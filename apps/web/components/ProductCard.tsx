@@ -1,0 +1,173 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+interface Variant {
+  id: string;
+  size: string;
+  price: any;
+  stock?: number;
+}
+
+interface ProductCardProps {
+  product: {
+    id: string;
+    title: string;
+    slug: string;
+    image?: string | null;
+    rating?: any | null;
+    category: { name: string };
+    variants: Variant[];
+  };
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+  const [selectedVariant, setSelectedVariant] = useState<Variant>(product.variants[0]);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAddedSuccess, setIsAddedSuccess] = useState(false);
+
+  const ratingDisplay = product.rating ? parseFloat(product.rating.toString()).toFixed(1) : '4.5';
+  
+  // Dynamic fallback graphics matching your categories
+  const getCategoryEmoji = (categoryName: string) => {
+    const name = categoryName.toLowerCase();
+    if (name.includes('flake')) return '🌾';
+    if (name.includes('millet')) return '🌱';
+    if (name.includes('laddu')) return '🍬';
+    if (name.includes('sugar') || name.includes('sweet')) return '🍯';
+    return '📦';
+  };
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    setIsAdding(true);
+
+    try {
+      // Simulates adding item state variables to your global checkout store context later
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      
+      // Visual feedback success trigger
+      setIsAddedSuccess(true);
+      setTimeout(() => {
+        setIsAddedSuccess(false);
+        setShowQuickAdd(false);
+      }, 1500);
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
+      
+      {/* 1. Image View Frame */}
+      <Link href={`/product/${product.slug}`} className="w-full h-52 bg-slate-50 relative overflow-hidden flex items-center justify-center p-4">
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.title}
+            className="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-slate-300 gap-2">
+            <span className="text-5xl transform group-hover:scale-110 transition duration-300">
+              {getCategoryEmoji(product.category.name)}
+            </span>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              {product.category.name} Pack
+            </span>
+          </div>
+        )}
+        
+        {/* Floating Rating Badge */}
+        <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm shadow-sm text-slate-800 text-xs font-bold px-2 py-1 rounded-lg">
+          ⭐ {ratingDisplay}
+        </span>
+      </Link>
+
+      {/* 2. Interactive Quick Add Options Overlay */}
+      <div className="px-5 pt-4">
+        <button
+          onClick={() => setShowQuickAdd(!showQuickAdd)}
+          className={`w-full text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1 border ${
+            showQuickAdd 
+              ? "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200" 
+              : "bg-slate-50 border-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-brand-green hover:border-emerald-100"
+          }`}
+        >
+          <span>{showQuickAdd ? "✕ Hide Panel" : "⚡ Quick Add"}</span>
+        </button>
+
+        {showQuickAdd && (
+          <div className="mt-3 bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col gap-3 transition-all duration-300">
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Select Size</label>
+              <select
+                value={selectedVariant.id}
+                onChange={(e) => {
+                  const variant = product.variants.find(v => v.id === e.target.value);
+                  if (variant) setSelectedVariant(variant);
+                }}
+                className="w-full bg-white text-slate-800 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-brand-green font-medium shadow-sm cursor-pointer"
+              >
+                {product.variants.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.size} — ₹{parseFloat(v.price.toString())}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding || isAddedSuccess}
+              className={`w-full text-white font-bold py-2 rounded-lg text-xs transition duration-200 shadow-sm ${
+                isAddedSuccess 
+                  ? "bg-emerald-600" 
+                  : "bg-brand-green hover:bg-[#00522b] disabled:opacity-50"
+              }`}
+            >
+              {isAdding ? "Processing..." : isAddedSuccess ? "✓ Added Successfully!" : "Confirm Add"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 3. Description Information Footer */}
+      <Link href={`/product/${product.slug}`} className="p-5 pt-3 flex flex-col flex-grow justify-between bg-white">
+        <div>
+          <span className="text-xs font-bold text-brand-green uppercase tracking-wider block mb-1">
+            {product.category.name}
+          </span>
+          <h3 className="font-bold text-base text-slate-800 line-clamp-1 group-hover:text-brand-green transition-colors mb-1">
+            {product.title}
+          </h3>
+          <p className="text-xs text-slate-400 font-medium mb-4">
+            Active Size: <span className="text-slate-600 font-bold">{selectedVariant.size}</span>
+          </p>
+        </div>
+
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-400 font-medium leading-none mb-1">Price</span>
+            <span className="text-lg font-black text-slate-900 group-hover:text-brand-green transition-colors">
+              ₹{parseFloat(selectedVariant.price.toString())}
+            </span>
+          </div>
+          
+          {/* Action Link Icon */}
+          <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-brand-green text-slate-400 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+            <svg className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+}

@@ -1,16 +1,6 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import React from 'react';
+import './globals.css'; 
 import Header from "../components/Header";
-import { BRAND } from "../lib/brand";
-import Providers from "./providers";
-
-export const metadata: Metadata = {
-  title: BRAND.name,
-  description: BRAND.tagline,
-  icons: {
-    icon: "/brand/srilaya-logo.png",
-  },
-};
 
 export default function RootLayout({
   children,
@@ -19,11 +9,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>
-          <Header />
+      <body className="bg-white text-black antialiased">
+        <Header />
+        <main>
           {children}
-        </Providers>
+        </main>
       </body>
     </html>
   );
