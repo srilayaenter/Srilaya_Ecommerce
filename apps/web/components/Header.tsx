@@ -19,15 +19,15 @@ export default function Header() {
     { name: "Contact Us", href: "/contact" },
   ];
 
-  // Line 2 Links: Specific product names (Text only)
+  // Line 2 Links: Updated to pass category as a query parameter cleanly
   const productLinks = [
-    { name: "Millet Flakes", href: "/category/flakes" },
-    { name: "Millet Laddu", href: "/category/laddu" },
-    { name: "Millet Rava", href: "/category/millet-rava" },
-    { name: "Millet Flour", href: "/category/millet-flour" },
-    { name: "Millet Parboiled", href: "/category/millet-parboiled" },
-    { name: "Millet Rice", href: "/category/millet-rice" },
-    { name: "Sweeteners", href: "/category/sweeteners" },
+    { name: "Millet Flakes", href: "/product?category=flakes" },
+    { name: "Millet Laddu", href: "/product?category=laddu" },
+    { name: "Millet Rava", href: "/product?category=millet-rava" },
+    { name: "Millet Flour", href: "/product?category=millet-flour" },
+    { name: "Millet Parboiled", href: "/product?category=millet-parboiled" },
+    { name: "Millet Rice", href: "/product?category=millet-rice" },
+    { name: "Sweeteners", href: "/product?category=sweeteners" },
   ];
 
   // Handles active search routing dynamically and clears the text field
@@ -37,7 +37,7 @@ export default function Header() {
     
     if (query) {
       router.push(`/product?search=${encodeURIComponent(query)}`);
-      setSearchQuery(""); // Clears the search text from the input bar after running it!
+      setSearchQuery(""); 
     } else {
       router.push("/product");
     }

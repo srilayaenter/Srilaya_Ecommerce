@@ -1,0 +1,8 @@
+{
+  "name": "@srilaya/db",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "@prisma/client": "6.19.0"
+  }
+}

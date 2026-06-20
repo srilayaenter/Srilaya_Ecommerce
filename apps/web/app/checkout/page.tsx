@@ -142,10 +142,11 @@ export default async function CheckoutPage({
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center">
+      <div className="container mx-auto px-4 py-16 text-center text-slate-800">
+        <span className="text-4xl block mb-4">🛒</span>
         <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
-        <Link href="/category/millets">
-          <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
+        <Link href="/product">
+          <button className="bg-brand-green text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-sm">
             Continue Shopping
           </button>
         </Link>
@@ -156,97 +157,97 @@ export default async function CheckoutPage({
   const total = subtotal + taxTotal;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+    <div className="container mx-auto px-4 py-8 text-slate-800">
+      <h1 className="text-3xl font-extrabold mb-8 tracking-tight text-slate-900">Checkout</h1>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 mb-6 text-sm font-semibold">
           {error}
         </div>
       )}
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-2">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-6">Shipping Information</h2>
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+            <h2 className="text-xl font-bold mb-6 text-slate-900">Shipping Information</h2>
 
             <form action={createOrder} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Full Name *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Full Name *</label>
                 <input
                   type="text"
                   name="name"
                   required
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                  className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                   placeholder="John Doe"
                 />
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Email *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Email *</label>
                   <input
                     type="email"
                     name="email"
                     required
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                     placeholder="john@example.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Phone *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Phone *</label>
                   <input
                     type="tel"
                     name="phone"
                     required
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                     placeholder="+91 98765 43210"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Address *</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Address *</label>
                 <textarea
                   name="address"
                   required
                   rows={3}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                  className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50 resize-none"
                   placeholder="Street address, apartment, suite, etc."
                 ></textarea>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">City *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">City *</label>
                   <input
                     type="text"
                     name="city"
                     required
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                     placeholder="Mysuru"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">State *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">State *</label>
                   <input
                     type="text"
                     name="state"
                     required
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                     placeholder="Karnataka"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">ZIP Code *</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">ZIP Code *</label>
                   <input
                     type="text"
                     name="zipCode"
                     required
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-600 outline-none"
+                    className="w-full text-xs font-medium border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700 focus:ring-2 focus:ring-emerald-50"
                     placeholder="570001"
                   />
                 </div>
@@ -255,7 +256,7 @@ export default async function CheckoutPage({
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700"
+                  className="w-full bg-brand-green text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-sm text-sm"
                 >
                   Continue to Payment
                 </button>
@@ -265,43 +266,43 @@ export default async function CheckoutPage({
         </div>
 
         <div>
-          <div className="bg-white rounded-lg shadow p-6 sticky top-4">
-            <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sticky top-24">
+            <h3 className="text-xl font-bold mb-4 border-b border-slate-50 pb-3 text-slate-900">Order Summary</h3>
 
-            <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
+            <div className="space-y-4 mb-4 max-h-60 overflow-y-auto no-scrollbar">
               {cartItems.map(item => {
                 const price = toNum(item.price);
                 return (
-                  <div key={item.id} className="flex justify-between text-sm">
+                  <div key={item.id} className="flex justify-between items-start text-xs font-medium">
                     <div>
-                      <p className="font-medium">{item.variant.product.title}</p>
-                      <p className="text-gray-600">{item.variant.size} × {item.quantity}</p>
+                      <p className="font-bold text-slate-800">{item.variant.product.title}</p>
+                      <p className="text-slate-400 mt-0.5">{item.variant.size} × {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">₹{(price * item.quantity).toFixed(2)}</p>
+                    <p className="font-bold text-slate-900">₹{(price * item.quantity).toFixed(2)}</p>
                   </div>
                 );
               })}
             </div>
 
-            <div className="border-t pt-4 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
+            <div className="border-t border-slate-100 pt-4 space-y-2 text-xs font-medium">
+              <div className="flex justify-between text-slate-500">
+                <span>Subtotal</span>
+                <span className="font-bold text-slate-800">₹{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">GST</span>
-                <span className="font-semibold">₹{taxTotal.toFixed(2)}</span>
+              <div className="flex justify-between text-slate-500">
+                <span>GST</span>
+                <span className="font-bold text-slate-800">₹{taxTotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
-                <span className="font-semibold text-green-600">Free</span>
+              <div className="flex justify-between text-slate-500">
+                <span>Shipping</span>
+                <span className="font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md text-[10px] uppercase tracking-wide">Free</span>
               </div>
             </div>
 
-            <div className="border-t pt-4 mt-4">
-              <div className="flex justify-between text-xl font-bold">
-                <span>Total</span>
-                <span className="text-indigo-600">₹{total.toFixed(2)}</span>
+            <div className="border-t border-slate-100 pt-4 mt-4">
+              <div className="flex justify-between text-xl font-extrabold">
+                <span className="text-slate-900">Total</span>
+                <span className="text-brand-green">₹{total.toFixed(2)}</span>
               </div>
             </div>
           </div>
