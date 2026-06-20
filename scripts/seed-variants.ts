@@ -1,13 +1,13 @@
-//import { PrismaClient } from '../packages/db/node_modules/@prisma/client';
 import { PrismaClient } from '../packages/db';
 import * as bcrypt from 'bcryptjs';
 
-// Use a unique variable name to completely avoid naming collisions
+// Unique client pointer to avoid global namespace conflicts inside the monorepo workspace
 const seedPrisma = new PrismaClient();
-async function main() {
-  console.log('🌱 Starting database seed with variants...');
 
-  // Wipe old data clean
+async function main() {
+  console.log('🌱 Starting database seed with nested categories and precise pricing inventory...');
+
+  // Clean slate data truncation in order of dependency constraints
   await seedPrisma.orderItem.deleteMany();
   await seedPrisma.order.deleteMany();
   await seedPrisma.cartItem.deleteMany();
@@ -17,10 +17,9 @@ async function main() {
   await seedPrisma.category.deleteMany();
   await seedPrisma.user.deleteMany();
 
-  const flakesCategory = await seedPrisma.category.create({
-    data: { slug: 'flakes', name: 'Flakes', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
-  });
-
+  // ==========================================
+  // 1. TOP-LEVEL MAIN CATEGORY CONFIGURATIONS
+  // ==========================================
   const milletsCategory = await seedPrisma.category.create({
     data: { slug: 'millets', name: 'Millets', image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' }
   });
@@ -29,103 +28,93 @@ async function main() {
     data: { slug: 'laddu', name: 'Laddu', image: 'https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400' }
   });
 
-  const sugarCategory = await seedPrisma.category.create({
-    data: { slug: 'sugar', name: 'Sugar', image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400' }
+  const sweetenersCategory = await seedPrisma.category.create({
+    data: { slug: 'sweeteners', name: 'Sweeteners', image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400' }
   });
 
-  console.log('✅ Categories created');
+  console.log('✅ Main categories initialized');
 
+  // ==========================================
+  // 2. NESTED SUBCATEGORY PROVISIONS (UNDER MILLETS)
+  // ==========================================
+  const flakesSubCategory = await seedPrisma.category.create({
+    data: { slug: 'millet-flakes', name: 'Flakes', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+  });
+
+  const ravaSubCategory = await seedPrisma.category.create({
+    data: { slug: 'millet-rava', name: 'Rava', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+  });
+
+  const flourSubCategory = await seedPrisma.category.create({
+    data: { slug: 'millet-flour', name: 'Flour', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+  });
+
+  const parboiledSubCategory = await seedPrisma.category.create({
+    data: { slug: 'millet-parboiled', name: 'Millet Parboiled', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' } as any
+  });
+
+  const riceSubCategory = await seedPrisma.category.create({
+    data: { slug: 'millet-rice', name: 'Millet Rice', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' } as any
+  });
+
+  console.log('✅ Millet subcategories initialized');
+
+  // ==========================================
+  // 3. PRODUCT SPECIFIC RAW INVENTORY DATASET
+  // ==========================================
+
+  // Flakes Dataset (Precise updated pricing sheets)
   const flakesData = [
-    { name: 'Foxtail Flakes', sku: 'FF', prices: { '1kg': 189, '500g': 104 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
-    { name: 'Little Flakes', sku: 'LF', prices: { '1kg': 168, '500g': 93 }, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400' },
-    { name: 'Kodo Flakes', sku: 'KF', prices: { '1kg': 159, '500g': 89 }, image: 'https://images.unsplash.com/photo-1563091133-94de5c872b71?w=400' },
-    { name: 'Barnyard Flakes', sku: 'BF', prices: { '1kg': 190, '500g': 106 }, image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=400' },
-    { name: 'Ragi Flakes', sku: 'RF', prices: { '1kg': 101, '500g': 56 }, image: 'https://images.unsplash.com/photo-1612450822627-f5b27e66b0e8?w=400' },
-    { name: 'White Sorghum Flakes', sku: 'WSF', prices: { '1kg': 98, '500g': 55 }, image: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400' },
-    { name: 'Red Sorghum Flakes', sku: 'RSF', prices: { '1kg': 124, '500g': 69 }, image: 'https://images.unsplash.com/photo-1574781330855-d0db8cc6a79c?w=400' },
-    { name: 'Pearl Flakes', sku: 'PF', prices: { '1kg': 103, '500g': 58 }, image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400' },
-    { name: 'Green Gram Flakes', sku: 'GGF', prices: { '1kg': 218, '500g': 120 }, image: 'https://images.unsplash.com/photo-1596797882870-8c33deeac224?w=400' },
-    { name: 'Horse Gram Flakes', sku: 'HGF', prices: { '1kg': 212, '500g': 117 }, image: 'https://images.unsplash.com/photo-1583306434214-8f5e5f7e57f7?w=400' },
-    { name: 'Wheat Flakes', sku: 'WF', prices: { '1kg': 121, '500g': 68 }, image: 'https://images.unsplash.com/photo-1560774082-de6d76cd3543?w=400' },
-    { name: 'Barley Flakes', sku: 'BAF', prices: { '1kg': 124, '500g': 69 }, image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=400' },
-    { name: 'Mapillai Samba Flakes', sku: 'MSF', prices: { '1kg': 149, '500g': 82 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
-    { name: 'Karuppu Kavuni Flakes', sku: 'KKF', prices: { '1kg': 214, '500g': 119 }, image: 'https://images.unsplash.com/photo-1536304929831-aac4b5025b2f?w=400' }
+    { name: 'Foxtail Flakes', sku: 'FF', prices: { '1kg': 137, '200g': 38 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Little Flakes', sku: 'LF', prices: { '1kg': 170, '200g': 45 }, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400' },
+    { name: 'Kodo Flakes', sku: 'KF', prices: { '1kg': 153, '200g': 42 }, image: 'https://images.unsplash.com/photo-1563091133-94de5c872b71?w=400' },
+    { name: 'Barnyard Flakes', sku: 'BF', prices: { '1kg': 177, '200g': 47 }, image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=400' },
+    { name: 'Ragi Flakes', sku: 'RF', prices: { '1kg': 109, '200g': 33 }, image: 'https://images.unsplash.com/photo-1612450822627-f5b27e66b0e8?w=400' },
+    { name: 'Pearl Flakes', sku: 'PF', prices: { '1kg': 105, '200g': 32 }, image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400' },
+    { name: 'Red Sorghum Flakes', sku: 'RSF', prices: { '1kg': 124, '200g': 35 }, image: 'https://images.unsplash.com/photo-1574781330855-d0db8cc6a79c?w=400' },
+    { name: 'White Sorghum Flakes', sku: 'WSF', prices: { '1kg': 107, '200g': 33 }, image: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400' },
+    { name: 'Barley Flakes', sku: 'BAF', prices: { '1kg': 124, '200g': 35 }, image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=400' }
   ];
 
-  for (const item of flakesData) {
-    const product = await seedPrisma.product.create({
-      data: {
-        slug: item.name.toLowerCase().replace(/\s+/g, '-'),
-        title: item.name,
-        description: `Premium ${item.name} for healthy breakfast`,
-        gstRate: 5,
-        sku: item.sku,
-        categoryId: flakesCategory.id,
-        active: true,
-        rating: 4.5,
-        reviews: 45,
-        image: item.image
-      }
-    });
-
-    for (const [size, price] of Object.entries(item.prices)) {
-      await seedPrisma.productVariant.create({
-        data: {
-          productId: product.id,
-          size: size,
-          price: price,
-          stock: 100,
-          sku: `${item.sku}-${size.toUpperCase()}`
-        }
-      });
-    }
-  }
-
-  console.log('✅ Flakes products created');
-
-  const milletsData = [
-    { name: 'Foxtail Millet', sku: 'FM', prices: { '1kg': 122, '500g': 52, '250g': 28 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
-    { name: 'Little Millet', sku: 'LM', prices: { '1kg': 94, '500g': 52, '250g': 28 }, image: 'https://images.unsplash.com/photo-1623046691569-e93684a7c4f5?w=400' },
-    { name: 'Kodo Millet', sku: 'KM', prices: { '1kg': 98, '500g': 54, '250g': 30 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
-    { name: 'Barnyard Millet', sku: 'BM', prices: { '1kg': 110, '500g': 61, '250g': 33 }, image: 'https://images.unsplash.com/photo-1615485737642-184e08e04f55?w=400' },
-    { name: 'Ragi Millet', sku: 'RM', prices: { '1kg': 46, '500g': 26, '250g': 15 }, image: 'https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?w=400' },
-    { name: 'White Sorghum', sku: 'WS', prices: { '1kg': 51, '500g': 29, '250g': 16 }, image: 'https://images.unsplash.com/photo-1617196034183-421b4917c92d?w=400' },
-    { name: 'Red Sorghum', sku: 'RS', prices: { '1kg': 69, '500g': 38, '250g': 21 }, image: 'https://images.unsplash.com/photo-1596797882870-8c33deeac224?w=400' },
-    { name: 'Pearl Millet', sku: 'PM', prices: { '1kg': 46, '500g': 26, '250g': 15 }, image: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b7?w=400' },
-    { name: 'Proso Millet', sku: 'PR', prices: { '1kg': 94, '500g': 52, '250g': 28 }, image: 'https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=400' }
+  // Rava Dataset
+  const ravaData = [
+    { name: 'Foxtail Rava', sku: 'FTR', prices: { '1kg': 137, '500g': 75 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Little Rava', sku: 'LTRV', prices: { '1kg': 182, '500g': 97 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Barnyard Rava', sku: 'BYRV', prices: { '1kg': 199, '500g': 107 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
   ];
 
-  for (const item of milletsData) {
-    const product = await seedPrisma.product.create({
-      data: {
-        slug: item.name.toLowerCase().replace(/\s+/g, '-'),
-        title: item.name,
-        description: `Organic ${item.name} grains for daily nutrition`,
-        gstRate: 5,
-        sku: item.sku,
-        categoryId: milletsCategory.id,
-        active: true,
-        rating: 4.7,
-        reviews: 60,
-        image: item.image
-      }
-    });
+  // Flour Dataset
+  const flourData = [
+    { name: 'Little Flour', sku: 'LTFL', prices: { '1kg': 135, '500g': 75 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Ragi Flour', sku: 'RGFL', prices: { '1kg': 78, '500g': 44 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Foxtail Flour', sku: 'FTFL', prices: { '1kg': 103, '500g': 58 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Barnyard Flour', sku: 'BYFL', prices: { '1kg': 152, '500g': 84 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { name: 'Pearl Flour', sku: 'PLFL', prices: { '1kg': 68, '500g': 39 }, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
+  ];
 
-    for (const [size, price] of Object.entries(item.prices)) {
-      await seedPrisma.productVariant.create({
-        data: {
-          productId: product.id,
-          size: size,
-          price: price,
-          stock: 100,
-          sku: `${item.sku}-${size.toUpperCase()}`
-        }
-      });
-    }
-  }
+  // Millet Rice Dataset
+  const milletRiceData = [
+    { name: 'Foxtail Rice', sku: 'FXR', prices: { '1kg': 121, '500g': 67 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Little Rice', sku: 'LTR', prices: { '1kg': 150, '500g': 83 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Kodo Rice', sku: 'KDR', prices: { '1kg': 148, '500g': 82 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Barnyard Rice', sku: 'BYR', prices: { '1kg': 165, '500g': 91 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Ragi Rice', sku: 'RGR', prices: { '1kg': 102, '500g': 57 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Pearl Rice', sku: 'PLR', prices: { '1kg': 89, '500g': 50 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'White Sorghum Rice', sku: 'WSR', prices: { '1kg': 90, '500g': 51 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' }
+  ];
 
-  console.log('✅ Millets products created');
+  // Millet Parboiled Dataset
+  const parboiledData = [
+    { name: 'Foxtail Parboiled Rice', sku: 'FPR', prices: { '1kg': 121, '500g': 67 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Little Parboiled Rice', sku: 'LPR', prices: { '1kg': 150, '500g': 83 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Kodo Parboiled Rice', sku: 'KPR', prices: { '1kg': 148, '500g': 82 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Barnyard Parboiled Rice', sku: 'BPR', prices: { '1kg': 165, '500g': 91 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Ragi Parboiled Rice', sku: 'RPR', prices: { '1kg': 102, '500g': 57 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'Pearl Parboiled Rice', sku: 'PPR', prices: { '1kg': 89, '500g': 50 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' },
+    { name: 'White Sorghum Parboiled Rice', sku: 'WPR', prices: { '1kg': 90, '500g': 51 }, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' }
+  ];
 
+  // Laddu Dataset
   const ladduData = [
     { name: 'Barnyard Millet Laddu', sku: 'BML', prices: { '1kg': 420, '500g': 210, '250g': 105 }, image: 'https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?w=400' },
     { name: 'Foxtail Millet Laddu', sku: 'FML', prices: { '1kg': 420, '500g': 210, '250g': 105 }, image: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400' },
@@ -133,61 +122,68 @@ async function main() {
     { name: 'Groundnut Laddu', sku: 'GL', prices: { '1kg': 420, '500g': 210, '250g': 105 }, image: 'https://images.unsplash.com/photo-1601744647628-37427e1e8ad4?w=400' }
   ];
 
-  for (const item of ladduData) {
-    const product = await seedPrisma.product.create({
-      data: {
-        slug: item.name.toLowerCase().replace(/\s+/g, '-'),
-        title: item.name,
-        description: `Traditional ${item.name} made with love`,
-        gstRate: 5,
-        sku: item.sku,
-        categoryId: ladduCategory.id,
-        active: true,
-        rating: 4.9,
-        reviews: 120,
-        image: item.image
-      }
-    });
+  // ==========================================
+  // 4. DATA PROCESSING LOOPS EXECUTION
+  // ==========================================
 
-    for (const [size, price] of Object.entries(item.prices)) {
-      await seedPrisma.productVariant.create({
-        data: {
-          productId: product.id,
-          size: size,
-          price: price,
-          stock: 50,
-          sku: `${item.sku}-${size.toUpperCase()}`
-        }
-      });
-    }
+  // Commit Flakes
+  for (const item of flakesData) {
+    await createProductWithVariants(item, flakesSubCategory.id, `Premium organic ${item.name} flakes for breakfast nutrition`);
   }
+  console.log('✅ Millet Flakes seeded');
 
-  console.log('✅ Laddu products created');
+  // Commit Rava
+  for (const item of ravaData) {
+    await createProductWithVariants(item, ravaSubCategory.id, `Organic ${item.name} fine semolina for healthy recipes`);
+  }
+  console.log('✅ Millet Rava seeded');
 
+  // Commit Flour
+  for (const item of flourData) {
+    await createProductWithVariants(item, flourSubCategory.id, `Nutritious multi-purpose ${item.name} stone-ground flour`);
+  }
+  console.log('✅ Millet Flour seeded');
+
+  // Commit Rice
+  for (const item of milletRiceData) {
+    await createProductWithVariants(item, riceSubCategory.id, `Organic whole-grain raw ${item.name} fields product`);
+  }
+  console.log('✅ Millet Rice seeded');
+
+  // Commit Parboiled
+  for (const item of parboiledData) {
+    await createProductWithVariants(item, parboiledSubCategory.id, `Easily digestible hydrothermal parboiled ${item.name}`);
+  }
+  console.log('✅ Millet Parboiled seeded');
+
+  // Commit Laddus
+  for (const item of ladduData) {
+    await createProductWithVariants(item, ladduCategory.id, `Traditional healthy organic ${item.name} made with natural sweeteners`, 50);
+  }
+  console.log('✅ Laddu varieties seeded');
+
+  // Commit Sweeteners Products
   const sugarProduct = await seedPrisma.product.create({
     data: {
       slug: 'brown-sugar',
       title: 'Brown Sugar',
-      description: 'Natural brown sugar with molasses',
+      description: 'Natural unrefined brown sugar crystals with rich molasses extraction',
       gstRate: 5,
       sku: 'BS',
-      categoryId: sugarCategory.id,
+      categoryId: sweetenersCategory.id,
       active: true,
       rating: 4.7,
       reviews: 95,
       image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400'
     }
   });
+  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '1kg', price: 73, stock: 200, sku: 'BS-1KG' } });
+  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '500g', price: 41, stock: 200, sku: 'BS-500G' } });
+  console.log('✅ Sweeteners products seeded');
 
-  await seedPrisma.productVariant.create({
-    data: { productId: sugarProduct.id, size: '1kg', price: 73, stock: 200, sku: 'BS-1KG' }
-  });
-  await seedPrisma.productVariant.create({
-    data: { productId: sugarProduct.id, size: '500g', price: 41, stock: 200, sku: 'BS-500G' }
-  });
-
-  console.log('✅ Sugar products created');
-
+  // ==========================================
+  // 5. SECURITY & USERS SEEDING
+  // ==========================================
   const hashedPassword = await bcrypt.hash('admin123', 10);
   await seedPrisma.user.create({
     data: {
@@ -196,17 +192,47 @@ async function main() {
       role: 'admin'
     }
   });
+  console.log('✅ Admin management credential built');
 
-  console.log('✅ Admin user created');
+  // Total summary printouts
+  const totalProducts = await seedPrisma.product.count();
+  const totalVariants = await seedPrisma.productVariant.count();
+  console.log(`\n🎉 Seeding operations completed successfully! Loaded ${totalProducts} total products with ${totalVariants} unique structural variant pack selections.`);
+}
 
-  const productCount = await seedPrisma.product.count();
-  const variantCount = await seedPrisma.productVariant.count();
-  console.log(`\n🎉 Seeding completed! Created ${productCount} products with ${variantCount} variants`);
+// Global automated schema product-to-variant data mapping helper factory
+async function createProductWithVariants(item: any, catId: string, description: string, baseStock = 100) {
+  const product = await seedPrisma.product.create({
+    data: {
+      slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+      title: item.name,
+      description: description,
+      gstRate: 5,
+      sku: item.sku,
+      categoryId: catId,
+      active: true,
+      rating: 4.5,
+      reviews: 32,
+      image: item.image
+    }
+  });
+
+  for (const [size, price] of Object.entries(item.prices)) {
+    await seedPrisma.productVariant.create({
+      data: {
+        productId: product.id,
+        size: size,
+        price: price as number,
+        stock: baseStock,
+        sku: `${item.sku}-${size.toUpperCase()}`
+      }
+    });
+  }
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error:', e);
+    console.error('❌ Error caught during database seed context handling loop:', e);
     process.exit(1);
   })
   .finally(async () => {
