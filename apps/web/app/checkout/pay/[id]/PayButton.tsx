@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import { BRAND } from '../../../../lib/brand';
 
 interface PayButtonProps {
   orderId: string;
@@ -34,6 +35,7 @@ export default function PayButton({
     setError('');
 
     try {
+      // 1. Initialize Razorpay Order via Next Backend API Endpoint
       const orderRes = await fetch('/api/payments/razorpay/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,16 +45,17 @@ export default function PayButton({
       const orderData = await orderRes.json();
 
       if (!orderRes.ok) {
-        setError(orderData.error || 'Could not start payment');
+        setError(orderData.error || 'Could not initiate secure payment gateway');
         setLoading(false);
         return;
       }
 
+      // 2. Configure Gateway Checkout Configurations
       const options = {
         key: orderData.key,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Srilaya Millets',
+        name: BRAND.name,
         description: `Order #${orderId.slice(0, 8).toUpperCase()}`,
         order_id: orderData.orderId,
         prefill: {
@@ -62,6 +65,7 @@ export default function PayButton({
         },
         handler: async function (response: any) {
           try {
+            // 3. Trigger Backend Signature Cryptography Verification
             const verifyRes = await fetch('/api/payments/razorpay/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -74,12 +78,13 @@ export default function PayButton({
             });
 
             if (verifyRes.ok) {
-              router.push(`/orders/${orderId}`);
+              // Redirect to uniform checkout success state route parameter
+              router.push(`/product?ordered=true&id=${orderId}`);
             } else {
-              setError('Payment was received but verification failed. Please contact support with your payment ID: ' + response.razorpay_payment_id);
+              setError('Payment received but verification failed. Please contact support with payment ID: ' + response.razorpay_payment_id);
             }
           } catch {
-            setError('Payment was received but we could not confirm it automatically. Please contact support with your payment ID: ' + response.razorpay_payment_id);
+            setError('Payment captured but confirmation timed out. Please contact support with payment ID: ' + response.razorpay_payment_id);
           }
         },
         modal: {
@@ -88,7 +93,8 @@ export default function PayButton({
           }
         },
         theme: {
-          color: '#4F46E5',
+          // Fixed: Matches your official storefront brand color scheme matching the checkout system
+          color: '#065f46', 
         },
       };
 
@@ -96,25 +102,32 @@ export default function PayButton({
       rzp.open();
 
     } catch (err) {
-      setError('Something went wrong starting payment');
+      setError('Something went wrong starting payment gateway service.');
       setLoading(false);
     }
   };
 
   return (
     <>
+      {/* Dynamic SDK Client Injector */}
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
       <button
         onClick={handlePay}
         disabled={loading}
-        className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400"
+        className={`w-full text-white py-3 rounded-xl font-bold transition-all shadow-sm text-center text-xs tracking-wide uppercase block ${
+          loading 
+            ? 'bg-emerald-800/70 cursor-not-allowed opacity-80' 
+            : 'bg-brand-green hover:bg-emerald-800'
+        }`}
       >
-        {loading ? 'Opening payment...' : `Pay ₹${amount.toFixed(2)}`}
+        {loading ? 'Opening payment gateway...' : `Pay Securely ₹${amount.toFixed(2)}`}
       </button>
 
       {error && (
-        <p className="text-red-600 text-sm mt-4">{error}</p>
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 mt-4 text-xs font-semibold">
+          {error}
+        </div>
       )}
     </>
   );
