@@ -1,0 +1,143 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../../node_modules/.prisma/client"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  role      String   @default("customer")
+  orders    Order[]
+  carts     Cart[]
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  slug      String     @unique
+  name      String
+  image     String?
+  parentId  String?
+  parent    Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryHierarchy")
+  products  Product[]
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  title       String
+  description String?
+  currency    String           @default("INR")
+  gstRate     Decimal          @db.Decimal(4,2)
+  sku         String           @unique
+  active      Boolean          @default(true)
+  image       String?
+  rating      Decimal?         @db.Decimal(3,2)
+  reviews     Int              @default(0)
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model ProductVariant {
+  id         String      @id @default(cuid())
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String
+  price      Decimal     @db.Decimal(10,2)
+  stock      Int         @default(100)
+  sku        String      @unique
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([productId, size])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String         @id @default(cuid())
+  cartId    String
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int            @default(1)
+  price     Decimal        @db.Decimal(10,2)
+  gstRate   Decimal        @db.Decimal(4,2)
+
+  @@unique([cartId, variantId])
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id])
+  items        OrderItem[]
+  subtotal     Decimal     @db.Decimal(10,2)
+  taxTotal     Decimal     @db.Decimal(10,2)
+  shippingFee  Decimal     @db.Decimal(10,2)
+  total        Decimal     @db.Decimal(10,2)
+  currency     String      @default("INR")
+  status       String      @default("pending")
+  paymentId    String?
+  invoiceNo    String?
+
+  customerName String?
+  email        String?
+  phone        String?
+  address      String?
+  city         String?
+  state        String?
+  zipCode      String?
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int
+  price     Decimal        @db.Decimal(10,2)
+  gstRate   Decimal        @db.Decimal(4,2)
+}
+
+model WebhookEvent {
+  id          String   @id @default(cuid())
+  provider    String
+  eventId     String   @unique
+  processedAt DateTime @default(now())
+}
+
+model FailedEmail {
+  id           String    @id @default(cuid())
+  to           String
+  subject      String
+  html         String
+  context      String?
+  errorMessage String
+  retriedAt    DateTime?
+  resolved     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+}

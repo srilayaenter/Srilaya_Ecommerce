@@ -1,0 +1,35 @@
+{
+  "name": "srilaya-ecommerce",
+  "private": true,
+  "scripts": {
+    "dev": "next dev apps/web",
+    "build": "next build apps/web",
+    "start": "next start apps/web",
+    "prisma:generate": "prisma generate --schema=./packages/db/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=./packages/db/schema.prisma",
+    "prisma:studio": "prisma studio --schema=./packages/db/schema.prisma",
+    "seed": "tsx scripts/seed-variants.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.0",
+    "autoprefixer": "10.4.19",
+    "bcryptjs": "2.4.3",
+    "next": "14.2.3",
+    "next-auth": "4.24.7",
+    "postcss": "8.4.41",
+    "razorpay": "2.9.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "resend": "^4.0.0",
+    "tailwindcss": "3.4.13",
+    "typescript": "5.5.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.2",
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.66",
+    "prisma": "6.19.0",
+    "ts-node": "10.9.2",
+    "tsx": "^4.22.4"
+  }
+}
