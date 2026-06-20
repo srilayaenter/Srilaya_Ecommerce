@@ -38,23 +38,23 @@ async function main() {
   // 2. NESTED SUBCATEGORY PROVISIONS (UNDER MILLETS)
   // ==========================================
   const flakesSubCategory = await seedPrisma.category.create({
-    data: { slug: 'millet-flakes', name: 'Flakes', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+    data: { slug: 'millet-flakes', name: 'Flakes', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
   });
 
   const ravaSubCategory = await seedPrisma.category.create({
-    data: { slug: 'millet-rava', name: 'Rava', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+    data: { slug: 'millet-rava', name: 'Rava', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
   });
 
   const flourSubCategory = await seedPrisma.category.create({
-    data: { slug: 'millet-flour', name: 'Flour', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' } as any
+    data: { slug: 'millet-flour', name: 'Flour', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }
   });
 
   const parboiledSubCategory = await seedPrisma.category.create({
-    data: { slug: 'millet-parboiled', name: 'Millet Parboiled', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' } as any
+    data: { slug: 'millet-parboiled', name: 'Millet Parboiled', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' }
   });
 
   const riceSubCategory = await seedPrisma.category.create({
-    data: { slug: 'millet-rice', name: 'Millet Rice', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' } as any
+    data: { slug: 'millet-rice', name: 'Millet Rice', parentId: milletsCategory.id, image: 'https://images.unsplash.com/photo-1599639957043-f3aa5c986398?w=400' }
   });
 
   console.log('✅ Millet subcategories initialized');
