@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
+import Link from "next/link";
 
 export default async function AdminOverviewPage() {
   const [
@@ -26,10 +26,10 @@ export default async function AdminOverviewPage() {
 
   // PRD Strict Semantic Colors Applied
   const metrics = [
-    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From verified processed orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" }, // Success
-    { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" }, // Warning
-    { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" }, // Info
-    { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Variants with <= 10 items left", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" }, // Error
+    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From verified processed orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
+    { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" },
+    { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" },
+    { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Variants with <= 10 items left", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
   ];
 
   return (
