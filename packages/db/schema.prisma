@@ -30,6 +30,7 @@ model Category {
 }
 
 model Product {
+    imageUrl  String?  
   id          String           @id @default(cuid())
   slug        String           @unique
   title       String
@@ -141,3 +142,4 @@ model FailedEmail {
   resolved     Boolean   @default(false)
   createdAt    DateTime  @default(now())
 }
+

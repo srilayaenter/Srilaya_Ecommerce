@@ -4,14 +4,12 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { prisma } from "@/lib/db";
-import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
+  // Navigation links updated to use standard root paths
   const infoLinks = [
     { name: "Home", href: "/" },
     { name: "All Products", href: "/product" },
@@ -20,22 +18,23 @@ export default function Header() {
     { name: "Contact Us", href: "/contact" },
   ];
 
+  // Updated hrefs to match the /category/[slug] structure
   const productLinks = [
-    { name: "Millet Flakes", href: "/product?category=flakes" },
-    { name: "Millet Laddu", href: "/product?category=laddu" },
-    { name: "Millet Rava", href: "/product?category=millet-rava" },
-    { name: "Millet Flour", href: "/product?category=millet-flour" },
-    { name: "Millet Parboiled", href: "/product?category=millet-parboiled" },
-    { name: "Millet Rice", href: "/product?category=millet-rice" },
-    { name: "Sweeteners", href: "/product?category=sweeteners" },
+    { name: "Millet Flakes", href: "/category/flakes" },
+    { name: "Millet Laddu", href: "/category/laddu" },
+    { name: "Millet Rava", href: "/category/millet-rava" },
+    { name: "Millet Flour", href: "/category/millet-flour" },
+    { name: "Millet Parboiled", href: "/category/millet-parboiled" },
+    { name: "Millet Rice", href: "/category/millet-rice" },
+    { name: "Sweeteners", href: "/category/sweeteners" },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const query = searchQuery.trim();
+    const query = searchQuery.trim().toLowerCase();
     if (query) {
-      router.push(`/product?search=${encodeURIComponent(query)}`);
-      setSearchQuery(""); 
+      router.push(`/category/${query}`);
+      setSearchQuery("");
     } else {
       router.push("/product");
     }
@@ -47,6 +46,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-24 gap-4">
           <Link href="/" className="flex items-center gap-4 flex-shrink-0 group">
             <div className="relative h-16 w-16 overflow-hidden rounded-full border border-[#E0E0E0] shadow-sm bg-white">
+              {/* Ensure your logo exists in public/brand/srilaya-logo.png */}
               <Image src="/brand/srilaya-logo.png" alt="SriLaYa Foods Logo" fill className="object-cover" priority />
             </div>
             <span className="font-black text-[26px] text-[#212121] tracking-tight font-poppins hidden sm:block">
@@ -70,7 +70,7 @@ export default function Header() {
             <form onSubmit={handleSearchSubmit} className="relative hidden md:flex items-center bg-[#F5F5F5] rounded-full border border-[#E0E0E0] w-48 xl:w-64">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search category..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-4 py-2.5 text-[13px] focus:outline-none focus:border-[#006A38] text-[#212121] bg-transparent"
