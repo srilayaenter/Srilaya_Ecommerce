@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-
+import { prisma } from "@/lib/db";
+import { toNum } from "@/lib/decimal";
+import { revalidatePath } from "next/cache";
 interface Subcategory {
   id: string;
   name: string;

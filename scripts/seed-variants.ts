@@ -172,7 +172,7 @@ async function main() {
   const hashedPassword = await bcrypt.hash('admin123', 10);
   await seedPrisma.user.create({
     data: {
-      email: 'admin@srilaya.com',
+      email: 'admin@srilayafoods.com',
       password: hashedPassword,
       role: 'admin'
     }

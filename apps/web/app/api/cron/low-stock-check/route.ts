@@ -1,7 +1,9 @@
-import { prisma } from "../../../../lib/db";
 import { NextResponse } from "next/server";
-import { sendEmail } from "../../../../lib/email";
-import { buildLowStockAlert } from "../../../../lib/emails/adminAlerts";
+import { sendEmail } from "@/lib/email";
+import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
+import { prisma } from "@/lib/db";
+import { toNum } from "@/lib/decimal";
+import { revalidatePath } from "next/cache";
 
 const LOW_STOCK_THRESHOLD = 10;
 

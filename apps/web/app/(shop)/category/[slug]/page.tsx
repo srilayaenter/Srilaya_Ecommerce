@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { prisma } from '../../../../lib/db';
 import CategorySidebar from '../../../../components/CategorySidebar';
 import { getCategoryTree } from '../../../actions/categories';
-
+import { prisma } from "@/lib/db";
+import { toNum } from "@/lib/decimal";
+import { revalidatePath } from "next/cache";
 interface Props {
   params: {
     slug: string;

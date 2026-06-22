@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { prisma } from "@/lib/db";
+import { toNum } from "@/lib/decimal";
+import { revalidatePath } from "next/cache";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");

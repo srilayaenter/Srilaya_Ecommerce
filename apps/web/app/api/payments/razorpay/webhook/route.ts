@@ -1,9 +1,10 @@
-import { prisma } from "../../../../../lib/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { sendEmail } from "../../../../../lib/email";
-import { buildPaymentFailedAlert } from "../../../../../lib/emails/adminAlerts";
-import { toNum } from "../../../../../lib/decimal";
+import { sendEmail } from "@/lib/email";
+import { buildPaymentFailedAlert } from "@/lib/emails/adminAlerts";
+import { prisma } from "@/lib/db";
+import { toNum } from "@/lib/decimal";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
   try {
