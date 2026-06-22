@@ -1,10 +1,8 @@
-"use client"; // Required for interactivity
+"use client";
+
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { prisma } from "@/lib/db";
-import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -12,23 +10,25 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     const result = await signIn("credentials", {
-      email,
+      email: email.trim().toLowerCase(),
       password,
-      redirect: false, // We handle the redirect manually
+      redirect: false,
+      callbackUrl: "/admin",
     });
 
     if (result?.error) {
       alert("Invalid email or password");
       setLoading(false);
-    } else {
-      router.push("/admin"); // Redirect to dashboard on success
-      router.refresh();
+      return;
     }
+
+    router.push(result?.url || "/admin");
+    router.refresh();
   };
 
   return (
@@ -45,31 +45,35 @@ export default function AdminLoginPage() {
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-md p-8">
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Staff Email</label>
-            <input 
-              type="email" 
+            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">
+              Staff Email
+            </label>
+            <input
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38]" 
-            />
-          </div>
-          
-          <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38]" 
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38]"
             />
           </div>
 
-          <button 
-            type="submit" 
+          <div>
+            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38]"
+            />
+          </div>
+
+          <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all"
+            className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all disabled:opacity-70"
           >
             {loading ? "Authorizing..." : "Authorize Access"}
           </button>

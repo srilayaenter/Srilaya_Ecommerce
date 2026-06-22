@@ -30,12 +30,13 @@ export default async function HomePage() {
             href={`/product/${product.slug}`}
             className="group border border-[#E0E0E0] rounded-xl p-4 hover:shadow-lg transition-shadow bg-white"
           >
-            <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
-              <Image 
-                src={product.imageUrl || "https://placehold.co/400x400/006A38/white?text=SriLaYa+Foods"} 
-                alt={product.title} 
-                fill 
-                className="object-cover group-hover:scale-105 transition-transform" 
+              <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
+              <Image
+                src={product.imageUrl || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
+                alt={product.title}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover group-hover:scale-105 transition-transform"
               />
             </div>
             <h2 className="font-bold text-[#212121]">{product.title}</h2>

@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const required = ['DATABASE_URL'];
+const required = ["DATABASE_URL"];
+
 for (const key of required) {
   if (!process.env[key]) {
     throw new Error(`Missing required environment variable: ${key}`);
@@ -8,13 +9,20 @@ for (const key of required) {
 }
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
+  prisma: PrismaClient | undefined;
+};
 
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  })
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "warn", "error"]
+        : ["warn", "error"],
+    errorFormat:
+      process.env.NODE_ENV === "development" ? "pretty" : "minimal",
+  });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}

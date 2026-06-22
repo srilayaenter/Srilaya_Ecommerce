@@ -1,9 +1,5 @@
-import React from 'react';
-import './globals.css'; 
-import Header from "../components/Header";
-import { prisma } from "@/lib/db";
-import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
+import React from "react";
+import "./globals.css";
 
 export default function RootLayout({
   children,
@@ -12,12 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white text-black antialiased">
-        <Header />
-        <main>
-          {children}
-        </main>
-      </body>
+      <body className="bg-white text-black antialiased">{children}</body>
     </html>
   );
 }
