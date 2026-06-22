@@ -3,7 +3,6 @@ import { toNum } from "../../lib/decimal";
 import Link from "next/link";
 
 export default async function AdminOverviewPage() {
-  // 1. Parallel Database Query Aggregate Calls
   const [
     totalOrdersCount,
     pendingOrders,
@@ -21,87 +20,79 @@ export default async function AdminOverviewPage() {
     })
   ]);
 
-  // 2. Compute metrics totals safely using type conversion helpers
   const totalRevenue = processingOrders.reduce((sum, order) => sum + toNum(order.total), 0);
   const pendingVerificationCount = pendingOrders.length;
 
-  // Metric card parameters array matrix
+  // PRD Strict Semantic Colors Applied
   const metrics = [
-    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From verified processed orders", icon: "💰", color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
-    { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR / Razorpay verifications", icon: "⏳", color: "text-amber-600 bg-amber-50 border-amber-100" },
-    { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction log capacity", icon: "📦", color: "text-blue-600 bg-blue-50 border-blue-100" },
-    { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Millet variants with <= 10 items left", icon: "⚠️", color: "text-rose-600 bg-rose-50 border-rose-100" },
+    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From verified processed orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" }, // Success
+    { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" }, // Warning
+    { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" }, // Info (The only acceptable blue)
+    { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Variants with <= 10 items left", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" }, // Error
   ];
 
   return (
-    <div className="space-y-8 text-slate-800">
+    <div className="space-y-8 font-sans">
       
-      {/* Upper Descriptive Welcome Header */}
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Overview Dashboard</h1>
-        <p className="text-slate-400 text-xs mt-1 font-medium">
-          Real-time snapshot monitoring system for sales trends, inventory health, and manual payment check logs.
+        <h1 className="text-[28px] font-bold text-[#212121] tracking-tight font-poppins">Overview Dashboard</h1>
+        <p className="text-[#8D6E63] text-[14px] mt-1 font-medium">
+          Real-time snapshot monitoring system for sales trends and inventory health.
         </p>
       </div>
 
-      {/* 4-Column Aggregates KPI Grid */}
+      {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((card) => (
-          <div key={card.title} className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 flex flex-col justify-between">
+          <div key={card.title} className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 duration-300">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">{card.title}</span>
-              <span className={`w-8 h-8 rounded-xl border flex items-center justify-center text-sm shadow-sm ${card.color}`}>
+              <span className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">{card.title}</span>
+              <span className={`w-9 h-9 rounded-lg border flex items-center justify-center text-lg shadow-sm ${card.color}`}>
                 {card.icon}
               </span>
             </div>
             <div className="mt-4">
-              <span className="text-2xl font-black text-slate-900 tracking-tight block">{card.value}</span>
-              <span className="text-[10px] text-slate-400 font-medium block mt-1 leading-normal">{card.description}</span>
+              <span className="text-[28px] font-bold text-[#212121] tracking-tight block">{card.value}</span>
+              <span className="text-[11px] text-[#9E9E9E] font-medium block mt-1">{card.description}</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Main Core Work Split Grid Sections */}
+      {/* Main Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* LEFT TWO-COLUMNS: RECENT TRANSACTIONS QUEUE TABLE */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
-            <h3 className="text-base font-bold text-slate-900">Recent Orders</h3>
-            <Link href="/admin/orders" className="text-xs font-bold text-brand-green hover:underline bg-emerald-50 px-2.5 py-1 rounded-xl transition-all">
+        {/* Recent Orders Table */}
+        <div className="lg:col-span-2 bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-6">
+          <div className="flex items-center justify-between pb-4 border-b border-[#F5F5F5] mb-4">
+            <h3 className="text-[16px] font-semibold text-[#212121] font-poppins">Recent Orders</h3>
+            <Link href="/admin/orders" className="text-[12px] font-bold text-[#4CAF50] hover:text-[#388E3C] hover:underline transition-colors">
               Manage All Orders →
             </Link>
           </div>
 
           {recentOrders.length === 0 ? (
-            <p className="text-xs text-slate-400 py-10 text-center font-medium">No order data rows found in the database yet.</p>
+            <div className="py-12 text-center bg-[#FFF8E1]/50 rounded-[8px] border border-[#FFF8E1]">
+              <span className="text-3xl block mb-2">🛒</span>
+              <p className="text-[#8D6E63] font-medium text-[14px]">No order data found yet.</p>
+            </div>
           ) : (
-            <div className="overflow-x-auto no-scrollbar">
-              <table className="w-full text-left border-collapse text-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100">
-                    <th className="pb-3 font-bold">Order ID</th>
-                    <th className="pb-3 font-bold">Customer</th>
-                    <th className="pb-3 font-bold">Total Payable</th>
-                    <th className="pb-3 font-bold">Status</th>
+                  <tr className="text-[#9E9E9E] font-semibold uppercase text-[11px] tracking-wider border-b border-[#E0E0E0]">
+                    <th className="pb-3 px-2">Order ID</th>
+                    <th className="pb-3 px-2">Customer</th>
+                    <th className="pb-3 px-2 text-right">Total Payable</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50 font-medium text-slate-700">
-                  {recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="py-3.5 font-mono font-bold text-slate-900">#{order.id.slice(0, 8).toUpperCase()}</td>
-                      <td className="py-3.5">{order.customerName || "Guest User"}</td>
-                      <td className="py-3.5 font-bold text-slate-900">₹{toNum(order.total).toFixed(2)}</td>
-                      <td className="py-3.5">
-                        <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wide inline-block ${
-                          order.status === 'pending' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
-                          order.status === 'processing' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                          'bg-slate-50 text-slate-500'
-                        }`}>
-                          {order.status}
-                        </span>
-                      </td>
+                <tbody className="text-[13px] text-[#424242]">
+                  {recentOrders.map((order: any) => (
+                    <tr key={order.id} className="border-b border-[#F5F5F5] hover:bg-[#FFF8E1]/30 transition-colors">
+                      <td className="py-3.5 px-2 font-mono font-semibold text-[#212121]">#{order.id.slice(0, 8).toUpperCase()}</td>
+                      <td className="py-3.5 px-2">{order.customerName || "Guest User"}</td>
+                      <td className="py-3.5 px-2 font-bold text-[#4CAF50] text-right">₹{toNum(order.total).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -110,31 +101,30 @@ export default async function AdminOverviewPage() {
           )}
         </div>
 
-        {/* RIGHT ONE-COLUMN: QUICK COMPACT UTILITY LINK ACTIONS MODAL */}
-        <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6">
-          <h3 className="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 mb-4">Quick Shortcuts</h3>
+        {/* Quick Actions Sidebar */}
+        <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-6 h-fit">
+          <h3 className="text-[16px] font-semibold text-[#212121] font-poppins pb-4 border-b border-[#F5F5F5] mb-4">Quick Shortcuts</h3>
           
-          <div className="space-y-2.5">
-            <Link href="/admin/orders?filter=pending" className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 hover:border-brand-green/30 transition-all group">
-              <span className="text-lg">🔍</span>
-              <div className="text-left">
-                <span className="block font-bold text-xs text-slate-800 group-hover:text-brand-green transition-colors">Verify Pending Orders</span>
-                <span className="block text-[10px] text-slate-400 mt-0.5 font-medium">Process manual UTR bank transfers</span>
+          <div className="space-y-3">
+            <Link href="/admin/orders?filter=pending" className="flex items-center gap-4 p-4 rounded-[8px] border border-[#E0E0E0] bg-white hover:bg-[#FFF8E1] hover:border-[#8D6E63]/30 transition-all group">
+              <span className="text-2xl">🔍</span>
+              <div>
+                <span className="block font-bold text-[13px] text-[#212121] group-hover:text-[#8D6E63] transition-colors">Verify Pending Orders</span>
+                <span className="block text-[11px] text-[#9E9E9E] mt-0.5">Process manual UTR bank transfers</span>
               </div>
             </Link>
 
-            <Link href="/admin/inventory" className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 hover:border-brand-green/30 transition-all group">
-              <span className="text-lg">🌾</span>
-              <div className="text-left">
-                <span className="block font-bold text-xs text-slate-800 group-hover:text-brand-green transition-colors">Restock Inventory</span>
-                <span className="block text-[10px] text-slate-400 mt-0.5 font-medium">Update bags stock and weight metrics</span>
+            <Link href="/admin/inventory" className="flex items-center gap-4 p-4 rounded-[8px] border border-[#E0E0E0] bg-white hover:bg-[#FFF8E1] hover:border-[#8D6E63]/30 transition-all group">
+              <span className="text-2xl">🌾</span>
+              <div>
+                <span className="block font-bold text-[13px] text-[#212121] group-hover:text-[#8D6E63] transition-colors">Restock Inventory</span>
+                <span className="block text-[11px] text-[#9E9E9E] mt-0.5">Update product stock & price metrics</span>
               </div>
             </Link>
           </div>
         </div>
 
       </div>
-
     </div>
   );
 }

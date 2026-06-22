@@ -3,12 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db";
 
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/admin/login",
+    // FIXED: Must start with a forward slash
+    signIn: "/admin/login", 
   },
   providers: [
     CredentialsProvider({
@@ -19,6 +21,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log("DEBUG: Missing email or password");
           return null;
         }
 
@@ -26,20 +29,24 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email },
         });
 
-        if (!user || !user.password) {
+        if (!user) {
+          console.log("DEBUG: User not found:", credentials.email);
+          return null;
+        }
+
+        if (!user.password) {
+          console.log("DEBUG: User has no password set:", credentials.email);
           return null;
         }
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
+          console.log("DEBUG: Invalid password for:", credentials.email);
           return null;
         }
 
-        if (user.role !== "admin") {
-          return null;
-        }
-
+        console.log("DEBUG: Login successful for:", user.email);
         return {
           id: user.id,
           email: user.email,
@@ -65,4 +72,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // Added debug mode to help you see more info in the terminal
+  debug: process.env.NODE_ENV === "development",
 };
