@@ -3,6 +3,7 @@ import Link from "next/link";
 import { toNum } from "@/lib/decimal";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
+import Testimonials from "@/components/Testimonials";
 
 // 1. Define the query structure once to ensure type consistency
 const productQuery = {
@@ -32,7 +33,7 @@ export default async function HomePage() {
           >
               <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
               <Image
-                src={product.imageUrl || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
+                src={product.image || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
                 alt={product.title}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -49,6 +50,7 @@ export default async function HomePage() {
           </Link>
         ))}
       </div>
+      <Testimonials />
     </div>
   );
 }
