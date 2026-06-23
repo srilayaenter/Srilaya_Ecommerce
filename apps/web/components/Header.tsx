@@ -20,7 +20,7 @@ export default function Header() {
 
   // Updated hrefs to match the /category/[slug] structure
   const productLinks = [
-    { name: "Millet Flakes", href: "/category/flakes" },
+    { name: "Millet Flakes", href: "/category/millet-flakes" },
     { name: "Millet Laddu", href: "/category/laddu" },
     { name: "Millet Rava", href: "/category/millet-rava" },
     { name: "Millet Flour", href: "/category/millet-flour" },

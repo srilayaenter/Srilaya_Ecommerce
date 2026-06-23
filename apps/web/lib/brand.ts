@@ -1,6 +1,6 @@
 export const BRAND = {
-  name: "Srilaya Millets",
-  tagline: "Pure & Organic Millets",
+  name: "Srilaya Foods",
+  tagline: "Pure & Organic Foods",
   domain: "srilaya.com",
   gstin: process.env.BRAND_GSTIN || "29XXXXX1234X1ZX",
   address: "Bengaluru, Karnataka, India",

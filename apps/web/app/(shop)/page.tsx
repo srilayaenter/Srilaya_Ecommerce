@@ -19,7 +19,7 @@ export default async function HomePage() {
     <div className="container mx-auto px-4 py-16">
       <div className="text-center mb-16">
         <h1 className="text-5xl font-extrabold text-[#212121] mb-6">
-          Pure Organic Millets from Mysuru
+          Pure Organic Millets from Across India
         </h1>
       </div>
 

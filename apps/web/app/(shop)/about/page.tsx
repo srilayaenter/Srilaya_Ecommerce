@@ -14,7 +14,7 @@ export default function AboutUsPage() {
             About {BRAND.name}
           </h1>
           <p className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto font-medium leading-relaxed">
-            Reviving traditional grains and bringing the wholesome goodness of organic millets from the fields of Mysuru straight to your kitchen.
+            Reviving traditional grains and bringing the wholesome goodness of organic millets from across India straight to your kitchen.
           </p>
         </div>
       </section>
@@ -55,7 +55,7 @@ export default function AboutUsPage() {
                   Our Commitment
                 </h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
-                  We maintain absolute transparency in sourcing. By partnering with dedicated organic farmers around Mysuru, we ensure fair trade practices while bringing you the finest, pesticide-free harvest.
+                  We maintain absolute transparency in sourcing. By partnering with dedicated organic farmers across India, we ensure fair trade practices while bringing you the finest, pesticide-free harvest.
                 </p>
               </div>
             </div>

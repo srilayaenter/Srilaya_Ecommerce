@@ -55,11 +55,11 @@ export default function ContactUsPage() {
                     Our Processing Unit Address
                   </h4>
                   <p className="text-slate-600 text-xs mt-1 leading-relaxed">
-                    {BRAND.name} Organic Hub,
+                    SriLaYa Enterprises,
                     <br />
-                    Industrial Area, Hebbal,
+                    White Field Hoskote Main Road, Seegehalli,
                     <br />
-                    Mysuru, Karnataka - 570016
+                    Bengaluru, Karnataka - 560067
                   </p>
                 </div>
               </div>
@@ -87,7 +87,7 @@ export default function ContactUsPage() {
                     Email Support Channels
                   </h4>
                   <p className="text-slate-600 text-xs mt-1 font-mono">
-                    support@srilayamillets.com
+                    support@srilayafoods.com
                   </p>
                 </div>
               </div>

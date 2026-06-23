@@ -97,7 +97,7 @@ export default function PaymentDetailsPage() {
               <div className="flex justify-between py-2 border-b border-slate-100 sm:col-span-2">
                 <span className="text-slate-500 font-medium">Branch Location</span>
                 <span className="font-bold text-slate-800 text-right">
-                  Mysuru Main Branch, Karnataka
+                  Bengaluru, Karnataka
                 </span>
               </div>
             </div>
