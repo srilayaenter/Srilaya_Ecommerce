@@ -1,6 +1,7 @@
 "use client";
 import { useState, useTransition } from "react";
 import { addToCart } from "../app/actions/cart";
+import { useCart } from "@/context/CartContext";
 
 interface Variant {
   id: string;
@@ -14,6 +15,7 @@ export default function AddToCartWithDropdown({ variants }: { variants: Variant[
   const [quantity, setQuantity] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
+  const { refreshCartCount } = useCart();
 
   const selected = variants.find(v => v.id === selectedId);
 
@@ -25,6 +27,7 @@ export default function AddToCartWithDropdown({ variants }: { variants: Variant[
       if (result.success) {
         setMessage("Added!");
         setQuantity(0);
+        await refreshCartCount();
         setTimeout(() => setMessage(""), 2000);
       } else {
         setMessage(result.error || "Error adding to cart.");

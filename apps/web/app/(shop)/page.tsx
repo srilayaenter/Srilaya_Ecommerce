@@ -14,14 +14,19 @@ const productQuery = {
 type ProductWithVariants = Prisma.ProductGetPayload<typeof productQuery>;
 
 export default async function HomePage() {
-  const products: ProductWithVariants[] = await prisma.product.findMany(productQuery);
+  const products: ProductWithVariants[] = await prisma.product.findMany({
+  ...productQuery,
+  take: 8,
+  orderBy: { reviews: "desc" },
+});
 
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="text-center mb-16">
         <h1 className="text-5xl font-extrabold text-[#212121] mb-6">
-          Pure Organic Millets from Across India
+            Pure Organic Millets from Across India
         </h1>
+<p className="text-center text-gray-500 mb-2 -mt-4">Featured Products</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

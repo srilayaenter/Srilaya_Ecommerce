@@ -4,10 +4,12 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const { cartCount } = useCart();
 
   const infoLinks = [
     { name: "Home", href: "/" },
@@ -75,6 +77,11 @@ export default function Header() {
             </form>
             <Link href="/cart" className="relative text-[#424242] hover:text-[#006A38]">
               <span className="text-2xl">🛍️</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#006A38] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
         </div>
