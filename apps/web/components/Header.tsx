@@ -9,7 +9,6 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // Navigation links updated to use standard root paths
   const infoLinks = [
     { name: "Home", href: "/" },
     { name: "All Products", href: "/product" },
@@ -18,7 +17,6 @@ export default function Header() {
     { name: "Contact Us", href: "/contact" },
   ];
 
-  // Updated hrefs to match the /category/[slug] structure
   const productLinks = [
     { name: "Millet Flakes", href: "/category/millet-flakes" },
     { name: "Millet Laddu", href: "/category/laddu" },
@@ -31,9 +29,9 @@ export default function Header() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const query = searchQuery.trim().toLowerCase();
+    const query = searchQuery.trim();
     if (query) {
-      router.push(`/category/${query}`);
+      router.push(`/search?q=${encodeURIComponent(query)}`);
       setSearchQuery("");
     } else {
       router.push("/product");
@@ -46,7 +44,6 @@ export default function Header() {
         <div className="flex items-center justify-between h-24 gap-4">
           <Link href="/" className="flex items-center gap-4 flex-shrink-0 group">
             <div className="relative h-16 w-16 overflow-hidden rounded-full border border-[#E0E0E0] shadow-sm bg-white">
-              {/* Ensure your logo exists in public/brand/srilaya-logo.png */}
               <Image src="/brand/srilaya-logo.png" alt="SriLaYa Foods Logo" fill className="object-cover" priority />
             </div>
             <span className="font-black text-[26px] text-[#212121] tracking-tight font-poppins hidden sm:block">
@@ -56,9 +53,9 @@ export default function Header() {
 
           <nav className="hidden lg:flex items-center justify-center gap-8 flex-grow">
             {infoLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
+              <Link
+                key={link.name}
+                href={link.href}
                 className="text-[#8D6E63] hover:text-[#006A38] font-bold transition-colors text-[14px]"
               >
                 {link.name}
@@ -70,7 +67,7 @@ export default function Header() {
             <form onSubmit={handleSearchSubmit} className="relative hidden md:flex items-center bg-[#F5F5F5] rounded-full border border-[#E0E0E0] w-48 xl:w-64">
               <input
                 type="text"
-                placeholder="Search category..."
+                placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-4 py-2.5 text-[13px] focus:outline-none focus:border-[#006A38] text-[#212121] bg-transparent"
@@ -86,9 +83,9 @@ export default function Header() {
       <div className="bg-[#FFF8E1]/60 border-t border-[#E0E0E0] py-3">
         <div className="container mx-auto px-4 max-w-7xl flex items-center justify-center gap-8">
           {productLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.href} 
+            <Link
+              key={link.name}
+              href={link.href}
               className="text-[#8D6E63] hover:text-[#006A38] font-semibold transition-colors text-[13px]"
             >
               {link.name}
