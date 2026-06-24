@@ -7,4 +7,6 @@ Payments
 
 New Variants Added for a product/item
 --------------------------------------
-4. Auto-generate SKU when adding a new product variant, instead of requiring manual entry — e.g., derive it from the product's base SKU + size (the pattern likely already used: {baseSKU}-{SIZE})
+4. Auto-generate SKU when adding a new product variant, instead of requiring manual entry — e.g., derive it from the product's base SKU + size (the pattern likely already used: {baseSKU}-{SIZE}) - done
+5. Clear Add Variant form after submit — done
+
