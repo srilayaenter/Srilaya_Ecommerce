@@ -45,13 +45,23 @@ async function updateVariant(formData: FormData) {
 async function addVariant(formData: FormData) {
   'use server';
   const productId = formData.get('productId') as string;
+  const size = formData.get('newSize') as string;
+
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { sku: true }
+  });
+
+  // Auto-generate SKU from the product's base SKU + size, e.g. "GL" + "2kg" -> "GL-2KG"
+  const generatedSku = `${product?.sku}-${size.toUpperCase().replace(/\s+/g, '')}`;
+
   await prisma.productVariant.create({
     data: {
       productId,
-      size: formData.get('newSize') as string,
+      size,
       price: parseFloat(formData.get('newPrice') as string),
       stock: parseInt(formData.get('newStock') as string, 10),
-      sku: formData.get('newSku') as string,
+      sku: generatedSku,
     }
   });
   redirect(`/admin/products/${productId}?saved=true&variant=added`);
@@ -154,13 +164,13 @@ export default async function EditProductPage({ params, searchParams }: PageProp
           
           <div className="mt-6 pt-6 border-t">
             <h3 className="font-medium mb-3">Add New Variant</h3>
-            <form action={addVariant} className="grid grid-cols-2 gap-2">
+            <p className="text-xs text-[#9E9E9E] mb-2">SKU will be generated automatically from the product code and size.</p>
+            <form key={Date.now()} action={addVariant} className="grid grid-cols-3 gap-2" autoComplete="off">
               <input type="hidden" name="productId" value={product.id} />
-              <input name="newSize" placeholder="Size (e.g 500g)" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" step="0.01" name="newPrice" placeholder="Price" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" name="newStock" placeholder="Stock" className="border rounded px-2 py-1 text-sm" required />
-              <input name="newSku" placeholder="Unique SKU" className="border rounded px-2 py-1 text-sm" required />
-              <button type="submit" className="col-span-2 bg-[#4CAF50] text-white py-2 rounded-lg text-sm font-bold">Add Variant</button>
+              <input name="newSize" placeholder="Size (e.g 500g)" autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input type="number" step="0.01" name="newPrice" placeholder="Price" autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input type="number" name="newStock" placeholder="Stock" autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <button type="submit" className="col-span-3 bg-[#4CAF50] text-white py-2 rounded-lg text-sm font-bold">Add Variant</button>
             </form>
           </div>
         </div>
