@@ -45,11 +45,12 @@ model Product {
   reviews     Int              @default(0)
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
+  supplierId  String?
+  supplier    Supplier?        @relation(fields: [supplierId], references: [id])
   variants    ProductVariant[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 }
-
 model ProductVariant {
   id         String      @id @default(cuid())
   productId  String
@@ -145,3 +146,16 @@ model FailedEmail {
   createdAt    DateTime  @default(now())
 }
 
+model Supplier {
+  id            String    @id @default(cuid())
+  name          String
+  contactPerson String?
+  phone         String?
+  email         String?
+  address       String?
+  notes         String?
+  active        Boolean   @default(true)
+  products      Product[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
