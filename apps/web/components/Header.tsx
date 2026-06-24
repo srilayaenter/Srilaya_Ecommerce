@@ -2,12 +2,13 @@
 
 import Image from 'next/image';
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [milletsOpen, setMilletsOpen] = useState(false);
   const router = useRouter();
   const { cartCount } = useCart();
 
@@ -19,13 +20,16 @@ export default function Header() {
     { name: "Contact Us", href: "/contact" },
   ];
 
-  const productLinks = [
-    { name: "Millet Flakes", href: "/category/millet-flakes" },
-    { name: "Millet Laddu", href: "/category/laddu" },
-    { name: "Millet Rava", href: "/category/millet-rava" },
-    { name: "Millet Flour", href: "/category/millet-flour" },
-    { name: "Millet Parboiled", href: "/category/millet-parboiled" },
-    { name: "Millet Rice", href: "/category/millet-rice" },
+  const milletSubcategories = [
+    { name: "Flakes", href: "/category/millet-flakes" },
+    { name: "Rava", href: "/category/millet-rava" },
+    { name: "Flour", href: "/category/millet-flour" },
+    { name: "Parboiled", href: "/category/millet-parboiled" },
+    { name: "Rice", href: "/category/millet-rice" },
+  ];
+
+  const otherCategoryLinks = [
+    { name: "Laddu", href: "/category/laddu" },
     { name: "Sweeteners", href: "/category/sweeteners" },
   ];
 
@@ -89,7 +93,43 @@ export default function Header() {
 
       <div className="bg-[#FFF8E1]/60 border-t border-[#E0E0E0] py-3">
         <div className="container mx-auto px-4 max-w-7xl flex items-center justify-center gap-8">
-          {productLinks.map((link) => (
+
+          <div
+            className="relative"
+            onMouseEnter={() => setMilletsOpen(true)}
+            onMouseLeave={() => setMilletsOpen(false)}
+          >
+            <Link
+              href="/category/millets"
+              className="text-[#8D6E63] hover:text-[#006A38] font-semibold transition-colors text-[13px] flex items-center gap-1"
+            >
+              Millets
+              <svg
+                className={`w-3 h-3 transition-transform ${milletsOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </Link>
+
+            {milletsOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 bg-white border border-[#E0E0E0] rounded-xl shadow-lg p-2 z-50">
+                {milletSubcategories.map((sub) => (
+                  <Link
+                    key={sub.name}
+                    href={sub.href}
+                    className="block px-3 py-2 text-sm text-[#8D6E63] hover:bg-[#FFF8E1] hover:text-[#006A38] rounded-lg font-medium"
+                  >
+                    {sub.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {otherCategoryLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
