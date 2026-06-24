@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: PageProps) {
               </p>
             </div>
             <Link href={`/orders/${order.id}/invoice`}>
-              <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 flex items-center gap-2">
+              <button className="bg-[#006A38] text-white px-4 py-2 rounded-lg hover:bg-emerald-800 flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -145,7 +145,7 @@ export default async function OrderPage({ params }: PageProps) {
                 </div>
                 <div className="flex justify-between text-xl font-bold border-t pt-2">
                   <span>Total:</span>
-                  <span className="text-indigo-600">₹{total.toFixed(2)}</span>
+                  <span className="text-[#006A38]">₹{total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -153,11 +153,11 @@ export default async function OrderPage({ params }: PageProps) {
         </div>
 
         <div className="flex gap-4 justify-center">
-          <Link href="/category/millets">
-            <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 font-semibold">
-              Continue Shopping
-            </button>
-          </Link>
+          <Link href="/product">
+          <button className="bg-[#006A38] text-white px-6 py-3 rounded-lg hover:bg-emerald-800 font-semibold">
+            Continue Shopping
+          </button>
+        </Link>
           <Link href={`/orders/${order.id}/invoice`}>
             <button className="border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 font-semibold">
               Download Invoice

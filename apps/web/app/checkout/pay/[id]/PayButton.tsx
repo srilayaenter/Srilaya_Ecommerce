@@ -78,8 +78,7 @@ export default function PayButton({
             });
 
             if (verifyRes.ok) {
-              // Redirect to uniform checkout success state route parameter
-              router.push(`/product?ordered=true&id=${orderId}`);
+              router.push(`/orders/${orderId}`);
             } else {
               setError('Payment received but verification failed. Please contact support with payment ID: ' + response.razorpay_payment_id);
             }
