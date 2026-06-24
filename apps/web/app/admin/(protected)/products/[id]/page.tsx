@@ -3,12 +3,14 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ saved?: string }>;
 }
 
 // SERVER ACTIONS
 async function updateProduct(productId: string, formData: FormData) {
   'use server';
+  const supplierId = formData.get('supplierId') as string;
   await prisma.product.update({
     where: { id: productId },
     data: {
@@ -17,10 +19,11 @@ async function updateProduct(productId: string, formData: FormData) {
       image: formData.get('image') as string,
       gstRate: parseFloat(formData.get('gstRate') as string) || 0,
       categoryId: formData.get('categoryId') as string,
+      supplierId: supplierId || null,
       active: formData.get('active') === 'on',
     }
   });
-  redirect(`/admin/products/${productId}`);
+  redirect(`/admin/products/${productId}?saved=true`);
 }
 
 async function updateVariant(formData: FormData) {
@@ -53,20 +56,28 @@ async function addVariant(formData: FormData) {
   redirect(`/admin/products/${productId}`);
 }
 
-export default async function EditProductPage({ params }: PageProps) {
+export default async function EditProductPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { saved } = await searchParams;
   const product = await prisma.product.findUnique({
     where: { id },
-    include: { category: true, variants: { orderBy: { price: 'asc' } } }
+    include: { category: true, supplier: true, variants: { orderBy: { price: 'asc' } } }
   });
 
   if (!product) notFound();
 
   const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
+  const suppliers = await prisma.supplier.findMany({ where: { active: true }, orderBy: { name: 'asc' } });
   const updateProductWithId = updateProduct.bind(null, product.id);
 
   return (
     <div className="container mx-auto px-6 py-8">
+      {saved === 'true' && (
+        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+          ✓ Changes saved successfully.
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold font-poppins text-[#212121]">Edit Product</h1>
         {/* SAFE CANCEL LINK */}
@@ -98,6 +109,13 @@ export default async function EditProductPage({ params }: PageProps) {
                   {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                 </select>
               </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Supplier</label>
+              <select name="supplierId" defaultValue={product.supplierId || ""} className="w-full border rounded-lg px-3 py-2 bg-white">
+                <option value="">No supplier assigned</option>
+                {suppliers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
             </div>
             <label className="flex items-center gap-2"><input type="checkbox" name="active" defaultChecked={product.active} /> Active</label>
             <button type="submit" className="w-full bg-[#006A38] text-white py-3 rounded-lg font-bold hover:bg-[#00522B]">Save Changes</button>

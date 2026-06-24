@@ -21,7 +21,12 @@ async function createSupplier(formData: FormData) {
   redirect("/admin/suppliers");
 }
 
-export default async function SuppliersPage() {
+interface PageProps {
+  searchParams: Promise<{ saved?: string }>;
+}
+
+export default async function SuppliersPage({ searchParams }: PageProps) {
+  const { saved } = await searchParams;
   const suppliers = await prisma.supplier.findMany({
     include: { _count: { select: { products: true } } },
     orderBy: { name: "asc" },
@@ -29,6 +34,12 @@ export default async function SuppliersPage() {
 
   return (
     <div className="space-y-6 font-sans">
+      {saved === 'true' && (
+        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg font-semibold text-sm">
+          ✓ Supplier updated successfully.
+        </div>
+      )}
+
       <div>
         <h1 className="text-[28px] font-bold text-[#212121] tracking-tight font-poppins">
           Suppliers

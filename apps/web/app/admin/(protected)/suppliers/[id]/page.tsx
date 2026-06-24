@@ -20,7 +20,7 @@ async function updateSupplier(supplierId: string, formData: FormData) {
       active: formData.get("active") === "on",
     },
   });
-  redirect("/admin/suppliers");
+  redirect("/admin/suppliers?saved=true");
 }
 
 export default async function EditSupplierPage({ params }: PageProps) {
