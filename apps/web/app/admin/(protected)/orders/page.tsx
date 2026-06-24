@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
 // 1. SERVER ACTION: This runs securely on the server to update the database
-async function updateOrderStatus(formData: FormData) {
+async function updateFulfillmentStatus(formData: FormData) {
   "use server";
   const orderId = formData.get("orderId") as string;
   const newStatus = formData.get("newStatus") as string;
@@ -12,7 +12,7 @@ async function updateOrderStatus(formData: FormData) {
   if (orderId && newStatus) {
     await prisma.order.update({
       where: { id: orderId },
-      data: { status: newStatus },
+      data: { fulfillmentStatus: newStatus },
     });
     
     // Instantly refresh the data on this page and the main dashboard
@@ -28,7 +28,7 @@ export default async function OrdersPage({
 }) {
   // 2. FILTER LOGIC: Catch the "?filter=pending" from your dashboard shortcut
   const currentFilter = searchParams.filter || "all";
-  const whereClause = currentFilter !== "all" ? { status: currentFilter } : {};
+  const whereClause = currentFilter !== "all" ? { fulfillmentStatus: currentFilter } : {};
 
   // 3. DATA FETCHING: Grab orders based on the filter
   const orders = await prisma.order.findMany({
@@ -112,15 +112,20 @@ export default async function OrdersPage({
                     </td>
                     
                     <td className="py-4 px-6 text-center">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
+                      <div className="flex flex-col gap-1 items-center">
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(order.fulfillmentStatus)}`}>
+                          {order.fulfillmentStatus}
+                        </span>
+                        <span className={`text-[9px] font-semibold ${order.status === 'paid' ? 'text-green-600' : 'text-orange-500'}`}>
+                          Payment: {order.status}
+                        </span>
+                      </div>
                     </td>
                     
                     <td className="py-4 px-6 text-right">
                       {/* Inline Form to trigger the Server Action */}
-                      {order.status === 'pending' && (
-                        <form action={updateOrderStatus}>
+                      {order.fulfillmentStatus === 'pending' && (
+                        <form action={updateFulfillmentStatus}>
                           <input type="hidden" name="orderId" value={order.id} />
                           <input type="hidden" name="newStatus" value="processing" />
                           <button 
@@ -132,8 +137,8 @@ export default async function OrdersPage({
                         </form>
                       )}
                       
-                      {order.status === 'processing' && (
-                        <form action={updateOrderStatus}>
+                      {order.fulfillmentStatus === 'processing' && (
+                        <form action={updateFulfillmentStatus}>
                           <input type="hidden" name="orderId" value={order.id} />
                           <input type="hidden" name="newStatus" value="completed" />
                           <button 
