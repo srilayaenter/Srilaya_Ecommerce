@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import LogoutButton from "./LogoutButton";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -89,6 +90,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="w-9 h-9 rounded-full bg-[#FFF8E1] text-[#8D6E63] border border-[#E0E0E0] flex items-center justify-center font-bold text-sm shadow-sm">
               SM
             </div>
+            <LogoutButton />
           </div>
         </header>
 
