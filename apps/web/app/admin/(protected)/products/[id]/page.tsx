@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import StyledSelect from "@/components/StyledSelect";
 
 interface PageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string }>;
+  searchParams: Promise<{ saved?: string; variant?: string }>;
 }
 
 // SERVER ACTIONS
@@ -38,7 +39,7 @@ async function updateVariant(formData: FormData) {
       stock: parseInt(formData.get('stock') as string, 10),
     }
   });
-  redirect(`/admin/products/${productId}`);
+  redirect(`/admin/products/${productId}?saved=true&variant=true`);
 }
 
 async function addVariant(formData: FormData) {
@@ -53,12 +54,12 @@ async function addVariant(formData: FormData) {
       sku: formData.get('newSku') as string,
     }
   });
-  redirect(`/admin/products/${productId}`);
+  redirect(`/admin/products/${productId}?saved=true&variant=added`);
 }
 
 export default async function EditProductPage({ params, searchParams }: PageProps) {
   const { id } = await params;
-  const { saved } = await searchParams;
+  const { saved, variant } = await searchParams;
   const product = await prisma.product.findUnique({
     where: { id },
     include: { category: true, supplier: true, variants: { orderBy: { price: 'asc' } } }
@@ -66,7 +67,11 @@ export default async function EditProductPage({ params, searchParams }: PageProp
 
   if (!product) notFound();
 
-  const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
+  const allCategories = await prisma.category.findMany({
+    include: { children: true },
+    orderBy: { name: 'asc' }
+  });
+  const categories = allCategories.filter(cat => cat.children.length === 0);
   const suppliers = await prisma.supplier.findMany({ where: { active: true }, orderBy: { name: 'asc' } });
   const updateProductWithId = updateProduct.bind(null, product.id);
 
@@ -74,7 +79,9 @@ export default async function EditProductPage({ params, searchParams }: PageProp
     <div className="container mx-auto px-6 py-8">
       {saved === 'true' && (
         <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
-          ✓ Changes saved successfully.
+          {variant === 'true' && '✓ Variant updated successfully.'}
+          {variant === 'added' && '✓ New variant added successfully.'}
+          {!variant && '✓ Changes saved successfully.'}
         </div>
       )}
 
@@ -105,17 +112,24 @@ export default async function EditProductPage({ params, searchParams }: PageProp
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Category</label>
-                <select name="categoryId" defaultValue={product.categoryId} required className="w-full border rounded-lg px-3 py-2 bg-white">
-                  {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
-                </select>
+                <StyledSelect
+                  name="categoryId"
+                  defaultValue={product.categoryId}
+                  options={categories.map(cat => ({ value: cat.id, label: cat.name }))}
+                />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Supplier</label>
-              <select name="supplierId" defaultValue={product.supplierId || ""} className="w-full border rounded-lg px-3 py-2 bg-white">
-                <option value="">No supplier assigned</option>
-                {suppliers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-              </select>
+              <StyledSelect
+                name="supplierId"
+                defaultValue={product.supplierId || ""}
+                placeholder="No supplier assigned"
+                options={[
+                  { value: "", label: "No supplier assigned" },
+                  ...suppliers.map(s => ({ value: s.id, label: s.name }))
+                ]}
+              />
             </div>
             <label className="flex items-center gap-2"><input type="checkbox" name="active" defaultChecked={product.active} /> Active</label>
             <button type="submit" className="w-full bg-[#006A38] text-white py-3 rounded-lg font-bold hover:bg-[#00522B]">Save Changes</button>
