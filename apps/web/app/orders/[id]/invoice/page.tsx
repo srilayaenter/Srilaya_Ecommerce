@@ -1,6 +1,7 @@
 import { prisma } from "../../../../lib/db";
 import { BRAND } from "../../../../lib/brand";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import PrintButton from "./PrintButton";
 
 interface PageProps {
@@ -57,7 +58,7 @@ export default async function InvoicePage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-start mb-8 border-b pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-indigo-600 mb-2">{BRAND.name}</h1>
+              <h1 className="text-3xl font-bold text-[#006A38] mb-2">{BRAND.name}</h1>
               <p className="text-sm text-gray-600 mt-2">{BRAND.address}</p>
               <p className="text-sm text-gray-600">Email: {BRAND.email}</p>
               <p className="text-sm text-gray-600">Phone: {BRAND.phone}</p>
@@ -155,6 +156,19 @@ export default async function InvoicePage({ params }: PageProps) {
           <div className="border-t pt-6 text-center text-sm text-gray-600">
             <p className="mb-2">Thank you for your business!</p>
             <p>For any queries, please contact us at {BRAND.email} or {BRAND.phone}</p>
+          </div>
+
+          <div className="flex gap-4 justify-center mt-6 no-print">
+            <Link href={`/orders/${order.id}`}>
+              <button className="border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 font-semibold text-sm">
+                Back to Order
+              </button>
+            </Link>
+            <Link href="/product">
+              <button className="bg-[#006A38] text-white px-6 py-3 rounded-lg hover:bg-emerald-800 font-semibold text-sm">
+                Continue Shopping
+              </button>
+            </Link>
           </div>
 
           <PrintButton />

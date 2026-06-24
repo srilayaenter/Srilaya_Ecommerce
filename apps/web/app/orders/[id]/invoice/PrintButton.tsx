@@ -5,7 +5,7 @@ export default function PrintButton() {
     <div className="mt-8 text-center no-print">
       <button
         onClick={() => window.print()}
-        className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700"
+        className="bg-[#006A38] text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-800"
       >
         Print Invoice
       </button>

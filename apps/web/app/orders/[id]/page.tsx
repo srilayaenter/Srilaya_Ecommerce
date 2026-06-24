@@ -1,7 +1,7 @@
 import { prisma } from "../../../lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-
+import CartRefresher from "./CartRefresher";
 interface PageProps {
   params: Promise<{ id: string }>
 }
@@ -32,6 +32,8 @@ export default async function OrderPage({ params }: PageProps) {
   const total = parseFloat(order.total.toString());
 
   return (
+    <>
+      <CartRefresher />
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className={`rounded-lg p-6 mb-8 text-center border ${
@@ -166,5 +168,6 @@ export default async function OrderPage({ params }: PageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }
