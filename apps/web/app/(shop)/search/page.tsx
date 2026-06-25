@@ -63,14 +63,14 @@ export default async function SearchPage({ searchParams }: PageProps) {
                   </div>
                 )}
                 <div className="p-4 flex-1 flex flex-col">
-                  <div className="text-sm text-indigo-600 font-semibold mb-1">
+                  <div className="text-xs text-[#006A38] font-bold uppercase tracking-wider mb-1">
                     {product.category.name}
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                  <h3 className="font-bold text-base text-[#212121] mb-2">{product.title}</h3>
+                  <p className="text-sm text-gray-500 mb-3 line-clamp-2 flex-1">
                     {product.description}
                   </p>
-                  <span className="text-xl font-bold text-gray-900 mt-auto">
+                  <span className="text-lg font-black text-[#006A38] mt-auto">
                     {priceDisplay}
                   </span>
                 </div>

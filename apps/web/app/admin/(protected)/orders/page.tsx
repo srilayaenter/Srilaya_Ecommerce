@@ -24,10 +24,11 @@ async function updateFulfillmentStatus(formData: FormData) {
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: { filter?: string };
+  searchParams: Promise<{ filter?: string }>;
 }) {
+  const { filter } = await searchParams;
   // 2. FILTER LOGIC: Catch the "?filter=pending" from your dashboard shortcut
-  const currentFilter = searchParams.filter || "all";
+  const currentFilter = filter || "all";
   const whereClause = currentFilter !== "all" ? { fulfillmentStatus: currentFilter } : {};
 
   // 3. DATA FETCHING: Grab orders based on the filter
@@ -64,6 +65,7 @@ export default async function OrdersPage({
           <Link href="/admin/orders" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'all' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>All</Link>
           <Link href="/admin/orders?filter=pending" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'pending' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Pending</Link>
           <Link href="/admin/orders?filter=processing" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'processing' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Processing</Link>
+          <Link href="/admin/orders?filter=completed" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'completed' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Completed</Link>
         </div>
       </div>
 
@@ -98,8 +100,7 @@ export default async function OrdersPage({
                     
                     <td className="py-4 px-6">
                       <span className="block font-semibold text-[#212121]">{order.customerName || "Guest User"}</span>
-                      {/* Note: Adjust 'order.customerEmail' if your schema uses a different field name */}
-                      <span className="block text-[11px] text-[#9E9E9E]">{order.customerEmail || "No email provided"}</span>
+                      <span className="block text-[11px] text-[#9E9E9E]">{order.email || "No email provided"}</span>
                     </td>
                     
                     {/* Note: Assumes your schema has a createdAt field */}

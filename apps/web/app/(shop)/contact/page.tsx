@@ -11,10 +11,29 @@ export default function ContactUsPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setSubmitError("Something went wrong. Please try again or contact us directly.");
+      }
+    } catch {
+      setSubmitError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -176,11 +195,18 @@ export default function ContactUsPage() {
                   ></textarea>
                 </div>
 
+                {submitError && (
+                  <p className="text-xs text-red-600 font-semibold bg-red-50 border border-red-200 rounded-xl px-4 py-2">
+                    {submitError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full text-center font-bold text-xs bg-brand-green text-white hover:bg-emerald-800 py-3 rounded-xl transition-all duration-200 shadow-sm"
+                  disabled={submitting}
+                  className="w-full text-center font-bold text-xs bg-brand-green text-white hover:bg-emerald-800 disabled:opacity-60 py-3 rounded-xl transition-all duration-200 shadow-sm"
                 >
-                  Submit Inquiry Form
+                  {submitting ? "Sending..." : "Submit Inquiry Form"}
                 </button>
               </form>
             )}

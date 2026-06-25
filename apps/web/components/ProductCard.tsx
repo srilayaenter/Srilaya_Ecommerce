@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
-import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
+import { addToCart } from "@/app/actions/cart";
+import { useCart } from "@/context/CartContext";
 
 interface Variant {
   id: string;
@@ -28,11 +27,13 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [selectedVariant, setSelectedVariant] = useState<Variant>(product.variants[0]);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [isAddedSuccess, setIsAddedSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const { refreshCartCount } = useCart();
 
   const ratingDisplay = product.rating ? parseFloat(product.rating).toFixed(1) : '4.5';
-  
+
   const getCategoryEmoji = (categoryName: string) => {
     const name = categoryName.toLowerCase();
     if (name.includes('flake')) return '🌾';
@@ -42,28 +43,27 @@ export default function ProductCard({ product }: ProductCardProps) {
     return '📦';
   };
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault(); 
-    setIsAdding(true);
-
-    try {
-      // Simulated delay for cart action
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      setIsAddedSuccess(true);
-      setTimeout(() => {
-        setIsAddedSuccess(false);
-        setShowQuickAdd(false);
-      }, 1500);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsAdding(false);
-    }
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    startTransition(async () => {
+      const result = await addToCart(selectedVariant.id, 1);
+      if (result.success) {
+        setIsAddedSuccess(true);
+        await refreshCartCount();
+        setTimeout(() => {
+          setIsAddedSuccess(false);
+          setShowQuickAdd(false);
+        }, 1500);
+      } else {
+        setErrorMsg(result.error || "Could not add to cart.");
+      }
+    });
   };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
-      
+
       {/* Image Frame */}
       <Link href={`/product/${product.slug}`} className="w-full h-52 bg-slate-50 relative overflow-hidden flex items-center justify-center p-4">
         {product.image ? (
@@ -82,7 +82,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
         )}
-        
+
         <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm shadow-sm text-slate-800 text-xs font-bold px-2 py-1 rounded-lg">
           ⭐ {ratingDisplay}
         </span>
@@ -91,10 +91,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Quick Add Interface */}
       <div className="px-5 pt-4">
         <button
-          onClick={() => setShowQuickAdd(!showQuickAdd)}
+          onClick={() => { setShowQuickAdd(!showQuickAdd); setErrorMsg(""); }}
           className={`w-full text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1 border ${
-            showQuickAdd 
-              ? "bg-slate-100 border-slate-200 text-slate-600" 
+            showQuickAdd
+              ? "bg-slate-100 border-slate-200 text-slate-600"
               : "bg-slate-50 border-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700"
           }`}
         >
@@ -116,19 +116,24 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {product.variants.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.size} — ₹{parseFloat(v.price)}
+                    {(v.stock ?? 1) <= 0 ? " (Out of stock)" : ""}
                   </option>
                 ))}
               </select>
             </div>
-            
+
+            {errorMsg && (
+              <p className="text-xs text-red-600 font-semibold">{errorMsg}</p>
+            )}
+
             <button
               onClick={handleAddToCart}
-              disabled={isAdding || isAddedSuccess}
+              disabled={isPending || isAddedSuccess || (selectedVariant.stock ?? 1) <= 0}
               className={`w-full text-white font-bold py-2 rounded-lg text-xs transition duration-200 ${
                 isAddedSuccess ? "bg-emerald-600" : "bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50"
               }`}
             >
-              {isAdding ? "Processing..." : isAddedSuccess ? "✓ Added!" : "Confirm Add"}
+              {isPending ? "Adding..." : isAddedSuccess ? "✓ Added!" : "Add to Cart"}
             </button>
           </div>
         )}
@@ -155,7 +160,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               ₹{parseFloat(selectedVariant.price)}
             </span>
           </div>
-          
+
           <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-emerald-700 text-slate-400 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
             →
           </div>

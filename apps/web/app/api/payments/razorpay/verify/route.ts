@@ -2,6 +2,9 @@ import { prisma } from "../../../../../lib/db";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { sendEmail } from "../../../../../lib/email";
+import { buildOrderConfirmationEmail } from "../../../../../lib/emails/orderConfirmation";
+import { toNum } from "../../../../../lib/decimal";
 
 export async function POST(request: Request) {
   try {
@@ -49,14 +52,51 @@ export async function POST(request: Request) {
     }
 
     if (order.status !== 'paid') {
-      await prisma.order.update({
+      const invoiceNo = order.invoiceNo || `INV-${Date.now()}`;
+
+      const updatedOrder = await prisma.order.update({
         where: { id: dbOrderId },
         data: {
           status: "paid",
           paymentId: razorpay_payment_id,
-          invoiceNo: order.invoiceNo || `INV-${Date.now()}`,
+          invoiceNo,
+        },
+        include: {
+          items: {
+            include: { variant: { include: { product: true } } },
+          },
         },
       });
+
+      // Send order confirmation email to the customer
+      if (updatedOrder.email) {
+        const html = buildOrderConfirmationEmail({
+          customerName: updatedOrder.customerName || "Customer",
+          orderId: updatedOrder.id,
+          invoiceNo,
+          items: updatedOrder.items.map((item) => ({
+            title: item.variant.product.title,
+            size: item.variant.size,
+            quantity: item.quantity,
+            price: toNum(item.price),
+          })),
+          subtotal: toNum(updatedOrder.subtotal),
+          taxTotal: toNum(updatedOrder.taxTotal),
+          shippingFee: toNum(updatedOrder.shippingFee),
+          total: toNum(updatedOrder.total),
+          address: updatedOrder.address || "",
+          city: updatedOrder.city || "",
+          state: updatedOrder.state || "",
+          zipCode: updatedOrder.zipCode || "",
+        });
+
+        await sendEmail({
+          to: updatedOrder.email,
+          subject: `Order Confirmed — ${invoiceNo} | Srilaya Foods`,
+          html,
+          context: `order:${dbOrderId}`,
+        });
+      }
     }
 
     const cookieStore = await cookies();

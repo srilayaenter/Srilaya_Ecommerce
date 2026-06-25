@@ -5,28 +5,27 @@ import Link from "next/link";
 export default async function AdminOverviewPage() {
   const [
     totalOrdersCount,
-    pendingOrders,
-    processingOrders,
+    pendingOrdersCount,
+    paidOrders,
     lowStockVariants,
     recentOrders
   ] = await Promise.all([
     prisma.order.count(),
-    prisma.order.findMany({ where: { status: 'pending' } }),
-    prisma.order.findMany({ where: { status: 'processing' } }),
+    prisma.order.count({ where: { status: 'pending' } }),
+    prisma.order.findMany({ where: { status: 'paid' }, select: { total: true } }),
     prisma.productVariant.count({ where: { stock: { lte: 10 } } }),
     prisma.order.findMany({
       take: 5,
-      orderBy: { id: 'desc' }
+      orderBy: { createdAt: 'desc' }
     })
   ]);
 
-  // TypeScript explicitly knows sum is a number, and order is an object from Prisma
-  const totalRevenue = processingOrders.reduce((sum: number, order: any) => sum + toNum(order.total), 0);
-  const pendingVerificationCount = pendingOrders.length;
+  const totalRevenue = paidOrders.reduce((sum: number, order: any) => sum + toNum(order.total), 0);
+  const pendingVerificationCount = pendingOrdersCount;
 
   // PRD Strict Semantic Colors Applied
   const metrics = [
-    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From verified processed orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
+    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From all confirmed paid orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
     { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" },
     { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" },
     { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Variants with <= 10 items left", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
