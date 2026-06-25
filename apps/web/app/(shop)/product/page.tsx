@@ -2,6 +2,13 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 import { toNum } from "@/lib/decimal";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Products",
+  description:
+    "Browse our complete range of organic millets, millet flour, rava, flakes, rice, and traditional laddus. Multiple sizes available with pan-India delivery.",
+};
 
 export default async function AllProductsPage() {
   const products = await prisma.product.findMany({

@@ -19,10 +19,11 @@ async function createProduct(formData: FormData) {
   const nutritionalInfo = formData.get('nutritionalInfo') as string;
 
   // Variant Data
-  const size = formData.get('size') as string;
-  const price = parseFloat(formData.get('price') as string);
-  const stock = parseInt(formData.get('stock') as string, 10);
-  const gstRate = parseFloat(formData.get('gstRate') as string) || 0;
+  const size        = formData.get('size') as string;
+  const price       = parseFloat(formData.get('price') as string);
+  const stock       = parseInt(formData.get('stock') as string, 10);
+  const gstRate     = parseFloat(formData.get('gstRate') as string) || 0;
+  const weightGrams = parseInt(formData.get('weightGrams') as string, 10) || 500;
   
   // SKU Generation
   const baseSku = formData.get('sku') as string;
@@ -51,6 +52,7 @@ async function createProduct(formData: FormData) {
         size,
         price,
         stock,
+        weightGrams,
         sku: finalSku,
       }
     });
@@ -118,6 +120,11 @@ export default async function NewProductPage() {
               <div>
                 <label className="block text-sm font-medium mb-1">SKU *</label>
                 <input type="text" name="sku" required className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Weight (grams) *</label>
+                <input type="number" name="weightGrams" required defaultValue="500" placeholder="e.g. 550" className="w-full border rounded-lg px-3 py-2" />
+                <p className="text-xs text-slate-400 mt-1">Include packaging weight. Used to calculate shipping cost.</p>
               </div>
             </div>
           </div>

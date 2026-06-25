@@ -183,17 +183,20 @@ export default async function CartPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Shipping</span>
-                <span className="font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md text-xs uppercase tracking-wide">
-                  Free
+                <span className="text-xs text-slate-400 italic font-medium">
+                  Calculated at checkout
                 </span>
               </div>
             </div>
 
             <div className="border-t border-slate-100 pt-4 mb-6">
               <div className="flex justify-between text-xl font-extrabold">
-                <span className="text-slate-900">Total</span>
+                <span className="text-slate-900">Subtotal + GST</span>
                 <span className="text-brand-green">₹{total.toFixed(2)}</span>
               </div>
+              <p className="text-[11px] text-slate-400 mt-1 text-right">
+                + shipping — calculated at checkout
+              </p>
             </div>
 
             {/* Action Buttons: Explicitly visible on load */}

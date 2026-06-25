@@ -1,8 +1,29 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
+import type { Metadata } from "next";
 
 type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    select: { title: true, description: true, image: true },
+  });
+  if (!product) return { title: "Product Not Found" };
+  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Foods — organic, minimally processed.`;
+  return {
+    title: product.title,
+    description: desc,
+    openGraph: {
+      title: `${product.title} | SriLaYa Foods`,
+      description: desc,
+      images: product.image ? [{ url: product.image }] : [],
+      type: "website",
+    },
+  };
+}
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { slug } = await params;

@@ -2,9 +2,25 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const category = await prisma.category.findUnique({
+    where: { slug },
+    select: { name: true, description: true },
+  });
+  if (!category) return { title: "Category Not Found" };
+  return {
+    title: category.name,
+    description:
+      category.description ||
+      `Shop our ${category.name} collection at SriLaYa Foods — 100% organic, pan-India delivery.`,
+  };
 }
 
 export default async function CategoryPage({ params }: PageProps) {

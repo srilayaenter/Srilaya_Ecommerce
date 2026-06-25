@@ -20,14 +20,15 @@ model User {
 }
 
 model Category {
-  id        String     @id @default(cuid())
-  slug      String     @unique
-  name      String
-  image     String?
-  parentId  String?
-  parent    Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children  Category[] @relation("CategoryHierarchy")
-  products  Product[]
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  name        String
+  description String?
+  image       String?
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
 }
 
 model Product {  
@@ -52,17 +53,18 @@ model Product {
   updatedAt   DateTime         @updatedAt
 }
 model ProductVariant {
-  id         String      @id @default(cuid())
-  productId  String
-  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  size       String
-  price      Decimal     @db.Decimal(10,2)
-  stock      Int         @default(100)
-  sku        String      @unique
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id          String      @id @default(cuid())
+  productId   String
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size        String
+  price       Decimal     @db.Decimal(10,2)
+  stock       Int         @default(100)
+  weightGrams Int         @default(500)
+  sku         String      @unique
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@unique([productId, size])
 }
@@ -90,19 +92,22 @@ model CartItem {
 }
 
 model Order {
-  id           String      @id @default(cuid())
-  userId       String?
-  user         User?       @relation(fields: [userId], references: [id])
-  items        OrderItem[]
-  subtotal     Decimal     @db.Decimal(10,2)
-  taxTotal     Decimal     @db.Decimal(10,2)
-  shippingFee  Decimal     @db.Decimal(10,2)
-  total        Decimal     @db.Decimal(10,2)
-  currency     String      @default("INR")
-  status       String      @default("pending")
-  fulfillmentStatus String @default("pending")
-  paymentId    String?
-  invoiceNo    String?
+  id                String      @id @default(cuid())
+  userId            String?
+  user              User?       @relation(fields: [userId], references: [id])
+  items             OrderItem[]
+  shipment          Shipment?
+  subtotal          Decimal     @db.Decimal(10,2)
+  taxTotal          Decimal     @db.Decimal(10,2)
+  shippingFee       Decimal     @db.Decimal(10,2)
+  total             Decimal     @db.Decimal(10,2)
+  currency          String      @default("INR")
+  status            String      @default("pending")
+  fulfillmentStatus String      @default("pending")
+  orderChannel      String      @default("online")
+  paymentMethod     String?
+  paymentId         String?
+  invoiceNo         String?
 
   customerName String?
   email        String?
@@ -114,6 +119,20 @@ model Order {
 
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+}
+
+model Shipment {
+  id                String    @id @default(cuid())
+  orderId           String    @unique
+  order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  courier           String
+  trackingNumber    String
+  trackingUrl       String?
+  status            String    @default("booked")
+  shippedAt         DateTime?
+  estimatedDelivery DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model OrderItem {

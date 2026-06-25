@@ -1,8 +1,5 @@
 import { Resend } from 'resend';
 import { prisma } from "@/lib/db";
-import { toNum } from "@/lib/decimal";
-import { revalidatePath } from "next/cache";
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface SendEmailParams {
   to: string;
@@ -12,6 +9,7 @@ interface SendEmailParams {
 }
 
 async function attemptSend({ to, subject, html }: SendEmailParams) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   return resend.emails.send({
     from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
     to,

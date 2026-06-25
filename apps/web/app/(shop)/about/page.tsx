@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "SriLaYa Foods is on a mission to revive traditional Indian millets — sourced farm-direct, minimally processed, zero preservatives, and delivered across India.",
+};
 
 export default function AboutUsPage() {
   return (
