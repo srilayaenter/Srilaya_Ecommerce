@@ -1,5 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import { canAccessPath, isAdminRole, ROLE_ALLOWED_PATHS, AppRole } from "@/lib/permissions";
 
 export default withAuth(
   function middleware(req) {
@@ -19,8 +20,16 @@ export default withAuth(
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
 
-    if (token.role !== "admin") {
+    const role = token.role as string;
+
+    if (!isAdminRole(role)) {
       return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    if (!canAccessPath(role, path)) {
+      const allowed = ROLE_ALLOWED_PATHS[role as AppRole] ?? [];
+      const fallback = allowed[0] ?? "/";
+      return NextResponse.redirect(new URL(fallback, req.url));
     }
 
     return NextResponse.next();

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 
-const LOW_STOCK_THRESHOLD = 10;
+const DEFAULT_LOW_STOCK_THRESHOLD = 10;
 
 export async function POST(request: Request) {
   try {
@@ -20,10 +20,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: "No admin alert email configured, skipping" });
     }
 
-    const lowStockVariants = await prisma.productVariant.findMany({
-      where: { stock: { lte: LOW_STOCK_THRESHOLD, gt: 0 } },
+    const allVariants = await prisma.productVariant.findMany({
+      where: { stock: { gt: 0 } },
       include: { product: true },
       orderBy: { stock: 'asc' }
+    });
+
+    const lowStockVariants = allVariants.filter(v => {
+      const threshold = (v as any).reorderThreshold ?? DEFAULT_LOW_STOCK_THRESHOLD;
+      return v.stock <= threshold;
     });
 
     if (lowStockVariants.length === 0) {

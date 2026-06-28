@@ -36,28 +36,28 @@ const categories = [
   {
     name: "Millet Flakes",
     description: "Quick-cook, nutrient-dense",
-    image: "/categories/Millet_Flakes.png",
+    image: "/categories/Pamphlet_MilletFlakes.png",
     href: "/category/millet-flakes",
     color: "from-amber-900/70 to-amber-700/60",
   },
   {
     name: "Millet Rice",
     description: "White rice alternative",
-    image: "/categories/Millet_Rice.png",
+    image: "/categories/Pamphlet_MilletRice.png",
     href: "/category/millet-rice",
     color: "from-teal-900/70 to-teal-700/60",
   },
   {
     name: "Millet Flour",
     description: "Ragi, pearl & multi-millet",
-    image: "/Products/Ragi-Millet.png",
+    image: "/categories/Pamphlet_MilletFlour.png",
     href: "/category/millet-flour",
     color: "from-orange-900/70 to-orange-700/60",
   },
   {
     name: "Millet Rava",
     description: "Healthy upma & porridge base",
-    image: "/Products/Foxtail-Millet.png",
+    image: "/categories/Pamphlet_MilletRava.png",
     href: "/category/millet-rava",
     color: "from-indigo-900/70 to-indigo-700/60",
   },
@@ -67,6 +67,13 @@ const categories = [
     image: "/categories/Foxtail Millet Flakes.png",
     href: "/category/laddu",
     color: "from-rose-900/70 to-rose-700/60",
+  },
+  {
+    name: "Sweeteners",
+    description: "Jaggery, palm sugar & more",
+    image: "/categories/Pamphlet_Sweetnercollection.png",
+    href: "/category/sweeteners",
+    color: "from-amber-900/70 to-amber-700/60",
   },
 ];
 

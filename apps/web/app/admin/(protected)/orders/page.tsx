@@ -24,12 +24,15 @@ async function updateFulfillmentStatus(formData: FormData) {
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ filter?: string }>;
+  searchParams: Promise<{ filter?: string; channel?: string; created?: string }>;
 }) {
-  const { filter } = await searchParams;
+  const { filter, channel, created } = await searchParams;
   // 2. FILTER LOGIC: Catch the "?filter=pending" from your dashboard shortcut
   const currentFilter = filter || "all";
-  const whereClause = currentFilter !== "all" ? { fulfillmentStatus: currentFilter } : {};
+  const whereClause: any = {
+    ...(currentFilter !== "all" ? { fulfillmentStatus: currentFilter } : {}),
+    ...(channel === 'in_store' ? { orderChannel: 'in_store' } : {}),
+  };
 
   // 3. DATA FETCHING: Grab orders based on the filter
   const orders = await prisma.order.findMany({
@@ -50,7 +53,13 @@ export default async function OrdersPage({
 
   return (
     <div className="space-y-6 font-sans">
-      
+
+      {created && (
+        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg text-sm font-semibold">
+          In-store order created successfully — #{created.slice(0, 8).toUpperCase()}
+        </div>
+      )}
+
       {/* Page Header & Filters */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -59,14 +68,25 @@ export default async function OrdersPage({
             Review UTR verifications and process customer shipments.
           </p>
         </div>
+        <Link
+          href="/admin/orders/new"
+          className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors whitespace-nowrap"
+        >
+          + New In-Store Order
+        </Link>
+      </div>
 
-        {/* Filter Tabs */}
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap gap-2">
         <div className="flex bg-white rounded-lg border border-[#E0E0E0] p-1 shadow-sm w-fit">
           <Link href="/admin/orders" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'all' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>All</Link>
           <Link href="/admin/orders?filter=pending" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'pending' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Pending</Link>
           <Link href="/admin/orders?filter=processing" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'processing' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Processing</Link>
           <Link href="/admin/orders?filter=completed" className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === 'completed' ? 'bg-[#FFF8E1] text-[#006A38]' : 'text-[#9E9E9E] hover:text-[#212121]'}`}>Completed</Link>
         </div>
+        <Link href="/admin/orders?channel=in_store" className={`px-4 py-1.5 text-sm font-semibold rounded-lg border transition-colors ${channel === 'in_store' ? 'bg-[#FF9800]/10 text-[#E65100] border-[#FF9800]/30' : 'bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]'}`}>
+          In-Store Only
+        </Link>
       </div>
 
       {/* Orders Table */}
@@ -94,13 +114,18 @@ export default async function OrdersPage({
                 {orders.map((order: any) => (
                   <tr key={order.id} className="border-b border-[#F5F5F5] hover:bg-[#FFF8E1]/20 transition-colors">
                     
-                    <td className="py-4 px-6 font-mono font-semibold text-[#212121]">
-                      #{order.id.slice(0, 8).toUpperCase()}
+                    <td className="py-4 px-6">
+                      <Link href={`/admin/orders/${order.id}`} className="font-mono font-semibold text-[#006A38] hover:underline">
+                        #{order.id.slice(0, 8).toUpperCase()}
+                      </Link>
                     </td>
                     
                     <td className="py-4 px-6">
                       <span className="block font-semibold text-[#212121]">{order.customerName || "Guest User"}</span>
                       <span className="block text-[11px] text-[#9E9E9E]">{order.email || "No email provided"}</span>
+                      {order.orderChannel === 'in_store' && (
+                        <span className="inline-block mt-1 text-[9px] font-bold uppercase tracking-wider bg-[#FF9800]/10 text-[#E65100] px-1.5 py-0.5 rounded">In-Store</span>
+                      )}
                     </td>
                     
                     {/* Note: Assumes your schema has a createdAt field */}
@@ -124,32 +149,43 @@ export default async function OrdersPage({
                     </td>
                     
                     <td className="py-4 px-6 text-right">
-                      {/* Inline Form to trigger the Server Action */}
-                      {order.fulfillmentStatus === 'pending' && (
-                        <form action={updateFulfillmentStatus}>
-                          <input type="hidden" name="orderId" value={order.id} />
-                          <input type="hidden" name="newStatus" value="processing" />
-                          <button 
-                            type="submit"
-                            className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
+                      <div className="flex flex-col gap-1.5 items-end">
+                        {/* Invoice link for in-store orders */}
+                        {order.orderChannel === 'in_store' && (
+                          <Link
+                            href={`/admin/orders/${order.id}/invoice`}
+                            className="bg-[#FFF8E1] border border-[#FF9800]/30 text-[#E65100] px-3 py-1.5 rounded-[6px] text-[11px] font-bold hover:bg-[#FF9800]/10 transition-colors"
                           >
-                            Verify & Process
-                          </button>
-                        </form>
-                      )}
-                      
-                      {order.fulfillmentStatus === 'processing' && (
-                        <form action={updateFulfillmentStatus}>
-                          <input type="hidden" name="orderId" value={order.id} />
-                          <input type="hidden" name="newStatus" value="completed" />
-                          <button 
-                            type="submit"
-                            className="bg-white border border-[#006A38] text-[#006A38] hover:bg-[#FFF8E1] px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
-                          >
-                            Mark Completed
-                          </button>
-                        </form>
-                      )}
+                            🧾 Invoice
+                          </Link>
+                        )}
+
+                        {order.fulfillmentStatus === 'pending' && (
+                          <form action={updateFulfillmentStatus}>
+                            <input type="hidden" name="orderId" value={order.id} />
+                            <input type="hidden" name="newStatus" value="processing" />
+                            <button
+                              type="submit"
+                              className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
+                            >
+                              Verify & Process
+                            </button>
+                          </form>
+                        )}
+
+                        {order.fulfillmentStatus === 'processing' && (
+                          <form action={updateFulfillmentStatus}>
+                            <input type="hidden" name="orderId" value={order.id} />
+                            <input type="hidden" name="newStatus" value="completed" />
+                            <button
+                              type="submit"
+                              className="bg-white border border-[#006A38] text-[#006A38] hover:bg-[#FFF8E1] px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                            >
+                              Mark Completed
+                            </button>
+                          </form>
+                        )}
+                      </div>
                     </td>
 
                   </tr>

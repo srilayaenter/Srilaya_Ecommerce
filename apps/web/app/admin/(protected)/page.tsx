@@ -13,7 +13,7 @@ export default async function AdminOverviewPage() {
     prisma.order.count(),
     prisma.order.count({ where: { status: 'pending' } }),
     prisma.order.findMany({ where: { status: 'paid' }, select: { total: true } }),
-    prisma.productVariant.count({ where: { stock: { lte: 10 } } }),
+    prisma.productVariant.findMany({ select: { stock: true, reorderThreshold: true } }),
     prisma.order.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' }
@@ -22,13 +22,14 @@ export default async function AdminOverviewPage() {
 
   const totalRevenue = paidOrders.reduce((sum: number, order: any) => sum + toNum(order.total), 0);
   const pendingVerificationCount = pendingOrdersCount;
+  const lowStockCount = (lowStockVariants as any[]).filter(v => v.stock <= (v.reorderThreshold ?? 10)).length;
 
   // PRD Strict Semantic Colors Applied
   const metrics = [
     { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From all confirmed paid orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
     { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" },
     { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" },
-    { title: "Low Stock Alerts", value: lowStockVariants.toString(), description: "Variants with <= 10 items left", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
+    { title: "Low Stock Alerts", value: lowStockCount.toString(), description: "Variants at or below reorder threshold", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
   ];
 
   return (

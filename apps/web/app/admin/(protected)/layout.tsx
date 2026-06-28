@@ -1,21 +1,32 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { ROLE_LABELS, AppRole } from "@/lib/permissions";
 import LogoutButton from "./LogoutButton";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
-  const menuItems = [
-    { name: "Overview Dashboard", href: "/admin", icon: "📊" },
-    { name: "Manage Orders", href: "/admin/orders", icon: "📦" },
-    { name: "Inventory Matrix", href: "/admin/products", icon: "🌾" },
-    { name: "Categories", href: "/admin/categories", icon: "🗂️" },
-    { name: "Suppliers", href: "/admin/suppliers", icon: "🚚" },
-    { name: "Failed Emails", href: "/admin/failed-emails", icon: "✉️" },
-    { name: "Store Settings", href: "/admin/settings", icon: "⚙️" },
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  const session = await getServerSession(authOptions);
+  const role = (session?.user?.role ?? 'admin') as AppRole;
+  const roleLabel = ROLE_LABELS[role] ?? 'Admin';
+  const userInitials = session?.user?.email?.slice(0, 2).toUpperCase() ?? 'SM';
+
+  const allMenuItems = [
+    { name: "Overview Dashboard", href: "/admin",               icon: "📊", roles: ['admin','manager'] },
+    { name: "Manage Orders",      href: "/admin/orders",        icon: "📦", roles: ['admin','manager','billing_staff'] },
+    { name: "Inventory Matrix",   href: "/admin/products",      icon: "🌾", roles: ['admin','manager','inventory_staff'] },
+    { name: "Categories",         href: "/admin/categories",    icon: "🗂️", roles: ['admin','manager','inventory_staff'] },
+    { name: "Suppliers",          href: "/admin/suppliers",     icon: "🚚", roles: ['admin','manager','inventory_staff'] },
+    { name: "Users & Roles",      href: "/admin/users",         icon: "👥", roles: ['admin','manager'] },
+    { name: "Failed Emails",      href: "/admin/failed-emails", icon: "✉️", roles: ['admin','manager'] },
+    { name: "Store Settings",     href: "/admin/settings",      icon: "⚙️", roles: ['admin'] },
   ];
+
+  const menuItems = allMenuItems.filter(item => item.roles.includes(role));
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#F5F5F5] flex font-sans overflow-hidden">
@@ -87,11 +98,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <span className="block font-bold text-[13px] text-[#212121]">Store Manager</span>
-              <span className="block text-[11px] text-[#9E9E9E] font-medium">System Admin</span>
+              <span className="block font-bold text-[13px] text-[#212121]">{session?.user?.email ?? 'Admin'}</span>
+              <span className="block text-[11px] text-[#9E9E9E] font-medium">{roleLabel}</span>
             </div>
             <div className="w-9 h-9 rounded-full bg-[#FFF8E1] text-[#8D6E63] border border-[#E0E0E0] flex items-center justify-center font-bold text-sm shadow-sm">
-              SM
+              {userInitials}
             </div>
             <LogoutButton />
           </div>

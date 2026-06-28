@@ -34,10 +34,11 @@ async function updateVariant(formData: FormData) {
   await prisma.productVariant.update({
     where: { id: variantId },
     data: {
-      size:        formData.get('size') as string,
-      price:       parseFloat(formData.get('price') as string),
-      stock:       parseInt(formData.get('stock') as string, 10),
-      weightGrams: parseInt(formData.get('weightGrams') as string, 10) || 500,
+      size:             formData.get('size') as string,
+      price:            parseFloat(formData.get('price') as string),
+      stock:            parseInt(formData.get('stock') as string, 10),
+      weightGrams:      parseInt(formData.get('weightGrams') as string, 10) || 500,
+      reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,
     }
   });
   redirect(`/admin/products/${productId}?saved=true&variant=true`);
@@ -59,10 +60,11 @@ async function addVariant(formData: FormData) {
     data: {
       productId,
       size,
-      price:       parseFloat(formData.get('newPrice') as string),
-      stock:       parseInt(formData.get('newStock') as string, 10),
-      weightGrams: parseInt(formData.get('newWeightGrams') as string, 10) || 500,
-      sku:         generatedSku,
+      price:            parseFloat(formData.get('newPrice') as string),
+      stock:            parseInt(formData.get('newStock') as string, 10),
+      weightGrams:      parseInt(formData.get('newWeightGrams') as string, 10) || 500,
+      reorderThreshold: parseInt(formData.get('newReorderThreshold') as string, 10) || 10,
+      sku:              generatedSku,
     }
   });
   redirect(`/admin/products/${productId}?saved=true&variant=added`);
@@ -150,22 +152,24 @@ export default async function EditProductPage({ params, searchParams }: PageProp
         {/* VARIANTS SECTION */}
         <div className="bg-white rounded-xl border p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Size Variants</h2>
-          <div className="grid grid-cols-5 gap-2 mb-1 px-0">
+          <div className="grid grid-cols-6 gap-2 mb-1 px-0">
             <span className="text-[10px] font-bold text-slate-400 uppercase">Size</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase">Price (₹)</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase">Stock</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase">Weight (g)</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Reorder At</span>
             <span />
           </div>
           {product.variants.map(variant => (
             <div key={variant.id} className="border-b py-3">
-              <form action={updateVariant} className="grid grid-cols-5 gap-2 items-center">
+              <form action={updateVariant} className="grid grid-cols-6 gap-2 items-center">
                 <input type="hidden" name="variantId" value={variant.id} />
                 <input type="hidden" name="productId" value={product.id} />
-                <input type="text"   name="size"        defaultValue={variant.size}              className="border rounded px-2 py-1 text-sm" />
-                <input type="number" name="price"       defaultValue={variant.price.toString()}  step="0.01" className="border rounded px-2 py-1 text-sm" />
-                <input type="number" name="stock"       defaultValue={variant.stock}             className="border rounded px-2 py-1 text-sm" />
-                <input type="number" name="weightGrams" defaultValue={(variant as any).weightGrams ?? 500} placeholder="e.g. 550" className="border rounded px-2 py-1 text-sm" />
+                <input type="text"   name="size"             defaultValue={variant.size}              className="border rounded px-2 py-1 text-sm" />
+                <input type="number" name="price"            defaultValue={variant.price.toString()}  step="0.01" className="border rounded px-2 py-1 text-sm" />
+                <input type="number" name="stock"            defaultValue={variant.stock}             className="border rounded px-2 py-1 text-sm" />
+                <input type="number" name="weightGrams"      defaultValue={(variant as any).weightGrams ?? 500} placeholder="e.g. 550" className="border rounded px-2 py-1 text-sm" />
+                <input type="number" name="reorderThreshold" defaultValue={(variant as any).reorderThreshold ?? 10} placeholder="10" className="border rounded px-2 py-1 text-sm" title="Alert when stock falls to this level" />
                 <button type="submit" className="bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs font-bold transition-colors">Update</button>
               </form>
             </div>
@@ -176,10 +180,11 @@ export default async function EditProductPage({ params, searchParams }: PageProp
             <p className="text-xs text-[#9E9E9E] mb-2">SKU will be generated automatically from the product code and size.</p>
             <form key={Date.now()} action={addVariant} className="grid grid-cols-2 gap-2" autoComplete="off">
               <input type="hidden" name="productId" value={product.id} />
-              <input name="newSize"         placeholder="Size (e.g. 500g)"  autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" step="0.01" name="newPrice"  placeholder="Price (₹)"       autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" name="newStock"        placeholder="Stock qty"        autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input name="newSize"                   placeholder="Size (e.g. 500g)"      autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input type="number" step="0.01" name="newPrice"        placeholder="Price (₹)"            autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input type="number" name="newStock"        placeholder="Stock qty"            autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
               <input type="number" name="newWeightGrams"  placeholder="Weight (g, e.g. 550)" autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
+              <input type="number" name="newReorderThreshold" placeholder="Reorder at (default 10)" autoComplete="off" className="border rounded px-2 py-1 text-sm col-span-2" />
               <button type="submit" className="col-span-2 bg-[#4CAF50] text-white py-2 rounded-lg text-sm font-bold hover:bg-[#388E3C] transition-colors">Add Variant</button>
             </form>
           </div>

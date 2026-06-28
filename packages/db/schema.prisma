@@ -58,9 +58,10 @@ model ProductVariant {
   product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   size        String
   price       Decimal     @db.Decimal(10,2)
-  stock       Int         @default(100)
-  weightGrams Int         @default(500)
-  sku         String      @unique
+  stock            Int         @default(100)
+  reorderThreshold Int         @default(10)
+  weightGrams      Int         @default(500)
+  sku              String      @unique
   cartItems   CartItem[]
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
