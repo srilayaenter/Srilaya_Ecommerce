@@ -150,13 +150,19 @@ export default async function OrdersPage({
                     
                     <td className="py-4 px-6 text-right">
                       <div className="flex flex-col gap-1.5 items-end">
-                        {/* Invoice link for in-store orders */}
-                        {order.orderChannel === 'in_store' && (
+                        {order.orderChannel === 'in_store' ? (
                           <Link
                             href={`/admin/orders/${order.id}/invoice`}
                             className="bg-[#FFF8E1] border border-[#FF9800]/30 text-[#E65100] px-3 py-1.5 rounded-[6px] text-[11px] font-bold hover:bg-[#FF9800]/10 transition-colors"
                           >
                             🧾 Invoice
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/admin/orders/${order.id}`}
+                            className="bg-[#F5F5F5] border border-[#E0E0E0] text-[#424242] px-3 py-1.5 rounded-[6px] text-[11px] font-bold hover:bg-[#E0E0E0] transition-colors"
+                          >
+                            View
                           </Link>
                         )}
 

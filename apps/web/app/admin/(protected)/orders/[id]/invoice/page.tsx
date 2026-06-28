@@ -63,6 +63,17 @@ export default async function OrderInvoicePage({ params }: PageProps) {
 
   return (
     <div className="font-sans pb-12">
+      {/* Print CSS: hide admin chrome so only the invoice renders in PDF */}
+      <style>{`
+        @media print {
+          aside, header, nav { display: none !important; }
+          main { padding: 0 !important; max-width: 100% !important; }
+          body { background: white !important; }
+          .print\\:hidden { display: none !important; }
+          #invoice-doc { border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+        }
+      `}</style>
+
       {/* Toolbar — hidden on print */}
       <div className="print:hidden flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
