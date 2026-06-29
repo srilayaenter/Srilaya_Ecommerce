@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { addToCart } from "@/app/actions/cart";
 import { useCart } from "@/context/CartContext";
+import WishlistButton from "@/components/WishlistButton";
 
 interface Variant {
   id: string;
@@ -63,6 +64,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
+
+      {/* Wishlist heart */}
+      <WishlistButton productId={product.id} />
 
       {/* Image Frame */}
       <Link href={`/product/${product.slug}`} className="w-full h-52 bg-slate-50 relative overflow-hidden flex items-center justify-center p-4">

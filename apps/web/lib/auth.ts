@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           role: user.role,
+          totpEnabled: user.totpEnabled,
         };
       },
     }),
@@ -51,6 +52,9 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.totpEnabled = (user as any).totpEnabled ?? false;
+        // If MFA is enabled, mark as pending until verified
+        token.totpPending = (user as any).totpEnabled === true;
       }
       return token;
     },
@@ -58,6 +62,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id ?? "";
         session.user.role = token.role ?? "customer";
+        (session.user as any).totpPending = token.totpPending ?? false;
       }
       return session;
     },

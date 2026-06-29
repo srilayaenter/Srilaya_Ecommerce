@@ -31,49 +31,91 @@ const categories = [
     description: "Foxtail, Ragi, Pearl & more",
     image: "/categories/Barnyard millet.png",
     href: "/category/millets",
-    color: "from-emerald-900/70 to-emerald-700/60",
+    color: "from-emerald-900/80 to-emerald-700/50",
+    wellness: [
+      "🩸 Regulates blood sugar naturally",
+      "💪 Rich in iron, calcium & magnesium",
+      "🌿 100% gluten-free & gut-friendly",
+      "⚖️ Supports healthy weight management",
+    ],
   },
   {
     name: "Millet Flakes",
     description: "Quick-cook, nutrient-dense",
     image: "/categories/Pamphlet_MilletFlakes.png",
     href: "/category/millet-flakes",
-    color: "from-amber-900/70 to-amber-700/60",
+    color: "from-amber-900/80 to-amber-700/50",
+    wellness: [
+      "⚡ Ready in under 5 minutes",
+      "🫀 High protein & heart-healthy",
+      "🦠 Promotes healthy gut flora",
+      "🥣 Great oats alternative for breakfast",
+    ],
   },
   {
     name: "Millet Rice",
     description: "White rice alternative",
     image: "/categories/Pamphlet_MilletRice.png",
     href: "/category/millet-rice",
-    color: "from-teal-900/70 to-teal-700/60",
+    color: "from-teal-900/80 to-teal-700/50",
+    wellness: [
+      "📉 Low glycaemic index",
+      "🩺 Ideal for diabetics & weight-watchers",
+      "🍽️ Keeps you fuller for longer",
+      "🌾 More nutrients than polished white rice",
+    ],
   },
   {
     name: "Millet Flour",
     description: "Ragi, pearl & multi-millet",
     image: "/categories/Pamphlet_MilletFlour.png",
     href: "/category/millet-flour",
-    color: "from-orange-900/70 to-orange-700/60",
+    color: "from-orange-900/80 to-orange-700/50",
+    wellness: [
+      "🧁 Perfect for rotis, dosas & bakes",
+      "🦴 High calcium — great for bone health",
+      "🧬 Rich in B-vitamins & antioxidants",
+      "🚫 No maida, no refined grains",
+    ],
   },
   {
     name: "Millet Rava",
     description: "Healthy upma & porridge base",
     image: "/categories/Pamphlet_MilletRava.png",
     href: "/category/millet-rava",
-    color: "from-indigo-900/70 to-indigo-700/60",
+    color: "from-indigo-900/80 to-indigo-700/50",
+    wellness: [
+      "❤️ Heart-healthy high-fibre base",
+      "📊 Keeps cholesterol levels in check",
+      "🔋 Slow-release energy all morning",
+      "🥗 Versatile — upma, porridge, khichdi",
+    ],
   },
   {
     name: "Laddus",
     description: "Traditional millet sweets",
     image: "/categories/Foxtail Millet Flakes.png",
     href: "/category/laddu",
-    color: "from-rose-900/70 to-rose-700/60",
+    color: "from-rose-900/80 to-rose-700/50",
+    wellness: [
+      "🍬 No refined sugar — sweetened with jaggery",
+      "🔥 Natural energy boost for kids & adults",
+      "🌺 Rich in iron & traditional herbs",
+      "🎁 Festive gifting with a healthy twist",
+    ],
   },
   {
     name: "Sweeteners",
     description: "Jaggery, palm sugar & more",
     image: "/categories/Pamphlet_Sweetnercollection.png",
     href: "/category/sweeteners",
-    color: "from-amber-900/70 to-amber-700/60",
+    color: "from-amber-900/80 to-amber-700/50",
+    wellness: [
+      "📉 Lower GI than refined white sugar",
+      "⚗️ Retains natural minerals & trace elements",
+      "🌴 Unrefined palm & cane jaggery",
+      "🧑‍🍳 Direct 1:1 substitute in all recipes",
+    ],
   },
 ];
 
@@ -190,23 +232,40 @@ export default async function HomePage() {
               <Link
                 key={cat.name}
                 href={cat.href}
-                className="group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all duration-300"
+                className="group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
               >
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 640px) 50vw, 33vw"
-                />
-                {/* gradient overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t ${cat.color}`} />
+                {/* Fixed image area */}
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 640px) 50vw, 33vw"
+                  />
+                  {/* Gradient overlay — darkens on hover for readability */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} group-hover:opacity-95 transition-opacity duration-300`} />
+                </div>
+
+                {/* Info panel — sits below the image, slides up to cover it on hover */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                  <h3 className="text-white font-black text-base md:text-lg leading-tight">
+                  <h3 className="text-white font-black text-base md:text-lg leading-tight drop-shadow">
                     {cat.name}
                   </h3>
                   <p className="text-white/80 text-xs mt-1 font-medium">{cat.description}</p>
-                  <span className="inline-block mt-2 text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors">
+
+                  {/* Wellness bullets — hidden by default, expands on hover */}
+                  <div className="max-h-0 group-hover:max-h-52 overflow-hidden transition-all duration-500 ease-in-out">
+                    <ul className="mt-3 space-y-1.5">
+                      {cat.wellness.map((tip) => (
+                        <li key={tip} className="text-white/90 text-[11px] md:text-xs leading-snug">
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <span className="inline-block mt-3 text-xs font-black text-amber-300 group-hover:text-amber-200 group-hover:tracking-wide transition-all duration-200">
                     Shop Now →
                   </span>
                 </div>

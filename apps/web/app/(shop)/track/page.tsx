@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { BRAND } from "@/lib/brand";

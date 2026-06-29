@@ -10,13 +10,15 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String?
-  role      String   @default("customer")
-  orders    Order[]
-  carts     Cart[]
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String?
+  role         String   @default("customer")
+  totpSecret   String?
+  totpEnabled  Boolean  @default(false)
+  orders       Order[]
+  carts        Cart[]
+  createdAt    DateTime @default(now())
 }
 
 model PasswordResetToken {
@@ -131,6 +133,8 @@ model Order {
   paymentMethod     String?
   paymentId         String?
   invoiceNo         String?
+  couponCode        String?
+  discountAmount    Decimal?    @db.Decimal(10,2)
 
   customerName String?
   email        String?
@@ -200,4 +204,17 @@ model Supplier {
   products      Product[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  type       String    // "percentage" | "fixed"
+  value      Decimal   @db.Decimal(10,2)
+  minOrder   Decimal?  @db.Decimal(10,2)
+  maxUses    Int?
+  usedCount  Int       @default(0)
+  expiresAt  DateTime?
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
 }

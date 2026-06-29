@@ -11,6 +11,8 @@ export default withAuth(
     const isPublicAdminPage =
       path.startsWith("/admin/forgot-password") ||
       path.startsWith("/admin/reset-password");
+    const isMfaVerifyPage = path.startsWith("/admin/mfa-verify");
+    const isMfaSetupPage  = path.startsWith("/admin/mfa-setup");
 
     if (isLoginPage || isPublicAdminPage) {
       if (isAuth && isLoginPage) {
@@ -22,6 +24,13 @@ export default withAuth(
     if (!isAuth) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
+
+    // MFA pending — only allow the verify page
+    const totpPending = token?.totpPending === true;
+    if (totpPending && !isMfaVerifyPage) {
+      return NextResponse.redirect(new URL("/admin/mfa-verify", req.url));
+    }
+    if (isMfaVerifyPage || isMfaSetupPage) return NextResponse.next();
 
     const role = token.role as string;
 

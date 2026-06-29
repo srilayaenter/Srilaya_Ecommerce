@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
+import CouponInput from "@/components/CouponInput";
 
 async function deleteCartItem(formData: FormData) {
   'use server';
@@ -189,13 +190,19 @@ export default async function CartPage() {
               </div>
             </div>
 
+            {/* Coupon input */}
+            <div className="mb-4">
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Coupon Code</p>
+              <CouponInput orderTotal={total} />
+            </div>
+
             <div className="border-t border-slate-100 pt-4 mb-6">
               <div className="flex justify-between text-xl font-extrabold">
                 <span className="text-slate-900">Subtotal + GST</span>
                 <span className="text-brand-green">₹{total.toFixed(2)}</span>
               </div>
               <p className="text-[11px] text-slate-400 mt-1 text-right">
-                + shipping — calculated at checkout
+                + shipping & coupon discount applied at checkout
               </p>
             </div>
 
