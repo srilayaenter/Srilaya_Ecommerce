@@ -59,11 +59,12 @@ export async function POST(request: Request) {
     state:            order.state,
     zipCode:          order.zipCode,
     items: order.items.map(i => ({
-      title:    i.variant.product.title,
-      size:     i.variant.size,
-      quantity: i.quantity,
-      price:    toNum(i.price),
-      gstRate:  toNum(i.gstRate),
+      title:     i.variant.product.title,
+      size:      i.variant.size,
+      quantity:  i.quantity,
+      price:     toNum(i.price),
+      gstRate:   toNum(i.gstRate),
+      variantId: i.variantId,
     })),
     shipment: order.shipment ? {
       courier:           order.shipment.courier,

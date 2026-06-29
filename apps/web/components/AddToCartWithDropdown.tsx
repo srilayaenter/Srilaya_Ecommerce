@@ -2,6 +2,7 @@
 import { useState, useTransition } from "react";
 import { addToCart } from "../app/actions/cart";
 import { useCart } from "@/context/CartContext";
+import NotifyMeButton from "@/components/NotifyMeButton";
 
 interface Variant {
   id: string;
@@ -71,6 +72,9 @@ export default function AddToCartWithDropdown({ variants }: { variants: Variant[
           ? `In Stock: ${selected.stock}`
           : <span className="text-red-500 font-bold">Out of Stock</span>}
       </p>
+
+      {/* Out of stock — notify me */}
+      {selected.stock <= 0 && <NotifyMeButton variantId={selected.id} />}
 
       {/* Quantity + Add to Cart */}
       {selected.stock > 0 && (

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { BRAND } from "@/lib/brand";
+import ReturnRequestButton from "@/components/ReturnRequestButton";
 
 interface ShipmentData {
   courier: string;
@@ -34,7 +35,7 @@ interface OrderData {
   city?: string;
   state?: string;
   zipCode?: string;
-  items: { title: string; size: string; quantity: number; price: number; gstRate: number }[];
+  items: { title: string; size: string; quantity: number; price: number; gstRate: number; variantId: string }[];
   shipment: ShipmentData | null;
 }
 
@@ -212,6 +213,18 @@ function TrackOrderContent() {
                 </a>
                 {order.fulfillmentStatus === 'completed' && (
                   <ReorderButton orderId={order.id} contact={contact} />
+                )}
+                {order.fulfillmentStatus === 'completed' && (
+                  <ReturnRequestButton
+                    orderId={order.id}
+                    contact={contact}
+                    items={order.items.map(i => ({
+                      title:     i.title,
+                      size:      i.size,
+                      quantity:  i.quantity,
+                      variantId: i.variantId,
+                    }))}
+                  />
                 )}
               </div>
             </div>

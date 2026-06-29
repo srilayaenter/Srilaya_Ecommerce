@@ -31,16 +31,27 @@ async function updateVariant(formData: FormData) {
   'use server';
   const variantId = formData.get('variantId') as string;
   const productId = formData.get('productId') as string;
+  const newStock  = parseInt(formData.get('stock') as string, 10);
+
+  const before = await prisma.productVariant.findUnique({ where: { id: variantId }, select: { stock: true } });
+
   await prisma.productVariant.update({
     where: { id: variantId },
     data: {
       size:             formData.get('size') as string,
       price:            parseFloat(formData.get('price') as string),
-      stock:            parseInt(formData.get('stock') as string, 10),
+      stock:            newStock,
       weightGrams:      parseInt(formData.get('weightGrams') as string, 10) || 500,
       reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,
     }
   });
+
+  // If stock went from 0 to >0, fire stock notifications
+  if (before && before.stock === 0 && newStock > 0) {
+    const { sendStockNotifications } = await import('@/lib/stockNotifications');
+    sendStockNotifications(variantId).catch(() => {});
+  }
+
   redirect(`/admin/products/${productId}?saved=true&variant=true`);
 }
 
