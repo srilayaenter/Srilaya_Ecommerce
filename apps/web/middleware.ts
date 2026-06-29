@@ -48,10 +48,19 @@ export default withAuth(
   },
   {
     callbacks: {
-      // Return true only when a JWT token exists — the middleware function
-      // above handles all further role/MFA checks. Returning false here
-      // would short-circuit the middleware and redirect before it runs.
-      authorized: ({ token }) => !!token,
+      // Allow login/reset pages through without a token so NextAuth doesn't
+      // redirect them to itself, creating an infinite callbackUrl loop.
+      // The middleware function above handles all role/MFA checks for
+      // authenticated paths.
+      authorized: ({ token, req }) => {
+        const path = req.nextUrl.pathname;
+        const isPublic =
+          path.startsWith("/admin/login") ||
+          path.startsWith("/admin/forgot-password") ||
+          path.startsWith("/admin/reset-password") ||
+          path.startsWith("/admin/mfa-verify");
+        return isPublic || !!token;
+      },
     },
   }
 );
