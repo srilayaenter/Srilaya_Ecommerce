@@ -28,19 +28,6 @@ type ProductWithVariants = Prisma.ProductGetPayload<typeof productQuery>;
 
 const categories = [
   {
-    name: "Millets",
-    description: "Foxtail, Ragi, Pearl & more",
-    image: "/categories/Barnyard millet.png",
-    href: "/category/millets",
-    color: "from-emerald-900/80 to-emerald-700/50",
-    wellness: [
-      "🩸 Regulates blood sugar naturally",
-      "💪 Rich in iron, calcium & magnesium",
-      "🌿 100% gluten-free & gut-friendly",
-      "⚖️ Supports healthy weight management",
-    ],
-  },
-  {
     name: "Millet Flakes",
     description: "Quick-cook, nutrient-dense",
     image: "/categories/Pamphlet_MilletFlakes.png",

@@ -33,7 +33,6 @@ export default function Header() {
   const infoLinks = [...primaryLinks, ...utilityLinks];
 
   const categoryLinks = [
-    { name: "Millets", href: "/category/millets" },
     { name: "Millet Flakes", href: "/category/millet-flakes" },
     { name: "Millet Rice", href: "/category/millet-rice" },
     { name: "Millet Flour", href: "/category/millet-flour" },
