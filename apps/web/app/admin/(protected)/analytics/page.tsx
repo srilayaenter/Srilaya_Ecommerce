@@ -78,28 +78,37 @@ export default async function AnalyticsPage() {
       {/* Revenue chart */}
       <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
         <h2 className="text-sm font-bold text-[#212121] mb-6">Daily Revenue — Last 30 Days</h2>
-        <div className="flex items-end gap-[3px] h-40 w-full">
-          {days.map(([date, value]) => {
-            const height = maxRevenue > 0 ? (value / maxRevenue) * 100 : 0;
-            const label = new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
-            return (
-              <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
-                <div
-                  className="w-full bg-[#006A38] rounded-t-sm transition-all group-hover:bg-[#00522B]"
-                  style={{ height: `${Math.max(height, value > 0 ? 4 : 0)}%` }}
-                />
-                {/* Tooltip */}
-                <div className="absolute bottom-full mb-1 hidden group-hover:block bg-[#212121] text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap z-10">
-                  {label}: ₹{value.toFixed(0)}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex justify-between mt-2 text-[10px] text-[#9E9E9E]">
-          <span>{new Date(days[0][0]).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
-          <span>{new Date(days[days.length - 1][0]).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
-        </div>
+        {totalRevenue === 0 ? (
+          <div className="flex flex-col items-center justify-center h-40 gap-3">
+            <span className="text-4xl">📊</span>
+            <p className="text-sm font-semibold text-[#9E9E9E]">No paid orders in the last 30 days.</p>
+            <p className="text-xs text-[#BDBDBD]">Revenue will appear here once customers complete purchases.</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-end gap-[3px] h-40 w-full">
+              {days.map(([date, value]) => {
+                const height = maxRevenue > 0 ? (value / maxRevenue) * 100 : 0;
+                const label = new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+                return (
+                  <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
+                    <div
+                      className="w-full bg-[#006A38] rounded-t-sm transition-all group-hover:bg-[#00522B]"
+                      style={{ height: `${Math.max(height, value > 0 ? 4 : 0)}%` }}
+                    />
+                    <div className="absolute bottom-full mb-1 hidden group-hover:block bg-[#212121] text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap z-10">
+                      {label}: ₹{value.toFixed(0)}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex justify-between mt-2 text-[10px] text-[#9E9E9E]">
+              <span>{new Date(days[0][0]).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
+              <span>{new Date(days[days.length - 1][0]).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Top products + Order status */}
@@ -131,6 +140,9 @@ export default async function AnalyticsPage() {
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
           <h2 className="text-sm font-bold text-[#212121] mb-5">Order Status Breakdown</h2>
           <div className="space-y-3">
+            {orderStatusCounts.length === 0 && (
+              <p className="text-sm text-[#9E9E9E] py-4 text-center">No orders placed yet.</p>
+            )}
             {orderStatusCounts.map(s => (
               <div key={s.status} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
