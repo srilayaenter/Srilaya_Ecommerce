@@ -1,5 +1,5 @@
 export const BRAND = {
-  name: "Srilaya Foods",
+  name: "SriLaYa Enterprises",
   tagline: "Pure & Organic Foods",
   domain: "srilaya.com",
   gstin: process.env.BRAND_GSTIN || "29XXXXX1234X1ZX",

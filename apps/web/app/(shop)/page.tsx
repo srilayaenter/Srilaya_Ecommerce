@@ -7,11 +7,11 @@ import Testimonials from "@/components/Testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SriLaYa Foods — Ancient Grains. Modern Nutrition.",
+  title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
   description:
     "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
   openGraph: {
-    title: "SriLaYa Foods — Ancient Grains. Modern Nutrition.",
+    title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
     description:
       "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
     url: "/",

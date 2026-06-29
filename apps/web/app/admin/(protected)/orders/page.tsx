@@ -3,6 +3,9 @@ import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { sendWhatsApp, orderDispatchedMessage } from "@/lib/whatsapp";
+import { sendEmail } from "@/lib/email";
+import { buildDispatchEmail, buildDeliveredEmail } from "@/lib/emails/orderStatusUpdate";
+import ExportButton from "./ExportButton";
 
 async function updateFulfillmentStatus(formData: FormData) {
   "use server";
@@ -17,15 +20,45 @@ async function updateFulfillmentStatus(formData: FormData) {
     include: { shipment: true },
   });
 
-  // WhatsApp dispatch notification
-  if (newStatus === "processing" && order.phone) {
-    sendWhatsApp(order.phone, orderDispatchedMessage({
-      customerName: order.customerName ?? "Customer",
-      shortId: order.id.slice(0, 8).toUpperCase(),
-      courier: order.shipment?.courier ?? "Our courier",
-      trackingNumber: order.shipment?.trackingNumber ?? "—",
-      trackingUrl: order.shipment?.trackingUrl,
-    })).catch(() => {});
+  const shortId = order.id.slice(0, 8).toUpperCase();
+  const customerName = order.customerName ?? "Customer";
+
+  // Dispatched → WhatsApp + email
+  if (newStatus === "processing") {
+    if (order.phone) {
+      sendWhatsApp(order.phone, orderDispatchedMessage({
+        customerName,
+        shortId,
+        courier: order.shipment?.courier ?? "Our courier",
+        trackingNumber: order.shipment?.trackingNumber ?? "—",
+        trackingUrl: order.shipment?.trackingUrl,
+      })).catch(() => {});
+    }
+    if (order.email) {
+      sendEmail({
+        to: order.email,
+        subject: `Your order #${shortId} has been dispatched! 🚚`,
+        html: buildDispatchEmail({
+          customerName,
+          shortId,
+          courier: order.shipment?.courier ?? "Our courier",
+          trackingNumber: order.shipment?.trackingNumber ?? "—",
+          trackingUrl: order.shipment?.trackingUrl,
+          estimatedDelivery: order.shipment?.estimatedDelivery,
+        }),
+        context: `dispatch:${orderId}`,
+      }).catch(() => {});
+    }
+  }
+
+  // Delivered → email
+  if (newStatus === "completed" && order.email) {
+    sendEmail({
+      to: order.email,
+      subject: `Order #${shortId} delivered — enjoy your healthy grains! ✅`,
+      html: buildDeliveredEmail({ customerName, shortId }),
+      context: `delivered:${orderId}`,
+    }).catch(() => {});
   }
 
   revalidatePath("/admin/orders");
@@ -50,7 +83,6 @@ export default async function OrdersPage({
   searchParams: Promise<{ filter?: string; channel?: string; created?: string }>;
 }) {
   const { filter, channel, created } = await searchParams;
-  // 2. FILTER LOGIC: Catch the "?filter=pending" from your dashboard shortcut
   const currentFilter = filter || "all";
   const whereClause: any = {
     ...(currentFilter !== "all" ? { fulfillmentStatus: currentFilter } : {}),
@@ -91,12 +123,15 @@ export default async function OrdersPage({
             Review UTR verifications and process customer shipments.
           </p>
         </div>
-        <Link
-          href="/admin/orders/new"
-          className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors whitespace-nowrap"
-        >
-          + New In-Store Order
-        </Link>
+        <div className="flex items-center gap-2">
+          <ExportButton filter={currentFilter} channel={channel} />
+          <Link
+            href="/admin/orders/new"
+            className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors whitespace-nowrap"
+          >
+            + New In-Store Order
+          </Link>
+        </div>
       </div>
 
       {/* Filter Tabs */}
