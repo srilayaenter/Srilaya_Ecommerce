@@ -60,8 +60,19 @@ model Product {
   supplier    Supplier?        @relation(fields: [supplierId], references: [id])
   variants    ProductVariant[]
   productReviews ProductReview[]
+  images      ProductImage[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model ProductReview {

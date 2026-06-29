@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import StyledSelect from "@/components/StyledSelect";
+import ImageManager from "./ImageManager";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -200,6 +201,11 @@ export default async function EditProductPage({ params, searchParams }: PageProp
             </form>
           </div>
         </div>
+      </div>
+
+      {/* Image gallery manager */}
+      <div className="mt-8">
+        <ImageManager productId={product.id} />
       </div>
     </div>
   );

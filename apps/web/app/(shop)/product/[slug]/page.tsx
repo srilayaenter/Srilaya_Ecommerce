@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
 import ReviewsSection from "@/components/ReviewsSection";
+import ProductGallery from "@/components/ProductGallery";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -34,6 +35,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     where: { slug },
     include: {
       variants: { orderBy: { price: "asc" } },
+      images: { orderBy: { position: "asc" } },
       productReviews: {
         where: { approved: true },
         orderBy: { createdAt: "desc" },
@@ -95,42 +97,85 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     }),
   };
 
+  const galleryImages = product.images.map(img => ({
+    id: img.id,
+    url: img.url,
+    alt: img.alt,
+  }));
+
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container mx-auto px-4 py-12 max-w-4xl space-y-8">
+      <div className="container mx-auto px-4 py-10 max-w-6xl">
 
-        {/* Product header */}
-        <div>
-          <h1 className="text-3xl font-extrabold text-[#212121]">{product.title}</h1>
-          {avgRating && (
-            <div className="flex items-center gap-2 mt-2">
-              <StarDisplay rating={avgRating} />
-              <span className="text-sm text-[#8D6E63]">
-                {avgRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
-              </span>
+        {/* ── Two-column product layout ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+          {/* Left — image gallery */}
+          <div className="md:sticky md:top-28">
+            <ProductGallery
+              images={galleryImages}
+              fallback={product.image ?? null}
+              title={product.title}
+            />
+          </div>
+
+          {/* Right — details + purchase */}
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl font-extrabold text-[#212121] leading-tight">{product.title}</h1>
+              {avgRating && (
+                <div className="flex items-center gap-2 mt-2">
+                  <StarDisplay rating={avgRating} />
+                  <span className="text-sm text-[#8D6E63]">
+                    {avgRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+                  </span>
+                </div>
+              )}
+              {lowestPrice !== null && (
+                <p className="mt-3 text-2xl font-black text-[#006A38]">
+                  ₹{lowestPrice.toFixed(2)}
+                  <span className="text-sm font-medium text-[#9E9E9E] ml-2">onwards</span>
+                </p>
+              )}
+              {product.description && (
+                <p className="text-[#555] mt-4 leading-relaxed text-sm">{product.description}</p>
+              )}
             </div>
-          )}
-          {product.description && (
-            <p className="text-gray-600 mt-4 leading-relaxed text-base">{product.description}</p>
-          )}
+
+            {/* Variant selector + add to cart */}
+            <div className="bg-white border border-[#E0E0E0] rounded-2xl p-6 shadow-sm">
+              <h2 className="font-bold text-base mb-4 text-[#212121]">Select Size & Add to Cart</h2>
+              {serializedVariants.length > 0 ? (
+                <AddToCartWithDropdown variants={serializedVariants} />
+              ) : (
+                <p className="text-gray-500 italic text-sm">No variants configured for this product.</p>
+              )}
+            </div>
+
+            {/* Trust badges */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { icon: "🌱", label: "100% Organic" },
+                { icon: "🚚", label: "Pan-India Delivery" },
+                { icon: "↩️", label: "7-Day Returns" },
+              ].map(b => (
+                <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
+                  <span className="text-xl">{b.icon}</span>
+                  <span className="text-[11px] font-semibold text-[#555]">{b.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Variant selector */}
-        <div className="bg-white border border-[#E0E0E0] rounded-xl p-8 shadow-sm">
-          <h2 className="font-bold text-xl mb-6 text-[#212121]">Select Variant</h2>
-          {serializedVariants.length > 0 ? (
-            <AddToCartWithDropdown variants={serializedVariants} />
-          ) : (
-            <p className="text-gray-500 italic">No variants configured for this product.</p>
-          )}
+        {/* ── Reviews — full width below ── */}
+        <div className="mt-14">
+          <ReviewsSection slug={slug} reviews={reviews} />
         </div>
-
-        {/* Reviews */}
-        <ReviewsSection slug={slug} reviews={reviews} />
 
       </div>
     </div>
