@@ -2,23 +2,46 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { sendWhatsApp, orderDispatchedMessage } from "@/lib/whatsapp";
 
-// 1. SERVER ACTION: This runs securely on the server to update the database
 async function updateFulfillmentStatus(formData: FormData) {
   "use server";
   const orderId = formData.get("orderId") as string;
   const newStatus = formData.get("newStatus") as string;
 
-  if (orderId && newStatus) {
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { fulfillmentStatus: newStatus },
-    });
-    
-    // Instantly refresh the data on this page and the main dashboard
-    revalidatePath("/admin/orders");
-    revalidatePath("/admin");
+  if (!orderId || !newStatus) return;
+
+  const order = await prisma.order.update({
+    where: { id: orderId },
+    data: { fulfillmentStatus: newStatus },
+    include: { shipment: true },
+  });
+
+  // WhatsApp dispatch notification
+  if (newStatus === "processing" && order.phone) {
+    sendWhatsApp(order.phone, orderDispatchedMessage({
+      customerName: order.customerName ?? "Customer",
+      shortId: order.id.slice(0, 8).toUpperCase(),
+      courier: order.shipment?.courier ?? "Our courier",
+      trackingNumber: order.shipment?.trackingNumber ?? "—",
+      trackingUrl: order.shipment?.trackingUrl,
+    })).catch(() => {});
   }
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+}
+
+async function markCodPaid(formData: FormData) {
+  "use server";
+  const orderId = formData.get("orderId") as string;
+  if (!orderId) return;
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { status: "paid" },
+  });
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
 }
 
 export default async function OrdersPage({
@@ -142,8 +165,8 @@ export default async function OrdersPage({
                         <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(order.fulfillmentStatus)}`}>
                           {order.fulfillmentStatus}
                         </span>
-                        <span className={`text-[9px] font-semibold ${order.status === 'paid' ? 'text-green-600' : 'text-orange-500'}`}>
-                          Payment: {order.status}
+                        <span className={`text-[9px] font-semibold ${order.status === 'paid' ? 'text-green-600' : order.status === 'cod_pending' ? 'text-blue-600' : 'text-orange-500'}`}>
+                          {order.status === 'cod_pending' ? '🛵 COD' : `Payment: ${order.status}`}
                         </span>
                       </div>
                     </td>
@@ -188,6 +211,18 @@ export default async function OrdersPage({
                               className="bg-white border border-[#006A38] text-[#006A38] hover:bg-[#FFF8E1] px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
                             >
                               Mark Completed
+                            </button>
+                          </form>
+                        )}
+
+                        {order.status === 'cod_pending' && (
+                          <form action={markCodPaid}>
+                            <input type="hidden" name="orderId" value={order.id} />
+                            <button
+                              type="submit"
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                            >
+                              ✓ COD Collected
                             </button>
                           </form>
                         )}

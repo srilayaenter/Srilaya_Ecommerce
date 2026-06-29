@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import { sendEmail } from "@/lib/email";
 import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
+import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -61,6 +62,7 @@ export async function createOrder(formData: FormData): Promise<void> {
         }
       }
 
+      const isCod = paymentMethod === 'cod';
       const order = await tx.order.create({
         data: {
           customerName,
@@ -75,11 +77,9 @@ export async function createOrder(formData: FormData): Promise<void> {
           shippingFee,
           total,
           currency: 'INR',
-          status: 'pending',
+          status: isCod ? 'cod_pending' : 'pending',
           orderChannel: 'online',
           paymentMethod: paymentMethod || undefined,
-          // Store courier name in paymentId temporarily until shipped; will be overwritten by Razorpay payment id on payment
-          // Better: use a dedicated field — for now store in invoiceNo prefix
           invoiceNo: courierName ? `COURIER:${courierName}` : undefined,
         },
       });
@@ -104,6 +104,18 @@ export async function createOrder(formData: FormData): Promise<void> {
       redirect(`/checkout?error=${encodeURIComponent(`Not enough stock for ${info}`)}`);
     }
     throw err;
+  }
+
+  const isCodOrder = paymentMethod === 'cod';
+
+  // WhatsApp confirmation — fire and forget
+  if (phone) {
+    sendWhatsApp(phone, orderConfirmedMessage({
+      customerName,
+      shortId: orderId.slice(0, 8).toUpperCase(),
+      total: subtotal + taxTotal + (parseFloat(formData.get('shippingFee') as string) || 0),
+      paymentMethod: paymentMethod ?? 'online',
+    })).catch(() => {});
   }
 
   // Real-time low stock alert — fire and forget, don't block checkout
@@ -133,5 +145,8 @@ export async function createOrder(formData: FormData): Promise<void> {
     }).catch(() => {});
   }
 
+  if (isCodOrder) {
+    redirect(`/checkout/confirm/${orderId}`);
+  }
   redirect(`/checkout/pay/${orderId}`);
 }

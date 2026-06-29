@@ -61,6 +61,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
       ? `${(totalWeightGrams / 1000).toFixed(2)} kg`
       : `${totalWeightGrams} g`;
 
+  const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
   const canSubmit = selectedCourier !== "" && isPending === false;
 
   async function handleSubmit(formData: FormData) {
@@ -73,9 +74,10 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
       {/* ── Shipping Form ── */}
       <div className="md:col-span-2">
         <form action={handleSubmit} className="space-y-6">
-          {/* Hidden shipping values passed to server action */}
-          <input type="hidden" name="shippingFee"  value={shippingFee} />
-          <input type="hidden" name="courierName"  value={selectedCourier} />
+          {/* Hidden values passed to server action */}
+          <input type="hidden" name="shippingFee"    value={shippingFee} />
+          <input type="hidden" name="courierName"    value={selectedCourier} />
+          <input type="hidden" name="paymentMethod"  value={paymentMethod} />
 
           {/* Address Card */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -229,12 +231,50 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
             )}
           </div>
 
+          {/* Payment method selector */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">Payment Method</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {([
+                { value: "online", label: "Pay Online", desc: "UPI / Card / Razorpay", icon: "💳" },
+                { value: "cod",    label: "Cash on Delivery", desc: "Pay when order arrives", icon: "🛵" },
+              ] as const).map(opt => (
+                <label
+                  key={opt.value}
+                  className={`flex flex-col gap-1 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                    paymentMethod === opt.value
+                      ? "border-brand-green bg-emerald-50"
+                      : "border-slate-100 hover:border-slate-300"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paymentDisplay"
+                      value={opt.value}
+                      checked={paymentMethod === opt.value}
+                      onChange={() => setPaymentMethod(opt.value)}
+                      className="accent-emerald-700 w-4 h-4"
+                    />
+                    <span className="text-lg">{opt.icon}</span>
+                    <span className="font-bold text-sm text-slate-800">{opt.label}</span>
+                  </div>
+                  <p className="text-xs text-slate-400 pl-6">{opt.desc}</p>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <button
             type="submit"
             disabled={!canSubmit}
             className="w-full bg-brand-green text-white py-3.5 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? "Processing..." : "Continue to Payment"}
+            {isPending
+              ? "Processing..."
+              : paymentMethod === "cod"
+              ? "Place Order (Pay on Delivery)"
+              : "Continue to Payment"}
           </button>
         </form>
       </div>

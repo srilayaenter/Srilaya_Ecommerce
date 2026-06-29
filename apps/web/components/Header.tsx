@@ -19,6 +19,7 @@ export default function Header() {
     { name: "Track Order", href: "/track" },
     { name: "My Orders", href: "/account" },
     { name: "Wishlist", href: "/wishlist" },
+    { name: "Bundle Packs", href: "/bundles" },
     { name: "Payment Details", href: "/payments" },
     { name: "Contact Us", href: "/contact" },
   ];

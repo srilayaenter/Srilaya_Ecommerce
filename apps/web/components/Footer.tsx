@@ -48,6 +48,7 @@ export default function Footer() {
               <li><Link href="/track" className="hover:text-[#4CAF50] transition-colors">Track Order</Link></li>
               <li><Link href="/account" className="hover:text-[#4CAF50] transition-colors">My Orders</Link></li>
               <li><Link href="/wishlist" className="hover:text-[#4CAF50] transition-colors">Wishlist</Link></li>
+              <li><Link href="/bundles" className="hover:text-[#4CAF50] transition-colors">Bundle Packs</Link></li>
               <li><Link href="/payments" className="hover:text-[#4CAF50] transition-colors">Payment Details</Link></li>
             </ul>
           </div>

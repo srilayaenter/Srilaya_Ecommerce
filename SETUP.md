@@ -24,6 +24,11 @@ RESEND_API_KEY="re_3246PYiC_ysGx2bkFMTGHk1gDr6sGb4w3"
 EMAIL_FROM="onboarding@resend.dev"              # change to orders@yourdomain.com after domain setup
 ADMIN_ALERT_EMAIL="avrsrikanth@gmail.com"
 
+# WhatsApp (Twilio) — optional, silently skipped if not set
+TWILIO_ACCOUNT_SID=""                           # from console.twilio.com
+TWILIO_AUTH_TOKEN=""                            # from console.twilio.com
+TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"    # Twilio sandbox default; use your approved number in prod
+
 # Cron
 CRON_SECRET="e32d49eee629310ffe455b3d440e07cc1deaa3c3bff8e8b172c52253bd570cec"
 
