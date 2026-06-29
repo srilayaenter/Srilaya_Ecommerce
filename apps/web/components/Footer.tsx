@@ -45,6 +45,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li><Link href="/about" className="hover:text-[#4CAF50] transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-[#4CAF50] transition-colors">Contact Us</Link></li>
+              <li><Link href="/track" className="hover:text-[#4CAF50] transition-colors">Track Order</Link></li>
               <li><Link href="/payments" className="hover:text-[#4CAF50] transition-colors">Payment Details</Link></li>
             </ul>
           </div>

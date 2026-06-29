@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 
 interface PageProps {
@@ -14,70 +15,126 @@ export default async function SearchPage({ searchParams }: PageProps) {
         where: {
           active: true,
           OR: [
-            { title: { contains: query, mode: "insensitive" } },
+            { title:       { contains: query, mode: "insensitive" } },
             { description: { contains: query, mode: "insensitive" } },
+            { category: { name: { contains: query, mode: "insensitive" } } },
+            { sku:         { contains: query, mode: "insensitive" } },
           ],
         },
         include: {
           category: true,
           variants: { orderBy: { price: "asc" } },
         },
+        orderBy: { createdAt: "desc" },
       })
     : [];
 
+  // Suggestions when no results
+  const suggestions = ["millet", "rice", "flakes", "flour", "rava", "sweetener"];
+
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-2">Search Results</h1>
-      <p className="text-gray-600 mb-8">
-        {query ? `Showing results for "${query}"` : "Enter a search term above"}
-      </p>
+    <div className="min-h-screen bg-[#F9F6F0]">
 
-      {query && products.length === 0 && (
-        <p className="text-gray-500 italic py-12 text-center">
-          No products found matching "{query}".
-        </p>
-      )}
+      {/* Hero strip */}
+      <div className="bg-[#006A38] py-10 px-4 text-center">
+        <h1 className="text-2xl font-black text-white font-poppins mb-3">
+          {query ? `Results for "${query}"` : "Search Products"}
+        </h1>
+        {/* Inline search bar */}
+        <form method="GET" action="/search" className="max-w-lg mx-auto flex gap-2">
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="Search millets, flakes, flour…"
+            autoFocus={!query}
+            className="flex-1 rounded-xl px-4 py-2.5 text-sm text-[#212121] bg-white focus:outline-none focus:ring-2 focus:ring-[#FFF8E1]"
+          />
+          <button
+            type="submit"
+            className="bg-[#FFF8E1] text-[#006A38] font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white transition-colors"
+          >
+            Search
+          </button>
+        </form>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => {
-          const prices = product.variants.map((v) => parseFloat(v.price.toString()));
-          const minPrice = prices.length ? Math.min(...prices) : 0;
-          const maxPrice = prices.length ? Math.max(...prices) : 0;
-          const priceDisplay =
-            minPrice === maxPrice
-              ? `₹${minPrice.toFixed(2)}`
-              : `₹${minPrice.toFixed(2)} - ₹${maxPrice.toFixed(2)}`;
+      <div className="max-w-7xl mx-auto px-4 py-10">
 
-          return (
-            <Link key={product.id} href={`/product/${product.slug}`}>
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group h-full flex flex-col">
-                {product.image ? (
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400">No image</span>
-                  </div>
-                )}
-                <div className="p-4 flex-1 flex flex-col">
-                  <div className="text-xs text-[#006A38] font-bold uppercase tracking-wider mb-1">
-                    {product.category.name}
-                  </div>
-                  <h3 className="font-bold text-base text-[#212121] mb-2">{product.title}</h3>
-                  <p className="text-sm text-gray-500 mb-3 line-clamp-2 flex-1">
-                    {product.description}
-                  </p>
-                  <span className="text-lg font-black text-[#006A38] mt-auto">
-                    {priceDisplay}
-                  </span>
-                </div>
-              </div>
+        {/* No query state */}
+        {!query && (
+          <div className="text-center py-12">
+            <p className="text-[#8D6E63] text-sm mb-4">Try searching for:</p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {suggestions.map(s => (
+                <Link
+                  key={s}
+                  href={`/search?q=${s}`}
+                  className="bg-white border border-[#E0E0E0] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:border-[#006A38] hover:text-[#006A38] transition-colors capitalize"
+                >
+                  {s}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Results count */}
+        {query && (
+          <p className="text-sm text-[#8D6E63] mb-6 font-medium">
+            {products.length === 0
+              ? `No products found for "${query}"`
+              : `${products.length} product${products.length !== 1 ? 's' : ''} found for "${query}"`}
+          </p>
+        )}
+
+        {/* No results */}
+        {query && products.length === 0 && (
+          <div className="text-center py-16 bg-white rounded-2xl border border-[#E8E0D5]">
+            <p className="text-5xl mb-4">🌾</p>
+            <h2 className="text-lg font-bold text-[#212121] mb-2">No products found</h2>
+            <p className="text-sm text-[#8D6E63] mb-6">Try a different keyword or browse our categories.</p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {suggestions.map(s => (
+                <Link
+                  key={s}
+                  href={`/search?q=${s}`}
+                  className="bg-[#F5F5F5] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#006A38] hover:text-white transition-colors capitalize"
+                >
+                  {s}
+                </Link>
+              ))}
+            </div>
+            <Link href="/product" className="inline-block mt-6 text-[#006A38] font-bold text-sm hover:underline">
+              Browse all products →
             </Link>
-          );
-        })}
+          </div>
+        )}
+
+        {/* Product grid */}
+        {products.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {products.map(product => (
+              <ProductCard
+                key={product.id}
+                product={{
+                  id:       product.id,
+                  title:    product.title,
+                  slug:     product.slug,
+                  image:    product.image,
+                  rating:   product.rating?.toString() ?? null,
+                  category: { name: product.category.name },
+                  variants: product.variants.map(v => ({
+                    id:    v.id,
+                    size:  v.size,
+                    price: v.price.toString(),
+                    stock: v.stock,
+                  })),
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
