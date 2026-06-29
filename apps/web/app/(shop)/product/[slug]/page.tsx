@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
 import ReviewsSection from "@/components/ReviewsSection";
 import ProductGallery from "@/components/ProductGallery";
+import RecentlyViewed from "@/components/RecentlyViewed";
+import RecordView from "@/components/RecordView";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -177,7 +179,20 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
           <ReviewsSection slug={slug} reviews={reviews} />
         </div>
 
+        {/* ── Recently viewed ── */}
+        <div className="mt-6 border-t border-[#E0E0E0] pt-8">
+          <RecentlyViewed excludeSlug={slug} />
+        </div>
+
       </div>
+
+      {/* Record this view in localStorage */}
+      <RecordView
+        slug={slug}
+        title={product.title}
+        image={product.image ?? null}
+        price={lowestPrice ?? 0}
+      />
     </div>
   );
 }

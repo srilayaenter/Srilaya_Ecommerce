@@ -4,6 +4,7 @@ import { toNum } from "@/lib/decimal";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
 import Testimonials from "@/components/Testimonials";
+import RecentlyViewed from "@/components/RecentlyViewed";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -417,6 +418,13 @@ export default async function HomePage() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* ── RECENTLY VIEWED ──────────────────────────────────── */}
+      <section className="bg-white border-t border-slate-100">
+        <div className="container mx-auto px-4 max-w-7xl py-4">
+          <RecentlyViewed />
         </div>
       </section>
 
