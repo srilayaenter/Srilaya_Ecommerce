@@ -57,8 +57,22 @@ model Product {
   supplierId  String?
   supplier    Supplier?        @relation(fields: [supplierId], references: [id])
   variants    ProductVariant[]
+  productReviews ProductReview[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+}
+
+model ProductReview {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderId      String?
+  customerName String
+  email        String
+  rating       Int
+  comment      String?
+  approved     Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }
 model ProductVariant {
   id          String      @id @default(cuid())

@@ -17,7 +17,17 @@ async function createStaffUser(formData: FormData) {
   const password = formData.get('password') as string;
   const role     = formData.get('role') as string;
   const hash     = await bcrypt.hash(password, 10);
-  await prisma.user.create({ data: { email, password: hash, role } });
+
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    // Email exists — update role and password instead of creating a duplicate
+    await prisma.user.update({
+      where: { email },
+      data: { role, password: hash },
+    });
+  } else {
+    await prisma.user.create({ data: { email, password: hash, role } });
+  }
   redirect('/admin/users?saved=true');
 }
 
@@ -109,9 +119,12 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         </table>
       </div>
 
-      {/* Create staff account */}
+      {/* Create or update staff account */}
       <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
-        <h2 className="text-base font-bold text-[#212121] mb-4">Create Staff Account</h2>
+        <h2 className="text-base font-bold text-[#212121] mb-1">Create or Update Staff Account</h2>
+        <p className="text-xs text-[#8D6E63] mb-4">
+          If the email already exists, the role and password will be updated instead.
+        </p>
         <form action={createStaffUser} className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
@@ -150,7 +163,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
               type="submit"
               className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg hover:bg-[#00522B] transition-colors text-sm"
             >
-              Create Staff Account
+              Save Staff Account
             </button>
           </div>
         </form>

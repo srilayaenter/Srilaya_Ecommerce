@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { BRAND } from "@/lib/brand";
 
 interface ShipmentData {
@@ -47,8 +49,9 @@ const PAYMENT_LABEL: Record<string, string> = {
   cash: 'Cash', upi: 'UPI', card: 'Card (POS)', bank_transfer: 'Bank Transfer', razorpay: 'Online (Razorpay)',
 };
 
-export default function TrackOrderPage() {
-  const [orderId,  setOrderId]  = useState('');
+function TrackOrderContent() {
+  const searchParams = useSearchParams();
+  const [orderId,  setOrderId]  = useState(searchParams.get('orderId') ?? '');
   const [contact,  setContact]  = useState('');
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
@@ -291,5 +294,13 @@ export default function TrackOrderPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TrackOrderPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F9F6F0]" />}>
+      <TrackOrderContent />
+    </Suspense>
   );
 }
