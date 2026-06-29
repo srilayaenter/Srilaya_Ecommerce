@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
+import { parseBody, ReturnRequestSchema } from "@/lib/validation";
 
 const RETURN_WINDOW_DAYS = 7;
 
 export async function POST(request: Request) {
-  const { orderId, contact, reason, items } = await request.json();
-  if (!orderId || !contact || !reason || !items?.length) {
-    return NextResponse.json({ error: "orderId, contact, reason, and items are required." }, { status: 400 });
-  }
+  const parsed = await parseBody(request, ReturnRequestSchema);
+  if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+  const { orderId, contact, reason, items } = parsed.data;
 
-  const rawId  = (orderId as string).trim().replace(/^#/, "").toLowerCase();
-  const c      = (contact as string).trim().toLowerCase();
+  const rawId  = orderId.trim().replace(/^#/, "").toLowerCase();
+  const c      = contact.trim().toLowerCase();
 
   const order = await prisma.order.findFirst({
     where: { OR: [{ id: { startsWith: rawId } }, { id: rawId }] },

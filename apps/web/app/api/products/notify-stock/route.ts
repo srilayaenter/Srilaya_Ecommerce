@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { parseBody, NotifyStockSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const { email, variantId } = await request.json();
-  if (!email || !variantId) {
-    return NextResponse.json({ error: "email and variantId required." }, { status: 400 });
-  }
+  const parsed = await parseBody(request, NotifyStockSchema);
+  if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+  const { email, variantId } = parsed.data;
 
   const variant = await prisma.productVariant.findUnique({ where: { id: variantId } });
   if (!variant) return NextResponse.json({ error: "Variant not found." }, { status: 404 });

@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
+import { parseBody, CancelOrderSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const { orderId, email } = await request.json();
-
-    if (!orderId || !email) {
-      return NextResponse.json({ error: "Order ID and email are required" }, { status: 400 });
-    }
+    const parsed = await parseBody(request, CancelOrderSchema);
+    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    const { orderId, email } = parsed.data;
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },

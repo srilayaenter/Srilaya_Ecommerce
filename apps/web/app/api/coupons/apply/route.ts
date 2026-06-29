@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { parseBody, CouponApplySchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const { code, orderTotal } = await request.json();
-    if (!code) return NextResponse.json({ error: "Coupon code required" }, { status: 400 });
+    const parsed = await parseBody(request, CouponApplySchema);
+    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    const { code, orderTotal } = parsed.data;
 
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.trim().toUpperCase() },

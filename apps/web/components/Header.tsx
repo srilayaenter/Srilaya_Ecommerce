@@ -12,17 +12,25 @@ export default function Header() {
   const router = useRouter();
   const { cartCount } = useCart();
 
-  const infoLinks = [
-    { name: "Home", href: "/" },
+  // Primary nav — main bar
+  const primaryLinks = [
+    { name: "Home",         href: "/" },
     { name: "All Products", href: "/product" },
-    { name: "About Us", href: "/about" },
-    { name: "Track Order", href: "/track" },
-    { name: "My Orders", href: "/account" },
-    { name: "Wishlist", href: "/wishlist" },
     { name: "Bundle Packs", href: "/bundles" },
-    { name: "Payment Details", href: "/payments" },
-    { name: "Contact Us", href: "/contact" },
+    { name: "About Us",     href: "/about" },
+    { name: "Contact Us",   href: "/contact" },
   ];
+
+  // Utility nav — top bar
+  const utilityLinks = [
+    { name: "Track Order",     href: "/track" },
+    { name: "My Orders",       href: "/account" },
+    { name: "Wishlist",        href: "/wishlist" },
+    { name: "Payment Details", href: "/payments" },
+  ];
+
+  // All links for mobile drawer
+  const infoLinks = [...primaryLinks, ...utilityLinks];
 
   const categoryLinks = [
     { name: "Millets", href: "/category/millets" },
@@ -49,25 +57,40 @@ export default function Header() {
 
   return (
     <>
-      <header className="w-full bg-white shadow-sm sticky top-0 z-50 border-b border-[#E0E0E0] font-sans">
+      <header className="w-full bg-white sticky top-0 z-50 border-b border-[#E0E0E0] font-sans shadow-sm">
+
+        {/* ── Utility bar ── */}
+        <div className="hidden lg:block bg-[#006A38]">
+          <div className="container mx-auto px-4 max-w-7xl flex items-center justify-end gap-5 h-8">
+            {utilityLinks.map(link => (
+              <Link key={link.name} href={link.href}
+                className="text-[#FFF8E1] hover:text-white text-[11px] font-semibold transition-colors whitespace-nowrap">
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Main bar ── */}
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-between h-20 gap-4">
+          <div className="flex items-center justify-between h-16 gap-6">
             <Link href="/" className="flex items-center gap-3 flex-shrink-0 group" onClick={closeMenu}>
-              <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[#E0E0E0] shadow-sm bg-white">
-                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Foods Logo" fill className="object-cover" priority />
+              <div className="relative h-10 w-10 overflow-hidden rounded-full border border-[#E0E0E0] shadow-sm bg-white">
+                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises Logo" fill className="object-cover" priority />
               </div>
-              <span className="font-black text-[22px] text-[#212121] tracking-tight font-poppins hidden sm:block">
-                SriLaYa <span className="text-[#006A38]">Foods</span>
-              </span>
+              <div className="hidden sm:flex flex-col leading-tight">
+                <span className="font-black text-[18px] text-[#212121] tracking-tight font-poppins">SriLaYa</span>
+                <span className="font-bold text-[11px] text-[#006A38] tracking-wide uppercase">Enterprises</span>
+              </div>
             </Link>
 
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center justify-center gap-8 flex-grow">
-              {infoLinks.map((link) => (
+            {/* Desktop primary nav */}
+            <nav className="hidden lg:flex items-center gap-6 flex-grow justify-center">
+              {primaryLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-[#8D6E63] hover:text-[#006A38] font-bold transition-colors text-[14px]"
+                  className="text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13.5px] whitespace-nowrap"
                 >
                   {link.name}
                 </Link>
@@ -142,11 +165,12 @@ export default function Header() {
             <div className="flex items-center justify-between px-5 py-4 border-b border-[#E0E0E0]">
               <div className="flex items-center gap-2">
                 <div className="relative h-9 w-9 overflow-hidden rounded-full border border-[#E0E0E0]">
-                  <Image src="/brand/srilaya-logo.png" alt="SriLaYa Foods" fill className="object-cover" />
+                  <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises" fill className="object-cover" />
                 </div>
-                <span className="font-black text-[16px] text-[#212121]">
-                  SriLaYa <span className="text-[#006A38]">Foods</span>
-                </span>
+                <div className="flex flex-col leading-tight">
+                  <span className="font-black text-[15px] text-[#212121]">SriLaYa</span>
+                  <span className="font-bold text-[10px] text-[#006A38] tracking-wide uppercase">Enterprises</span>
+                </div>
               </div>
               <button
                 onClick={closeMenu}

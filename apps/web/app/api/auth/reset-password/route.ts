@@ -1,27 +1,25 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import { parseBody, ResetPasswordSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const { token, password } = await request.json();
+    const parsed = await parseBody(request, ResetPasswordSchema);
+    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    const { token, password } = parsed.data;
 
-    if (!token || !password) {
-      return NextResponse.json({ error: "Token and password are required" }, { status: 400 });
-    }
-
-    if (password.length < 8) {
-      return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
-    }
-
-    const resetToken = await prisma.passwordResetToken.findUnique({ where: { token } });
+    // Hash the raw token from URL to look up the stored hash
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const resetToken = await prisma.passwordResetToken.findUnique({ where: { token: tokenHash } });
 
     if (!resetToken) {
       return NextResponse.json({ error: "Invalid or expired reset link" }, { status: 400 });
     }
 
     if (resetToken.expiresAt < new Date()) {
-      await prisma.passwordResetToken.delete({ where: { token } });
+      await prisma.passwordResetToken.delete({ where: { token: tokenHash } });
       return NextResponse.json({ error: "This reset link has expired. Please request a new one." }, { status: 400 });
     }
 
@@ -34,7 +32,7 @@ export async function POST(request: Request) {
 
     await prisma.$transaction([
       prisma.user.update({ where: { id: user.id }, data: { password: hashed } }),
-      prisma.passwordResetToken.delete({ where: { token } }),
+      prisma.passwordResetToken.delete({ where: { token: tokenHash } }),
     ]);
 
     return NextResponse.json({ success: true });
