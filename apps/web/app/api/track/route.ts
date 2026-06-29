@@ -1,8 +1,32 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
+import { headers } from "next/headers";
+
+// Simple in-memory rate limiter: max 10 attempts per IP per 10-minute window
+const attempts = new Map<string, { count: number; resetAt: number }>();
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_ATTEMPTS = 10;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = attempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    attempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= MAX_ATTEMPTS) return false;
+  entry.count++;
+  return true;
+}
 
 export async function POST(request: Request) {
+  const hdrs = await headers();
+  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json({ error: "Too many attempts. Please try again later." }, { status: 429 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const rawId    = (body.orderId as string ?? '').trim().replace(/^#/, '').toUpperCase();
   const contact  = (body.contact as string ?? '').trim().toLowerCase();
@@ -31,9 +55,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Order not found. Please check your Order ID." }, { status: 404 });
   }
 
-  // Verify the contact matches email or phone
+  // Exact match required for both email and phone — no partial/suffix matching
+  const normalizedPhone = contact.replace(/\D/g, '');
+  const orderPhone      = (order.phone ?? '').replace(/\D/g, '');
   const emailMatch = order.email?.toLowerCase() === contact;
-  const phoneMatch = order.phone?.replace(/\D/g, '').endsWith(contact.replace(/\D/g, ''));
+  const phoneMatch = normalizedPhone.length >= 10 && orderPhone === normalizedPhone;
 
   if (!emailMatch && !phoneMatch) {
     return NextResponse.json({ error: "Details don't match. Please check your email or phone." }, { status: 403 });

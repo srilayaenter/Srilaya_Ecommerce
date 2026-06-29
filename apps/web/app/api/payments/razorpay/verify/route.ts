@@ -51,6 +51,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
+    // Ensure this payment request matches the Razorpay order ID we stored —
+    // prevents an attacker from submitting a valid signature for order A
+    // but claiming it belongs to order B.
+    if (order.paymentId !== razorpay_order_id) {
+      return NextResponse.json({ error: "Payment mismatch" }, { status: 400 });
+    }
+
     if (order.status !== 'paid') {
       const invoiceNo = order.invoiceNo || `INV-${Date.now()}`;
 
@@ -114,7 +121,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("Payment verification error:", error);
     return NextResponse.json(
-      { error: "Payment verification failed", details: error.message },
+      { error: "Payment verification failed" },
       { status: 500 }
     );
   }

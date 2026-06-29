@@ -48,7 +48,10 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: () => true,
+      // Return true only when a JWT token exists — the middleware function
+      // above handles all further role/MFA checks. Returning false here
+      // would short-circuit the middleware and redirect before it runs.
+      authorized: ({ token }) => !!token,
     },
   }
 );
