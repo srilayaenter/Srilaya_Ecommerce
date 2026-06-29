@@ -146,7 +146,7 @@ export default function AccountPage() {
                   {/* Actions */}
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
-                      href={`/track?orderId=${order.id}`}
+                      href={`/track?orderId=${order.id}&contact=${encodeURIComponent(email)}`}
                       className="text-xs font-bold text-[#006A38] border border-[#006A38] px-3 py-1.5 rounded-lg hover:bg-[#006A38] hover:text-white transition-colors"
                     >
                       Track Order

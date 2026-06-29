@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 
 interface ShipmentData {
@@ -40,42 +41,82 @@ interface OrderData {
 const FULFILLMENT_STEPS = ['pending', 'processing', 'completed'];
 
 const STEP_LABELS: Record<string, { label: string; desc: string; icon: string }> = {
-  pending:    { label: 'Order Placed',   desc: 'Your order has been received.',              icon: '📋' },
-  processing: { label: 'Dispatched',     desc: 'Your order is packed and on the way.',       icon: '🚚' },
-  completed:  { label: 'Delivered',      desc: 'Your order has been delivered. Enjoy!',      icon: '✅' },
+  pending:    { label: 'Order Placed',   desc: 'Your order has been received.',        icon: '📋' },
+  processing: { label: 'Dispatched',     desc: 'Your order is packed and on the way.', icon: '🚚' },
+  completed:  { label: 'Delivered',      desc: 'Your order has been delivered. Enjoy!', icon: '✅' },
 };
 
 const PAYMENT_LABEL: Record<string, string> = {
   cash: 'Cash', upi: 'UPI', card: 'Card (POS)', bank_transfer: 'Bank Transfer', razorpay: 'Online (Razorpay)',
 };
 
+function ReorderButton({ orderId, contact }: { orderId: string; contact: string }) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [done,    setDone]    = useState(false);
+
+  async function handleReorder() {
+    setLoading(true);
+    const res = await fetch('/api/cart/reorder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, contact }),
+    });
+    setLoading(false);
+    if (res.ok) {
+      setDone(true);
+      setTimeout(() => router.push('/cart'), 800);
+    }
+  }
+
+  return (
+    <button
+      onClick={handleReorder}
+      disabled={loading || done}
+      className="inline-flex items-center gap-2 bg-[#006A38] text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors disabled:opacity-60"
+    >
+      {done ? '✓ Added to cart! Redirecting…' : loading ? 'Adding to cart…' : '🔁 Reorder'}
+    </button>
+  );
+}
+
 function TrackOrderContent() {
   const searchParams = useSearchParams();
   const [orderId,  setOrderId]  = useState(searchParams.get('orderId') ?? '');
-  const [contact,  setContact]  = useState('');
+  const [contact,  setContact]  = useState(searchParams.get('contact') ?? '');
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
   const [order,    setOrder]    = useState<OrderData | null>(null);
+  const autoSubmitted = useRef(false);
 
-  async function handleLookup(e: React.FormEvent) {
-    e.preventDefault();
+  async function lookup(oid: string, c: string) {
     setError('');
     setOrder(null);
     setLoading(true);
-
     const res  = await fetch('/api/track', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ orderId: orderId.trim(), contact: contact.trim() }),
+      body:    JSON.stringify({ orderId: oid.trim(), contact: c.trim() }),
     });
     const data = await res.json();
     setLoading(false);
+    if (!res.ok) setError(data.error ?? 'Something went wrong. Please try again.');
+    else setOrder(data);
+  }
 
-    if (!res.ok) {
-      setError(data.error ?? 'Something went wrong. Please try again.');
-    } else {
-      setOrder(data);
+  // Auto-submit when both params come from URL
+  useEffect(() => {
+    const oid = searchParams.get('orderId') ?? '';
+    const c   = searchParams.get('contact') ?? '';
+    if (oid && c && !autoSubmitted.current) {
+      autoSubmitted.current = true;
+      lookup(oid, c);
     }
+  }, [searchParams]);
+
+  async function handleLookup(e: React.FormEvent) {
+    e.preventDefault();
+    lookup(orderId, contact);
   }
 
   const currentStep = order ? FULFILLMENT_STEPS.indexOf(order.fulfillmentStatus) : -1;
@@ -158,6 +199,21 @@ function TrackOrderContent() {
                   </span>
                 </div>
               </div>
+
+              {/* Action buttons */}
+              <div className="mt-5 pt-4 border-t border-[#F5F5F5] flex flex-wrap gap-3">
+                <a
+                  href={`/invoice/${order.id}?contact=${encodeURIComponent(contact)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-[#006A38] text-[#006A38] text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#006A38] hover:text-white transition-colors"
+                >
+                  🧾 Download Invoice
+                </a>
+                {order.fulfillmentStatus === 'completed' && (
+                  <ReorderButton orderId={order.id} contact={contact} />
+                )}
+              </div>
             </div>
 
             {/* Progress timeline */}
@@ -165,7 +221,6 @@ function TrackOrderContent() {
               <div className="bg-white rounded-2xl shadow-sm border border-[#E8E0D5] p-6">
                 <h2 className="text-sm font-bold text-[#212121] mb-6">Order Progress</h2>
                 <div className="relative">
-                  {/* connector line */}
                   <div className="absolute top-5 left-5 right-5 h-0.5 bg-[#E0E0E0] -z-0" />
                   <div
                     className="absolute top-5 left-5 h-0.5 bg-[#006A38] transition-all duration-500 -z-0"
@@ -173,15 +228,13 @@ function TrackOrderContent() {
                   />
                   <div className="relative flex justify-between">
                     {FULFILLMENT_STEPS.map((step, idx) => {
-                      const done    = idx <= currentStep;
-                      const active  = idx === currentStep;
-                      const info    = STEP_LABELS[step];
+                      const done   = idx <= currentStep;
+                      const active = idx === currentStep;
+                      const info   = STEP_LABELS[step];
                       return (
                         <div key={step} className="flex flex-col items-center text-center w-1/3 px-2">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all ${
-                            done
-                              ? 'bg-[#006A38] border-[#006A38] shadow-md'
-                              : 'bg-white border-[#E0E0E0]'
+                            done ? 'bg-[#006A38] border-[#006A38] shadow-md' : 'bg-white border-[#E0E0E0]'
                           }`}>
                             {done ? <span>{info.icon}</span> : <span className="text-[#9E9E9E] text-sm font-bold">{idx + 1}</span>}
                           </div>
