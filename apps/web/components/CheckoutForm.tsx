@@ -30,6 +30,16 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
   const [selectedCourier, setSelectedCourier] = useState<CourierKey | "">("");
   const [isPending, setIsPending] = useState(false);
 
+  function handleEmailBlur(e: React.FocusEvent<HTMLInputElement>) {
+    const email = e.target.value.trim();
+    if (!email || !email.includes("@")) return;
+    fetch("/api/cart/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    }).catch(() => {});
+  }
+
   const totalWeightGrams = cartItems.reduce(
     (sum, item) => sum + item.weightGrams * item.quantity,
     0
@@ -91,6 +101,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
                   <input
                     type="email" name="email" required
                     placeholder="you@example.com"
+                    onBlur={handleEmailBlur}
                     className="w-full text-sm border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-brand-green bg-white text-slate-700"
                   />
                 </div>

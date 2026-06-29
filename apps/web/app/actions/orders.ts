@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
+import { sendEmail } from "@/lib/email";
+import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -102,6 +104,33 @@ export async function createOrder(formData: FormData): Promise<void> {
       redirect(`/checkout?error=${encodeURIComponent(`Not enough stock for ${info}`)}`);
     }
     throw err;
+  }
+
+  // Real-time low stock alert — fire and forget, don't block checkout
+  if (process.env.ADMIN_ALERT_EMAIL) {
+    prisma.productVariant.findMany({
+      where: {
+        id: { in: cartItems.map(i => i.variantId) },
+      },
+      include: { product: true },
+    }).then(variants => {
+      const low = variants.filter(v => v.stock <= v.reorderThreshold);
+      if (low.length > 0) {
+        sendEmail({
+          to: process.env.ADMIN_ALERT_EMAIL!,
+          subject: `Low stock alert — ${low.length} item(s) after order ${orderId.slice(0, 8).toUpperCase()}`,
+          html: buildLowStockAlert({
+            variants: low.map(v => ({
+              productTitle: v.product.title,
+              size: v.size,
+              stock: v.stock,
+              sku: v.sku,
+            })),
+          }),
+          context: 'admin_alert_low_stock',
+        }).catch(() => {});
+      }
+    }).catch(() => {});
   }
 
   redirect(`/checkout/pay/${orderId}`);

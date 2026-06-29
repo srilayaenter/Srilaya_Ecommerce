@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
 import ReviewsSection from "@/components/ReviewsSection";
 import type { Metadata } from "next";
+import { BRAND } from "@/lib/brand";
 
 type Params = Promise<{ slug: string }>;
 
@@ -62,8 +63,44 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : null;
 
+  const lowestPrice = product.variants.length
+    ? Math.min(...product.variants.map(v => parseFloat(v.price.toString())))
+    : null;
+  const inStock = product.variants.some(v => v.stock > 0);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description ?? `Buy ${product.title} from ${BRAND.name}`,
+    image: product.image ?? undefined,
+    brand: { "@type": "Brand", name: BRAND.name },
+    ...(lowestPrice !== null && {
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "INR",
+        price: lowestPrice,
+        availability: inStock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        seller: { "@type": "Organization", name: BRAND.name },
+      },
+    }),
+    ...(avgRating !== null && reviews.length > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: avgRating.toFixed(1),
+        reviewCount: reviews.length,
+      },
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container mx-auto px-4 py-12 max-w-4xl space-y-8">
 
         {/* Product header */}
