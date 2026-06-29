@@ -8,9 +8,12 @@ export default withAuth(
     const isAuth = !!token;
     const path = req.nextUrl.pathname;
     const isLoginPage = path.startsWith("/admin/login");
+    const isPublicAdminPage =
+      path.startsWith("/admin/forgot-password") ||
+      path.startsWith("/admin/reset-password");
 
-    if (isLoginPage) {
-      if (isAuth) {
+    if (isLoginPage || isPublicAdminPage) {
+      if (isAuth && isLoginPage) {
         return NextResponse.redirect(new URL("/admin", req.url));
       }
       return NextResponse.next();

@@ -19,6 +19,14 @@ model User {
   createdAt DateTime @default(now())
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 model Category {
   id          String     @id @default(cuid())
   slug        String     @unique
