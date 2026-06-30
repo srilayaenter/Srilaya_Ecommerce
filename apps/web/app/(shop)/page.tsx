@@ -82,7 +82,7 @@ const categories = [
   {
     name: "Laddus",
     description: "Traditional millet sweets",
-    image: "/categories/Foxtail Millet Flakes.png",
+    image: "/categories/Pamphlet_MilletFlakes.png",
     href: "/category/laddu",
     color: "from-rose-900/80 to-rose-700/50",
     wellness: [
