@@ -8,11 +8,11 @@ import RecentlyViewed from "@/components/RecentlyViewed";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
+  title: "SriLaYa Enterprises â€” Ancient Grains. Modern Nutrition.",
   description:
     "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
   openGraph: {
-    title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
+    title: "SriLaYa Enterprises â€” Ancient Grains. Modern Nutrition.",
     description:
       "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
     url: "/",
@@ -61,7 +61,7 @@ const categories = [
     color: "from-orange-900/80 to-orange-700/50",
     wellness: [
       "?? Perfect for rotis, dosas & bakes",
-      "?? High calcium — great for bone health",
+      "?? High calcium â€” great for bone health",
       "?? Rich in B-vitamins & antioxidants",
       "?? No maida, no refined grains",
     ],
@@ -76,7 +76,7 @@ const categories = [
       "?? Heart-healthy high-fibre base",
       "?? Keeps cholesterol levels in check",
       "?? Slow-release energy all morning",
-      "?? Versatile — upma, porridge, khichdi",
+      "?? Versatile â€” upma, porridge, khichdi",
     ],
   },
   {
@@ -86,7 +86,7 @@ const categories = [
     href: "/category/laddu",
     color: "from-rose-900/80 to-rose-700/50",
     wellness: [
-      "?? No refined sugar — sweetened with jaggery",
+      "?? No refined sugar â€” sweetened with jaggery",
       "?? Natural energy boost for kids & adults",
       "?? Rich in iron & traditional herbs",
       "?? Festive gifting with a healthy twist",
@@ -118,7 +118,7 @@ const whyUs = [
   {
     icon: "??",
     title: "Farm-Direct Sourcing",
-    desc: "We partner with certified organic farmers across India — no middlemen, fair prices, maximum freshness.",
+    desc: "We partner with certified organic farmers across India â€” no middlemen, fair prices, maximum freshness.",
   },
   {
     icon: "??",
@@ -159,7 +159,7 @@ export default async function HomePage() {
             </h1>
             <p className="text-emerald-100 text-base md:text-lg leading-relaxed mb-10 max-w-xl">
               Pure, minimally-processed millets, flakes, and traditional foods sourced directly from
-              organic farmers across India — straight to your kitchen.
+              organic farmers across India â€” straight to your kitchen.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -210,7 +210,7 @@ export default async function HomePage() {
               What Are You Looking For?
             </h2>
             <p className="text-[#757575] max-w-lg mx-auto text-sm md:text-base">
-              From everyday millet grains to ready-to-cook flakes and traditional sweets —
+              From everyday millet grains to ready-to-cook flakes and traditional sweets â€”
               we have something for every health goal.
             </p>
           </div>
@@ -231,18 +231,18 @@ export default async function HomePage() {
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                     sizes="(max-width: 640px) 50vw, 33vw"
                   />
-                  {/* Gradient overlay — darkens on hover for readability */}
+                  {/* Gradient overlay â€” darkens on hover for readability */}
                   <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} group-hover:opacity-95 transition-opacity duration-300`} />
                 </div>
 
-                {/* Info panel — sits below the image, slides up to cover it on hover */}
+                {/* Info panel â€” sits below the image, slides up to cover it on hover */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
                   <h3 className="text-white font-black text-base md:text-lg leading-tight drop-shadow">
                     {cat.name}
                   </h3>
                   <p className="text-white/80 text-xs mt-1 font-medium">{cat.description}</p>
 
-                  {/* Wellness bullets — hidden by default, expands on hover */}
+                  {/* Wellness bullets â€” hidden by default, expands on hover */}
                   <div className="max-h-0 group-hover:max-h-52 overflow-hidden transition-all duration-500 ease-in-out">
                     <ul className="mt-3 space-y-1.5">
                       {cat.wellness.map((tip) => (
@@ -360,7 +360,7 @@ export default async function HomePage() {
               </h2>
               <p className="text-emerald-200 text-sm md:text-base leading-relaxed mb-10 max-w-md">
                 For generations, millets formed the backbone of Indian nutrition. We&apos;re bringing
-                that wisdom back — with the transparency and quality that modern families deserve.
+                that wisdom back â€” with the transparency and quality that modern families deserve.
               </p>
 
               <div className="space-y-6">

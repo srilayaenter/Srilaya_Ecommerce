@@ -20,7 +20,7 @@ export default async function BundlesPage() {
     <div className="min-h-screen bg-[#F9F6F0]">
       <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">Bundle Packs</h1>
-        <p className="text-[#FFF8E1] text-sm mt-1">Curated combos at special prices — great value, zero compromise.</p>
+        <p className="text-[#FFF8E1] text-sm mt-1">Curated combos at special prices â€” great value, zero compromise.</p>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-10">
@@ -58,7 +58,7 @@ export default async function BundlesPage() {
                       {bundle.items.map((item, i) => (
                         <li key={i} className="flex items-center gap-3 text-sm">
                           <span className="w-6 h-6 bg-[#006A38]/10 rounded-full flex items-center justify-center text-[#006A38] font-bold text-xs flex-shrink-0">
-                            {item.quantity}×
+                            {item.quantity}Ã—
                           </span>
                           <span className="text-[#424242]">
                             {item.variant.product.title}

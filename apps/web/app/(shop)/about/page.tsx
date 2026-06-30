@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "SriLaYa Enterprises is on a mission to revive traditional Indian millets — sourced farm-direct, minimally processed, zero preservatives, and delivered across India.",
+    "SriLaYa Enterprises is on a mission to revive traditional Indian millets â€” sourced farm-direct, minimally processed, zero preservatives, and delivered across India.",
 };
 
 export default function AboutUsPage() {
