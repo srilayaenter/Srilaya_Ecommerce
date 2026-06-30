@@ -84,6 +84,7 @@ model ProductReview {
   email        String
   rating       Int
   comment      String?
+  photoUrl     String?
   approved     Boolean  @default(false)
   createdAt    DateTime @default(now())
 }
@@ -175,6 +176,7 @@ model Order {
   invoiceNo         String?
   couponCode        String?
   discountAmount    Decimal?    @db.Decimal(10,2)
+  referralCode      String?
 
   customerName String?
   email        String?
@@ -297,6 +299,7 @@ model LoyaltyAccount {
   email        String               @unique
   balance      Int                  @default(0)
   totalEarned  Int                  @default(0)
+  referralCode String?              @unique
   transactions LoyaltyTransaction[]
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt

@@ -25,6 +25,7 @@ export default function Header() {
   const utilityLinks = [
     { name: "Track Order",     href: "/track" },
     { name: "My Orders",       href: "/account" },
+    { name: "Refer & Earn",    href: "/referral" },
     { name: "Wishlist",        href: "/wishlist" },
     { name: "Payment Details", href: "/payments" },
   ];

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { sendWhatsApp, orderDispatchedMessage } from "@/lib/whatsapp";
+import { sendWhatsApp, orderDispatchedMessage, orderDeliveredMessage } from "@/lib/whatsapp";
 import { sendEmail } from "@/lib/email";
 import { buildDispatchEmail, buildDeliveredEmail } from "@/lib/emails/orderStatusUpdate";
 import ExportButton from "./ExportButton";
@@ -51,14 +51,19 @@ async function updateFulfillmentStatus(formData: FormData) {
     }
   }
 
-  // Delivered → email
-  if (newStatus === "completed" && order.email) {
-    sendEmail({
-      to: order.email,
-      subject: `Order #${shortId} delivered — enjoy your healthy grains! ✅`,
-      html: buildDeliveredEmail({ customerName, shortId }),
-      context: `delivered:${orderId}`,
-    }).catch(() => {});
+  // Delivered → WhatsApp + email
+  if (newStatus === "completed") {
+    if (order.phone) {
+      sendWhatsApp(order.phone, orderDeliveredMessage({ customerName, shortId })).catch(() => {});
+    }
+    if (order.email) {
+      sendEmail({
+        to: order.email,
+        subject: `Order #${shortId} delivered — enjoy your healthy grains! ✅`,
+        html: buildDeliveredEmail({ customerName, shortId }),
+        context: `delivered:${orderId}`,
+      }).catch(() => {});
+    }
   }
 
   revalidatePath("/admin/orders");

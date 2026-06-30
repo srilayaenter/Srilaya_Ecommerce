@@ -7,7 +7,7 @@ import { toNum } from "@/lib/decimal";
 import { sendEmail } from "@/lib/email";
 import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
-import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints } from "@/lib/loyalty";
+import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -43,6 +43,7 @@ export async function createOrder(formData: FormData): Promise<void> {
   const shippingFee   = parseFloat(formData.get('shippingFee') as string) || 0;
   const paymentMethod  = formData.get('paymentMethod') as string | null;
   const redeemedPoints = parseInt(formData.get('redeemedPoints') as string || '0', 10) || 0;
+  const referralCode   = (formData.get('referralCode') as string || '').trim().toUpperCase() || null;
 
   const baseTotal = subtotal + taxTotal + shippingFee;
 
@@ -96,6 +97,7 @@ export async function createOrder(formData: FormData): Promise<void> {
           paymentMethod: paymentMethod || undefined,
           invoiceNo: courierName ? `COURIER:${courierName}` : undefined,
           discountAmount: loyaltyDiscount > 0 ? loyaltyDiscount : undefined,
+          referralCode: referralCode || undefined,
         },
       });
 
@@ -127,7 +129,10 @@ export async function createOrder(formData: FormData): Promise<void> {
   if (email) {
     Promise.resolve().then(async () => {
       if (validatedPoints > 0) await redeemPoints(email, orderId, validatedPoints).catch(() => {});
-      if (isCodOrder) await earnPoints(email, orderId, total).catch(() => {});
+      if (isCodOrder) {
+        await earnPoints(email, orderId, total).catch(() => {});
+        if (referralCode) await processReferral(email, referralCode, orderId).catch(() => {});
+      }
     });
   }
 

@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { sendEmail } from "../../../../../lib/email";
 import { buildOrderConfirmationEmail } from "../../../../../lib/emails/orderConfirmation";
 import { toNum } from "../../../../../lib/decimal";
-import { earnPoints } from "../../../../../lib/loyalty";
+import { earnPoints, processReferral } from "../../../../../lib/loyalty";
 
 export async function POST(request: Request) {
   try {
@@ -107,9 +107,12 @@ export async function POST(request: Request) {
       }
     }
 
-    // Earn loyalty points for online payment — fire and forget
+    // Earn loyalty points + process referral for online payment — fire and forget
     if (order.email && order.status !== 'paid') {
       earnPoints(order.email, dbOrderId, toNum(order.total)).catch(() => {});
+      if (order.referralCode) {
+        processReferral(order.email, order.referralCode, dbOrderId).catch(() => {});
+      }
     }
 
     const cookieStore = await cookies();

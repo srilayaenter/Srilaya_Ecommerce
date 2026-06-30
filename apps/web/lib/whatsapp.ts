@@ -35,6 +35,17 @@ export function orderConfirmedMessage({
   return `Hi ${customerName}! 🌾 Your SriLaYa Enterprises order *#${shortId}* has been placed successfully.\n\nTotal: ₹${total.toFixed(2)} | Payment: ${payLabel}\n\nTrack your order: ${process.env.NEXTAUTH_URL ?? "https://srilaya.com"}/track?orderId=${shortId}\n\nThank you for choosing SriLaYa!`;
 }
 
+export function orderDeliveredMessage({
+  customerName,
+  shortId,
+}: {
+  customerName: string;
+  shortId: string;
+}) {
+  const storeUrl = process.env.NEXTAUTH_URL ?? "https://srilaya.com";
+  return `Hi ${customerName}! ✅ Your SriLaYa Enterprises order *#${shortId}* has been delivered!\n\nWe hope you love your order. 🌾\n\nShare your experience: ${storeUrl}/product\n\nFor returns within 7 days: ${storeUrl}/track\n\nThank you for choosing SriLaYa! 🙏`;
+}
+
 export function orderDispatchedMessage({
   customerName,
   shortId,

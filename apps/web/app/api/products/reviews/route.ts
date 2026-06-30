@@ -21,6 +21,7 @@ export async function GET(request: Request) {
       customerName: true,
       rating: true,
       comment: true,
+      photoUrl: true,
       createdAt: true,
     },
   });
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
 // POST /api/products/reviews
 export async function POST(request: Request) {
   try {
-    const { slug, email, customerName, rating, comment } = await request.json();
+    const { slug, email, customerName, rating, comment, photoUrl } = await request.json();
 
     if (!slug || !email || !customerName || !rating) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -88,6 +89,7 @@ export async function POST(request: Request) {
         email: email.trim().toLowerCase(),
         rating: Number(rating),
         comment: comment?.trim() || null,
+        photoUrl: photoUrl?.trim() || null,
         approved: false,
       },
     });

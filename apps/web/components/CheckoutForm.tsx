@@ -68,6 +68,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
       : `${totalWeightGrams} g`;
 
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
+  const [referralCode,   setReferralCode]   = useState("");
   const [loyaltyBalance, setLoyaltyBalance] = useState(0);
   const [applyPoints, setApplyPoints] = useState(false);
   const canSubmit = selectedCourier !== "" && isPending === false;
@@ -93,6 +94,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
           <input type="hidden" name="courierName"    value={selectedCourier} />
           <input type="hidden" name="paymentMethod"  value={paymentMethod} />
           <input type="hidden" name="redeemedPoints" value={applyPoints ? redeemablePoints : 0} />
+          <input type="hidden" name="referralCode"   value={referralCode.trim().toUpperCase()} />
 
           {/* Address Card */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -278,6 +280,20 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
                 </label>
               ))}
             </div>
+          </div>
+
+          {/* Referral code */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <p className="text-sm font-bold text-slate-700 mb-2">Have a referral code?</p>
+            <input
+              type="text"
+              value={referralCode}
+              onChange={e => setReferralCode(e.target.value.toUpperCase())}
+              placeholder="e.g. SL-ABC123"
+              maxLength={12}
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-green bg-white text-slate-700 font-mono tracking-widest"
+            />
+            <p className="text-xs text-slate-400 mt-1">Both you and your friend get 50 loyalty points on your first order.</p>
           </div>
 
           {/* Loyalty points widget */}

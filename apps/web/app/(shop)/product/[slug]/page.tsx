@@ -6,6 +6,7 @@ import ProductGallery from "@/components/ProductGallery";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import RecordView from "@/components/RecordView";
 import ProductRecommendations from "@/components/ProductRecommendations";
+import PincodeCheck from "@/components/PincodeCheck";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -42,7 +43,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
       productReviews: {
         where: { approved: true },
         orderBy: { createdAt: "desc" },
-        select: { id: true, customerName: true, rating: true, comment: true, createdAt: true },
+        select: { id: true, customerName: true, rating: true, comment: true, photoUrl: true, createdAt: true },
       },
     },
   });
@@ -61,6 +62,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     customerName: r.customerName,
     rating: r.rating,
     comment: r.comment,
+    photoUrl: r.photoUrl,
     createdAt: r.createdAt.toISOString(),
   }));
 
@@ -158,6 +160,9 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
                 <p className="text-gray-500 italic text-sm">No variants configured for this product.</p>
               )}
             </div>
+
+            {/* Pincode check */}
+            <PincodeCheck />
 
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-3">

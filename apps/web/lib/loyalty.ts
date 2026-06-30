@@ -1,4 +1,9 @@
 import { prisma } from "@/lib/db";
+import { randomBytes } from "crypto";
+
+export function generateReferralCode(): string {
+  return "SL-" + randomBytes(3).toString("hex").toUpperCase();
+}
 
 // 1 point per ₹10 spent; 10 points = ₹1 discount (1% effective cashback)
 export const POINTS_PER_RUPEE = 0.1;
@@ -30,12 +35,14 @@ export async function getBalance(email: string): Promise<number> {
 export async function earnPoints(email: string, orderId: string, orderTotal: number): Promise<void> {
   const points = pointsEarned(orderTotal);
   if (points <= 0) return;
+  const code = generateReferralCode();
   await prisma.loyaltyAccount.upsert({
     where: { email },
     create: {
       email,
       balance: points,
       totalEarned: points,
+      referralCode: code,
       transactions: {
         create: { type: "earned", points, orderId, note: `Order ${orderId.slice(0, 8).toUpperCase()}` },
       },
@@ -45,6 +52,62 @@ export async function earnPoints(email: string, orderId: string, orderTotal: num
       totalEarned: { increment: points },
       transactions: {
         create: { type: "earned", points, orderId, note: `Order ${orderId.slice(0, 8).toUpperCase()}` },
+      },
+    },
+  });
+}
+
+// 50 bonus points for referrer + 50 for new customer on their first paid order
+export const REFERRAL_BONUS = 50;
+
+export async function processReferral(
+  newCustomerEmail: string,
+  referralCode: string,
+  orderId: string
+): Promise<void> {
+  // Only applies on first paid order
+  const prevOrders = await prisma.order.count({
+    where: { email: newCustomerEmail, status: "paid", id: { not: orderId } },
+  });
+  if (prevOrders > 0) return;
+
+  // Find referrer account by code
+  const referrer = await prisma.loyaltyAccount.findUnique({
+    where: { referralCode },
+    select: { id: true, email: true },
+  });
+  if (!referrer || referrer.email === newCustomerEmail) return;
+
+  // Give referrer 50 points
+  await prisma.loyaltyAccount.update({
+    where: { id: referrer.id },
+    data: {
+      balance: { increment: REFERRAL_BONUS },
+      totalEarned: { increment: REFERRAL_BONUS },
+      transactions: {
+        create: { type: "earned", points: REFERRAL_BONUS, orderId, note: `Referral bonus — ${newCustomerEmail}` },
+      },
+    },
+  });
+
+  // Give new customer 50 bonus points (upsert in case account doesn't exist yet)
+  const code = generateReferralCode();
+  await prisma.loyaltyAccount.upsert({
+    where: { email: newCustomerEmail },
+    create: {
+      email: newCustomerEmail,
+      balance: REFERRAL_BONUS,
+      totalEarned: REFERRAL_BONUS,
+      referralCode: code,
+      transactions: {
+        create: { type: "earned", points: REFERRAL_BONUS, orderId, note: `Welcome bonus — referred by ${referrer.email}` },
+      },
+    },
+    update: {
+      balance: { increment: REFERRAL_BONUS },
+      totalEarned: { increment: REFERRAL_BONUS },
+      transactions: {
+        create: { type: "earned", points: REFERRAL_BONUS, orderId, note: `Welcome bonus — referred by ${referrer.email}` },
       },
     },
   });

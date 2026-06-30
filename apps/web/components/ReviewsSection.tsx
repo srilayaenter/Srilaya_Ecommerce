@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface Review {
   id: string;
   customerName: string;
   rating: number;
   comment: string | null;
+  photoUrl: string | null;
   createdAt: string;
 }
 
@@ -57,6 +59,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
   const [email,     setEmail]     = useState("");
   const [rating,    setRating]    = useState(0);
   const [comment,   setComment]   = useState("");
+  const [photoUrl,  setPhotoUrl]  = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [result,    setResult]    = useState<{ ok: boolean; message: string } | null>(null);
 
@@ -69,14 +72,14 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
     const res = await fetch("/api/products/reviews", {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ slug, email, customerName: name, rating, comment }),
+      body:    JSON.stringify({ slug, email, customerName: name, rating, comment, photoUrl: photoUrl || undefined }),
     });
     const data = await res.json();
     setSubmitting(false);
 
     if (res.ok) {
       setResult({ ok: true, message: "Thanks! Your review is pending approval and will appear shortly." });
-      setName(""); setEmail(""); setRating(0); setComment("");
+      setName(""); setEmail(""); setRating(0); setComment(""); setPhotoUrl("");
       setShowForm(false);
     } else {
       setResult({ ok: false, message: data.error ?? "Failed to submit review." });
@@ -153,6 +156,19 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
             />
           </div>
 
+          <div>
+            <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">
+              Photo URL <span className="text-[#9E9E9E] font-normal normal-case">(optional — paste a link to your photo)</span>
+            </label>
+            <input
+              type="url"
+              value={photoUrl}
+              onChange={e => setPhotoUrl(e.target.value)}
+              placeholder="https://i.imgur.com/your-photo.jpg"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
+            />
+          </div>
+
           {result && !result.ok && (
             <p className="text-sm text-red-600 font-medium">{result.message}</p>
           )}
@@ -197,6 +213,19 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
               </div>
               {review.comment && (
                 <p className="text-sm text-[#424242] mt-2 leading-relaxed">{review.comment}</p>
+              )}
+              {review.photoUrl && (
+                <div className="mt-3">
+                  <Image
+                    src={review.photoUrl}
+                    alt={`Photo by ${review.customerName}`}
+                    width={160}
+                    height={160}
+                    className="rounded-xl object-cover border border-[#E0E0E0] cursor-pointer hover:opacity-90"
+                    onClick={() => window.open(review.photoUrl!, "_blank")}
+                    unoptimized
+                  />
+                </div>
               )}
             </div>
           ))}
