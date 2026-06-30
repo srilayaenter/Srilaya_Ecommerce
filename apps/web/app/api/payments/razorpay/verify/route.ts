@@ -6,6 +6,7 @@ import { sendEmail } from "../../../../../lib/email";
 import { buildOrderConfirmationEmail } from "../../../../../lib/emails/orderConfirmation";
 import { toNum } from "../../../../../lib/decimal";
 import { earnPoints, processReferral } from "../../../../../lib/loyalty";
+import { generateInvoicePdf } from "../../../../../lib/generateInvoicePdf";
 
 export async function POST(request: Request) {
   try {
@@ -98,11 +99,41 @@ export async function POST(request: Request) {
           zipCode: updatedOrder.zipCode || "",
         });
 
+        let pdfBuffer: Buffer | undefined;
+        try {
+          pdfBuffer = await generateInvoicePdf({
+            invoiceNo,
+            orderId: updatedOrder.id,
+            createdAt: updatedOrder.createdAt,
+            customerName: updatedOrder.customerName || "Customer",
+            email: updatedOrder.email,
+            phone: updatedOrder.phone,
+            address: updatedOrder.address,
+            city: updatedOrder.city,
+            state: updatedOrder.state,
+            zipCode: updatedOrder.zipCode,
+            items: updatedOrder.items.map(i => ({
+              title: i.variant.product.title,
+              size: i.variant.size,
+              quantity: i.quantity,
+              price: toNum(i.price),
+              gstRate: toNum(i.gstRate),
+            })),
+            subtotal: toNum(updatedOrder.subtotal),
+            taxTotal: toNum(updatedOrder.taxTotal),
+            shippingFee: toNum(updatedOrder.shippingFee),
+            total: toNum(updatedOrder.total),
+            paymentMethod: updatedOrder.paymentMethod,
+            discountAmount: updatedOrder.discountAmount ? toNum(updatedOrder.discountAmount) : null,
+          });
+        } catch { /* PDF generation failure should not block email */ }
+
         await sendEmail({
           to: updatedOrder.email,
           subject: `Order Confirmed — ${invoiceNo} | SriLaYa Enterprises`,
           html,
           context: `order:${dbOrderId}`,
+          ...(pdfBuffer ? { attachments: [{ filename: `${invoiceNo}.pdf`, content: pdfBuffer }] } : {}),
         });
       }
     }

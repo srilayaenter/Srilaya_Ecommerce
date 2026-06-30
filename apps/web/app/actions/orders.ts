@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import { sendEmail } from "@/lib/email";
 import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
+import { buildOrderConfirmationEmail } from "@/lib/emails/orderConfirmation";
+import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
 
@@ -133,6 +135,75 @@ export async function createOrder(formData: FormData): Promise<void> {
         await earnPoints(email, orderId, total).catch(() => {});
         if (referralCode) await processReferral(email, referralCode, orderId).catch(() => {});
       }
+    });
+  }
+
+  // COD order confirmation email with PDF — fire and forget
+  if (isCodOrder && email) {
+    const shortId   = orderId.slice(0, 8).toUpperCase();
+    const invoiceNo = `SL-${shortId}`;
+    Promise.resolve().then(async () => {
+      try {
+        const orderWithItems = await prisma.order.findUnique({
+          where: { id: orderId },
+          include: { items: { include: { variant: { include: { product: true } } } } },
+        });
+        if (!orderWithItems) return;
+        const html = buildOrderConfirmationEmail({
+          customerName,
+          orderId,
+          invoiceNo,
+          items: orderWithItems.items.map(i => ({
+            title: i.variant.product.title,
+            size: i.variant.size,
+            quantity: i.quantity,
+            price: toNum(i.price),
+          })),
+          subtotal: toNum(orderWithItems.subtotal),
+          taxTotal: toNum(orderWithItems.taxTotal),
+          shippingFee: toNum(orderWithItems.shippingFee),
+          total: toNum(orderWithItems.total),
+          address: orderWithItems.address || "",
+          city: orderWithItems.city || "",
+          state: orderWithItems.state || "",
+          zipCode: orderWithItems.zipCode || "",
+        });
+        let pdfBuffer: Buffer | undefined;
+        try {
+          pdfBuffer = await generateInvoicePdf({
+            invoiceNo,
+            orderId,
+            createdAt: orderWithItems.createdAt,
+            customerName,
+            email,
+            phone: orderWithItems.phone,
+            address: orderWithItems.address,
+            city: orderWithItems.city,
+            state: orderWithItems.state,
+            zipCode: orderWithItems.zipCode,
+            items: orderWithItems.items.map(i => ({
+              title: i.variant.product.title,
+              size: i.variant.size,
+              quantity: i.quantity,
+              price: toNum(i.price),
+              gstRate: toNum(i.gstRate),
+            })),
+            subtotal: toNum(orderWithItems.subtotal),
+            taxTotal: toNum(orderWithItems.taxTotal),
+            shippingFee: toNum(orderWithItems.shippingFee),
+            total: toNum(orderWithItems.total),
+            paymentMethod: 'cod',
+            discountAmount: orderWithItems.discountAmount ? toNum(orderWithItems.discountAmount) : null,
+          });
+        } catch { /* PDF failure should not block email */ }
+        await sendEmail({
+          to: email,
+          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Enterprises`,
+          html,
+          context: `order:${orderId}`,
+          ...(pdfBuffer ? { attachments: [{ filename: `${invoiceNo}.pdf`, content: pdfBuffer }] } : {}),
+        });
+      } catch { /* ignore */ }
     });
   }
 

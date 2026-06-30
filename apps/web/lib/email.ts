@@ -1,20 +1,27 @@
 import { Resend } from 'resend';
 import { prisma } from "@/lib/db";
 
+interface Attachment {
+  filename: string;
+  content: Buffer;
+}
+
 interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
   context?: string;
+  attachments?: Attachment[];
 }
 
-async function attemptSend({ to, subject, html }: SendEmailParams) {
+async function attemptSend({ to, subject, html, attachments }: SendEmailParams) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   return resend.emails.send({
     from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
     to,
     subject,
     html,
+    ...(attachments?.length ? { attachments: attachments.map(a => ({ filename: a.filename, content: a.content })) } : {}),
   });
 }
 
@@ -30,7 +37,7 @@ export async function sendEmail(params: SendEmailParams) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const result = await attemptSend(params);
+      const result = await attemptSend({ ...params, attachments: params.attachments });
       return { success: true, result };
     } catch (error: any) {
       lastError = error;

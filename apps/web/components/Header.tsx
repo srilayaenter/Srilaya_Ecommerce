@@ -40,6 +40,7 @@ export default function Header() {
     { name: "Millet Rava", href: "/category/millet-rava" },
     { name: "Laddu", href: "/category/laddu" },
     { name: "Sweeteners", href: "/category/sweeteners" },
+    { name: "Recipes",    href: "/blog" },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
