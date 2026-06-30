@@ -29,6 +29,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     { name: "Bundles",            href: "/admin/bundles",       icon: "📦", roles: ['admin','manager'] },
     { name: "Analytics",          href: "/admin/analytics",     icon: "📈", roles: ['admin','manager'] },
     { name: "GST Report",         href: "/admin/gst-report",    icon: "🧾", roles: ['admin','manager'] },
+    { name: "Loyalty Points",     href: "/admin/loyalty",       icon: "🎁", roles: ['admin','manager'] },
     { name: "Failed Emails",      href: "/admin/failed-emails", icon: "✉️", roles: ['admin','manager'] },
     { name: "MFA Setup",          href: "/admin/mfa-setup",     icon: "🔐", roles: ['admin','manager','inventory_staff','billing_staff'] },
     { name: "Store Settings",     href: "/admin/settings",      icon: "⚙️", roles: ['admin'] },

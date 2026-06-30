@@ -9,6 +9,7 @@ import {
   type CourierKey,
   type CourierOption,
 } from "@/lib/shipping";
+import { MIN_REDEEM_POINTS, RUPEES_PER_POINT, maxRedeemablePoints } from "@/lib/loyalty";
 
 interface CartSummaryItem {
   id: string;
@@ -30,7 +31,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
   const [selectedCourier, setSelectedCourier] = useState<CourierKey | "">("");
   const [isPending, setIsPending] = useState(false);
 
-  function handleEmailBlur(e: React.FocusEvent<HTMLInputElement>) {
+  async function handleEmailBlur(e: React.FocusEvent<HTMLInputElement>) {
     const email = e.target.value.trim();
     if (!email || !email.includes("@")) return;
     fetch("/api/cart/email", {
@@ -38,6 +39,12 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     }).catch(() => {});
+    // Check loyalty balance
+    const res = await fetch(`/api/loyalty/balance?email=${encodeURIComponent(email)}`).catch(() => null);
+    if (res?.ok) {
+      const data = await res.json();
+      setLoyaltyBalance(data.balance ?? 0);
+    }
   }
 
   const totalWeightGrams = cartItems.reduce(
@@ -54,7 +61,6 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
 
   const selectedOption = courierOptions.find((c) => c.key === selectedCourier) ?? null;
   const shippingFee = selectedOption?.cost ?? 0;
-  const total = subtotal + taxTotal + shippingFee;
 
   const weightDisplay =
     totalWeightGrams >= 1000
@@ -62,7 +68,15 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
       : `${totalWeightGrams} g`;
 
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
+  const [loyaltyBalance, setLoyaltyBalance] = useState(0);
+  const [applyPoints, setApplyPoints] = useState(false);
   const canSubmit = selectedCourier !== "" && isPending === false;
+
+  const redeemablePoints = loyaltyBalance >= MIN_REDEEM_POINTS
+    ? maxRedeemablePoints(subtotal + taxTotal + shippingFee, loyaltyBalance)
+    : 0;
+  const loyaltyDiscount = applyPoints ? parseFloat((redeemablePoints * RUPEES_PER_POINT).toFixed(2)) : 0;
+  const total = subtotal + taxTotal + shippingFee - loyaltyDiscount;
 
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
@@ -78,6 +92,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
           <input type="hidden" name="shippingFee"    value={shippingFee} />
           <input type="hidden" name="courierName"    value={selectedCourier} />
           <input type="hidden" name="paymentMethod"  value={paymentMethod} />
+          <input type="hidden" name="redeemedPoints" value={applyPoints ? redeemablePoints : 0} />
 
           {/* Address Card */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -265,6 +280,29 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
             </div>
           </div>
 
+          {/* Loyalty points widget */}
+          {loyaltyBalance >= MIN_REDEEM_POINTS && (
+            <div className="bg-[#FFF8E1] border border-[#FFE082] rounded-2xl p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-bold text-[#E65100] text-sm">🎁 You have {loyaltyBalance} loyalty points</p>
+                  <p className="text-xs text-[#757575] mt-0.5">
+                    Apply {redeemablePoints} points for ₹{(redeemablePoints * RUPEES_PER_POINT).toFixed(2)} off this order
+                  </p>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={applyPoints}
+                    onChange={e => setApplyPoints(e.target.checked)}
+                    className="w-4 h-4 accent-[#006A38]"
+                  />
+                  <span className="text-sm font-bold text-[#006A38]">Apply</span>
+                </label>
+              </div>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={!canSubmit}
@@ -318,6 +356,12 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
               <span className="text-slate-400 italic">Select courier</span>
             )}
           </div>
+          {loyaltyDiscount > 0 && (
+            <div className="flex justify-between text-emerald-600">
+              <span>Loyalty discount</span>
+              <span className="font-bold">−₹{loyaltyDiscount.toFixed(2)}</span>
+            </div>
+          )}
         </div>
 
         <div className="border-t border-slate-100 pt-4 mt-4">

@@ -5,6 +5,7 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ProductGallery from "@/components/ProductGallery";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import RecordView from "@/components/RecordView";
+import ProductRecommendations from "@/components/ProductRecommendations";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -178,6 +179,9 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
         <div className="mt-14">
           <ReviewsSection slug={slug} reviews={reviews} />
         </div>
+
+        {/* ── Customers also bought ── */}
+        <ProductRecommendations slug={slug} />
 
         {/* ── Recently viewed ── */}
         <div className="mt-6 border-t border-[#E0E0E0] pt-8">

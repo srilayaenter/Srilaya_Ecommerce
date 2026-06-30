@@ -5,6 +5,7 @@ import crypto from "crypto";
 import { sendEmail } from "../../../../../lib/email";
 import { buildOrderConfirmationEmail } from "../../../../../lib/emails/orderConfirmation";
 import { toNum } from "../../../../../lib/decimal";
+import { earnPoints } from "../../../../../lib/loyalty";
 
 export async function POST(request: Request) {
   try {
@@ -104,6 +105,11 @@ export async function POST(request: Request) {
           context: `order:${dbOrderId}`,
         });
       }
+    }
+
+    // Earn loyalty points for online payment — fire and forget
+    if (order.email && order.status !== 'paid') {
+      earnPoints(order.email, dbOrderId, toNum(order.total)).catch(() => {});
     }
 
     const cookieStore = await cookies();

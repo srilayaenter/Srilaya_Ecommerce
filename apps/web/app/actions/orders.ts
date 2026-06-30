@@ -7,6 +7,7 @@ import { toNum } from "@/lib/decimal";
 import { sendEmail } from "@/lib/email";
 import { buildLowStockAlert } from "@/lib/emails/adminAlerts";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
+import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints } from "@/lib/loyalty";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -40,9 +41,22 @@ export async function createOrder(formData: FormData): Promise<void> {
   const zipCode       = formData.get('zipCode')     as string;
   const courierName   = formData.get('courierName') as string;
   const shippingFee   = parseFloat(formData.get('shippingFee') as string) || 0;
-  const paymentMethod = formData.get('paymentMethod') as string | null;
+  const paymentMethod  = formData.get('paymentMethod') as string | null;
+  const redeemedPoints = parseInt(formData.get('redeemedPoints') as string || '0', 10) || 0;
 
-  const total = subtotal + taxTotal + shippingFee;
+  const baseTotal = subtotal + taxTotal + shippingFee;
+
+  // Validate redeemed points server-side
+  let validatedPoints = 0;
+  let loyaltyDiscount = 0;
+  if (redeemedPoints >= MIN_REDEEM_POINTS && email) {
+    const balance = await getBalance(email);
+    const maxPoints = maxRedeemablePoints(baseTotal, balance);
+    validatedPoints = Math.min(redeemedPoints, maxPoints);
+    loyaltyDiscount = pointsToRupees(validatedPoints);
+  }
+
+  const total = Math.max(0, baseTotal - loyaltyDiscount);
 
   let orderId: string;
 
@@ -81,6 +95,7 @@ export async function createOrder(formData: FormData): Promise<void> {
           orderChannel: 'online',
           paymentMethod: paymentMethod || undefined,
           invoiceNo: courierName ? `COURIER:${courierName}` : undefined,
+          discountAmount: loyaltyDiscount > 0 ? loyaltyDiscount : undefined,
         },
       });
 
@@ -107,6 +122,14 @@ export async function createOrder(formData: FormData): Promise<void> {
   }
 
   const isCodOrder = paymentMethod === 'cod';
+
+  // Loyalty points — redeem then earn (fire and forget)
+  if (email) {
+    Promise.resolve().then(async () => {
+      if (validatedPoints > 0) await redeemPoints(email, orderId, validatedPoints).catch(() => {});
+      if (isCodOrder) await earnPoints(email, orderId, total).catch(() => {});
+    });
+  }
 
   // WhatsApp confirmation — fire and forget
   if (phone) {
