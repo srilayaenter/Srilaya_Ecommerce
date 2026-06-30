@@ -17,7 +17,7 @@ export default function Footer() {
                 <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises Logo" fill className="object-cover" />
               </div>
               <span className="font-black text-xl text-white tracking-tight">
-                SriLaYa <span className="text-[#4CAF50]">Foods</span>
+                SriLaYa <span className="text-[#4CAF50]">Enterprises</span>
               </span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
@@ -32,9 +32,11 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Shop</h4>
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li><Link href="/product" className="hover:text-[#4CAF50] transition-colors">All Products</Link></li>
-              <li><Link href="/category/millets" className="hover:text-[#4CAF50] transition-colors">Millets</Link></li>
+              <li><Link href="/category/millet-flakes" className="hover:text-[#4CAF50] transition-colors">Millet Flakes</Link></li>
+              <li><Link href="/category/millet-flour" className="hover:text-[#4CAF50] transition-colors">Millet Flour</Link></li>
               <li><Link href="/category/laddu" className="hover:text-[#4CAF50] transition-colors">Laddu</Link></li>
               <li><Link href="/category/sweeteners" className="hover:text-[#4CAF50] transition-colors">Sweeteners</Link></li>
+              <li><Link href="/bundles" className="hover:text-[#4CAF50] transition-colors">Bundle Packs</Link></li>
               <li><Link href="/cart" className="hover:text-[#4CAF50] transition-colors">Cart</Link></li>
             </ul>
           </div>
@@ -44,12 +46,12 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Company</h4>
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li><Link href="/about" className="hover:text-[#4CAF50] transition-colors">About Us</Link></li>
+              <li><Link href="/blog" className="hover:text-[#4CAF50] transition-colors">Blog & Recipes</Link></li>
               <li><Link href="/contact" className="hover:text-[#4CAF50] transition-colors">Contact Us</Link></li>
               <li><Link href="/track" className="hover:text-[#4CAF50] transition-colors">Track Order</Link></li>
               <li><Link href="/account" className="hover:text-[#4CAF50] transition-colors">My Orders</Link></li>
               <li><Link href="/wishlist" className="hover:text-[#4CAF50] transition-colors">Wishlist</Link></li>
-              <li><Link href="/bundles" className="hover:text-[#4CAF50] transition-colors">Bundle Packs</Link></li>
-              <li><Link href="/payments" className="hover:text-[#4CAF50] transition-colors">Payment Details</Link></li>
+              <li><Link href="/referral" className="hover:text-[#4CAF50] transition-colors">Refer & Earn</Link></li>
             </ul>
           </div>
 

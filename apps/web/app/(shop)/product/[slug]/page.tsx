@@ -7,6 +7,7 @@ import RecentlyViewed from "@/components/RecentlyViewed";
 import RecordView from "@/components/RecordView";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import PincodeCheck from "@/components/PincodeCheck";
+import NotifyMeButton from "@/components/NotifyMeButton";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -155,7 +156,14 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             <div className="bg-white border border-[#E0E0E0] rounded-2xl p-6 shadow-sm">
               <h2 className="font-bold text-base mb-4 text-[#212121]">Select Size & Add to Cart</h2>
               {serializedVariants.length > 0 ? (
-                <AddToCartWithDropdown variants={serializedVariants} />
+                <>
+                  <AddToCartWithDropdown variants={serializedVariants} />
+                  {!inStock && (
+                    <div className="mt-4">
+                      <NotifyMeButton variantId={serializedVariants[0].id} />
+                    </div>
+                  )}
+                </>
               ) : (
                 <p className="text-gray-500 italic text-sm">No variants configured for this product.</p>
               )}
