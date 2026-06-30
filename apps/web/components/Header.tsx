@@ -61,7 +61,7 @@ export default function Header() {
       <header className="w-full bg-white sticky top-0 z-50 border-b border-[#E0E0E0] font-sans shadow-sm">
 
         {/* ── Utility bar ── */}
-        <div className="hidden lg:block bg-[#006A38]">
+        <div className="hidden lg:block bg-[#003D20]">
           <div className="container mx-auto px-4 max-w-7xl flex items-center justify-end gap-5 h-8">
             {utilityLinks.map(link => (
               <Link key={link.name} href={link.href}
