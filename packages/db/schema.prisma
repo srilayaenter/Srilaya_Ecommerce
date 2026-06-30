@@ -11,7 +11,8 @@ generator client {
 
 model User {
   id           String   @id @default(cuid())
-  email        String   @unique
+  email        String?  @unique
+  phone        String?  @unique
   password     String?
   role         String   @default("customer")
   totpSecret   String?
@@ -19,6 +20,17 @@ model User {
   orders       Order[]
   carts        Cart[]
   createdAt    DateTime @default(now())
+}
+
+model PhoneOtp {
+  id        String   @id @default(cuid())
+  phone     String
+  otp       String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone])
 }
 
 model PasswordResetToken {

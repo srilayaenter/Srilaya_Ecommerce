@@ -10,10 +10,21 @@ import { Suspense } from "react";
 function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-  const [email, setEmail]     = useState("");
+
+  const [tab, setTab] = useState<"email" | "phone">("email");
+
+  // Email/password state
+  const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
+
+  // Phone/OTP state
+  const [phone,     setPhone]     = useState("");
+  const [otp,       setOtp]       = useState("");
+  const [otpSent,   setOtpSent]   = useState(false);
+  const [otpTimer,  setOtpTimer]  = useState(0);
+
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
+  const [error,   setError]   = useState("");
 
   async function handleGoogle() {
     setLoading(true);
@@ -37,6 +48,55 @@ function LoginForm() {
     }
   }
 
+  async function handleSendOtp(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    const clean = phone.replace(/\D/g, "").slice(-10);
+    if (clean.length !== 10) {
+      setError("Enter a valid 10-digit mobile number.");
+      return;
+    }
+    setLoading(true);
+    const res  = await fetch("/api/auth/otp/send", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ phone: clean }),
+    });
+    const data = await res.json();
+    setLoading(false);
+    if (!res.ok) {
+      setError(data.error ?? "Failed to send OTP.");
+      return;
+    }
+    setOtpSent(true);
+    // 60-second resend cooldown
+    setOtpTimer(60);
+    const interval = setInterval(() => {
+      setOtpTimer(t => {
+        if (t <= 1) { clearInterval(interval); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+  }
+
+  async function handleVerifyOtp(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    const clean = phone.replace(/\D/g, "").slice(-10);
+    setLoading(true);
+    const res = await signIn("phone-otp", {
+      phone: clean,
+      otp:   otp.trim(),
+      redirect: false,
+    });
+    setLoading(false);
+    if (res?.error) {
+      setError("Incorrect or expired OTP. Please try again.");
+    } else {
+      window.location.href = callbackUrl;
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] font-sans pb-20 mt-12 px-4">
       <div className="text-center mb-8 flex flex-col items-center">
@@ -52,6 +112,7 @@ function LoginForm() {
       </div>
 
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-md p-8">
+
         {/* Google sign-in */}
         <button
           onClick={handleGoogle}
@@ -67,46 +128,140 @@ function LoginForm() {
           Continue with Google
         </button>
 
-        <div className="flex items-center gap-3 my-5">
-          <div className="flex-1 h-px bg-[#E0E0E0]" />
-          <span className="text-xs text-[#9E9E9E] font-medium">or sign in with email</span>
-          <div className="flex-1 h-px bg-[#E0E0E0]" />
+        {/* Tab switcher */}
+        <div className="flex mt-5 rounded-lg border border-[#E0E0E0] overflow-hidden">
+          {(["email", "phone"] as const).map(t => (
+            <button
+              key={t}
+              onClick={() => { setTab(t); setError(""); setOtpSent(false); setOtp(""); }}
+              className={`flex-1 py-2.5 text-sm font-bold transition-colors ${
+                tab === t
+                  ? "bg-[#006A38] text-white"
+                  : "text-[#757575] hover:bg-[#F5F5F5]"
+              }`}
+            >
+              {t === "email" ? "Email & Password" : "Phone OTP"}
+            </button>
+          ))}
         </div>
 
-        <form onSubmit={handleCredentials} className="space-y-5">
-          <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
-            />
-          </div>
-          <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
-            />
-          </div>
+        {/* Email/password form */}
+        {tab === "email" && (
+          <form onSubmit={handleCredentials} className="space-y-5 mt-5">
+            <div>
+              <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                placeholder="you@example.com"
+                className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
+              />
+            </div>
+            {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
+            >
+              {loading ? "Signing in…" : "Sign In"}
+            </button>
+          </form>
+        )}
 
-          {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
-          >
-            {loading ? "Signing in…" : "Sign In"}
-          </button>
-        </form>
+        {/* Phone OTP form */}
+        {tab === "phone" && (
+          <div className="mt-5 space-y-4">
+            {!otpSent ? (
+              <form onSubmit={handleSendOtp} className="space-y-4">
+                <div>
+                  <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Mobile Number</label>
+                  <div className="flex">
+                    <span className="flex items-center px-3 border border-r-0 border-[#E0E0E0] rounded-l-[8px] text-[#424242] text-sm font-medium bg-[#F5F5F5]">
+                      +91
+                    </span>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={e => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                      required
+                      placeholder="98765 43210"
+                      maxLength={10}
+                      className="flex-1 border border-[#E0E0E0] rounded-r-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
+                    />
+                  </div>
+                </div>
+                {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                <button
+                  type="submit"
+                  disabled={loading || phone.replace(/\D/g, "").length !== 10}
+                  className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
+                >
+                  {loading ? "Sending…" : "Send OTP"}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleVerifyOtp} className="space-y-4">
+                <p className="text-sm text-[#616161]">
+                  OTP sent to <strong>+91 {phone}</strong>.{" "}
+                  <button
+                    type="button"
+                    onClick={() => { setOtpSent(false); setOtp(""); setError(""); }}
+                    className="text-[#006A38] font-bold hover:underline"
+                  >
+                    Change
+                  </button>
+                </p>
+                <div>
+                  <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Enter OTP</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={otp}
+                    onChange={e => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    required
+                    placeholder="6-digit OTP"
+                    maxLength={6}
+                    className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] text-center text-2xl font-black tracking-[0.5em] transition-all"
+                  />
+                </div>
+                {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                <button
+                  type="submit"
+                  disabled={loading || otp.length !== 6}
+                  className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
+                >
+                  {loading ? "Verifying…" : "Verify & Sign In"}
+                </button>
+                <p className="text-center text-xs text-[#9E9E9E]">
+                  {otpTimer > 0 ? (
+                    <>Resend OTP in <strong>{otpTimer}s</strong></>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleSendOtp as any}
+                      className="text-[#006A38] font-bold hover:underline"
+                    >
+                      Resend OTP
+                    </button>
+                  )}
+                </p>
+              </form>
+            )}
+          </div>
+        )}
 
         <div className="mt-6 text-center border-t border-[#E0E0E0] pt-5">
           <p className="text-[14px] text-[#424242] font-medium">

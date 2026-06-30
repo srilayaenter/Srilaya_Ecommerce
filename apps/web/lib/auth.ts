@@ -23,32 +23,59 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         const email = credentials.email.trim().toLowerCase();
+        const user = await prisma.user.findUnique({ where: { email } });
 
-        const user = await prisma.user.findUnique({
-          where: { email },
-        });
-
-        if (!user || !user.password) {
-          return null;
-        }
+        if (!user || !user.password) return null;
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) return null;
 
-        if (!isValid) {
+        return { id: user.id, email: user.email, role: user.role, totpEnabled: user.totpEnabled };
+      },
+    }),
+    CredentialsProvider({
+      id: "phone-otp",
+      name: "PhoneOTP",
+      credentials: {
+        phone: { label: "Phone", type: "tel" },
+        otp:   { label: "OTP",   type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.phone || !credentials?.otp) return null;
+
+        const phone = credentials.phone.replace(/\s/g, "").slice(-10);
+
+        const record = await prisma.phoneOtp.findFirst({
+          where: { phone, expiresAt: { gt: new Date() } },
+          orderBy: { createdAt: "desc" },
+        });
+
+        if (!record) return null;
+
+        if (record.attempts >= 5) {
+          await prisma.phoneOtp.delete({ where: { id: record.id } });
           return null;
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          totpEnabled: user.totpEnabled,
-        };
+        if (record.otp !== credentials.otp.trim()) {
+          await prisma.phoneOtp.update({
+            where: { id: record.id },
+            data:  { attempts: { increment: 1 } },
+          });
+          return null;
+        }
+
+        await prisma.phoneOtp.delete({ where: { id: record.id } });
+
+        let user = await prisma.user.findUnique({ where: { phone } });
+        if (!user) {
+          user = await prisma.user.create({ data: { phone, role: "customer" } });
+        }
+
+        return { id: user.id, email: user.email ?? null, role: user.role, totpEnabled: user.totpEnabled };
       },
     }),
   ],
@@ -67,7 +94,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, account }) {
       if (user) {
-        const dbUser = await prisma.user.findUnique({ where: { email: user.email! } });
+        const dbUser = await prisma.user.findUnique({ where: { id: user.id as string } });
         token.id   = dbUser?.id ?? user.id;
         token.role = dbUser?.role ?? "customer";
         token.totpEnabled = dbUser?.totpEnabled ?? false;
