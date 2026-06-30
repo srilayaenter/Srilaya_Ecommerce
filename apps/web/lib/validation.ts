@@ -39,25 +39,27 @@ export const ReturnRequestSchema = z.object({
   reason: z.string().min(5).max(500),
   items: z.array(z.object({
     variantId: z.string().min(1).max(64),
-    quantity: z.number().int().positive(),
+    title:     z.string().min(1).max(200),
+    size:      z.string().min(1).max(50),
+    quantity:  z.number().int().positive(),
   })).min(1),
 });
 
-/** Parse request body with a Zod schema. Returns `{ data }` or `{ error, status }`. */
+/** Parse request body with a Zod schema. Returns `{ ok: true, data }` or `{ ok: false, error, status }`. */
 export async function parseBody<T>(
   request: Request,
   schema: z.ZodSchema<T>
-): Promise<{ data: T; error?: never } | { data?: never; error: string; status: number }> {
+): Promise<{ ok: true; data: T } | { ok: false; error: string; status: number }> {
   let raw: unknown;
   try {
     raw = await request.json();
   } catch {
-    return { error: "Invalid JSON body", status: 400 };
+    return { ok: false, error: "Invalid JSON body", status: 400 };
   }
   const result = schema.safeParse(raw);
   if (!result.success) {
-    const msg = result.error.errors.map(e => e.message).join("; ");
-    return { error: msg, status: 400 };
+    const msg = result.error.issues.map((i: z.ZodIssue) => i.message).join("; ");
+    return { ok: false, error: msg, status: 400 };
   }
-  return { data: result.data };
+  return { ok: true, data: result.data };
 }

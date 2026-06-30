@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { getToken, encode } from "next-auth/jwt";
 import { prisma } from "@/lib/db";
 import { TOTP as TOTPClass } from "otplib";
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
   }
 
   const parsed = await parseBody(request, MfaVerifySchema);
-  if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+  if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
   const { code } = parsed.data;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });

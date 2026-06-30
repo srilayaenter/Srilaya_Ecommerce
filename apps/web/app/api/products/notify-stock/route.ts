@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { parseBody, NotifyStockSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   const parsed = await parseBody(request, NotifyStockSchema);
-  if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+  if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
   const { email, variantId } = parsed.data;
 
   const variant = await prisma.productVariant.findUnique({ where: { id: variantId } });

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
@@ -7,7 +7,7 @@ import { parseBody, CancelOrderSchema } from "@/lib/validation";
 export async function POST(request: Request) {
   try {
     const parsed = await parseBody(request, CancelOrderSchema);
-    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     const { orderId, email } = parsed.data;
 
     const order = await prisma.order.findUnique({

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { buildPasswordResetEmail } from "@/lib/emails/passwordReset";
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     }
 
     const parsed = await parseBody(request, ForgotPasswordSchema);
-    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     const { email } = parsed.data;
 
     const normalised = email.trim().toLowerCase();

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -7,7 +7,7 @@ import { parseBody, ResetPasswordSchema } from "@/lib/validation";
 export async function POST(request: Request) {
   try {
     const parsed = await parseBody(request, ResetPasswordSchema);
-    if (parsed.error) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     const { token, password } = parsed.data;
 
     // Hash the raw token from URL to look up the stored hash
