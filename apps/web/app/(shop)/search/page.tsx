@@ -64,7 +64,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         {/* No query state */}
         {!query && (
           <div className="text-center py-12">
-            <p className="text-[#8D6E63] text-sm mb-4">Try searching for:</p>
+            <p className="text-[#424242] text-sm mb-4">Try searching for:</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {suggestions.map(s => (
                 <Link
@@ -81,7 +81,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
 
         {/* Results count */}
         {query && (
-          <p className="text-sm text-[#8D6E63] mb-6 font-medium">
+          <p className="text-sm text-[#424242] mb-6 font-medium">
             {products.length === 0
               ? `No products found for "${query}"`
               : `${products.length} product${products.length !== 1 ? 's' : ''} found for "${query}"`}
@@ -93,7 +93,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
           <div className="text-center py-16 bg-white rounded-2xl border border-[#E8E0D5]">
             <p className="text-5xl mb-4">🌾</p>
             <h2 className="text-lg font-bold text-[#212121] mb-2">No products found</h2>
-            <p className="text-sm text-[#8D6E63] mb-6">Try a different keyword or browse our categories.</p>
+            <p className="text-sm text-[#424242] mb-6">Try a different keyword or browse our categories.</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {suggestions.map(s => (
                 <Link

@@ -46,7 +46,7 @@ export default function WishlistPage() {
           <div className="text-center py-16">
             <p className="text-4xl mb-4">🤍</p>
             <h2 className="text-lg font-bold text-[#212121] mb-2">Your wishlist is empty</h2>
-            <p className="text-sm text-[#8D6E63] mb-6">Browse products and tap the heart icon to save them here.</p>
+            <p className="text-sm text-[#424242] mb-6">Browse products and tap the heart icon to save them here.</p>
             <Link href="/product" className="inline-block bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors">
               Browse Products
             </Link>

@@ -46,7 +46,7 @@ function LoginForm() {
         <h1 className="text-[32px] font-black text-[#212121] tracking-tight font-poppins">
           SriLaYa <span className="text-[#006A38]">Enterprises</span>
         </h1>
-        <p className="text-[#8D6E63] font-bold tracking-wide mt-1 uppercase text-[12px]">
+        <p className="text-[#424242] font-bold tracking-wide mt-1 uppercase text-[12px]">
           Welcome Back
         </p>
       </div>

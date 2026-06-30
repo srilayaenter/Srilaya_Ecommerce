@@ -34,11 +34,11 @@ export default async function CheckoutPage({
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center text-slate-800">
+      <div className="container mx-auto px-4 py-16 text-center text-[#212121]">
         <span className="text-4xl block mb-4">🛒</span>
         <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
         <Link href="/product">
-          <button className="bg-brand-green text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-sm">
+          <button className="bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm">
             Continue Shopping
           </button>
         </Link>
@@ -57,8 +57,8 @@ export default async function CheckoutPage({
   }));
 
   return (
-    <div className="container mx-auto px-4 py-8 text-slate-800">
-      <h1 className="text-3xl font-extrabold mb-8 tracking-tight text-slate-900">Checkout</h1>
+    <div className="container mx-auto px-4 py-8 text-[#212121]">
+      <h1 className="text-3xl font-extrabold mb-8 tracking-tight text-[#212121]">Checkout</h1>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 mb-6 text-sm font-semibold">

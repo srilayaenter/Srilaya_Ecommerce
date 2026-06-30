@@ -114,7 +114,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
       {showForm && (
         <form onSubmit={handleSubmit} className="border border-[#E8E0D5] rounded-xl p-5 mb-6 bg-[#FAFAF8] space-y-4">
           <h3 className="font-bold text-[#212121] text-sm">Write a Review</h3>
-          <p className="text-xs text-[#8D6E63]">Only customers who have purchased this product can submit a review.</p>
+          <p className="text-xs text-[#424242]">Only customers who have purchased this product can submit a review.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -184,7 +184,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
             <button
               type="button"
               onClick={() => { setShowForm(false); setResult(null); }}
-              className="text-[#8D6E63] font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#F5F5F5] transition-colors"
+              className="text-[#424242] font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#F5F5F5] transition-colors"
             >
               Cancel
             </button>

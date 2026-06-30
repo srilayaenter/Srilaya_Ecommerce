@@ -29,7 +29,7 @@ export default function NotifyMeButton({ variantId }: { variantId: string }) {
 
   if (done) {
     return (
-      <div className="w-full bg-[#FFF8E1] border border-[#FFE082] text-[#8D6E63] text-sm font-medium px-4 py-3 rounded-xl text-center">
+      <div className="w-full bg-[#FFF8E1] border border-[#FFE082] text-[#424242] text-sm font-medium px-4 py-3 rounded-xl text-center">
         🔔 We'll email you when this is back in stock!
       </div>
     );

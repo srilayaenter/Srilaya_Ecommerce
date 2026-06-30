@@ -63,13 +63,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
 
       {/* Wishlist heart */}
       <WishlistButton productId={product.id} />
 
       {/* Image Frame */}
-      <Link href={`/product/${product.slug}`} className="w-full h-52 bg-slate-50 relative overflow-hidden flex items-center justify-center p-4">
+      <Link href={`/product/${product.slug}`} className="w-full h-52 bg-[#F9F9F9] relative overflow-hidden flex items-center justify-center p-4">
         {product.image ? (
           <img
             src={product.image}
@@ -77,17 +77,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center text-slate-300 gap-2">
+          <div className="flex flex-col items-center justify-center text-[#BDBDBD] gap-2">
             <span className="text-5xl transform group-hover:scale-110 transition duration-300">
               {getCategoryEmoji(product.category.name)}
             </span>
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">
               {product.category.name} Pack
             </span>
           </div>
         )}
 
-        <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm shadow-sm text-slate-800 text-xs font-bold px-2 py-1 rounded-lg">
+        <span className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm shadow-sm text-[#212121] text-xs font-bold px-2 py-1 rounded-lg">
           ⭐ {ratingDisplay}
         </span>
       </Link>
@@ -98,24 +98,24 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={() => { setShowQuickAdd(!showQuickAdd); setErrorMsg(""); }}
           className={`w-full text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1 border ${
             showQuickAdd
-              ? "bg-slate-100 border-slate-200 text-slate-600"
-              : "bg-slate-50 border-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700"
+              ? "bg-[#F5F5F5] border-[#E0E0E0] text-[#616161]"
+              : "bg-[#F9F9F9] border-[#E0E0E0] text-[#424242] hover:bg-emerald-50 hover:text-emerald-700"
           }`}
         >
           <span>{showQuickAdd ? "✕ Hide Options" : "⚡ Quick Add"}</span>
         </button>
 
         {showQuickAdd && (
-          <div className="mt-3 bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col gap-3">
+          <div className="mt-3 bg-[#F9F9F9] p-3 rounded-xl border border-[#E0E0E0] flex flex-col gap-3">
             <div>
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Select Size</label>
+              <label className="text-[10px] font-bold text-[#9E9E9E] uppercase tracking-wider block mb-1">Select Size</label>
               <select
                 value={selectedVariant.id}
                 onChange={(e) => {
                   const variant = product.variants.find(v => v.id === e.target.value);
                   if (variant) setSelectedVariant(variant);
                 }}
-                className="w-full bg-white text-slate-800 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer"
+                className="w-full bg-white text-[#212121] text-xs border border-[#E0E0E0] rounded-lg p-2 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer"
               >
                 {product.variants.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -134,7 +134,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={handleAddToCart}
               disabled={isPending || isAddedSuccess || (selectedVariant.stock ?? 1) <= 0}
               className={`w-full text-white font-bold py-2 rounded-lg text-xs transition duration-200 ${
-                isAddedSuccess ? "bg-emerald-600" : "bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50"
+                isAddedSuccess ? "bg-emerald-600" : "bg-emerald-700 hover:bg-[#00522B] disabled:opacity-50"
               }`}
             >
               {isPending ? "Adding..." : isAddedSuccess ? "✓ Added!" : "Add to Cart"}
@@ -149,23 +149,23 @@ export default function ProductCard({ product }: ProductCardProps) {
           <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">
             {product.category.name}
           </span>
-          <h3 className="font-bold text-base text-slate-800 line-clamp-1 group-hover:text-emerald-700 transition-colors mb-1">
+          <h3 className="font-bold text-base text-[#212121] line-clamp-1 group-hover:text-emerald-700 transition-colors mb-1">
             {product.title}
           </h3>
-          <p className="text-xs text-slate-400 font-medium mb-4">
-            Size: <span className="text-slate-600 font-bold">{selectedVariant.size}</span>
+          <p className="text-xs text-[#9E9E9E] font-medium mb-4">
+            Size: <span className="text-[#616161] font-bold">{selectedVariant.size}</span>
           </p>
         </div>
 
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+        <div className="pt-3 border-t border-[#E0E0E0] flex items-center justify-between mt-auto">
           <div className="flex flex-col">
-            <span className="text-xs text-slate-400 font-medium leading-none mb-1">Price</span>
-            <span className="text-lg font-black text-slate-900 group-hover:text-emerald-700 transition-colors">
+            <span className="text-xs text-[#9E9E9E] font-medium leading-none mb-1">Price</span>
+            <span className="text-lg font-black text-[#212121] group-hover:text-emerald-700 transition-colors">
               ₹{parseFloat(selectedVariant.price)}
             </span>
           </div>
 
-          <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-emerald-700 text-slate-400 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-[#00522B] text-[#9E9E9E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
             →
           </div>
         </div>

@@ -100,14 +100,14 @@ export default function AccountPage() {
             <div className="bg-white rounded-2xl border border-[#E8E0D5] p-10 text-center">
               <p className="text-3xl mb-3">🛒</p>
               <p className="font-bold text-[#212121]">No orders found</p>
-              <p className="text-sm text-[#8D6E63] mt-1">No orders are linked to this email address.</p>
+              <p className="text-sm text-[#424242] mt-1">No orders are linked to this email address.</p>
               <Link href="/product" className="inline-block mt-4 text-[#006A38] font-bold text-sm hover:underline">
                 Start shopping →
               </Link>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-sm text-[#8D6E63] font-medium">
+              <p className="text-sm text-[#424242] font-medium">
                 {orders.length} order{orders.length !== 1 ? "s" : ""} found
               </p>
               {orders.map(order => (
@@ -125,7 +125,7 @@ export default function AccountPage() {
                       <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${STATUS_STYLES[order.status] ?? "bg-gray-100 text-gray-500"}`}>
                         {order.status === "paid" ? "✓ Paid" : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </span>
-                      <span className="text-xs text-[#8D6E63]">
+                      <span className="text-xs text-[#424242]">
                         {FULFILLMENT_LABELS[order.fulfillmentStatus] ?? order.fulfillmentStatus}
                       </span>
                     </div>

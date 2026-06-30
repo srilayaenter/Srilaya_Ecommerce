@@ -255,7 +255,7 @@ function TrackOrderContent() {
                             {info.label}
                           </p>
                           {active && (
-                            <p className="text-[10px] text-[#8D6E63] mt-0.5 leading-tight">{info.desc}</p>
+                            <p className="text-[10px] text-[#424242] mt-0.5 leading-tight">{info.desc}</p>
                           )}
                         </div>
                       );
@@ -322,7 +322,7 @@ function TrackOrderContent() {
                     <div key={i} className="flex items-center justify-between py-3 text-sm">
                       <div>
                         <p className="font-semibold text-[#212121]">{item.title}</p>
-                        <p className="text-xs text-[#8D6E63]">{item.size} × {item.quantity}</p>
+                        <p className="text-xs text-[#424242]">{item.size} × {item.quantity}</p>
                       </div>
                       <p className="font-bold text-[#212121]">₹{lineTotal.toFixed(2)}</p>
                     </div>
@@ -351,7 +351,7 @@ function TrackOrderContent() {
             )}
 
             {/* Help */}
-            <div className="bg-[#FFF8E1] border border-[#FFE082] rounded-2xl p-5 text-center text-sm text-[#8D6E63]">
+            <div className="bg-[#FFF8E1] border border-[#FFE082] rounded-2xl p-5 text-center text-sm text-[#424242]">
               <p className="font-bold text-[#212121] mb-1">Need help with your order?</p>
               <p>Call us at <a href={`tel:${BRAND.phone}`} className="text-[#006A38] font-bold">{BRAND.phone}</a> or email <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-bold">{BRAND.email}</a></p>
             </div>

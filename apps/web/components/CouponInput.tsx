@@ -71,7 +71,7 @@ export default function CouponInput({ orderTotal }: { orderTotal: number }) {
           value={code}
           onChange={e => setCode(e.target.value.toUpperCase())}
           placeholder="Coupon code"
-          className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] font-mono uppercase"
+          className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] font-mono uppercase"
         />
         <button
           type="submit"

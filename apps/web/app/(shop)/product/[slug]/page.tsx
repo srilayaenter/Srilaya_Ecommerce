@@ -135,7 +135,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             </p>
           )}
           {product.description && (
-            <p className="text-[#555] mt-4 leading-relaxed text-sm">{product.description}</p>
+            <p className="text-[#424242] mt-4 leading-relaxed text-sm">{product.description}</p>
           )}
         </div>
 
@@ -158,7 +158,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             ].map(b => (
               <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
                 <span className="text-xl">{b.icon}</span>
-                <span className="text-[11px] font-semibold text-[#555]">{b.label}</span>
+                <span className="text-[11px] font-semibold text-[#424242]">{b.label}</span>
               </div>
             ))}
           </div>

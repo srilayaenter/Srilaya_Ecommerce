@@ -107,7 +107,7 @@ export default function Header() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-4 pr-10 py-2 text-[13px] focus:outline-none text-[#212121] bg-transparent"
                 />
-                <button type="submit" className="absolute right-3 text-[#8D6E63] hover:text-[#006A38]">
+                <button type="submit" className="absolute right-3 text-[#424242] hover:text-[#006A38]">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 </button>
               </form>
@@ -136,13 +136,13 @@ export default function Header() {
         </div>
 
         {/* Category strip — desktop */}
-        <div className="hidden lg:block bg-[#FFF8E1]/60 border-t border-[#E0E0E0] py-2.5 overflow-x-auto">
+        <div className="hidden lg:block bg-white border-t border-[#E0E0E0] py-2.5 overflow-x-auto">
           <div className="container mx-auto px-4 max-w-7xl flex items-center justify-center gap-6">
             {categoryLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-[#8D6E63] hover:text-[#006A38] font-semibold transition-colors text-[13px] whitespace-nowrap"
+                className="text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13px] whitespace-nowrap"
               >
                 {link.name}
               </Link>
@@ -198,7 +198,7 @@ export default function Header() {
 
             {/* Nav links */}
             <nav className="px-5 py-4 border-b border-[#F0F0F0]">
-              <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest mb-3">Menu</p>
+              <p className="text-[10px] font-black text-[#424242] uppercase tracking-widest mb-3">Menu</p>
               <ul className="space-y-1">
                 {infoLinks.map((link) => (
                   <li key={link.name}>
@@ -216,7 +216,7 @@ export default function Header() {
 
             {/* Category links */}
             <nav className="px-5 py-4 flex-1">
-              <p className="text-[10px] font-black text-[#8D6E63] uppercase tracking-widest mb-3">Shop by Category</p>
+              <p className="text-[10px] font-black text-[#424242] uppercase tracking-widest mb-3">Shop by Category</p>
               <ul className="space-y-1">
                 {categoryLinks.map((link) => (
                   <li key={link.name}>
@@ -234,7 +234,7 @@ export default function Header() {
             </nav>
 
             {/* Footer */}
-            <div className="px-5 py-4 border-t border-[#F0F0F0] bg-[#FFF8E1]/60">
+            <div className="px-5 py-4 border-t border-[#F0F0F0] bg-[#F5F5F5]">
               <Link
                 href="/cart"
                 onClick={closeMenu}
