@@ -37,8 +37,8 @@ export async function createOrder(formData: FormData): Promise<void> {
   });
 
   const customerName  = formData.get('name')        as string;
-  const email         = formData.get('email')       as string;
-  const phone         = formData.get('phone')       as string;
+  const email         = ((formData.get('email') as string) || '').trim() || '';
+  const phone         = ((formData.get('phone') as string) || '').trim();
   const address       = formData.get('address')     as string;
   const city          = formData.get('city')        as string;
   const state         = formData.get('state')       as string;
@@ -110,8 +110,8 @@ export async function createOrder(formData: FormData): Promise<void> {
       const order = await tx.order.create({
         data: {
           customerName,
-          email,
-          phone,
+          email:  email  || undefined,
+          phone:  phone  || undefined,
           address,
           city,
           state,
