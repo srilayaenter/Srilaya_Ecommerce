@@ -74,7 +74,7 @@ export default async function CodConfirmPage({ params }: Props) {
             Track My Order
           </Link>
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(`Hi! I just ordered from SriLaYa Enterprises 🌾\nOrder #${shortId} — ₹${toNum(order.total).toFixed(2)} (Pay on Delivery)\n\nTrack my order: ${process.env.NEXTAUTH_URL ?? 'https://srilaya.com'}/track?orderId=${order.id}`)}`}
+            href={`https://wa.me/?text=${encodeURIComponent(`Hi! I just ordered from SriLaYa Naturals 🌾\nOrder #${shortId} — ₹${toNum(order.total).toFixed(2)} (Pay on Delivery)\n\nTrack my order: ${process.env.NEXTAUTH_URL ?? 'https://srilaya.com'}/track?orderId=${order.id}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full border-2 border-[#25D366] text-[#25D366] font-bold py-3 rounded-xl text-sm hover:bg-[#25D366]/5 transition-colors"

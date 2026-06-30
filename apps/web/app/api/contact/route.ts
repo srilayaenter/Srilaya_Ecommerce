@@ -43,12 +43,44 @@ export async function POST(request: Request) {
 
     const adminEmail = process.env.ADMIN_EMAIL || BRAND.email;
 
+    // Notify admin
     await sendEmail({
       to: adminEmail,
       subject: `New Inquiry from ${name} — ${BRAND.name} Website`,
       html,
       context: "contact-form",
     });
+
+    // Auto-reply to customer
+    const replyHtml = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+        <div style="background:#006A38;padding:20px 28px;">
+          <h2 style="color:#fff;margin:0;font-size:18px;">Thank you for reaching out, ${name}!</h2>
+        </div>
+        <div style="padding:24px 28px;background:#fff;border:1px solid #e0e0e0;font-size:14px;color:#424242;line-height:1.7;">
+          <p>We've received your message and our team will get back to you within <strong>1 business day</strong> (Mon–Sat, 9 AM – 6 PM IST).</p>
+          <p>For urgent queries, you can also reach us directly:</p>
+          <ul style="padding-left:18px;color:#555;">
+            <li>📞 Phone / WhatsApp: <strong>${BRAND.phone}</strong></li>
+            <li>✉️ Email: <a href="mailto:${BRAND.email}" style="color:#006A38;">${BRAND.email}</a></li>
+          </ul>
+          <div style="margin-top:20px;padding:14px 18px;background:#f9f9f9;border-radius:8px;border-left:4px solid #006A38;font-size:13px;color:#616161;">
+            <strong>Your message:</strong><br/>
+            <span style="white-space:pre-wrap;">${message}</span>
+          </div>
+        </div>
+        <div style="padding:16px 28px;background:#f5f5f5;font-size:12px;color:#999;text-align:center;">
+          ${BRAND.name} · ${BRAND.address}
+        </div>
+      </div>
+    `;
+
+    sendEmail({
+      to: email,
+      subject: `We received your message — ${BRAND.name}`,
+      html: replyHtml,
+      context: "contact-autoreply",
+    }).catch(() => {}); // fire-and-forget, don't block response
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

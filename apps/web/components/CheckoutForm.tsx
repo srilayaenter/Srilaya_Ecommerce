@@ -109,7 +109,7 @@ export default function CheckoutForm({
   return (
     <div className="grid md:grid-cols-3 gap-8 items-start">
       {/* ── Shipping Form ── */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-2 order-2 md:order-1">
         <form action={handleSubmit} className="space-y-6">
           {/* Hidden values passed to server action */}
           <input type="hidden" name="shippingFee"    value={shippingFee} />
@@ -359,7 +359,7 @@ export default function CheckoutForm({
       </div>
 
       {/* ── Order Summary ── */}
-      <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm p-6 sticky top-24">
+      <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm p-6 md:sticky md:top-24 order-1 md:order-2">
         <h3 className="text-xl font-bold mb-4 border-b border-[#F0F0F0] pb-3 text-[#212121]">
           Order Summary
         </h3>

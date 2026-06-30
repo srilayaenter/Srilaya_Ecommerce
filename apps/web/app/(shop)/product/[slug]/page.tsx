@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     select: { title: true, description: true, image: true },
   });
   if (!product) return { title: "Product Not Found" };
-  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Enterprises — organic, minimally processed.`;
+  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Naturals — organic, minimally processed.`;
   return {
     title: product.title,
     description: desc,
     openGraph: {
-      title: `${product.title} | SriLaYa Enterprises`,
+      title: `${product.title} | SriLaYa Naturals`,
       description: desc,
       images: product.image ? [{ url: product.image }] : [],
       type: "website",
@@ -119,7 +119,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
 
         {/* ── Product info (title / price / description) ── */}
         <div className="mb-6">
-          <h1 className="text-3xl font-extrabold text-[#212121] leading-tight">{product.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#212121] leading-tight">{product.title}</h1>
           {avgRating && (
             <div className="flex items-center gap-2 mt-2">
               <StarDisplay rating={avgRating} />

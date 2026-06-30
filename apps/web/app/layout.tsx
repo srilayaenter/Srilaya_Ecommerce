@@ -6,27 +6,27 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://srilayafoods.com"),
   title: {
-    default: "SriLaYa Enterprises — Organic Millets & Traditional Foods",
-    template: "%s | SriLaYa Enterprises",
+    default: "SriLaYa Naturals — Organic Millets & Traditional Foods",
+    template: "%s | SriLaYa Naturals",
   },
   description:
     "Pure, minimally-processed millets, millet flour, rava, flakes, and traditional laddus sourced directly from organic farmers across India. Pan-India delivery.",
   keywords: [
     "organic millets", "buy millets online", "millet flour", "millet rava",
     "millet flakes", "millet rice", "ragi flour", "foxtail millet",
-    "organic food India", "millet laddu", "SriLaYa Enterprises",
+    "organic food India", "millet laddu", "SriLaYa Naturals",
   ],
-  authors: [{ name: "SriLaYa Enterprises" }],
-  creator: "SriLaYa Enterprises",
+  authors: [{ name: "SriLaYa Naturals" }],
+  creator: "SriLaYa Naturals",
   openGraph: {
-    siteName: "SriLaYa Enterprises",
+    siteName: "SriLaYa Naturals",
     locale: "en_IN",
     type: "website",
-    images: [{ url: "/brand/srilaya-logo.png", width: 512, height: 512, alt: "SriLaYa Enterprises" }],
+    images: [{ url: "/brand/srilaya-logo.png", width: 512, height: 512, alt: "SriLaYa Naturals" }],
   },
   twitter: {
     card: "summary",
-    title: "SriLaYa Enterprises — Organic Millets & Traditional Foods",
+    title: "SriLaYa Naturals — Organic Millets & Traditional Foods",
     description: "Pure organic millets, flours, and traditional foods delivered pan-India.",
     images: ["/brand/srilaya-logo.png"],
   },

@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
     <div className="flex flex-col items-center justify-center min-h-[80vh] font-sans pb-20 mt-12">
       <div className="text-center mb-8 flex flex-col items-center">
         <h1 className="text-[32px] font-black text-[#212121] tracking-tight">
-          SriLaYa <span className="text-[#006A38]">Enterprises</span>
+          SriLaYa <span className="text-[#006A38]">Naturals</span>
         </h1>
         <p className="text-[#8D6E63] font-bold tracking-wide mt-1 uppercase text-[12px]">
           Secure Admin Portal

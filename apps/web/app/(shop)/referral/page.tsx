@@ -105,7 +105,7 @@ export default function ReferralPage() {
 
                   <div className="flex gap-2">
                     <a
-                      href={`https://wa.me/?text=${encodeURIComponent(`Hey! Use my referral code *${data.referralCode}* on SriLaYa Enterprises and get ₹${(REFERRAL_BONUS * 0.1).toFixed(0)} off your first order! Shop here: ${storeUrl}`)}`}
+                      href={`https://wa.me/?text=${encodeURIComponent(`Hey! Use my referral code *${data.referralCode}* on SriLaYa Naturals and get ₹${(REFERRAL_BONUS * 0.1).toFixed(0)} off your first order! Shop here: ${storeUrl}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 bg-[#25D366] text-white font-bold text-sm py-2.5 rounded-xl text-center hover:bg-[#1da851] transition-colors"

@@ -166,7 +166,7 @@ export default async function OrderPage({ params }: PageProps) {
             </button>
           </Link>
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(`I ordered from SriLaYa Enterprises! 🌾\nOrder #${order.id.slice(0,8).toUpperCase()} — ₹${total.toFixed(2)}\n\nShop here: ${process.env.NEXTAUTH_URL ?? 'https://srilaya.com'}/product`)}`}
+            href={`https://wa.me/?text=${encodeURIComponent(`I ordered from SriLaYa Naturals! 🌾\nOrder #${order.id.slice(0,8).toUpperCase()} — ₹${total.toFixed(2)}\n\nShop here: ${process.env.NEXTAUTH_URL ?? 'https://srilaya.com'}/product`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 border-2 border-[#25D366] text-[#25D366] px-6 py-3 rounded-lg hover:bg-[#25D366]/5 font-semibold transition-colors"

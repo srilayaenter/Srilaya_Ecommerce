@@ -235,7 +235,7 @@ export async function createOrder(formData: FormData): Promise<void> {
         } catch { /* PDF failure should not block email */ }
         await sendEmail({
           to: email,
-          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Enterprises`,
+          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Naturals`,
           html,
           context: `order:${orderId}`,
           ...(pdfBuffer ? { attachments: [{ filename: `${invoiceNo}.pdf`, content: pdfBuffer }] } : {}),

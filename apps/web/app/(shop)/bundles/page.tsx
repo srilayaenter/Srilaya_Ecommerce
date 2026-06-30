@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import AddBundleButton from "./AddBundleButton";
 
-export const metadata = { title: "Bundle Packs | SriLaYa Enterprises" };
+export const metadata = { title: "Bundle Packs | SriLaYa Naturals" };
 
 export default async function BundlesPage() {
   const bundles = await prisma.bundle.findMany({
@@ -26,7 +26,7 @@ export default async function BundlesPage() {
       <div className="max-w-4xl mx-auto px-4 py-10">
         {bundles.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-3xl mb-3">??</p>
+            <p className="text-3xl mb-3">📦</p>
             <p className="font-bold text-[#212121]">No bundles available yet.</p>
             <p className="text-sm text-[#424242] mt-1">Check back soon!</p>
           </div>
@@ -72,9 +72,9 @@ export default async function BundlesPage() {
                     <div className="mt-5 flex items-end justify-between">
                       <div>
                         {savings > 0 && (
-                          <p className="text-xs text-[#9E9E9E] line-through">?{originalTotal.toFixed(2)}</p>
+                          <p className="text-xs text-[#9E9E9E] line-through">₹{originalTotal.toFixed(2)}</p>
                         )}
-                        <p className="text-2xl font-black text-[#006A38]">?{bundlePrice.toFixed(2)}</p>
+                        <p className="text-2xl font-black text-[#006A38]">₹{bundlePrice.toFixed(2)}</p>
                         <p className="text-xs text-[#9E9E9E] mt-0.5">incl. GST</p>
                       </div>
                       <AddBundleButton slug={bundle.slug} />

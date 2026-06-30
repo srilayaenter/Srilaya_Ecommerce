@@ -14,10 +14,10 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#4CAF50] bg-white flex-shrink-0">
-                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises Logo" fill className="object-cover" />
+                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals Logo" fill className="object-cover" />
               </div>
               <span className="font-black text-xl text-white tracking-tight">
-                SriLaYa <span className="text-[#4CAF50]">Enterprises</span>
+                SriLaYa <span className="text-[#4CAF50]">Naturals</span>
               </span>
             </Link>
             <p className="text-green-200 text-sm leading-relaxed mb-4">
@@ -59,7 +59,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-green-400 mb-4">Our Location</h4>
             <address className="not-italic text-sm text-green-100 leading-relaxed">
-              SriLaYa Enterprises<br />
+              SriLaYa Naturals<br />
               White Field Hoskote Main Road,<br />
               Seegehalli, Bengaluru<br />
               Karnataka — 560067
@@ -79,12 +79,18 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10 bg-[#002A16]">
-        <div className="container mx-auto px-4 max-w-7xl py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-green-400 text-center sm:text-left">
+        <div className="container mx-auto px-4 max-w-7xl py-4 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-xs text-green-400">
+            <Link href="/privacy" className="hover:text-[#4CAF50] transition-colors">Privacy</Link>
+            <span className="opacity-40">·</span>
+            <Link href="/terms" className="hover:text-[#4CAF50] transition-colors">Terms</Link>
+            <span className="opacity-40">·</span>
+            <Link href="/shipping-policy" className="hover:text-[#4CAF50] transition-colors">Shipping</Link>
+            <span className="opacity-40">·</span>
+            <Link href="/returns-policy" className="hover:text-[#4CAF50] transition-colors">Returns</Link>
+          </div>
+          <p className="text-xs text-green-400 text-center sm:text-right">
             © {currentYear} {BRAND.name}. All rights reserved.
-          </p>
-          <p className="text-xs text-green-400 flex items-center gap-1.5">
-            <span>🔒</span> 256-Bit SSL Secured &nbsp;|&nbsp; <span>🌾</span> 100% Organic
           </p>
         </div>
       </div>

@@ -74,7 +74,7 @@ export default function ContactUsPage() {
                     Our Processing Unit Address
                   </h4>
                   <p className="text-[#616161] text-xs mt-1 leading-relaxed">
-                    SriLaYa Enterprises,
+                    SriLaYa Naturals,
                     <br />
                     White Field Hoskote Main Road, Seegehalli,
                     <br />
@@ -92,7 +92,7 @@ export default function ContactUsPage() {
                     Phone Support &amp; WhatsApp
                   </h4>
                   <p className="text-[#616161] text-xs mt-1 font-mono">
-                    +91 98765 43210
+                    {BRAND.phone}
                   </p>
                 </div>
               </div>
@@ -106,7 +106,7 @@ export default function ContactUsPage() {
                     Email Support Channels
                   </h4>
                   <p className="text-[#616161] text-xs mt-1 font-mono">
-                    support@srilayafoods.com
+                    {BRAND.email}
                   </p>
                 </div>
               </div>

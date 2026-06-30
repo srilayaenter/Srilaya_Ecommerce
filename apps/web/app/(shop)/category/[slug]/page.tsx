@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: category.name,
     description:
       category.description ||
-      `Shop our ${category.name} collection at SriLaYa Enterprises — 100% organic, pan-India delivery.`,
+      `Shop our ${category.name} collection at SriLaYa Naturals — 100% organic, pan-India delivery.`,
   };
 }
 

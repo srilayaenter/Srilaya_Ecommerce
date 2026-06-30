@@ -62,7 +62,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             
             <div className="flex flex-col">
               <span className="font-bold text-[15px] tracking-tight text-white font-poppins">
-                SriLaYa Enterprises
+                SriLaYa Naturals
               </span>
               <span className="text-[10px] text-[#FFF8E1] font-bold tracking-widest uppercase mt-0.5 opacity-90">
                 Admin Workspace

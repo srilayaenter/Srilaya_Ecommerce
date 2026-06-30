@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "SriLaYa Enterprises is on a mission to revive traditional Indian millets — sourced farm-direct, minimally processed, zero preservatives, and delivered across India.",
+    "SriLaYa Naturals is on a mission to revive traditional Indian millets — sourced farm-direct, minimally processed, zero preservatives, and delivered across India.",
 };
 
 export default function AboutUsPage() {
@@ -49,7 +49,7 @@ export default function AboutUsPage() {
             <div className="space-y-8">
               <div>
                 <h3 className="text-lg font-bold text-[#212121] flex items-center gap-2 mb-2">
-                  <span className="p-1.5 bg-emerald-700 text-white rounded-lg text-xs">??</span>
+                  <span className="p-1.5 bg-emerald-700 text-white rounded-lg text-xs">🎯</span>
                   Our Mission
                 </h3>
                 <p className="text-[#616161] text-sm leading-relaxed">
@@ -58,7 +58,7 @@ export default function AboutUsPage() {
               </div>
               <div className="border-t border-[#E0E0E0]/60 pt-6">
                 <h3 className="text-lg font-bold text-[#212121] flex items-center gap-2 mb-2">
-                  <span className="p-1.5 bg-amber-500 text-white rounded-lg text-xs">??</span>
+                  <span className="p-1.5 bg-amber-500 text-white rounded-lg text-xs">🤝</span>
                   Our Commitment
                 </h3>
                 <p className="text-[#616161] text-sm leading-relaxed">
@@ -78,7 +78,7 @@ export default function AboutUsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
               <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                ??
+                🌿
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">100% Organic</h4>
               <p className="text-[#757575] text-xs leading-relaxed max-w-xs">
@@ -88,7 +88,7 @@ export default function AboutUsPage() {
 
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
               <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                ??
+                🌾
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">
                 Minimally Processed
@@ -100,7 +100,7 @@ export default function AboutUsPage() {
 
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
               <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                ??
+                🍯
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">
                 Pure Sweeteners

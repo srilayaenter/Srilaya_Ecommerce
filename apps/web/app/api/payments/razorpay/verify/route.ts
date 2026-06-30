@@ -130,7 +130,7 @@ export async function POST(request: Request) {
 
         await sendEmail({
           to: updatedOrder.email,
-          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Enterprises`,
+          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Naturals`,
           html,
           context: `order:${dbOrderId}`,
           ...(pdfBuffer ? { attachments: [{ filename: `${invoiceNo}.pdf`, content: pdfBuffer }] } : {}),

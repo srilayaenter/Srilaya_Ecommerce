@@ -51,21 +51,28 @@ export default function AddToCartWithDropdown({
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select Size:
         </label>
-        <select
-          value={selectedId}
-          onChange={(e) => {
-            setSelectedId(e.target.value);
-            setQuantity(0);
-            onVariantChange?.(e.target.value);
-          }}
-          className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#006A38] focus:border-transparent outline-none text-lg"
-        >
-          {variants.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.size} — ₹{v.price.toFixed(2)} {v.stock <= 0 ? "(Out of Stock)" : ""}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            value={selectedId}
+            onChange={(e) => {
+              setSelectedId(e.target.value);
+              setQuantity(0);
+              onVariantChange?.(e.target.value);
+            }}
+            className="w-full appearance-none border-2 border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-[#006A38] focus:border-[#006A38] outline-none text-base bg-white text-[#212121] cursor-pointer"
+          >
+            {variants.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.size} — ₹{v.price.toFixed(2)} {v.stock <= 0 ? "(Out of Stock)" : ""}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006A38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* Price */}

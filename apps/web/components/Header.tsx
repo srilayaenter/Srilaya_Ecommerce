@@ -77,11 +77,11 @@ export default function Header() {
           <div className="flex items-center justify-between h-16 gap-6">
             <Link href="/" className="flex items-center gap-3 flex-shrink-0 group" onClick={closeMenu}>
               <div className="relative h-10 w-10 overflow-hidden rounded-full border border-[#E0E0E0] shadow-sm bg-white">
-                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises Logo" fill className="object-cover" priority />
+                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals Logo" fill className="object-cover" priority />
               </div>
               <div className="hidden sm:flex flex-col leading-tight">
                 <span className="font-black text-[18px] text-[#212121] tracking-tight font-poppins">SriLaYa</span>
-                <span className="font-bold text-[11px] text-[#006A38] tracking-wide uppercase">Enterprises</span>
+                <span className="font-bold text-[11px] text-[#006A38] tracking-wide uppercase">Naturals</span>
               </div>
             </Link>
 
@@ -166,11 +166,11 @@ export default function Header() {
             <div className="flex items-center justify-between px-5 py-4 border-b border-[#E0E0E0]">
               <div className="flex items-center gap-2">
                 <div className="relative h-9 w-9 overflow-hidden rounded-full border border-[#E0E0E0]">
-                  <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises" fill className="object-cover" />
+                  <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals" fill className="object-cover" />
                 </div>
                 <div className="flex flex-col leading-tight">
                   <span className="font-black text-[15px] text-[#212121]">SriLaYa</span>
-                  <span className="font-bold text-[10px] text-[#006A38] tracking-wide uppercase">Enterprises</span>
+                  <span className="font-bold text-[10px] text-[#006A38] tracking-wide uppercase">Naturals</span>
                 </div>
               </div>
               <button

@@ -8,11 +8,11 @@ import RecentlyViewed from "@/components/RecentlyViewed";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
+  title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",
   description:
     "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
   openGraph: {
-    title: "SriLaYa Enterprises — Ancient Grains. Modern Nutrition.",
+    title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",
     description:
       "Shop 100% organic millets, millet flour, rava, flakes, rice, and traditional laddus. Farm-direct sourcing, no preservatives, pan-India delivery.",
     url: "/",
@@ -34,10 +34,10 @@ const categories = [
     href: "/category/millet-flakes",
     color: "from-amber-900/80 to-amber-700/50",
     wellness: [
-      "? Ready in under 5 minutes",
-      "?? High protein & heart-healthy",
-      "?? Promotes healthy gut flora",
-      "?? Great oats alternative for breakfast",
+      "⚡ Ready in under 5 minutes",
+      "💪 High protein & heart-healthy",
+      "🌿 Promotes healthy gut flora",
+      "🥣 Great oats alternative for breakfast",
     ],
   },
   {
@@ -47,10 +47,10 @@ const categories = [
     href: "/category/millet-rice",
     color: "from-teal-900/80 to-teal-700/50",
     wellness: [
-      "?? Low glycaemic index",
-      "?? Ideal for diabetics & weight-watchers",
-      "??? Keeps you fuller for longer",
-      "?? More nutrients than polished white rice",
+      "📉 Low glycaemic index",
+      "✅ Ideal for diabetics & weight-watchers",
+      "⏱️ Keeps you fuller for longer",
+      "💎 More nutrients than polished white rice",
     ],
   },
   {
@@ -60,10 +60,10 @@ const categories = [
     href: "/category/millet-flour",
     color: "from-orange-900/80 to-orange-700/50",
     wellness: [
-      "?? Perfect for rotis, dosas & bakes",
-      "?? High calcium — great for bone health",
-      "?? Rich in B-vitamins & antioxidants",
-      "?? No maida, no refined grains",
+      "🫓 Perfect for rotis, dosas & bakes",
+      "🦴 High calcium — great for bone health",
+      "🌟 Rich in B-vitamins & antioxidants",
+      "🚫 No maida, no refined grains",
     ],
   },
   {
@@ -73,10 +73,10 @@ const categories = [
     href: "/category/millet-rava",
     color: "from-indigo-900/80 to-indigo-700/50",
     wellness: [
-      "?? Heart-healthy high-fibre base",
-      "?? Keeps cholesterol levels in check",
-      "?? Slow-release energy all morning",
-      "?? Versatile — upma, porridge, khichdi",
+      "❤️ Heart-healthy high-fibre base",
+      "📊 Keeps cholesterol levels in check",
+      "⚡ Slow-release energy all morning",
+      "🍲 Versatile — upma, porridge, khichdi",
     ],
   },
   {
@@ -86,10 +86,10 @@ const categories = [
     href: "/category/laddu",
     color: "from-rose-900/80 to-rose-700/50",
     wellness: [
-      "?? No refined sugar — sweetened with jaggery",
-      "?? Natural energy boost for kids & adults",
-      "?? Rich in iron & traditional herbs",
-      "?? Festive gifting with a healthy twist",
+      "🍯 No refined sugar — sweetened with jaggery",
+      "⚡ Natural energy boost for kids & adults",
+      "💪 Rich in iron & traditional herbs",
+      "🎁 Festive gifting with a healthy twist",
     ],
   },
   {
@@ -99,34 +99,34 @@ const categories = [
     href: "/category/sweeteners",
     color: "from-amber-900/80 to-amber-700/50",
     wellness: [
-      "?? Lower GI than refined white sugar",
-      "?? Retains natural minerals & trace elements",
-      "?? Unrefined palm & cane jaggery",
-      "????? Direct 1:1 substitute in all recipes",
+      "📉 Lower GI than refined white sugar",
+      "💎 Retains natural minerals & trace elements",
+      "🌿 Unrefined palm & cane jaggery",
+      "✅ Direct 1:1 substitute in all recipes",
     ],
   },
 ];
 
 const usps = [
-  { icon: "??", label: "100% Organic", sub: "No chemicals or pesticides" },
-  { icon: "??", label: "No Preservatives", sub: "Minimally processed grains" },
-  { icon: "??", label: "5000+ Customers", sub: "Across India" },
-  { icon: "??", label: "Pan-India Delivery", sub: "Delhivery, Blue Dart & more" },
+  { icon: "🌿", label: "100% Organic", sub: "No chemicals or pesticides" },
+  { icon: "🚫", label: "No Preservatives", sub: "Minimally processed grains" },
+  { icon: "😊", label: "5000+ Customers", sub: "Across India" },
+  { icon: "🚚", label: "Pan-India Delivery", sub: "Delhivery, Blue Dart & more" },
 ];
 
 const whyUs = [
   {
-    icon: "??",
+    icon: "🌾",
     title: "Farm-Direct Sourcing",
     desc: "We partner with certified organic farmers across India — no middlemen, fair prices, maximum freshness.",
   },
   {
-    icon: "??",
+    icon: "🔬",
     title: "Quality Tested",
     desc: "Every batch is checked for purity and nutritional integrity before it reaches your doorstep.",
   },
   {
-    icon: "??",
+    icon: "♻️",
     title: "Sustainable Packaging",
     desc: "Our packaging is designed to minimise waste while keeping your grains fresh for longer.",
   },
@@ -161,16 +161,16 @@ export default async function HomePage() {
               Pure, minimally-processed millets, flakes, and traditional foods sourced directly from
               organic farmers across India — straight to your kitchen.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/product"
-                className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-400/30 text-sm tracking-wide"
+                className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-400/30 text-sm tracking-wide"
               >
-                Shop Now ?
+                Shop Now →
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white font-bold px-7 py-3.5 rounded-xl transition-all duration-200 text-sm tracking-wide"
+                className="inline-flex items-center justify-center gap-2 border border-white/30 hover:bg-white/10 text-white font-bold px-7 py-3.5 rounded-xl transition-all duration-200 text-sm tracking-wide"
               >
                 Our Story
               </Link>
@@ -185,9 +185,9 @@ export default async function HomePage() {
       {/* -- USP STRIP ------------------------------------------ */}
       <section className="bg-white border-b border-[#E0E0E0]">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#F0F0F0]">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[#F0F0F0]">
             {usps.map((usp) => (
-              <div key={usp.label} className="flex items-center gap-3 px-6 py-5">
+              <div key={usp.label} className="flex items-center gap-3 px-4 md:px-6 py-4 md:py-5">
                 <span className="text-2xl flex-shrink-0">{usp.icon}</span>
                 <div>
                   <p className="font-bold text-sm text-[#212121]">{usp.label}</p>
@@ -200,7 +200,7 @@ export default async function HomePage() {
       </section>
 
       {/* -- CATEGORY SHOWCASE ---------------------------------- */}
-      <section className="py-20 bg-[#F9F9F9]">
+      <section className="py-12 md:py-20 bg-[#F9F9F9]">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
@@ -254,7 +254,7 @@ export default async function HomePage() {
                   </div>
 
                   <span className="inline-block mt-3 text-xs font-black text-amber-300 group-hover:text-amber-200 group-hover:tracking-wide transition-all duration-200">
-                    Shop Now ?
+                    Shop Now →
                   </span>
                 </div>
               </Link>
@@ -317,14 +317,14 @@ export default async function HomePage() {
                           <div>
                             <span className="text-[10px] text-[#9E9E9E] font-medium block">Starting at</span>
                             <span className="text-lg font-black text-[#212121]">
-                              ?{lowestPrice.toFixed(2)}
+                              ₹{lowestPrice.toFixed(2)}
                             </span>
                           </div>
                         ) : (
                           <span className="text-[#9E9E9E] text-sm">No variants</span>
                         )}
                         <span className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-[#00522B] text-[#9E9E9E] group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm text-sm font-bold border border-[#E0E0E0] group-hover:border-emerald-700">
-                          ?
+                          →
                         </span>
                       </div>
                     </div>
@@ -338,21 +338,21 @@ export default async function HomePage() {
 
           <div className="text-center mt-10 sm:hidden">
             <Link href="/product" className="inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-6 py-3 rounded-xl">
-              View All Products ?
+              View All Products →
             </Link>
           </div>
         </div>
       </section>
 
       {/* -- WHY CHOOSE US -------------------------------------- */}
-      <section className="py-20 bg-gradient-to-br from-emerald-950 to-emerald-900 text-white">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-emerald-950 to-emerald-900 text-white">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
             {/* Left: text */}
             <div>
               <span className="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
-                Why SriLaYa Enterprises
+                Why SriLaYa Naturals
               </span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mt-5 mb-4">
                 We Don&apos;t Just Sell Grains.<br />
@@ -381,21 +381,21 @@ export default async function HomePage() {
                 href="/about"
                 className="inline-flex items-center gap-2 mt-10 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black px-6 py-3 rounded-xl transition-all text-sm"
               >
-                Read Our Story ?
+                Read Our Story →
               </Link>
             </div>
 
             {/* Right: stats grid */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { value: "22+", label: "Millet Varieties", icon: "??" },
-                { value: "5000+", label: "Happy Customers", icon: "??" },
-                { value: "100%", label: "Certified Organic", icon: "?" },
-                { value: "0", label: "Preservatives Added", icon: "??" },
+                { value: "22+", label: "Millet Varieties", icon: "🌾" },
+                { value: "5000+", label: "Happy Customers", icon: "😊" },
+                { value: "100%", label: "Certified Organic", icon: "✅" },
+                { value: "0", label: "Preservatives Added", icon: "🚫" },
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="bg-emerald-800/50 border border-emerald-700/50 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-[#00522B] transition-colors"
+                  className="bg-emerald-800/50 border border-emerald-700/50 rounded-2xl p-4 md:p-6 flex flex-col items-center text-center hover:bg-[#00522B] transition-colors"
                 >
                   <span className="text-3xl mb-2">{stat.icon}</span>
                   <span className="text-3xl font-black text-amber-400 leading-none">{stat.value}</span>
@@ -421,7 +421,7 @@ export default async function HomePage() {
       {/* -- WHATSAPP / CONTACT CTA ----------------------------- */}
       <section className="py-16 bg-amber-50 border-t border-amber-100">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <span className="text-3xl block mb-4">??</span>
+          <span className="text-3xl block mb-4">💬</span>
           <h2 className="text-2xl md:text-3xl font-black text-[#212121] mb-3 tracking-tight">
             Questions? We&apos;re Here to Help.
           </h2>
