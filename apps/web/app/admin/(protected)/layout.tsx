@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -59,7 +59,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             
             <div className="flex flex-col">
               <span className="font-bold text-[15px] tracking-tight text-white font-poppins">
-                SriLaYa Foods
+                SriLaYa Enterprises
               </span>
               <span className="text-[10px] text-[#FFF8E1] font-bold tracking-widest uppercase mt-0.5 opacity-90">
                 Admin Workspace

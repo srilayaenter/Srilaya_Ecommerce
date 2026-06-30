@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -65,7 +65,7 @@ export async function POST(
 
   const result = await sendEmail({
     to:      emailTo,
-    subject: `Your SriLaYa Foods receipt — #${order.id.slice(0, 8).toUpperCase()}`,
+    subject: `Your SriLaYa Enterprises receipt — #${order.id.slice(0, 8).toUpperCase()}`,
     html,
     context: 'in_store_invoice',
   });

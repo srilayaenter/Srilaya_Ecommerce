@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+﻿import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -17,12 +17,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     select: { title: true, description: true, image: true },
   });
   if (!product) return { title: "Product Not Found" };
-  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Foods — organic, minimally processed.`;
+  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Enterprises — organic, minimally processed.`;
   return {
     title: product.title,
     description: desc,
     openGraph: {
-      title: `${product.title} | SriLaYa Foods`,
+      title: `${product.title} | SriLaYa Enterprises`,
       description: desc,
       images: product.image ? [{ url: product.image }] : [],
       type: "website",

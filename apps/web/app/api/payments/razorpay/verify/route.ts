@@ -1,4 +1,4 @@
-import { prisma } from "../../../../../lib/db";
+﻿import { prisma } from "../../../../../lib/db";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import crypto from "crypto";
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
 
         await sendEmail({
           to: updatedOrder.email,
-          subject: `Order Confirmed — ${invoiceNo} | Srilaya Foods`,
+          subject: `Order Confirmed — ${invoiceNo} | SriLaYa Enterprises`,
           html,
           context: `order:${dbOrderId}`,
         });

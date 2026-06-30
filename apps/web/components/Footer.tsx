@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 import { BRAND } from "@/lib/brand";
 
@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#006A38] bg-white flex-shrink-0">
-                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Foods Logo" fill className="object-cover" />
+                <Image src="/brand/srilaya-logo.png" alt="SriLaYa Enterprises Logo" fill className="object-cover" />
               </div>
               <span className="font-black text-xl text-white tracking-tight">
                 SriLaYa <span className="text-[#4CAF50]">Foods</span>

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+﻿import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { toNum } from "@/lib/decimal";
 import Image from "next/image";
@@ -352,7 +352,7 @@ export default async function HomePage() {
             {/* Left: text */}
             <div>
               <span className="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
-                Why SriLaYa Foods
+                Why SriLaYa Enterprises
               </span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mt-5 mb-4">
                 We Don&apos;t Just Sell Grains.<br />

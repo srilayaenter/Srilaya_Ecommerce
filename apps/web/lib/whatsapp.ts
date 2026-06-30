@@ -1,4 +1,4 @@
-import twilio from "twilio";
+﻿import twilio from "twilio";
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken  = process.env.TWILIO_AUTH_TOKEN;
@@ -32,7 +32,7 @@ export function orderConfirmedMessage({
   paymentMethod: string;
 }) {
   const payLabel = paymentMethod === "cod" ? "Cash on Delivery" : "Online";
-  return `Hi ${customerName}! 🌾 Your SriLaYa Foods order *#${shortId}* has been placed successfully.\n\nTotal: ₹${total.toFixed(2)} | Payment: ${payLabel}\n\nTrack your order: ${process.env.NEXTAUTH_URL ?? "https://srilaya.com"}/track?orderId=${shortId}\n\nThank you for choosing SriLaYa!`;
+  return `Hi ${customerName}! 🌾 Your SriLaYa Enterprises order *#${shortId}* has been placed successfully.\n\nTotal: ₹${total.toFixed(2)} | Payment: ${payLabel}\n\nTrack your order: ${process.env.NEXTAUTH_URL ?? "https://srilaya.com"}/track?orderId=${shortId}\n\nThank you for choosing SriLaYa!`;
 }
 
 export function orderDispatchedMessage({
@@ -49,5 +49,5 @@ export function orderDispatchedMessage({
   trackingUrl?: string | null;
 }) {
   const trackLine = trackingUrl ? `\nTrack shipment: ${trackingUrl}` : "";
-  return `Hi ${customerName}! 🚚 Your SriLaYa Foods order *#${shortId}* has been dispatched!\n\nCourier: ${courier}\nTracking No: ${trackingNumber}${trackLine}\n\nExpect delivery in 3–7 business days.`;
+  return `Hi ${customerName}! 🚚 Your SriLaYa Enterprises order *#${shortId}* has been dispatched!\n\nCourier: ${courier}\nTracking No: ${trackingNumber}${trackLine}\n\nExpect delivery in 3–7 business days.`;
 }
