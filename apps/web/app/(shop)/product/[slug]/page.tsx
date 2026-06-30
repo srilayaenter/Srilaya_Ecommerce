@@ -1,13 +1,12 @@
 ﻿import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import AddToCartWithDropdown from "@/components/AddToCartWithDropdown";
 import ReviewsSection from "@/components/ReviewsSection";
 import ProductGallery from "@/components/ProductGallery";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import RecordView from "@/components/RecordView";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import PincodeCheck from "@/components/PincodeCheck";
-import NotifyMeButton from "@/components/NotifyMeButton";
+import ProductPurchaseSection from "@/components/ProductPurchaseSection";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
@@ -56,6 +55,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
     size: v.size,
     price: parseFloat(v.price.toString()),
     stock: v.stock,
+    imageUrl: v.imageUrl ?? null,
   }));
 
   const reviews = product.productReviews.map(r => ({
@@ -117,74 +117,50 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
       />
       <div className="container mx-auto px-4 py-10 max-w-6xl">
 
-        {/* ── Two-column product layout ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-          {/* Left — image gallery */}
-          <div className="md:sticky md:top-28">
-            <ProductGallery
-              images={galleryImages}
-              fallback={product.image ?? null}
-              title={product.title}
-            />
-          </div>
-
-          {/* Right — details + purchase */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-extrabold text-[#212121] leading-tight">{product.title}</h1>
-              {avgRating && (
-                <div className="flex items-center gap-2 mt-2">
-                  <StarDisplay rating={avgRating} />
-                  <span className="text-sm text-[#8D6E63]">
-                    {avgRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
-                  </span>
-                </div>
-              )}
-              {lowestPrice !== null && (
-                <p className="mt-3 text-2xl font-black text-[#006A38]">
-                  ₹{lowestPrice.toFixed(2)}
-                  <span className="text-sm font-medium text-[#9E9E9E] ml-2">onwards</span>
-                </p>
-              )}
-              {product.description && (
-                <p className="text-[#555] mt-4 leading-relaxed text-sm">{product.description}</p>
-              )}
+        {/* ── Product info (title / price / description) ── */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-extrabold text-[#212121] leading-tight">{product.title}</h1>
+          {avgRating && (
+            <div className="flex items-center gap-2 mt-2">
+              <StarDisplay rating={avgRating} />
+              <span className="text-sm text-[#8D6E63]">
+                {avgRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+              </span>
             </div>
+          )}
+          {lowestPrice !== null && (
+            <p className="mt-3 text-2xl font-black text-[#006A38]">
+              ₹{lowestPrice.toFixed(2)}
+              <span className="text-sm font-medium text-[#9E9E9E] ml-2">onwards</span>
+            </p>
+          )}
+          {product.description && (
+            <p className="text-[#555] mt-4 leading-relaxed text-sm">{product.description}</p>
+          )}
+        </div>
 
-            {/* Variant selector + add to cart */}
-            <div className="bg-white border border-[#E0E0E0] rounded-2xl p-6 shadow-sm">
-              <h2 className="font-bold text-base mb-4 text-[#212121]">Select Size & Add to Cart</h2>
-              {serializedVariants.length > 0 ? (
-                <>
-                  <AddToCartWithDropdown variants={serializedVariants} />
-                  {!inStock && (
-                    <div className="mt-4">
-                      <NotifyMeButton variantId={serializedVariants[0].id} />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-gray-500 italic text-sm">No variants configured for this product.</p>
-              )}
-            </div>
+        {/* ── Gallery + variant selector (gallery reacts to variant selection) ── */}
+        <ProductPurchaseSection
+          variants={serializedVariants}
+          images={galleryImages}
+          fallback={product.image ?? null}
+          title={product.title}
+        />
 
-            {/* Pincode check */}
-            <PincodeCheck />
-
-            {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { icon: "🌱", label: "100% Organic" },
-                { icon: "🚚", label: "Pan-India Delivery" },
-                { icon: "↩️", label: "7-Day Returns" },
-              ].map(b => (
-                <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
-                  <span className="text-xl">{b.icon}</span>
-                  <span className="text-[11px] font-semibold text-[#555]">{b.label}</span>
-                </div>
-              ))}
-            </div>
+        {/* ── Pincode & trust badges ── */}
+        <div className="mt-6 space-y-4">
+          <PincodeCheck />
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { icon: "🌱", label: "100% Organic" },
+              { icon: "🚚", label: "Pan-India Delivery" },
+              { icon: "↩️", label: "7-Day Returns" },
+            ].map(b => (
+              <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
+                <span className="text-xl">{b.icon}</span>
+                <span className="text-[11px] font-semibold text-[#555]">{b.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 

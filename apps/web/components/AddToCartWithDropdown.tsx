@@ -11,7 +11,13 @@ interface Variant {
   stock: number;
 }
 
-export default function AddToCartWithDropdown({ variants }: { variants: Variant[] }) {
+export default function AddToCartWithDropdown({
+  variants,
+  onVariantChange,
+}: {
+  variants: Variant[];
+  onVariantChange?: (id: string) => void;
+}) {
   const [selectedId, setSelectedId] = useState(variants[0]?.id || "");
   const [quantity, setQuantity] = useState(0);
   const [isPending, startTransition] = useTransition();
@@ -50,6 +56,7 @@ export default function AddToCartWithDropdown({ variants }: { variants: Variant[
           onChange={(e) => {
             setSelectedId(e.target.value);
             setQuantity(0);
+            onVariantChange?.(e.target.value);
           }}
           className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#006A38] focus:border-transparent outline-none text-lg"
         >

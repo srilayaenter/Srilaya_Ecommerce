@@ -44,6 +44,7 @@ async function updateVariant(formData: FormData) {
       stock:            newStock,
       weightGrams:      parseInt(formData.get('weightGrams') as string, 10) || 500,
       reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,
+      imageUrl:         (formData.get('imageUrl') as string)?.trim() || null,
     }
   });
 
@@ -182,6 +183,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
                 <input type="number" name="stock"            defaultValue={variant.stock}             className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="weightGrams"      defaultValue={(variant as any).weightGrams ?? 500} placeholder="e.g. 550" className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="reorderThreshold" defaultValue={(variant as any).reorderThreshold ?? 10} placeholder="10" className="border rounded px-2 py-1 text-sm" title="Alert when stock falls to this level" />
+                <input name="imageUrl" defaultValue={(variant as any).imageUrl ?? ""} placeholder="Variant image URL (optional)" className="border rounded px-2 py-1 text-sm col-span-full" title="Image shown when this variant is selected on the product page" />
                 <button type="submit" className="bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs font-bold transition-colors">Update</button>
               </form>
             </div>

@@ -98,6 +98,7 @@ model ProductVariant {
   reorderThreshold Int          @default(10)
   weightGrams      Int          @default(500)
   sku              String       @unique
+  imageUrl         String?
   cartItems          CartItem[]
   orderItems         OrderItem[]
   bundleItems        BundleItem[]
