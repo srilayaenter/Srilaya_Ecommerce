@@ -1,15 +1,11 @@
 import { prisma } from "@/lib/db";
 import { randomBytes } from "crypto";
+export { POINTS_PER_RUPEE, RUPEES_PER_POINT, MIN_REDEEM_POINTS, MAX_REDEEM_PCT, REFERRAL_BONUS } from "@/lib/loyaltyConstants";
+import { POINTS_PER_RUPEE, RUPEES_PER_POINT, MAX_REDEEM_PCT, REFERRAL_BONUS } from "@/lib/loyaltyConstants";
 
 export function generateReferralCode(): string {
   return "SL-" + randomBytes(3).toString("hex").toUpperCase();
 }
-
-// 1 point per ₹10 spent; 10 points = ₹1 discount (1% effective cashback)
-export const POINTS_PER_RUPEE = 0.1;
-export const RUPEES_PER_POINT = 0.1;
-export const MIN_REDEEM_POINTS = 100; // ₹10 minimum discount
-export const MAX_REDEEM_PCT = 10;     // max 10% of order total
 
 export function pointsEarned(orderTotal: number): number {
   return Math.floor(orderTotal * POINTS_PER_RUPEE);
@@ -56,9 +52,6 @@ export async function earnPoints(email: string, orderId: string, orderTotal: num
     },
   });
 }
-
-// 50 bonus points for referrer + 50 for new customer on their first paid order
-export const REFERRAL_BONUS = 50;
 
 export async function processReferral(
   newCustomerEmail: string,

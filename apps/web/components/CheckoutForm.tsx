@@ -9,7 +9,7 @@ import {
   type CourierKey,
   type CourierOption,
 } from "@/lib/shipping";
-import { MIN_REDEEM_POINTS, RUPEES_PER_POINT, maxRedeemablePoints } from "@/lib/loyalty";
+import { MIN_REDEEM_POINTS, RUPEES_PER_POINT, maxRedeemablePoints } from "@/lib/loyaltyConstants";
 
 interface CartSummaryItem {
   id: string;

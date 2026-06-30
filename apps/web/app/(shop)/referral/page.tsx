@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { REFERRAL_BONUS } from "@/lib/loyalty";
+import { REFERRAL_BONUS } from "@/lib/loyaltyConstants";
 
 export default function ReferralPage() {
   const [email,   setEmail]   = useState("");
