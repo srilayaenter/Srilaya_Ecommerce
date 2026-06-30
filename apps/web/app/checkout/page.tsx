@@ -3,6 +3,8 @@ import { prisma } from "../../lib/db";
 import Link from "next/link";
 import { toNum } from "../../lib/decimal";
 import CheckoutForm from "@/components/CheckoutForm";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export default async function CheckoutPage({
   searchParams,
@@ -56,6 +58,23 @@ export default async function CheckoutPage({
     weightGrams: item.variant.weightGrams ?? 500,
   }));
 
+  // Pre-fill checkout fields from session
+  const session = await getServerSession(authOptions);
+  let defaultEmail = "";
+  let defaultPhone = "";
+  let emailRequired = true;
+
+  if (session?.user?.id) {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { email: true, phone: true },
+    });
+    defaultEmail = dbUser?.email ?? "";
+    defaultPhone = dbUser?.phone ?? "";
+    // Phone-only users have no email — make email optional
+    if (!defaultEmail && defaultPhone) emailRequired = false;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 text-[#212121]">
       <h1 className="text-3xl font-extrabold mb-8 tracking-tight text-[#212121]">Checkout</h1>
@@ -70,6 +89,9 @@ export default async function CheckoutPage({
         cartItems={serialisedItems}
         subtotal={subtotal}
         taxTotal={taxTotal}
+        defaultEmail={defaultEmail}
+        defaultPhone={defaultPhone}
+        emailRequired={emailRequired}
       />
     </div>
   );

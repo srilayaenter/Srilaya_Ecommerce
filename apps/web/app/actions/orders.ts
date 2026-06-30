@@ -10,6 +10,8 @@ import { buildOrderConfirmationEmail } from "@/lib/emails/orderConfirmation";
 import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -47,6 +49,9 @@ export async function createOrder(formData: FormData): Promise<void> {
   const redeemedPoints = parseInt(formData.get('redeemedPoints') as string || '0', 10) || 0;
   const referralCode   = (formData.get('referralCode') as string || '').trim().toUpperCase() || null;
   const couponCodeRaw  = (formData.get('couponCode') as string || '').trim().toUpperCase() || null;
+
+  const session = await getServerSession(authOptions);
+  const sessionUserId = session?.user?.id ?? undefined;
 
   const baseTotal = subtotal + taxTotal + shippingFee;
 
@@ -123,6 +128,7 @@ export async function createOrder(formData: FormData): Promise<void> {
           discountAmount: (loyaltyDiscount + couponDiscount) > 0 ? loyaltyDiscount + couponDiscount : undefined,
           couponCode: validatedCouponCode || undefined,
           referralCode: referralCode || undefined,
+          userId: sessionUserId,
         },
       });
 

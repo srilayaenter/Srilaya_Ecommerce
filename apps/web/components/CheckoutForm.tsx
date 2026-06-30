@@ -24,9 +24,15 @@ interface CheckoutFormProps {
   cartItems: CartSummaryItem[];
   subtotal: number;
   taxTotal: number;
+  defaultEmail?: string;
+  defaultPhone?: string;
+  emailRequired?: boolean;
 }
 
-export default function CheckoutForm({ cartItems, subtotal, taxTotal }: CheckoutFormProps) {
+export default function CheckoutForm({
+  cartItems, subtotal, taxTotal,
+  defaultEmail = "", defaultPhone = "", emailRequired = true,
+}: CheckoutFormProps) {
   const [state, setState] = useState("");
   const [selectedCourier, setSelectedCourier] = useState<CourierKey | "">("");
   const [isPending, setIsPending] = useState(false);
@@ -132,10 +138,11 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
-                    Email *
+                    Email {emailRequired ? "*" : "(optional)"}
                   </label>
                   <input
-                    type="email" name="email" required
+                    type="email" name="email" required={emailRequired}
+                    defaultValue={defaultEmail}
                     placeholder="you@example.com"
                     onBlur={handleEmailBlur}
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
@@ -147,6 +154,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
                   </label>
                   <input
                     type="tel" name="phone" required
+                    defaultValue={defaultPhone}
                     placeholder="+91 98765 43210"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
