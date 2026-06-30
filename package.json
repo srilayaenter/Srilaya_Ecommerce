@@ -8,7 +8,15 @@
     "prisma:generate": "prisma generate --schema=./packages/db/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=./packages/db/schema.prisma",
     "prisma:studio": "prisma studio --schema=./packages/db/schema.prisma",
-    "seed": "tsx scripts/seed-variants.ts"
+    "seed": "tsx scripts/seed-variants.ts",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:regression": "playwright test tests/e2e/regression.spec.ts",
+    "test:auth": "playwright test tests/e2e/auth.spec.ts",
+    "test:mobile": "playwright test --project=mobile",
+    "test:api": "playwright test tests/e2e/api/",
+    "test:report": "playwright show-report tests/report"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
@@ -30,6 +38,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/bcryptjs": "2.4.2",
     "@types/node": "20.11.30",
     "@types/pdfkit": "^0.17.6",
