@@ -46,6 +46,7 @@ export async function createOrder(formData: FormData): Promise<void> {
   const paymentMethod  = formData.get('paymentMethod') as string | null;
   const redeemedPoints = parseInt(formData.get('redeemedPoints') as string || '0', 10) || 0;
   const referralCode   = (formData.get('referralCode') as string || '').trim().toUpperCase() || null;
+  const couponCodeRaw  = (formData.get('couponCode') as string || '').trim().toUpperCase() || null;
 
   const baseTotal = subtotal + taxTotal + shippingFee;
 
@@ -59,7 +60,28 @@ export async function createOrder(formData: FormData): Promise<void> {
     loyaltyDiscount = pointsToRupees(validatedPoints);
   }
 
-  const total = Math.max(0, baseTotal - loyaltyDiscount);
+  // Validate coupon server-side
+  let couponDiscount = 0;
+  let validatedCouponCode: string | null = null;
+  if (couponCodeRaw) {
+    const coupon = await prisma.coupon.findUnique({ where: { code: couponCodeRaw } });
+    const now = new Date();
+    const isValid =
+      coupon &&
+      coupon.active &&
+      (!coupon.expiresAt || coupon.expiresAt > now) &&
+      (!coupon.maxUses || coupon.usedCount < coupon.maxUses) &&
+      (!coupon.minOrder || baseTotal >= Number(coupon.minOrder));
+
+    if (isValid && coupon) {
+      couponDiscount = coupon.type === "percentage"
+        ? parseFloat(((baseTotal * Number(coupon.value)) / 100).toFixed(2))
+        : Math.min(Number(coupon.value), baseTotal);
+      validatedCouponCode = coupon.code;
+    }
+  }
+
+  const total = Math.max(0, baseTotal - loyaltyDiscount - couponDiscount);
 
   let orderId: string;
 
@@ -98,7 +120,8 @@ export async function createOrder(formData: FormData): Promise<void> {
           orderChannel: 'online',
           paymentMethod: paymentMethod || undefined,
           invoiceNo: courierName ? `COURIER:${courierName}` : undefined,
-          discountAmount: loyaltyDiscount > 0 ? loyaltyDiscount : undefined,
+          discountAmount: (loyaltyDiscount + couponDiscount) > 0 ? loyaltyDiscount + couponDiscount : undefined,
+          couponCode: validatedCouponCode || undefined,
           referralCode: referralCode || undefined,
         },
       });
@@ -126,6 +149,14 @@ export async function createOrder(formData: FormData): Promise<void> {
   }
 
   const isCodOrder = paymentMethod === 'cod';
+
+  // Increment coupon usage counter
+  if (validatedCouponCode) {
+    prisma.coupon.update({
+      where: { code: validatedCouponCode },
+      data:  { usedCount: { increment: 1 } },
+    }).catch(() => {});
+  }
 
   // Loyalty points — redeem then earn (fire and forget)
   if (email) {

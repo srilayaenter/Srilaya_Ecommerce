@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createOrder } from "@/app/actions/orders";
 import {
   getAllCourierOptions,
@@ -71,13 +71,29 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
   const [referralCode,   setReferralCode]   = useState("");
   const [loyaltyBalance, setLoyaltyBalance] = useState(0);
   const [applyPoints, setApplyPoints] = useState(false);
+  const [couponCode,    setCouponCode]    = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponLabel,    setCouponLabel]    = useState("");
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("coupon");
+    if (saved) {
+      try {
+        const c = JSON.parse(saved);
+        setCouponCode(c.code ?? "");
+        setCouponDiscount(c.discount ?? 0);
+        setCouponLabel(c.label ?? "");
+      } catch {}
+    }
+  }, []);
+
   const canSubmit = selectedCourier !== "" && isPending === false;
 
   const redeemablePoints = loyaltyBalance >= MIN_REDEEM_POINTS
     ? maxRedeemablePoints(subtotal + taxTotal + shippingFee, loyaltyBalance)
     : 0;
   const loyaltyDiscount = applyPoints ? parseFloat((redeemablePoints * RUPEES_PER_POINT).toFixed(2)) : 0;
-  const total = subtotal + taxTotal + shippingFee - loyaltyDiscount;
+  const total = subtotal + taxTotal + shippingFee - loyaltyDiscount - couponDiscount;
 
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
@@ -95,6 +111,7 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
           <input type="hidden" name="paymentMethod"  value={paymentMethod} />
           <input type="hidden" name="redeemedPoints" value={applyPoints ? redeemablePoints : 0} />
           <input type="hidden" name="referralCode"   value={referralCode.trim().toUpperCase()} />
+          <input type="hidden" name="couponCode"     value={couponCode} />
 
           {/* Address Card */}
           <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm p-6">
@@ -372,6 +389,12 @@ export default function CheckoutForm({ cartItems, subtotal, taxTotal }: Checkout
               <span className="text-[#9E9E9E] italic">Select courier</span>
             )}
           </div>
+          {couponDiscount > 0 && (
+            <div className="flex justify-between text-emerald-600">
+              <span>Coupon ({couponCode})</span>
+              <span className="font-bold">−₹{couponDiscount.toFixed(2)}</span>
+            </div>
+          )}
           {loyaltyDiscount > 0 && (
             <div className="flex justify-between text-emerald-600">
               <span>Loyalty discount</span>

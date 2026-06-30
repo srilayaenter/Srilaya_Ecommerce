@@ -4,6 +4,8 @@ import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { toNum } from "@/lib/decimal";
 import { redirect } from "next/navigation";
+import { sendEmail } from "@/lib/email";
+import { buildDispatchEmail, buildDeliveredEmail } from "@/lib/emails/orderStatusUpdate";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -14,10 +16,23 @@ async function updateFulfillmentStatus(formData: FormData) {
   const orderId   = formData.get('orderId') as string;
   const newStatus = formData.get('newStatus') as string;
   if (orderId && newStatus) {
-    await prisma.order.update({ where: { id: orderId }, data: { fulfillmentStatus: newStatus } });
+    const order = await prisma.order.update({
+      where: { id: orderId },
+      data:  { fulfillmentStatus: newStatus },
+      select: { email: true, customerName: true, id: true },
+    });
     revalidatePath(`/admin/orders/${orderId}`);
     revalidatePath('/admin/orders');
     revalidatePath('/admin');
+    if (newStatus === 'delivered' && order.email) {
+      const shortId = order.id.slice(0, 8).toUpperCase();
+      sendEmail({
+        to: order.email,
+        subject: `Your order #${shortId} has been delivered!`,
+        html: buildDeliveredEmail({ customerName: order.customerName ?? 'Valued Customer', shortId }),
+        context: `delivered-${orderId}`,
+      }).catch(() => {});
+    }
   }
 }
 
@@ -39,6 +54,9 @@ async function addShipment(formData: FormData) {
   const courier        = formData.get('courier') as string;
   const trackingNumber = formData.get('trackingNumber') as string;
   const trackingUrl    = (formData.get('trackingUrl') as string) || undefined;
+  const estimatedDelivery = (formData.get('estimatedDelivery') as string)
+    ? new Date(formData.get('estimatedDelivery') as string)
+    : null;
 
   await prisma.shipment.upsert({
     where:  { orderId },
@@ -46,13 +64,31 @@ async function addShipment(formData: FormData) {
     create: { orderId, courier, trackingNumber, trackingUrl: trackingUrl ?? null, status: 'booked' },
   });
 
-  await prisma.order.update({
+  const order = await prisma.order.update({
     where: { id: orderId },
     data:  { fulfillmentStatus: 'processing' },
+    select: { email: true, customerName: true, id: true },
   });
 
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath('/admin/orders');
+
+  if (order.email) {
+    const shortId = order.id.slice(0, 8).toUpperCase();
+    sendEmail({
+      to: order.email,
+      subject: `Your SriLaYa order #${shortId} has been dispatched!`,
+      html: buildDispatchEmail({
+        customerName: order.customerName ?? 'Valued Customer',
+        shortId,
+        courier,
+        trackingNumber,
+        trackingUrl: trackingUrl ?? null,
+        estimatedDelivery,
+      }),
+      context: `dispatch-${orderId}`,
+    }).catch(() => {});
+  }
 }
 
 const FULFILLMENT_COLORS: Record<string, string> = {
@@ -220,9 +256,13 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       <label className="block text-xs font-medium text-[#616161] mb-1">Tracking URL (optional)</label>
                       <input name="trackingUrl" type="url" placeholder="https://…" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
                     </div>
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-[#616161] mb-1">Estimated Delivery (optional)</label>
+                      <input name="estimatedDelivery" type="date" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                    </div>
                   </div>
                   <button type="submit" className="bg-[#006A38] text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors">
-                    Add Shipment & Mark Processing
+                    Save Shipment & Email Customer
                   </button>
                 </form>
               )}
