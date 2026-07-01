@@ -1,14 +1,14 @@
 import { Page } from "@playwright/test";
 
 export const TEST_USER = {
-  email: process.env.TEST_USER_EMAIL || "testuser@srilaya.test",
-  password: process.env.TEST_USER_PASSWORD || "TestPass123!",
+  email: process.env.TEST_USER_EMAIL || "avrsrikanth@gmail.com",
+  password: process.env.TEST_USER_PASSWORD || "RaSa@1500",
   name: "Test User",
 };
 
 export const ADMIN_USER = {
-  email: process.env.TEST_ADMIN_EMAIL || "admin@srilaya.test",
-  password: process.env.TEST_ADMIN_PASSWORD || "AdminPass123!",
+  email: process.env.TEST_ADMIN_EMAIL || "admin@srilayafoods.com",
+  password: process.env.TEST_ADMIN_PASSWORD || "admin123",
 };
 
 export async function loginAsUser(page: Page) {
@@ -23,8 +23,12 @@ export async function loginAsAdmin(page: Page) {
   await page.goto("/admin/login");
   await page.getByLabel(/email/i).fill(ADMIN_USER.email);
   await page.getByLabel(/password/i).fill(ADMIN_USER.password);
-  await page.getByRole("button", { name: /sign in/i }).click();
-  await page.waitForURL("/admin");
+  // Handle potential error alert (wrong creds) so it doesn't block
+  page.once("dialog", dialog => dialog.dismiss());
+  // Button text is "Authorize Access" on admin login
+  await page.getByRole("button", { name: /authorize|sign in/i }).click();
+  // Wait for redirect away from the login page (not /admin/login)
+  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 15000 });
 }
 
 export async function logout(page: Page) {

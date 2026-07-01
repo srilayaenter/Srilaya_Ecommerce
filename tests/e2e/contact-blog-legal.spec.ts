@@ -15,7 +15,7 @@ test("CNT-01 contact form submits successfully", async ({ page }) => {
   await page.getByRole("button", { name: /submit|send/i }).click();
 
   await expect(
-    page.getByText(/message sent|thank you|received|success/i)
+    page.getByText(/message sent|thank you|received|success/i).first()
   ).toBeVisible({ timeout: 8000 });
 });
 

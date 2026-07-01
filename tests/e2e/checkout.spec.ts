@@ -72,15 +72,13 @@ test("CHK-04 COD order placement redirects to confirmation", async ({ page }) =>
   await page.goto("/checkout");
 
   // Fill required fields
-  await page.getByLabel(/name/i).fill(TEST_ADDRESS.name);
+  await page.getByLabel(/full name/i).fill(TEST_ADDRESS.name);
   await page.getByLabel(/phone/i).fill(TEST_ADDRESS.phone);
   await page.getByLabel(/email/i).fill(TEST_ADDRESS.email);
   await page.getByLabel(/address/i).fill(TEST_ADDRESS.address);
   await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
-  await page.getByLabel(/state/i).selectOption(TEST_ADDRESS.state).catch(() => {
-    page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
-  });
-  await page.getByLabel(/pin|zip|postal/i).fill(TEST_ADDRESS.pincode);
+  await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
+  await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
   // Select COD
   const codOption = page.getByLabel(/cash on delivery|cod/i)
@@ -96,12 +94,12 @@ test("CHK-05 online payment opens Razorpay modal", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/checkout");
 
-  await page.getByLabel(/name/i).fill(TEST_ADDRESS.name);
+  await page.getByLabel(/full name/i).fill(TEST_ADDRESS.name);
   await page.getByLabel(/phone/i).fill(TEST_ADDRESS.phone);
   await page.getByLabel(/email/i).fill(TEST_ADDRESS.email);
   await page.getByLabel(/address/i).fill(TEST_ADDRESS.address);
   await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
-  await page.getByLabel(/state/i).selectOption(TEST_ADDRESS.state).catch(() => {});
+  await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
   await page.getByLabel(/pin|zip|postal/i).fill(TEST_ADDRESS.pincode);
 
   const onlineBtn = page.getByLabel(/pay online|card|upi/i)
@@ -144,7 +142,7 @@ test("CHK-12 order confirmation page shows order details", async ({ page }) => {
   await page.getByLabel(/address/i).fill(TEST_ADDRESS.address);
   await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
   await page.getByLabel(/state/i).selectOption(TEST_ADDRESS.state).catch(() => {});
-  await page.getByLabel(/pin|zip|postal/i).fill(TEST_ADDRESS.pincode);
+  await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
   const codOption = page.getByLabel(/cash on delivery|cod/i)
     .or(page.getByRole("radio", { name: /cod|cash/i }));

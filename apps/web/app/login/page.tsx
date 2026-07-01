@@ -149,8 +149,9 @@ function LoginForm() {
         {tab === "email" && (
           <form onSubmit={handleCredentials} className="space-y-5 mt-5">
             <div>
-              <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
+              <label htmlFor="login-email" className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
               <input
+                id="login-email"
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -160,8 +161,9 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
+              <label htmlFor="login-password" className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
               <input
+                id="login-password"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -187,12 +189,13 @@ function LoginForm() {
             {!otpSent ? (
               <form onSubmit={handleSendOtp} className="space-y-4">
                 <div>
-                  <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Mobile Number</label>
+                  <label htmlFor="login-phone" className="block text-[14px] font-bold text-[#424242] mb-1.5">Mobile Number</label>
                   <div className="flex">
                     <span className="flex items-center px-3 border border-r-0 border-[#E0E0E0] rounded-l-[8px] text-[#424242] text-sm font-medium bg-[#F5F5F5]">
                       +91
                     </span>
                     <input
+                      id="login-phone"
                       type="tel"
                       value={phone}
                       onChange={e => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
@@ -225,8 +228,9 @@ function LoginForm() {
                   </button>
                 </p>
                 <div>
-                  <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Enter OTP</label>
+                  <label htmlFor="login-otp" className="block text-[14px] font-bold text-[#424242] mb-1.5">Enter OTP</label>
                   <input
+                    id="login-otp"
                     type="text"
                     inputMode="numeric"
                     value={otp}

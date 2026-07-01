@@ -18,8 +18,8 @@ test("CART-01 add to cart increments badge", async ({ page }) => {
   await page.getByRole("button", { name: /add to cart/i }).click();
   await page.waitForTimeout(800);
 
-  const badge = page.locator("[class*=badge],[class*=count],[aria-label*=cart]").first();
-  const badgeText = await badge.textContent();
+  const badge = page.locator("a[href='/cart'] span").first();
+  const badgeText = await badge.textContent({ timeout: 5000 }).catch(() => "0");
   expect(parseInt(badgeText || "0")).toBeGreaterThan(0);
 });
 

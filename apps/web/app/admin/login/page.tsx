@@ -46,10 +46,11 @@ export default function AdminLoginPage() {
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-md p-8">
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">
+            <label htmlFor="admin-email" className="block text-[14px] font-bold text-[#424242] mb-1.5">
               Staff Email
             </label>
             <input
+              id="admin-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -59,10 +60,11 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">
+            <label htmlFor="admin-password" className="block text-[14px] font-bold text-[#424242] mb-1.5">
               Password
             </label>
             <input
+              id="admin-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

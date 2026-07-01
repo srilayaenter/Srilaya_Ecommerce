@@ -125,11 +125,11 @@ export default function CheckoutForm({
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                <label htmlFor="chk-name" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                   Full Name *
                 </label>
                 <input
-                  type="text" name="name" required
+                  id="chk-name" type="text" name="name" required
                   placeholder="Ravi Kumar"
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                 />
@@ -137,11 +137,11 @@ export default function CheckoutForm({
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="chk-email" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     Email {emailRequired ? "*" : "(optional)"}
                   </label>
                   <input
-                    type="email" name="email" required={emailRequired}
+                    id="chk-email" type="email" name="email" required={emailRequired}
                     defaultValue={defaultEmail}
                     placeholder="you@example.com"
                     onBlur={handleEmailBlur}
@@ -149,11 +149,11 @@ export default function CheckoutForm({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="chk-phone" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     Phone *
                   </label>
                   <input
-                    type="tel" name="phone" required
+                    id="chk-phone" type="tel" name="phone" required
                     defaultValue={defaultPhone}
                     placeholder="+91 98765 43210"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
@@ -162,11 +162,11 @@ export default function CheckoutForm({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                <label htmlFor="chk-address" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                   Address *
                 </label>
                 <textarea
-                  name="address" required rows={3}
+                  id="chk-address" name="address" required rows={3}
                   placeholder="Street address, flat/house number..."
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242] resize-none"
                 />
@@ -174,21 +174,21 @@ export default function CheckoutForm({
 
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="chk-city" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     City *
                   </label>
                   <input
-                    type="text" name="city" required
+                    id="chk-city" type="text" name="city" required
                     placeholder="Mysuru"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="chk-state" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     State *
                   </label>
                   <input
-                    type="text" name="state" required
+                    id="chk-state" type="text" name="state" required
                     placeholder="Karnataka"
                     value={state}
                     onChange={(e) => {
@@ -199,11 +199,11 @@ export default function CheckoutForm({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="chk-zipcode" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     ZIP Code *
                   </label>
                   <input
-                    type="text" name="zipCode" required
+                    id="chk-zipcode" type="text" name="zipCode" required
                     placeholder="570001"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />

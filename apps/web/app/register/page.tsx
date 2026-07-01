@@ -73,8 +73,9 @@ export default function RegisterPage() {
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-md p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Full Name</label>
+            <label htmlFor="reg-name" className="block text-[14px] font-bold text-[#424242] mb-1.5">Full Name</label>
             <input
+              id="reg-name"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -84,8 +85,9 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
+            <label htmlFor="reg-email" className="block text-[14px] font-bold text-[#424242] mb-1.5">Email Address</label>
             <input
+              id="reg-email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -95,8 +97,9 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
+            <label htmlFor="reg-password" className="block text-[14px] font-bold text-[#424242] mb-1.5">Password</label>
             <input
+              id="reg-password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
@@ -107,8 +110,9 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label className="block text-[14px] font-bold text-[#424242] mb-1.5">Confirm Password</label>
+            <label htmlFor="reg-confirm" className="block text-[14px] font-bold text-[#424242] mb-1.5">Confirm Password</label>
             <input
+              id="reg-confirm"
               type="password"
               value={confirm}
               onChange={e => setConfirm(e.target.value)}

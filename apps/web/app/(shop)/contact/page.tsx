@@ -132,10 +132,11 @@ export default function ContactUsPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                    <label htmlFor="contact-name" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                       Full Name
                     </label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
                       value={formData.name}
@@ -148,10 +149,11 @@ export default function ContactUsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                    <label htmlFor="contact-email" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                       Email Address
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
                       value={formData.email}
@@ -165,10 +167,11 @@ export default function ContactUsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="contact-phone" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     Phone Number (Optional)
                   </label>
                   <input
+                    id="contact-phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) =>
@@ -180,10 +183,11 @@ export default function ContactUsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
+                  <label htmlFor="contact-message" className="block text-xs font-bold text-[#757575] uppercase tracking-wide mb-1.5">
                     Your Message / Inquiry
                   </label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     required
                     value={formData.message}
