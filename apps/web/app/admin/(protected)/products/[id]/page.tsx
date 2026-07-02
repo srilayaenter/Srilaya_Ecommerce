@@ -37,11 +37,13 @@ async function updateVariant(formData: FormData) {
 
   const before = await prisma.productVariant.findUnique({ where: { id: variantId }, select: { stock: true, sku: true } });
 
+  const costPriceRaw = parseFloat(formData.get('costPrice') as string);
   await prisma.productVariant.update({
     where: { id: variantId },
     data: {
       size:             formData.get('size') as string,
       price:            parseFloat(formData.get('price') as string),
+      costPrice:        !isNaN(costPriceRaw) && costPriceRaw > 0 ? costPriceRaw : null,
       stock:            newStock,
       weightGrams:      parseInt(formData.get('weightGrams') as string, 10) || 500,
       reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,
@@ -177,21 +179,23 @@ export default async function EditProductPage({ params, searchParams }: PageProp
         {/* VARIANTS SECTION */}
         <div className="bg-white rounded-xl border p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Size Variants</h2>
-          <div className="grid grid-cols-6 gap-2 mb-1 px-0">
+          <div className="grid grid-cols-7 gap-2 mb-1 px-0">
             <span className="text-[10px] font-bold text-slate-400 uppercase">Size</span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Price (₹)</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Price ₹</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Cost ₹</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase">Stock</span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Weight (g)</span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Reorder At</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Wt (g)</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Reorder</span>
             <span />
           </div>
           {product.variants.map(variant => (
             <div key={variant.id} className="border-b py-3">
-              <form action={updateVariant} className="grid grid-cols-6 gap-2 items-center">
+              <form action={updateVariant} className="grid grid-cols-7 gap-2 items-center">
                 <input type="hidden" name="variantId" value={variant.id} />
                 <input type="hidden" name="productId" value={product.id} />
                 <input type="text"   name="size"             defaultValue={variant.size}              className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="price"            defaultValue={variant.price.toString()}  step="0.01" className="border rounded px-2 py-1 text-sm" />
+                <input type="number" name="costPrice"        defaultValue={(variant as any).costPrice?.toString() ?? ""} step="0.01" placeholder="—" title="Internal cost price (not shown to customers)" className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="stock"            defaultValue={variant.stock}             className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="weightGrams"      defaultValue={(variant as any).weightGrams ?? 500} placeholder="e.g. 550" className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="reorderThreshold" defaultValue={(variant as any).reorderThreshold ?? 10} placeholder="10" className="border rounded px-2 py-1 text-sm" title="Alert when stock falls to this level" />

@@ -19,6 +19,7 @@ const REASON_LABELS: Record<string, string> = {
   return_restock: "↩️ Return Restock",
   csv_import:     "📥 CSV Import",
   manual_edit:    "✏️ Manual Edit",
+  po_receive:     "📦 PO Receive",
 };
 
 const REASON_COLORS: Record<string, string> = {
@@ -27,6 +28,7 @@ const REASON_COLORS: Record<string, string> = {
   return_restock: "bg-amber-50 text-amber-700",
   csv_import:     "bg-teal-50 text-teal-700",
   manual_edit:    "bg-gray-100 text-gray-600",
+  po_receive:     "bg-green-50 text-green-700",
 };
 
 export default function StockLogPage() {

@@ -8,15 +8,18 @@ export async function POST(request: Request) {
 
   const bundle = await prisma.bundle.findUnique({
     where: { slug: bundleSlug, active: true },
-    include: { items: { include: { variant: true } } },
+    include: { items: { include: { variant: { include: { product: { select: { gstRate: true } } } } } } },
   });
   if (!bundle) return NextResponse.json({ error: "Bundle not found" }, { status: 404 });
 
   const cookieStore = await cookies();
   let cartId = cookieStore.get("cartId")?.value;
+  let isNewCart = false;
+
   if (!cartId) {
     const cart = await prisma.cart.create({ data: {} });
     cartId = cart.id;
+    isNewCart = true;
   }
 
   // Each bundle item is added as an individual cart item at its variant price
@@ -38,16 +41,16 @@ export async function POST(request: Request) {
         data: {
           cartId,
           variantId: item.variantId,
-          quantity: item.quantity,
-          price: variant.price,
-          gstRate: 5, // default GST
+          quantity:  item.quantity,
+          price:     variant.price,
+          gstRate:   variant.product.gstRate,
         },
       });
     }
   }
 
   const response = NextResponse.json({ success: true });
-  if (!cookieStore.get("cartId")?.value) {
+  if (isNewCart) {
     response.cookies.set("cartId", cartId, { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 30 });
   }
   return response;

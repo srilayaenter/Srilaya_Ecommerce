@@ -106,6 +106,7 @@ model ProductVariant {
   product          Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   size             String
   price            Decimal      @db.Decimal(10,2)
+  costPrice        Decimal?     @db.Decimal(10,2)
   stock            Int          @default(100)
   reorderThreshold Int          @default(10)
   weightGrams      Int          @default(500)
@@ -248,17 +249,46 @@ model FailedEmail {
 }
 
 model Supplier {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String
   contactPerson String?
   phone         String?
   email         String?
   address       String?
   notes         String?
-  active        Boolean   @default(true)
+  active        Boolean         @default(true)
   products      Product[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  purchaseOrders PurchaseOrder[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model PurchaseOrder {
+  id         String              @id @default(cuid())
+  supplierId String
+  supplier   Supplier            @relation(fields: [supplierId], references: [id])
+  status     String              @default("draft") // draft | sent | received | partial | cancelled
+  note       String?
+  expectedAt DateTime?
+  receivedAt DateTime?
+  createdBy  String?
+  items      PurchaseOrderItem[]
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  @@index([supplierId])
+  @@index([status])
+}
+
+model PurchaseOrderItem {
+  id               String        @id @default(cuid())
+  purchaseOrderId  String
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  variantId        String
+  sku              String
+  quantityOrdered  Int
+  quantityReceived Int           @default(0)
+  unitCost         Decimal?      @db.Decimal(10,2)
 }
 
 model Coupon {

@@ -4,7 +4,14 @@ import { toNum } from "@/lib/decimal";
 export default async function AnalyticsPage() {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-  const [paidOrders, topItemsRaw, orderStatusCounts] = await Promise.all([
+  const [
+    paidOrders,
+    topItemsRaw,
+    orderStatusCounts,
+    channelCounts,
+    categoryRevRaw,
+    marginItems,
+  ] = await Promise.all([
     prisma.order.findMany({
       where: { status: "paid", createdAt: { gte: thirtyDaysAgo } },
       select: { total: true, createdAt: true },
@@ -14,15 +21,21 @@ export default async function AnalyticsPage() {
       by: ["variantId"],
       _sum: { quantity: true },
       orderBy: { _sum: { quantity: "desc" } },
-      take: 5,
+      take: 8,
     }),
-    prisma.order.groupBy({
-      by: ["status"],
-      _count: true,
+    prisma.order.groupBy({ by: ["status"], _count: true }),
+    prisma.order.groupBy({ by: ["orderChannel"], _count: true, _sum: { total: true } }),
+    // Revenue by category (all time)
+    prisma.orderItem.findMany({
+      include: { variant: { include: { product: { include: { category: { select: { name: true } } } } } } },
+    }),
+    // Margin data: all OrderItems with costPrice
+    prisma.orderItem.findMany({
+      include: { variant: { select: { costPrice: true } } },
     }),
   ]);
 
-  // Build daily revenue for last 30 days
+  // --- Daily revenue chart ---
   const dayMap: Record<string, number> = {};
   for (let i = 29; i >= 0; i--) {
     const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
@@ -33,44 +46,78 @@ export default async function AnalyticsPage() {
     if (key in dayMap) dayMap[key] += toNum(o.total);
   }
   const days = Object.entries(dayMap);
-  const maxRevenue = Math.max(...days.map(([, v]) => v), 1);
-  const totalRevenue = days.reduce((s, [, v]) => s + v, 0);
+  const maxRevenue    = Math.max(...days.map(([, v]) => v), 1);
+  const totalRevenue  = days.reduce((s, [, v]) => s + v, 0);
 
-  // Top products
+  // --- Top products ---
   const variantIds = topItemsRaw.map(r => r.variantId);
-  const variants = await prisma.productVariant.findMany({
+  const variantInfos = await prisma.productVariant.findMany({
     where: { id: { in: variantIds } },
     include: { product: { select: { title: true } } },
   });
   const topItems = topItemsRaw.map(r => ({
-    qty: r._sum.quantity ?? 0,
-    label: variants.find(v => v.id === r.variantId)?.product.title ?? "Unknown",
-    size:  variants.find(v => v.id === r.variantId)?.size ?? "",
+    qty:   r._sum.quantity ?? 0,
+    label: variantInfos.find(v => v.id === r.variantId)?.product.title ?? "Unknown",
+    size:  variantInfos.find(v => v.id === r.variantId)?.size ?? "",
   }));
   const maxQty = Math.max(...topItems.map(i => i.qty), 1);
 
-  // Status breakdown
-  const statusMap = Object.fromEntries(orderStatusCounts.map(s => [s.status, s._count]));
+  // --- Status breakdown ---
+  const statusMap   = Object.fromEntries(orderStatusCounts.map(s => [s.status, s._count]));
   const totalOrders = orderStatusCounts.reduce((s, r) => s + r._count, 0);
+
+  // --- Channel split ---
+  const channels = channelCounts.map(c => ({
+    channel: c.orderChannel ?? "online",
+    count:   c._count,
+    revenue: toNum(c._sum.total ?? 0),
+  }));
+
+  // --- Category revenue ---
+  const catMap: Record<string, number> = {};
+  for (const item of categoryRevRaw) {
+    const cat = item.variant.product.category?.name ?? "Uncategorised";
+    catMap[cat] = (catMap[cat] ?? 0) + toNum(item.price) * item.quantity;
+  }
+  const categoryRevenue = Object.entries(catMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const maxCatRev = Math.max(...categoryRevenue.map(([, v]) => v), 1);
+
+  // --- Margin ---
+  let totalCost    = 0;
+  let costCoverage = 0;
+  let totalSold    = 0;
+  for (const item of marginItems) {
+    const soldAmt = toNum(item.price) * item.quantity;
+    totalSold += soldAmt;
+    if (item.variant.costPrice) {
+      totalCost += toNum(item.variant.costPrice) * item.quantity;
+      costCoverage += soldAmt;
+    }
+  }
+  const grossMargin = costCoverage > 0
+    ? ((costCoverage - totalCost) / costCoverage) * 100
+    : null;
 
   return (
     <div className="space-y-8 font-sans">
       <div>
         <h1 className="text-[28px] font-bold text-[#212121] tracking-tight font-poppins">Sales Analytics</h1>
-        <p className="text-[#8D6E63] text-[14px] mt-1 font-medium">Revenue and order trends for the last 30 days.</p>
+        <p className="text-[#8D6E63] text-[14px] mt-1 font-medium">Revenue trends, best sellers, and category breakdown.</p>
       </div>
 
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Revenue (30d)", value: `₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: "💰" },
-          { label: "Paid Orders", value: (statusMap["paid"] ?? 0).toString(), icon: "✅" },
-          { label: "COD Pending", value: (statusMap["cod_pending"] ?? 0).toString(), icon: "🛵" },
-          { label: "Total Orders", value: totalOrders.toString(), icon: "📦" },
+          { label: "Revenue (30d)",   value: `₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: "💰" },
+          { label: "Paid Orders",     value: (statusMap["paid"] ?? 0).toString(),         icon: "✅" },
+          { label: "COD Pending",     value: (statusMap["cod_pending"] ?? 0).toString(),  icon: "🛵" },
+          { label: "Gross Margin",    value: grossMargin !== null ? `${grossMargin.toFixed(1)}%` : "—",                 icon: "📈",
+            sub: grossMargin === null ? "Add cost prices to variants" : undefined },
         ].map(m => (
           <div key={m.label} className="bg-white rounded-xl border border-[#E0E0E0] p-5 shadow-sm">
             <p className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">{m.label}</p>
             <p className="text-2xl font-black text-[#212121] mt-2">{m.value}</p>
+            {m.sub && <p className="text-[10px] text-[#9E9E9E] mt-1">{m.sub}</p>}
           </div>
         ))}
       </div>
@@ -82,20 +129,17 @@ export default async function AnalyticsPage() {
           <div className="flex flex-col items-center justify-center h-40 gap-3">
             <span className="text-4xl">📊</span>
             <p className="text-sm font-semibold text-[#9E9E9E]">No paid orders in the last 30 days.</p>
-            <p className="text-xs text-[#BDBDBD]">Revenue will appear here once customers complete purchases.</p>
           </div>
         ) : (
           <>
             <div className="flex items-end gap-[3px] h-40 w-full">
               {days.map(([date, value]) => {
-                const height = maxRevenue > 0 ? (value / maxRevenue) * 100 : 0;
-                const label = new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+                const height = (value / maxRevenue) * 100;
+                const label  = new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
                 return (
                   <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
-                    <div
-                      className="w-full bg-[#006A38] rounded-t-sm transition-all group-hover:bg-[#00522B]"
-                      style={{ height: `${Math.max(height, value > 0 ? 4 : 0)}%` }}
-                    />
+                    <div className="w-full bg-[#006A38] rounded-t-sm transition-all group-hover:bg-[#00522B]"
+                         style={{ height: `${Math.max(height, value > 0 ? 4 : 0)}%` }} />
                     <div className="absolute bottom-full mb-1 hidden group-hover:block bg-[#212121] text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap z-10">
                       {label}: ₹{value.toFixed(0)}
                     </div>
@@ -111,13 +155,13 @@ export default async function AnalyticsPage() {
         )}
       </div>
 
-      {/* Top products + Order status */}
+      {/* Top products + Category breakdown */}
       <div className="grid lg:grid-cols-2 gap-6">
 
         {/* Top products */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
           <h2 className="text-sm font-bold text-[#212121] mb-5">Top Selling Products (All Time)</h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {topItems.length === 0 && <p className="text-sm text-[#9E9E9E]">No sales data yet.</p>}
             {topItems.map((item, i) => (
               <div key={i}>
@@ -126,28 +170,49 @@ export default async function AnalyticsPage() {
                   <span className="font-bold text-[#006A38] ml-2 flex-shrink-0">{item.qty} sold</span>
                 </div>
                 <div className="w-full bg-[#F5F5F5] rounded-full h-2">
-                  <div
-                    className="bg-[#006A38] h-2 rounded-full"
-                    style={{ width: `${(item.qty / maxQty) * 100}%` }}
-                  />
+                  <div className="bg-[#006A38] h-2 rounded-full" style={{ width: `${(item.qty / maxQty) * 100}%` }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Order status breakdown */}
+        {/* Category revenue */}
+        <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
+          <h2 className="text-sm font-bold text-[#212121] mb-5">Revenue by Category (All Time)</h2>
+          {categoryRevenue.length === 0 ? (
+            <p className="text-sm text-[#9E9E9E]">No data yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {categoryRevenue.map(([cat, rev]) => (
+                <div key={cat}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="font-semibold text-[#212121]">{cat}</span>
+                    <span className="font-bold text-[#006A38]">₹{rev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                  </div>
+                  <div className="w-full bg-[#F5F5F5] rounded-full h-2">
+                    <div className="bg-[#8D6E63] h-2 rounded-full" style={{ width: `${(rev / maxCatRev) * 100}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Order status + Channel split */}
+      <div className="grid lg:grid-cols-2 gap-6">
+
+        {/* Order status */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
           <h2 className="text-sm font-bold text-[#212121] mb-5">Order Status Breakdown</h2>
           <div className="space-y-3">
-            {orderStatusCounts.length === 0 && (
-              <p className="text-sm text-[#9E9E9E] py-4 text-center">No orders placed yet.</p>
-            )}
+            {orderStatusCounts.length === 0 && <p className="text-sm text-[#9E9E9E] py-4 text-center">No orders yet.</p>}
             {orderStatusCounts.map(s => (
               <div key={s.status} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#006A38]" />
-                  <span className="capitalize text-[#424242] font-medium">{s.status.replace("_", " ")}</span>
+                  <span className="capitalize text-[#424242] font-medium">{s.status.replace(/_/g, " ")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-24 bg-[#F5F5F5] rounded-full h-2">
@@ -158,6 +223,36 @@ export default async function AnalyticsPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Channel split */}
+        <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
+          <h2 className="text-sm font-bold text-[#212121] mb-5">Sales Channel Split</h2>
+          {channels.length === 0 ? (
+            <p className="text-sm text-[#9E9E9E] py-4 text-center">No orders yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {channels.map(c => {
+                const totalCount = channels.reduce((s, ch) => s + ch.count, 0);
+                const pct = totalCount > 0 ? (c.count / totalCount) * 100 : 0;
+                const icon = c.channel === "in_store" ? "🏪" : "🛒";
+                const label = c.channel === "in_store" ? "In-Store" : "Online";
+                return (
+                  <div key={c.channel}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-semibold text-[#212121]">{icon} {label}</span>
+                      <span className="text-[#9E9E9E] text-xs">{c.count} orders · ₹{c.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                    </div>
+                    <div className="w-full bg-[#F5F5F5] rounded-full h-3">
+                      <div className="bg-[#006A38] h-3 rounded-full flex items-center justify-end pr-2" style={{ width: `${Math.max(pct, 4)}%` }}>
+                        {pct >= 20 && <span className="text-white text-[9px] font-bold">{pct.toFixed(0)}%</span>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>
