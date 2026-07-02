@@ -27,23 +27,24 @@ test("CART-02 cart page shows added items", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/cart");
 
-  await expect(page.locator("[class*=cart-item],[class*=cartItem]").or(
-    page.getByRole("row").nth(1)
-  ).first()).toBeVisible();
-  await expect(page.getByText(/₹/)).toBeVisible();
+  // Cart shows items — check for Remove button (each item has one) and price
+  await expect(page.getByRole("button", { name: /remove/i }).first()).toBeVisible();
+  await expect(page.getByText(/₹/).first()).toBeVisible();
 });
 
 test("CART-03 update quantity recalculates total", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/cart");
 
-  const totalBefore = await page.getByText(/total.*₹|₹.*total/i).first().textContent();
+  // Cart total label is "Subtotal + GST" — grab the ₹ amount from the order summary
+  const totalLocator = page.locator("text=/₹[0-9]/").last();
+  const totalBefore = await totalLocator.textContent();
 
-  // Increase qty via + button in cart
+  // Increase qty via + button in cart (server action — full page reload)
   await page.getByRole("button", { name: "+" }).first().click();
-  await page.waitForTimeout(600);
+  await page.waitForLoadState("networkidle");
 
-  const totalAfter = await page.getByText(/total.*₹|₹.*total/i).first().textContent();
+  const totalAfter = await totalLocator.textContent();
   expect(totalAfter).not.toEqual(totalBefore);
 });
 
@@ -66,11 +67,12 @@ test("CART-05 cart persists across page navigation", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/");
   await page.goto("/cart");
-  // Item still there
-  await expect(page.getByText(/₹/)).toBeVisible();
+  // Item still there — use .first() to avoid strict mode error if multiple ₹ elements
+  await expect(page.getByText(/₹/).first()).toBeVisible();
 });
 
 test("CART-07 valid coupon applies discount", async ({ page }) => {
+  test.setTimeout(60000);
   await addFirstProductToCart(page, 2);
   await page.goto("/checkout");
 

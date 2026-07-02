@@ -52,14 +52,11 @@ test("REG-04 checkout form submits COD order", async ({ page }) => {
   const codOption = page.getByRole("radio", { name: /cash on delivery|cod/i });
   if (await codOption.count() > 0) await codOption.click();
 
-  // Select cheapest courier (required before placing order)
-  const courierOption = page.getByRole("radio").filter({ hasText: /india post|standard|free/i }).first();
-  if (await courierOption.count() > 0) {
-    await courierOption.click();
-  } else {
-    // Fallback: click the first courier radio
-    await page.getByRole("radio").first().click();
-  }
+  // Select courier (name="courierDisplay", appears after state is filled)
+  await page.waitForTimeout(500);
+  const regCourierInput = page.locator("input[type=radio][name=courierDisplay]");
+  await regCourierInput.first().waitFor({ state: "attached", timeout: 5000 }).catch(() => {});
+  if (await regCourierInput.count() > 0) await regCourierInput.first().click();
   await page.waitForTimeout(300);
 
   await page.getByRole("button", { name: /place order|confirm/i }).click();

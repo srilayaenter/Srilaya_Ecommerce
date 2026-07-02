@@ -12,6 +12,7 @@ import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { logStockChanges } from "@/lib/stockLog";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -153,6 +154,15 @@ export async function createOrder(formData: FormData): Promise<void> {
     }
     throw err;
   }
+
+  // Log stock deductions
+  logStockChanges(cartItems.map(item => ({
+    variantId: item.variantId,
+    sku:       item.variant.sku,
+    delta:     -item.quantity,
+    reason:    "order" as const,
+    note:      orderId,
+  }))).catch(() => {});
 
   const isCodOrder = paymentMethod === 'cod';
 

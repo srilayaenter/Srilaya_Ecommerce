@@ -53,9 +53,17 @@ export default function InventoryImportPage() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div>
-        <h1 className="text-2xl font-black text-[#212121] font-poppins">Inventory Bulk Import</h1>
-        <p className="text-sm text-[#757575] mt-0.5">Update stock, price, and reorder thresholds for multiple variants at once via CSV.</p>
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-black text-[#212121] font-poppins">Inventory Bulk Import</h1>
+          <p className="text-sm text-[#757575] mt-0.5">Update stock, price, and reorder thresholds for multiple variants at once via CSV.</p>
+        </div>
+        <a
+          href="/api/admin/inventory/export"
+          className="bg-[#006A38] text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors"
+        >
+          ⬇ Export Current Inventory
+        </a>
       </div>
 
       {/* Instructions */}

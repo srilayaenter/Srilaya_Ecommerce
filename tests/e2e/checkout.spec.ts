@@ -40,8 +40,8 @@ test("CHK-02 order summary appears first on mobile", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/checkout");
 
-  // Order summary box should appear before the form in the DOM
-  const summaryBox = page.locator("[class*=summary],[class*=order-summary]").first();
+  // Order summary section contains "Order Summary" heading
+  const summaryBox = page.getByText(/order summary/i).first();
   const formBox = page.locator("form").first();
 
   const summaryBbox = await summaryBox.boundingBox();
@@ -56,14 +56,16 @@ test("CHK-03 courier options appear after filling state", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/checkout");
 
-  await page.getByLabel(/state/i).selectOption("Karnataka");
+  // State field is a text input — filling it triggers courier options (zone-based)
+  await page.getByLabel(/state/i).fill("Karnataka");
   await page.waitForTimeout(1000);
 
-  const courierOptions = page.locator("[class*=courier],[name*=courier],[id*=courier]");
-  if (await courierOptions.count() > 0) {
-    await expect(courierOptions.first()).toBeVisible();
+  // Courier radios appear after state triggers zone calculation
+  const courierRadioInput = page.locator("input[type=radio][name=courierDisplay]");
+  if (await courierRadioInput.count() > 0) {
+    await expect(courierRadioInput.first()).toBeVisible();
   } else {
-    console.log("CHK-03: Courier section may be combined with form or not yet rendered");
+    console.log("CHK-03: Courier options not visible after filling state");
   }
 });
 
@@ -80,10 +82,19 @@ test("CHK-04 COD order placement redirects to confirmation", async ({ page }) =>
   await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
   await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
-  // Select COD
-  const codOption = page.getByLabel(/cash on delivery|cod/i)
-    .or(page.getByRole("radio", { name: /cod|cash/i }));
-  if (await codOption.count() > 0) await codOption.click();
+  // Select COD — radio inside a <label>, use the radio role or click the label text
+  const codOption = page.getByRole("radio", { name: /cash on delivery/i })
+    .or(page.locator("label").filter({ hasText: /cash on delivery/i }));
+  if (await codOption.count() > 0) await codOption.first().click();
+
+  // Select first available courier (name="courierDisplay", only appear after state is filled)
+  await page.waitForTimeout(500); // React re-render after state fill
+  const courierInput = page.locator("input[type=radio][name=courierDisplay]");
+  await courierInput.first().waitFor({ state: "attached", timeout: 5000 }).catch(() => {});
+  if (await courierInput.count() > 0) {
+    await courierInput.first().click();
+  }
+  await page.waitForTimeout(300);
 
   await page.getByRole("button", { name: /place order|confirm/i }).click();
   await page.waitForURL(/checkout\/confirm/, { timeout: 10000 });
@@ -100,7 +111,14 @@ test("CHK-05 online payment opens Razorpay modal", async ({ page }) => {
   await page.getByLabel(/address/i).fill(TEST_ADDRESS.address);
   await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
   await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
-  await page.getByLabel(/pin|zip|postal/i).fill(TEST_ADDRESS.pincode);
+  await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
+
+  // Select courier first (required before button is enabled)
+  await page.waitForTimeout(500);
+  const courierInputCHK5 = page.locator("input[type=radio][name=courierDisplay]");
+  await courierInputCHK5.first().waitFor({ state: "attached", timeout: 5000 }).catch(() => {});
+  if (await courierInputCHK5.count() > 0) await courierInputCHK5.first().click();
+  await page.waitForTimeout(300);
 
   const onlineBtn = page.getByLabel(/pay online|card|upi/i)
     .or(page.getByRole("radio", { name: /online|pay.*online/i }));
@@ -124,10 +142,10 @@ test("CHK-08 checkout required field validation blocks submit", async ({ page })
   await addFirstProductToCart(page, 1);
   await page.goto("/checkout");
 
-  // Try to submit with empty form
-  await page.getByRole("button", { name: /place order|continue/i }).click();
-  await page.waitForTimeout(500);
-  // Should stay on checkout — HTML5 validation or JS validation
+  // The submit button requires courier selection — verify it's disabled with empty form
+  const submitBtn = page.getByRole("button", { name: /place order|continue/i });
+  await expect(submitBtn).toBeDisabled();
+  // Should stay on checkout
   await expect(page).toHaveURL(/checkout/);
 });
 
@@ -136,22 +154,31 @@ test("CHK-12 order confirmation page shows order details", async ({ page }) => {
   await addFirstProductToCart(page, 1);
   await page.goto("/checkout");
 
-  await page.getByLabel(/name/i).fill(TEST_ADDRESS.name);
+  await page.getByLabel(/full name/i).fill(TEST_ADDRESS.name);
   await page.getByLabel(/phone/i).fill(TEST_ADDRESS.phone);
   await page.getByLabel(/email/i).fill(TEST_ADDRESS.email);
   await page.getByLabel(/address/i).fill(TEST_ADDRESS.address);
   await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
-  await page.getByLabel(/state/i).selectOption(TEST_ADDRESS.state).catch(() => {});
+  await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
   await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
-  const codOption = page.getByLabel(/cash on delivery|cod/i)
-    .or(page.getByRole("radio", { name: /cod|cash/i }));
-  if (await codOption.count() > 0) await codOption.click();
+  const codOption = page.getByRole("radio", { name: /cash on delivery/i })
+    .or(page.locator("label").filter({ hasText: /cash on delivery/i }));
+  if (await codOption.count() > 0) await codOption.first().click();
+
+  // Select first available courier (name="courierDisplay", only appear after state is filled)
+  await page.waitForTimeout(500); // React re-render after state fill
+  const courierInput2 = page.locator("input[type=radio][name=courierDisplay]");
+  await courierInput2.first().waitFor({ state: "attached", timeout: 5000 }).catch(() => {});
+  if (await courierInput2.count() > 0) {
+    await courierInput2.first().click();
+  }
+  await page.waitForTimeout(300);
 
   await page.getByRole("button", { name: /place order|confirm/i }).click();
   await page.waitForURL(/checkout\/confirm/, { timeout: 10000 });
 
   // Confirmation page elements
-  await expect(page.getByText(/order.*confirmed|thank you|placed/i)).toBeVisible();
-  await expect(page.getByText(/₹/)).toBeVisible();
+  await expect(page.getByText(/order.*confirmed|thank you|placed/i).first()).toBeVisible();
+  await expect(page.getByText(/₹/).first()).toBeVisible();
 });

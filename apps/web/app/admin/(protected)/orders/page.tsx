@@ -260,7 +260,7 @@ export default async function OrdersPage({
                             <input type="hidden" name="orderId" value={order.id} />
                             <button
                               type="submit"
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                              className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
                             >
                               ✓ COD Collected
                             </button>

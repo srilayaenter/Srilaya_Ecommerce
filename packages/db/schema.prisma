@@ -333,6 +333,20 @@ model BlogPost {
   updatedAt   DateTime  @updatedAt
 }
 
+model StockLog {
+  id        String   @id @default(cuid())
+  variantId String
+  sku       String
+  delta     Int      // positive = restock, negative = depletion
+  reason    String   // "order" | "offline_order" | "return_restock" | "csv_import" | "manual_edit"
+  note      String?  // orderId, returnId, "CSV batch", etc.
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([variantId])
+  @@index([createdAt])
+}
+
 model LoyaltyTransaction {
   id        String         @id @default(cuid())
   accountId String

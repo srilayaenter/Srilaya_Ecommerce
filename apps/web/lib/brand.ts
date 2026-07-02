@@ -8,12 +8,12 @@ export const BRAND = {
   phone: "+91 86603 21315",
 
   colors: {
-    primary: "#4F46E5",
-    primaryDark: "#4338CA",
-    accent: "#06890f",
-    text: "#1F2937",
-    bg: "#F9FAFB",
-    muted: "#6B7280",
+    primary: "#006A38",
+    primaryDark: "#00522B",
+    accent: "#8D6E63",
+    text: "#212121",
+    bg: "#F5F5F5",
+    muted: "#9E9E9E",
   },
 
   social: {

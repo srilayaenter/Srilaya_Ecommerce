@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import { sendEmail } from "@/lib/email";
+import { logStockChanges } from "@/lib/stockLog";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -29,17 +30,44 @@ export async function PATCH(request: Request) {
   const updated = await prisma.return.update({
     where: { id: returnId },
     data: { status, adminNote: adminNote ?? undefined },
-    include: { order: true, items: true },
+    include: { order: true, items: { include: { return: false } } },
   });
+
+  // Restock inventory when return is marked as received
+  if (status === "received") {
+    const variantIds = updated.items.map(i => i.variantId);
+    const variants = await prisma.productVariant.findMany({
+      where: { id: { in: variantIds } },
+      select: { id: true, sku: true },
+    });
+    const variantMap = Object.fromEntries(variants.map(v => [v.id, v]));
+
+    await Promise.all(updated.items.map(item =>
+      prisma.productVariant.update({
+        where: { id: item.variantId },
+        data:  { stock: { increment: item.quantity } },
+      })
+    ));
+
+    logStockChanges(updated.items.map(item => ({
+      variantId: item.variantId,
+      sku:       variantMap[item.variantId]?.sku ?? item.variantId,
+      delta:     item.quantity,
+      reason:    "return_restock" as const,
+      note:      returnId,
+    }))).catch(() => {});
+  }
 
   // Notify customer
   const email = updated.order.email;
   if (email) {
-    const label = status === "approved" ? "✅ Approved" : status === "rejected" ? "❌ Rejected" : "💰 Refunded";
+    const label = status === "approved" ? "✅ Approved" : status === "rejected" ? "❌ Rejected" : status === "received" ? "📦 Received" : "💰 Refunded";
     const msg = status === "approved"
       ? "Your return has been approved. We will arrange pickup or provide refund instructions shortly."
       : status === "rejected"
       ? `Your return request was not approved. ${adminNote ? `Reason: ${adminNote}` : ""}`
+      : status === "received"
+      ? "We have received your returned items. Your refund will be processed shortly."
       : "Your refund has been processed. Please allow 5–7 business days for it to reflect.";
 
     sendEmail({

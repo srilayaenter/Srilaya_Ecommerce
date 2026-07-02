@@ -20,6 +20,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     { name: "Manage Orders",      href: "/admin/orders",        icon: "📦", roles: ['admin','manager','billing_staff'] },
     { name: "Inventory Matrix",   href: "/admin/products",      icon: "🌾", roles: ['admin','manager','inventory_staff'] },
     { name: "Bulk Stock Import",  href: "/admin/inventory-import", icon: "📥", roles: ['admin','manager','inventory_staff'] },
+    { name: "Stock Log",          href: "/admin/stock-log",        icon: "📋", roles: ['admin','manager','inventory_staff'] },
     { name: "Categories",         href: "/admin/categories",    icon: "🗂️", roles: ['admin','manager','inventory_staff'] },
     { name: "Suppliers",          href: "/admin/suppliers",     icon: "🚚", roles: ['admin','manager','inventory_staff'] },
     { name: "Users & Roles",      href: "/admin/users",         icon: "👥", roles: ['admin','manager'] },

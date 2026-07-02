@@ -7,7 +7,7 @@ import { loginAsUser } from "./helpers/auth";
 
 test("PROD-01 product listing page loads with items", async ({ page }) => {
   await page.goto("/product");
-  await expect(page.locator("a[href^='/product/']")).toHaveCount({ min: 1 } as any);
+  expect(await page.locator("a[href^='/product/']").count()).toBeGreaterThan(0);
   // No ?? corruption
   await expect(page.getByText("??")).not.toBeVisible();
 });
@@ -26,7 +26,7 @@ test("PROD-02 product detail page loads correctly", async ({ page }) => {
   // Key elements present
   await expect(page.locator("h1")).toBeVisible();
   await expect(page.getByRole("button", { name: /add to cart/i })).toBeVisible();
-  await expect(page.getByText(/₹/)).toBeVisible();
+  await expect(page.getByText(/₹/).first()).toBeVisible();
 });
 
 test("PROD-03 variant selection updates price", async ({ page }) => {
@@ -106,7 +106,7 @@ test("PROD-07 search returns relevant results", async ({ page }) => {
 
 test("PROD-08 search no results shows empty state", async ({ page }) => {
   await page.goto("/search?q=xyz123nonexistentproduct");
-  await expect(page.getByText(/no.*result|no.*product|not.*found/i)).toBeVisible();
+  await expect(page.getByText(/no.*result|no.*product|not.*found/i).first()).toBeVisible();
 });
 
 test("PROD-10 submit product review (logged in)", async ({ page }) => {
@@ -121,7 +121,7 @@ test("PROD-10 submit product review (logged in)", async ({ page }) => {
     const stars = page.locator("[class*=star], [aria-label*=star]");
     if (await stars.count() >= 4) await stars.nth(3).click();
 
-    await page.getByLabel(/review|comment/i).fill("Great product, healthy and tasty!");
+    await page.getByLabel(/review|comment/i).or(page.getByPlaceholder(/review|comment|your thoughts/i)).first().fill("Great product, healthy and tasty!");
     await page.getByRole("button", { name: /submit.*review|post/i }).click();
     await expect(page.getByText(/thank|pending|submitted|review received/i)).toBeVisible();
   } else {

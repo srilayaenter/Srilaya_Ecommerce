@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { logStockChanges } from "@/lib/stockLog";
 
 // POST — accepts CSV text body
 // Expected columns (header row required):
@@ -70,6 +71,16 @@ export async function POST(request: Request) {
     if (variant.stock === 0 && row.stock > 0) stockNotifyIds.push(variant.id);
     updated++;
   }
+
+  // Log stock changes from CSV import
+  const logEntries = rows
+    .filter(r => variantMap[r.sku])
+    .map(r => {
+      const v = variantMap[r.sku];
+      return { variantId: v.id, sku: r.sku, delta: r.stock - v.stock, reason: "csv_import" as const, note: "CSV batch" };
+    })
+    .filter(e => e.delta !== 0);
+  logStockChanges(logEntries).catch(() => {});
 
   // Fire stock notifications asynchronously
   if (stockNotifyIds.length > 0) {

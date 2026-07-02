@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
+import { logStockChanges } from "@/lib/stockLog";
 
 export async function createOfflineOrder(formData: FormData): Promise<void> {
   const customerName  = formData.get('customerName') as string;
@@ -101,6 +102,18 @@ export async function createOfflineOrder(formData: FormData): Promise<void> {
     }
     throw err;
   }
+
+  // Log stock deductions
+  logStockChanges(items.map(item => {
+    const v = variants.find(v => v.id === item.variantId)!;
+    return {
+      variantId: item.variantId,
+      sku:       v.sku,
+      delta:     -item.quantity,
+      reason:    "offline_order" as const,
+      note:      orderId,
+    };
+  })).catch(() => {});
 
   redirect(`/admin/orders/${orderId}/invoice`);
 }

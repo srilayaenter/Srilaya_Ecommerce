@@ -16,6 +16,7 @@ const STATUS_STYLES: Record<string, string> = {
   requested: "bg-amber-50 text-amber-700",
   approved:  "bg-blue-50 text-blue-700",
   rejected:  "bg-red-50 text-red-700",
+  received:  "bg-purple-50 text-purple-700",
   refunded:  "bg-green-50 text-green-700",
 };
 
@@ -57,7 +58,7 @@ export default function ReturnsAdminPage() {
 
       {/* Filter tabs */}
       <div className="flex gap-2 flex-wrap">
-        {["requested", "approved", "rejected", "refunded", "all"].map(s => (
+        {["requested", "approved", "received", "rejected", "refunded", "all"].map(s => (
           <button key={s} onClick={() => setFilter(s)}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg border transition-colors capitalize ${
               filter === s ? "bg-[#006A38] text-white border-[#006A38]" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
@@ -129,9 +130,22 @@ export default function ReturnsAdminPage() {
               )}
 
               {r.status === "approved" && (
+                <div className="border-t border-[#F5F5F5] pt-4 flex gap-2">
+                  <button onClick={() => updateStatus(r.id, "received")} disabled={saving === r.id}
+                    className="bg-purple-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-colors disabled:opacity-60">
+                    📦 Mark Received & Restock
+                  </button>
+                  <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
+                    className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
+                    💰 Mark as Refunded
+                  </button>
+                </div>
+              )}
+
+              {r.status === "received" && (
                 <div className="border-t border-[#F5F5F5] pt-4">
                   <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
-                    className="bg-blue-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors disabled:opacity-60">
+                    className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                     💰 Mark as Refunded
                   </button>
                 </div>

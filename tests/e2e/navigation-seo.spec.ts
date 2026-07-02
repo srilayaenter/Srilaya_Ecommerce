@@ -39,13 +39,9 @@ test("NAV-03 mobile drawer closes on backdrop click", async ({ page }) => {
     await menuBtn.click();
     await page.waitForTimeout(300);
 
-    // Click backdrop or close button
-    const closeBtn = page.getByRole("button", { name: /close/i })
-      .or(page.locator("[class*=backdrop],[class*=overlay]")).first();
-    if (await closeBtn.count() > 0) {
-      await closeBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Click at left edge of screen (outside the right-side drawer) to close
+    await page.mouse.click(20, 400);
+    await page.waitForTimeout(300);
     // Page should still be functional
     await expect(page.locator("h1, h2").first()).toBeVisible();
   }
@@ -114,7 +110,7 @@ test("SEO-02 sitemap.xml returns valid XML", async ({ page }) => {
 test("SEO-03 robots.txt is accessible", async ({ page }) => {
   const response = await page.goto("/robots.txt");
   expect(response?.status()).toBe(200);
-  const text = await page.locator("body, pre").textContent();
+  const text = await page.locator("body, pre").first().textContent();
   expect(text).toMatch(/user-agent/i);
 });
 

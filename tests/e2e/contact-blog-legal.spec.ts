@@ -32,8 +32,8 @@ test("CNT-02 contact form requires all fields", async ({ page }) => {
 test("CNT-03 contact page shows correct brand details", async ({ page }) => {
   await page.goto("/contact");
   // Phone and email should be from BRAND constants
-  await expect(page.getByText(/86603 21315/)).toBeVisible();
-  await expect(page.getByText(/info@srilaya.com/)).toBeVisible();
+  await expect(page.getByText(/86603 21315/).first()).toBeVisible();
+  await expect(page.getByText(/info@srilaya.com/).first()).toBeVisible();
 });
 
 // ─── Blog ─────────────────────────────────────────────────────────────────────
@@ -78,13 +78,13 @@ test("LGL-01 privacy policy page loads without corruption", async ({ page }) => 
   // No ?? corruption
   await expect(page.getByText("??")).not.toBeVisible();
   // Brand name correct
-  await expect(page.getByText("SriLaYa Naturals")).toBeVisible();
+  await expect(page.getByText("SriLaYa Naturals").first()).toBeVisible();
 });
 
 test("LGL-02 terms of service page loads", async ({ page }) => {
   await page.goto("/terms");
   await expect(page.locator("h1").first()).toBeVisible();
-  await expect(page.getByText(/Bengaluru|jurisdiction/i)).toBeVisible();
+  await expect(page.getByText(/Bengaluru|jurisdiction/i).first()).toBeVisible();
   await expect(page.getByText("??")).not.toBeVisible();
 });
 
@@ -92,14 +92,14 @@ test("LGL-03 shipping policy page loads with table", async ({ page }) => {
   await page.goto("/shipping-policy");
   await expect(page.locator("h1").first()).toBeVisible();
   // Delivery table or zones section
-  await expect(page.getByText(/₹499|free.*shipping|shipping.*free/i)).toBeVisible();
+  await expect(page.getByText(/₹499|free.*shipping|shipping.*free/i).first()).toBeVisible();
   await expect(page.getByText("??")).not.toBeVisible();
 });
 
 test("LGL-04 returns policy page shows 7-day window", async ({ page }) => {
   await page.goto("/returns-policy");
   await expect(page.locator("h1").first()).toBeVisible();
-  await expect(page.getByText(/7.day|7 day/i)).toBeVisible();
+  await expect(page.getByText(/7.day|7 day/i).first()).toBeVisible();
   await expect(page.getByText("??")).not.toBeVisible();
 });
 

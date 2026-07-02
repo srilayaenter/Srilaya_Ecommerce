@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import StyledSelect from "@/components/StyledSelect";
 import ImageManager from "./ImageManager";
+import { logStockChange } from "@/lib/stockLog";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -34,7 +35,7 @@ async function updateVariant(formData: FormData) {
   const productId = formData.get('productId') as string;
   const newStock  = parseInt(formData.get('stock') as string, 10);
 
-  const before = await prisma.productVariant.findUnique({ where: { id: variantId }, select: { stock: true } });
+  const before = await prisma.productVariant.findUnique({ where: { id: variantId }, select: { stock: true, sku: true } });
 
   await prisma.productVariant.update({
     where: { id: variantId },
@@ -47,6 +48,17 @@ async function updateVariant(formData: FormData) {
       imageUrl:         (formData.get('imageUrl') as string)?.trim() || null,
     }
   });
+
+  // Log stock change if stock value was modified
+  if (before && before.stock !== newStock) {
+    logStockChange({
+      variantId,
+      sku:    before.sku,
+      delta:  newStock - before.stock,
+      reason: "manual_edit",
+      note:   `admin edit`,
+    }).catch(() => {});
+  }
 
   // If stock went from 0 to >0, fire stock notifications
   if (before && before.stock === 0 && newStock > 0) {
