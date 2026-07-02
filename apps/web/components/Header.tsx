@@ -3,7 +3,7 @@ import HeaderClient from "./HeaderClient";
 
 export default async function Header() {
   const dbCategories = await prisma.category.findMany({
-    where:   { parentId: null, products: { some: { active: true } } },
+    where:   { parentId: null, products: { some: {} } },
     orderBy: { name: "asc" },
     select:  { name: true, slug: true },
   });

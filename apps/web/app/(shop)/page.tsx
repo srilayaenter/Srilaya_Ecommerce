@@ -147,7 +147,7 @@ export default async function HomePage() {
       orderBy: { reviews: "desc" },
     }),
     prisma.category.findMany({
-      where: { parentId: null },   // top-level only
+      where: { parentId: null, products: { some: {} } },
       orderBy: { name: "asc" },
       select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
     }),
