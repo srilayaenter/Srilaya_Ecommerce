@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isOwner } from "@/lib/permissions";
 
 export default async function AnalyticsPage() {
+  const session = await getServerSession(authOptions);
+  const showMargin = isOwner(session?.user?.role ?? '');
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
   const [
@@ -111,8 +116,8 @@ export default async function AnalyticsPage() {
           { label: "Revenue (30d)",   value: `₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: "💰" },
           { label: "Paid Orders",     value: (statusMap["paid"] ?? 0).toString(),         icon: "✅" },
           { label: "COD Pending",     value: (statusMap["cod_pending"] ?? 0).toString(),  icon: "🛵" },
-          { label: "Gross Margin",    value: grossMargin !== null ? `${grossMargin.toFixed(1)}%` : "—",                 icon: "📈",
-            sub: grossMargin === null ? "Add cost prices to variants" : undefined },
+          ...(showMargin ? [{ label: "Gross Margin", value: grossMargin !== null ? `${grossMargin.toFixed(1)}%` : "—", icon: "📈",
+            sub: grossMargin === null ? "Add cost prices to variants" : undefined }] : []),
         ].map(m => (
           <div key={m.label} className="bg-white rounded-xl border border-[#E0E0E0] p-5 shadow-sm">
             <p className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">{m.label}</p>
