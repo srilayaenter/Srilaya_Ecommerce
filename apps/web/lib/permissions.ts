@@ -1,6 +1,7 @@
-export type AppRole = 'admin' | 'manager' | 'inventory_staff' | 'billing_staff' | 'customer';
+export type AppRole = 'owner' | 'admin' | 'manager' | 'inventory_staff' | 'billing_staff' | 'customer';
 
 export const ROLE_LABELS: Record<AppRole, string> = {
+  owner:           'Business Owner',
   admin:           'System Admin',
   manager:         'Store Manager',
   inventory_staff: 'Inventory Staff',
@@ -13,6 +14,7 @@ export const ROLE_LABELS: Record<AppRole, string> = {
  * A role with ['/admin'] can access everything under /admin.
  */
 export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
+  owner:           ['/admin'],
   admin:           ['/admin'],
   manager:         ['/admin'],
   inventory_staff: ['/admin/products', '/admin/categories', '/admin/suppliers'],
@@ -27,5 +29,9 @@ export function canAccessPath(role: string, path: string): boolean {
 }
 
 export function isAdminRole(role: string): boolean {
-  return ['admin', 'manager', 'inventory_staff', 'billing_staff'].includes(role);
+  return ['owner', 'admin', 'manager', 'inventory_staff', 'billing_staff'].includes(role);
+}
+
+export function isOwner(role: string): boolean {
+  return role === 'owner';
 }
