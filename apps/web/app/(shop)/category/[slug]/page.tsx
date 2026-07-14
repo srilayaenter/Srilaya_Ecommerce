@@ -36,13 +36,13 @@ export default async function CategoryPage({ params }: PageProps) {
         include: {
           products: {
             where: { active: true },
-            include: { variants: { orderBy: { price: "asc" } } },
+            include: { variants: { where: { active: true }, orderBy: { price: "asc" } } },
           },
         },
       },
       products: {
         where: { active: true },
-        include: { variants: { orderBy: { price: "asc" } } },
+        include: { variants: { where: { active: true }, orderBy: { price: "asc" } } },
       },
     },
   });

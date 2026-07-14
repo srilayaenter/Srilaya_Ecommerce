@@ -52,18 +52,25 @@ export default async function InventoryMatrixPage() {
                   {product.category?.name || "—"}
                 </td>
                 <td className="px-6 py-4">
-                  {product.variants.map((v) => (
-                    <div key={v.id} className="flex items-center gap-4 text-xs py-1">
-                      <span className="font-mono text-[#8D6E63] w-12">{v.size}</span>
-                      <span className="font-bold text-[#006A38] w-16">₹{toNum(v.price).toFixed(2)}</span>
-                      <span className={`px-2 py-0.5 rounded border ${v.stock <= ((v as any).reorderThreshold ?? 10) ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'}`}>
-                        {v.stock} in stock
-                      </span>
-                      {v.stock <= ((v as any).reorderThreshold ?? 10) && (
-                        <span className="text-[10px] text-red-500 font-semibold">↓ reorder</span>
-                      )}
-                    </div>
-                  ))}
+                  {product.variants.map((v) => {
+                    const inactive = (v as any).active === false;
+                    return (
+                      <div key={v.id} className={`flex items-center gap-4 text-xs py-1 ${inactive ? 'opacity-40' : ''}`}>
+                        <span className="font-mono text-[#8D6E63] w-12">{v.size}</span>
+                        <span className="font-bold text-[#006A38] w-16">₹{toNum(v.price).toFixed(2)}</span>
+                        {inactive ? (
+                          <span className="px-2 py-0.5 rounded border bg-gray-100 text-gray-400 border-gray-200 line-through">inactive</span>
+                        ) : (
+                          <span className={`px-2 py-0.5 rounded border ${v.stock <= ((v as any).reorderThreshold ?? 10) ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'}`}>
+                            {v.stock} in stock
+                          </span>
+                        )}
+                        {!inactive && v.stock <= ((v as any).reorderThreshold ?? 10) && (
+                          <span className="text-[10px] text-red-500 font-semibold">↓ reorder</span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <Link 

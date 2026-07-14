@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
 import Image from "next/image";
 import { toNum } from "@/lib/decimal";
 import type { Metadata } from "next";
@@ -15,7 +17,7 @@ export default async function AllProductsPage() {
     where: { active: true },
     include: {
       category: true,
-      variants: { orderBy: { price: "asc" } },
+      variants: { where: { active: true }, orderBy: { price: "asc" } },
     },
     orderBy: { title: "asc" },
   });

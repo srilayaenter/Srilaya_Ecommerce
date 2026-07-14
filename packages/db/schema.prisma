@@ -112,6 +112,7 @@ model ProductVariant {
   weightGrams      Int          @default(500)
   sku              String       @unique
   imageUrl         String?
+  active           Boolean      @default(true)
   cartItems          CartItem[]
   orderItems         OrderItem[]
   bundleItems        BundleItem[]

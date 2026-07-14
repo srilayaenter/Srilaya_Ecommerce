@@ -23,7 +23,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         },
         include: {
           category: true,
-          variants: { orderBy: { price: "asc" } },
+          variants: { where: { active: true }, orderBy: { price: "asc" } },
         },
         orderBy: { createdAt: "desc" },
       })

@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import StyledSelect from "@/components/StyledSelect";
 import ImageManager from "./ImageManager";
+import DeleteVariantButton from "./DeleteVariantButton";
 import { logStockChange } from "@/lib/stockLog";
 
 interface PageProps {
@@ -97,6 +98,35 @@ async function addVariant(formData: FormData) {
   redirect(`/admin/products/${productId}?saved=true&variant=added`);
 }
 
+async function deleteVariant(formData: FormData) {
+  'use server';
+  const variantId = formData.get('variantId') as string;
+  const productId = formData.get('productId') as string;
+
+  const count = await prisma.productVariant.count({ where: { productId } });
+  if (count <= 1) redirect(`/admin/products/${productId}?saved=true&variant=last`);
+
+  // Block if variant is part of any placed order (preserves order history)
+  const orderedCount = await prisma.orderItem.count({ where: { variantId } });
+  if (orderedCount > 0) redirect(`/admin/products/${productId}?saved=true&variant=inorder`);
+
+  // Remove ephemeral cart references first, then delete
+  await prisma.cartItem.deleteMany({ where: { variantId } });
+  await prisma.bundleItem.deleteMany({ where: { variantId } });
+  await prisma.stockLog.deleteMany({ where: { variantId } });
+  await prisma.productVariant.delete({ where: { id: variantId } });
+  redirect(`/admin/products/${productId}?saved=true&variant=deleted`);
+}
+
+async function toggleVariantActive(formData: FormData) {
+  'use server';
+  const variantId = formData.get('variantId') as string;
+  const productId = formData.get('productId') as string;
+  const current   = formData.get('active') === 'true';
+  await prisma.productVariant.update({ where: { id: variantId }, data: { active: !current } });
+  redirect(`/admin/products/${productId}?saved=true&variant=${current ? 'deactivated' : 'activated'}`);
+}
+
 export default async function EditProductPage({ params, searchParams }: PageProps) {
   const { id } = await params;
   const { saved, variant } = await searchParams;
@@ -117,11 +147,32 @@ export default async function EditProductPage({ params, searchParams }: PageProp
 
   return (
     <div className="container mx-auto px-6 py-8">
-      {saved === 'true' && (
+      {saved === 'true' && variant !== 'last' && (
         <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
           {variant === 'true' && '✓ Variant updated successfully.'}
           {variant === 'added' && '✓ New variant added successfully.'}
+          {variant === 'deleted' && '✓ Variant deleted successfully.'}
           {!variant && '✓ Changes saved successfully.'}
+        </div>
+      )}
+      {saved === 'true' && variant === 'last' && (
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+          ⚠ Cannot delete — a product must have at least one variant.
+        </div>
+      )}
+      {saved === 'true' && variant === 'inorder' && (
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+          ⚠ Cannot delete — this variant has been ordered by customers. Use &quot;Deactivate&quot; to hide it from the store instead.
+        </div>
+      )}
+      {saved === 'true' && variant === 'deactivated' && (
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+          ✓ Variant deactivated — hidden from the store. You can reactivate it anytime.
+        </div>
+      )}
+      {saved === 'true' && variant === 'activated' && (
+        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+          ✓ Variant reactivated — now visible on the store.
         </div>
       )}
 
@@ -200,8 +251,30 @@ export default async function EditProductPage({ params, searchParams }: PageProp
                 <input type="number" name="weightGrams"      defaultValue={(variant as any).weightGrams ?? 500} placeholder="e.g. 550" className="border rounded px-2 py-1 text-sm" />
                 <input type="number" name="reorderThreshold" defaultValue={(variant as any).reorderThreshold ?? 10} placeholder="10" className="border rounded px-2 py-1 text-sm" title="Alert when stock falls to this level" />
                 <input name="imageUrl" defaultValue={(variant as any).imageUrl ?? ""} placeholder="Variant image URL (optional)" className="border rounded px-2 py-1 text-sm col-span-full" title="Image shown when this variant is selected on the product page" />
-                <button type="submit" className="bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs font-bold transition-colors">Update</button>
+                <div className="flex gap-1">
+                  <button type="submit" className="bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs font-bold transition-colors">Update</button>
+                </div>
               </form>
+              <div className="flex items-center justify-between mt-1">
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${(variant as any).active !== false ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+                  {(variant as any).active !== false ? 'Active' : 'Inactive'}
+                </span>
+                <div className="flex gap-3">
+                  <form action={toggleVariantActive}>
+                    <input type="hidden" name="variantId" value={variant.id} />
+                    <input type="hidden" name="productId" value={product.id} />
+                    <input type="hidden" name="active" value={String((variant as any).active !== false)} />
+                    <button type="submit" className={`text-xs underline ${(variant as any).active !== false ? 'text-amber-600 hover:text-amber-800' : 'text-green-600 hover:text-green-800'}`}>
+                      {(variant as any).active !== false ? 'Deactivate' : 'Reactivate'}
+                    </button>
+                  </form>
+                  <DeleteVariantButton
+                    variantId={variant.id}
+                    productId={product.id}
+                    action={deleteVariant}
+                  />
+                </div>
+              </div>
             </div>
           ))}
           

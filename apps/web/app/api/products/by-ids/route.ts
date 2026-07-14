@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     where: { id: { in: ids }, active: true },
     include: {
       category: true,
-      variants: { orderBy: { price: "asc" } },
+      variants: { where: { active: true }, orderBy: { price: "asc" } },
     },
   });
 

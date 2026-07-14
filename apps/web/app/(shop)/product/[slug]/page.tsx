@@ -1,5 +1,7 @@
 ﻿import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+
+export const dynamic = 'force-dynamic';
 import ReviewsSection from "@/components/ReviewsSection";
 import ProductGallery from "@/components/ProductGallery";
 import RecentlyViewed from "@/components/RecentlyViewed";
@@ -38,7 +40,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
   const product = await prisma.product.findUnique({
     where: { slug },
     include: {
-      variants: { orderBy: { price: "asc" } },
+      variants: { where: { active: true }, orderBy: { price: "asc" } },
       images: { orderBy: { position: "asc" } },
       productReviews: {
         where: { approved: true },

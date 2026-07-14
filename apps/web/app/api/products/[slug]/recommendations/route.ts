@@ -51,7 +51,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     where: { id: { in: topIds }, active: true },
     select: {
       id: true, slug: true, title: true, image: true,
-      variants: { select: { price: true }, orderBy: { price: "asc" }, take: 1 },
+      variants: { where: { active: true }, select: { price: true }, orderBy: { price: "asc" }, take: 1 },
     },
   });
 

@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     },
     include: {
       category: true,
-      variants: { orderBy: { price: "asc" } },
+      variants: { where: { active: true }, orderBy: { price: "asc" } },
     },
     take: 50,
   });

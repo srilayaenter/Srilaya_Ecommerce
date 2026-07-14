@@ -5,8 +5,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   // ── Admin user ────────────────────────────────────────────
-  const email = 'admin@srilayafoods.com';
-  const plainPassword = 'admin123';
+  // Override via env: SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD
+  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@srilayafoods.com';
+  const plainPassword = process.env.SEED_ADMIN_PASSWORD ?? 'ChangeMe123!';
+  if (plainPassword === 'ChangeMe123!') {
+    console.warn('⚠  Using default admin password — set SEED_ADMIN_PASSWORD before running in production!');
+  }
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
   await prisma.user.upsert({
@@ -14,7 +18,7 @@ async function main() {
     update: { password: hashedPassword, role: 'admin' },
     create: { email, password: hashedPassword, role: 'admin' },
   });
-  console.log('Admin user updated.');
+  console.log(`✅ Admin user ready — email: ${email}`);
 
   // ── Categories ────────────────────────────────────────────
   const categoryData = [

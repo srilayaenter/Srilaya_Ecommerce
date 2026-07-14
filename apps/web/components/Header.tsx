@@ -1,7 +1,9 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { prisma } from "@/lib/db";
 import HeaderClient from "./HeaderClient";
 
 export default async function Header() {
+  noStore();
   const dbCategories = await prisma.category.findMany({
     where:   { parentId: null, products: { some: {} } },
     orderBy: { name: "asc" },

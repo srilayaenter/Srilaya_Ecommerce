@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 const productQuery = {
-  include: { variants: { orderBy: { price: "asc" as const } } },
+  include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
 } satisfies Prisma.ProductFindManyArgs;
 
 type ProductWithVariants = Prisma.ProductGetPayload<typeof productQuery>;
