@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
-import { logStockChanges } from "@/lib/stockLog";
+import { logStockChanges, type StockLogEntry } from "@/lib/stockLog";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -37,7 +37,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     });
     if (!po) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    const stockLogEntries: { variantId: string; sku: string; delta: number; reason: "csv_import"; note: string }[] = [];
+    const stockLogEntries: StockLogEntry[] = [];
 
     for (const rec of (receivedItems as { poItemId: string; quantityReceived: number }[])) {
       const poItem = po.items.find(i => i.id === rec.poItemId);

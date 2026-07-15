@@ -1,8 +1,8 @@
 import { prisma } from "./db";
 
-type Reason = "order" | "offline_order" | "return_restock" | "csv_import" | "manual_edit" | "po_receive";
+export type Reason = "order" | "offline_order" | "return_restock" | "csv_import" | "manual_edit" | "po_receive";
 
-interface StockLogEntry {
+export interface StockLogEntry {
   variantId: string;
   sku: string;
   delta: number;

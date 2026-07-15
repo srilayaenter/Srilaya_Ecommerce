@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { generateSecret, generateURI } from "otplib";
 import { TOTP as TOTPClass } from "otplib";
 import QRCode from "qrcode";
-import { encryptTotpSecret, decryptTotpSecret } from "@/app/api/auth/mfa-verify/route";
+import { encryptTotpSecret, decryptTotpSecret } from "@/lib/totp";
 
 const totp = new TOTPClass();
 
