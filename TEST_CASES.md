@@ -1,5 +1,6 @@
 # SriLaYa Naturals — Test Cases
-**Project:** srilaya-ecommerce | **Total Modules:** 20 | **Total TCs:** 150+
+**Project:** srilaya-ecommerce | **Total Modules:** 27 | **Total TCs:** 220+
+**Last updated:** 15 Jul 2026 | **Automation:** 169/175 Playwright tests passing
 
 Format: `TC-[Module]-[Number] | Priority: P1/P2/P3 | Type: Manual/Automated`
 - **P1** — Must pass before go-live
@@ -850,3 +851,257 @@ Format: `TC-[Module]-[Number] | Priority: P1/P2/P3 | Type: Manual/Automated`
 - **Email in dev mode:** Set `RESEND_API_KEY` in `.env` to receive real emails; without it emails are silently skipped
 - **Admin test account:** Must be seeded manually in DB with `role: "admin"`
 - **Mobile testing:** Use Chrome DevTools (Ctrl+Shift+M) for quick checks; use real device at `http://[local-ip]:3000` for accurate touch testing
+
+---
+
+## MODULE 21 â€” RAW MATERIALS
+
+### TC-RM-01 | P1 | Automated
+**Raw Materials Page â€” Owner Access**
+- Steps: Login as owner â†’ go to `/admin/raw-materials`
+- Expected: Page loads with materials table, Add Material form, Import / Recipes / Production buttons
+
+### TC-RM-02 | P1 | Automated
+**Raw Materials Page â€” Non-Owner Blocked**
+- Steps: Login as admin (non-owner) â†’ go to `/admin/raw-materials`
+- Expected: 404 page; access denied
+
+### TC-RM-03 | P1 | Automated
+**Add New Raw Material**
+- Steps: Fill Name, Unit, Cost/Unit, Reorder Threshold â†’ Submit
+- Expected: Material appears in list with correct values
+
+### TC-RM-04 | P1 | Automated
+**Material Name is Clickable Link**
+- Steps: Click material name in list
+- Expected: Navigates to `/admin/raw-materials/[id]`
+
+### TC-RM-05 | P1 | Automated
+**Add Stock (Inline Form)**
+- Steps: On list page, fill qty in add-stock inline form â†’ Submit
+- Expected: Stock quantity increments; log entry created
+
+### TC-RM-06 | P1 | Automated
+**Detail Page â€” KPI Cards**
+- Steps: Open raw material detail page
+- Expected: Cards showing Current Stock, Reorder Threshold, Cost/Unit, Total Value visible
+
+### TC-RM-07 | P1 | Automated
+**Detail Page â€” Edit Form Saves**
+- Steps: Edit name/unit/cost â†’ Save
+- Expected: Changes persisted; stock history table updated
+
+### TC-RM-08 | P1 | Automated
+**Stock Adjustment â€” Logs Entry**
+- Steps: Submit an adjustment with reason
+- Expected: Log entry with type "adjustment" appears in history
+
+### TC-RM-09 | P1 | Automated
+**Delete Raw Material**
+- Steps: Click Delete on a material â†’ confirm
+- Expected: Material removed from list
+
+### TC-RM-10 | P1 | Manual
+**Low-Stock Dashboard Alert**
+- Steps: Set a material stock below its reorder threshold â†’ go to `/admin`
+- Expected: Red KPI card "Raw Material Alerts" with count; warning banner listing the material
+
+---
+
+## MODULE 22 â€” RECIPES
+
+### TC-RCP-01 | P1 | Automated
+**Recipes Page â€” Owner Access**
+- Steps: Login as owner â†’ go to `/admin/recipes`
+- Expected: Page loads showing product variants with ingredient lists
+
+### TC-RCP-02 | P1 | Automated
+**Recipes Page â€” Non-Owner Blocked**
+- Steps: Login as admin â†’ go to `/admin/recipes`
+- Expected: 404
+
+### TC-RCP-03 | P1 | Automated
+**Add Ingredient to Variant**
+- Steps: Select raw material + qty per unit â†’ Add
+- Expected: Ingredient appears in recipe for that variant
+
+### TC-RCP-04 | P2 | Manual
+**Recipe Deduction Preview**
+- Steps: On production form, change units produced
+- Expected: Ingredient deduction quantities update proportionally
+
+---
+
+## MODULE 23 â€” PRODUCTION
+
+### TC-PRD-01 | P1 | Automated
+**Production Page â€” Owner Access**
+- Steps: Login as owner â†’ go to `/admin/production`
+- Expected: Page loads with recent batches table and log form
+
+### TC-PRD-02 | P1 | Automated
+**Production Page â€” Non-Owner Blocked**
+- Steps: Login as admin â†’ go to `/admin/production`
+- Expected: 404
+
+### TC-PRD-03 | P1 | Automated
+**Recent Batches Table**
+- Steps: Open production page
+- Expected: Table shows date, product, units, raw materials deducted
+
+### TC-PRD-04 | P1 | Manual
+**Log Production Batch**
+- Steps: Select variant, enter units produced â†’ Submit
+- Expected: Finished variant stock increments; raw material stock decrements per recipe; batch appears in history
+
+### TC-PRD-05 | P2 | Manual
+**Production With Missing Recipe**
+- Steps: Log production for a variant with no recipe defined
+- Expected: Warning shown; raw material deduction skipped; variant stock still increments
+
+---
+
+## MODULE 24 â€” PURCHASE BILL IMPORT
+
+### TC-IMP-01 | P1 | Automated
+**Import Page â€” Owner Access**
+- Steps: Login as owner â†’ go to `/admin/raw-materials/import`
+- Expected: Page loads with AI upload + manual entry modes
+
+### TC-IMP-02 | P1 | Automated
+**Import Page â€” Non-Owner Blocked**
+- Steps: Login as admin â†’ go to `/admin/raw-materials/import`
+- Expected: 404
+
+### TC-IMP-03 | P1 | Automated
+**Manual Entry Mode â€” Add Row**
+- Steps: Select manual mode â†’ click "Add Another Item"
+- Expected: New item row added with raw material dropdown + qty + cost fields
+
+### TC-IMP-04 | P1 | Manual
+**Manual Entry â€” Submit Purchase Bill**
+- Steps: Fill vendor, date, line items â†’ Submit
+- Expected: Raw material stock incremented; purchase log entry created
+
+### TC-IMP-05 | P2 | Manual
+**AI Upload â€” PDF Invoice**
+- Steps: Upload a supplier invoice PDF â†’ Parse
+- Expected: Line items pre-filled from PDF text; user can review and confirm before saving
+
+---
+
+## MODULE 25 â€” P&L REPORT
+
+### TC-PL-01 | P1 | Automated
+**P&L Page â€” Owner Access**
+- Steps: Login as owner â†’ go to `/admin/reports/pl`
+- Expected: Page loads with summary cards and revenue breakdown
+
+### TC-PL-02 | P1 | Automated
+**P&L Page â€” Non-Owner Blocked**
+- Steps: Login as admin â†’ go to `/admin/reports/pl`
+- Expected: 404
+
+### TC-PL-03 | P1 | Automated
+**Summary Cards Present**
+- Steps: Open P&L for current month
+- Expected: Cards for Gross Revenue, Variant COGS, Production Material Cost, Returns, Net Profit visible
+
+### TC-PL-04 | P1 | Automated
+**Month Navigation**
+- Steps: Click Prev and Next links
+- Expected: URL updates; figures change accordingly
+
+### TC-PL-05 | P1 | Automated
+**Revenue Breakdown Table**
+- Steps: Open P&L
+- Expected: Table shows each product variant with units sold, revenue, COGS, margin
+
+### TC-PL-06 | P1 | Automated
+**Production Material Cost Row**
+- Steps: Log a production batch â†’ open P&L for same month
+- Expected: "Production Material Cost" line shows deducted amount; breakdown table lists materials consumed
+
+### TC-PL-07 | P2 | Manual
+**Missing Cost Price Warning**
+- Steps: Add raw material without costPerUnit â†’ log production â†’ open P&L
+- Expected: Warning banner listing materials with missing cost
+
+### TC-PL-08 | P1 | Automated
+**Confidential Footer**
+- Steps: Open P&L report
+- Expected: Footer with "Confidential â€” SriLaYa Naturals Owner Only" visible
+
+---
+
+## MODULE 26 â€” OFFLINE (IN-STORE) ORDERS
+
+### TC-OFF-01 | P1 | Automated
+**Create Offline Order Page Loads**
+- Steps: Login as admin â†’ go to `/admin/orders/new`
+- Expected: Product picker, customer info, payment method fields visible
+
+### TC-OFF-02 | P1 | Manual
+**Create Offline Order â€” Happy Path**
+- Steps: Select product + variant + qty; fill customer name + phone; select Cash â†’ Create Order
+- Expected: Order created with orderChannel: in_store, status: paid; redirected to invoice page
+
+### TC-OFF-03 | P1 | Manual
+**Offline Order â€” Stock Decremented**
+- Steps: Note variant stock before; create offline order for 2 units
+- Expected: Variant stock reduced by 2
+
+### TC-OFF-04 | P1 | Manual
+**In-Store Invoice Page**
+- Steps: Open `/admin/orders/[id]/invoice`
+- Expected: Printable receipt with items, GST breakdown, totals, customer info, payment method
+
+### TC-OFF-05 | P2 | Manual
+**Send Invoice by Email**
+- Steps: On invoice page, enter customer email â†’ Send Email
+- Expected: Email with HTML receipt sent via Resend; success message shown
+
+### TC-OFF-06 | P2 | Manual
+**Send Invoice via WhatsApp**
+- Steps: On invoice page, click WhatsApp button
+- Expected: wa.me deep link opens with pre-filled invoice text targeting customer phone
+
+---
+
+## MODULE 27 â€” RBAC (ROLE-BASED ACCESS CONTROL)
+
+### TC-RBAC-01 | P1 | Automated
+**Owner â€” Full Access**
+- Steps: Login as owner
+- Expected: All admin pages accessible including raw materials, P&L, production, cost prices
+
+### TC-RBAC-02 | P1 | Automated
+**Admin â€” Owner Pages Blocked**
+- Steps: Login as admin (non-owner) â†’ visit `/admin/raw-materials`, `/admin/reports/pl`, `/admin/production`
+- Expected: 404 on all owner-only pages
+
+### TC-RBAC-03 | P1 | Manual
+**Inventory Staff â€” Restricted to Inventory Pages**
+- Steps: Login as inventory_staff â†’ try to access `/admin/orders`, `/admin/coupons`
+- Expected: Redirected or 403; only products, categories, suppliers accessible
+
+### TC-RBAC-04 | P1 | Manual
+**Billing Staff â€” Restricted to Orders**
+- Steps: Login as billing_staff â†’ try to access `/admin/products`
+- Expected: Redirected or 403; only orders page accessible
+
+### TC-RBAC-05 | P1 | Automated
+**Cost Price Hidden from Non-Owner**
+- Steps: Login as admin â†’ open product edit page or inventory matrix
+- Expected: Cost price column/field not visible
+
+### TC-RBAC-06 | P1 | Manual
+**Admin Users Page â€” Change Role**
+- Steps: Admin â†’ `/admin/users` â†’ change a staff member role â†’ Save
+- Expected: Role updated; that user next session reflects the new role
+
+### TC-RBAC-07 | P1 | Manual
+**Create Staff Account**
+- Steps: Admin â†’ `/admin/users` â†’ Create Staff Account â†’ fill email, name, role, password
+- Expected: Account created; staff can login at `/admin/login` with those credentials
+

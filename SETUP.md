@@ -164,10 +164,13 @@ Create admin accounts via the Admin UI: **Admin → Users → Create Staff Accou
 
 | Role | Access |
 |------|--------|
-| `admin` | Full access — all pages including settings and user management |
+| `owner` | Everything — including P&L report, raw materials, production, cost prices, profit margins |
+| `admin` | Full admin access except owner-only pages (P&L, raw materials, production) |
 | `manager` | Orders, products, categories, analytics, returns, coupons, bundles |
 | `inventory_staff` | Products, categories, suppliers only |
 | `billing_staff` | Orders only |
+
+> **Owner role:** Only one owner account is expected. The owner sees cost prices in the inventory matrix, the P&L report, raw material stock & alerts, and the production batch log. These are hidden from all other roles.
 
 ### MFA (Two-Factor Authentication)
 All admin users can enable TOTP-based MFA from **Admin → MFA Setup**.
