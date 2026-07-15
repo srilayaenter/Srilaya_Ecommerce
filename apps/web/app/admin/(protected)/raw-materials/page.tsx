@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { addRawMaterial, addStock, deleteRawMaterial } from "./actions";
+import { addRawMaterial, addStock } from "./actions";
 
 export const dynamic = 'force-dynamic';
 
@@ -77,8 +77,11 @@ export default async function RawMaterialsPage() {
                   const isLow = m.stockQty <= m.reorderThreshold;
                   return (
                     <tr key={m.id} className={isLow ? 'bg-red-50/50' : 'hover:bg-[#FAFAFA]'}>
-                      <td className="px-5 py-3 font-semibold text-[#212121]">
-                        {m.name}
+                      <td className="px-5 py-3">
+                        <Link href={`/admin/raw-materials/${m.id}`}
+                          className="font-semibold text-[#006A38] hover:underline">
+                          {m.name}
+                        </Link>
                         <span className="ml-2 text-[11px] text-[#9E9E9E] font-normal">({m.unit})</span>
                         {isLow && <span className="ml-2 text-[10px] text-red-600 font-bold">LOW</span>}
                       </td>
@@ -103,14 +106,10 @@ export default async function RawMaterialsPage() {
                         </form>
                       </td>
                       <td className="px-5 py-3 text-right">
-                        {m._count.recipeLines === 0 && (
-                          <form action={deleteRawMaterial} className="inline">
-                            <input type="hidden" name="id" value={m.id} />
-                            <button type="submit" className="text-[11px] text-red-400 hover:text-red-600 underline">
-                              Delete
-                            </button>
-                          </form>
-                        )}
+                        <Link href={`/admin/raw-materials/${m.id}`}
+                          className="text-[11px] text-[#9E9E9E] hover:text-[#006A38] underline">
+                          View →
+                        </Link>
                       </td>
                     </tr>
                   );
