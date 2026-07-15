@@ -40,6 +40,17 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
     },
   });
 
+  // ── Raw material production logs in the same period ──────────────────────
+  const productionLogs = await prisma.rawMaterialLog.findMany({
+    where: {
+      type:      'production',
+      createdAt: { gte: from, lt: to },
+    },
+    include: {
+      rawMaterial: { select: { name: true, unit: true, costPerUnit: true } },
+    },
+  });
+
   // ── Returns in the same period ────────────────────────────────────────────
   const returns = await prisma.return.findMany({
     where: {
@@ -81,6 +92,26 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
     }
   }
 
+  // ── Raw material production cost ─────────────────────────────────────────
+  let rawMatCost = 0;
+  let rawMatMissingCost = false;
+  const byRawMat: Record<string, { name: string; unit: string; qtyConsumed: number; cost: number; missingCost: boolean }> = {};
+
+  for (const log of productionLogs) {
+    const consumed   = Math.abs(log.qty);           // logs are negative (deduction)
+    const costPerUnit = toNum(log.rawMaterial.costPerUnit ?? null);
+    const lineCost    = costPerUnit > 0 ? consumed * costPerUnit : 0;
+    rawMatCost += lineCost;
+    if (costPerUnit <= 0) rawMatMissingCost = true;
+
+    const key = log.rawMaterial.name;
+    if (!byRawMat[key]) byRawMat[key] = { name: key, unit: log.rawMaterial.unit, qtyConsumed: 0, cost: 0, missingCost: false };
+    byRawMat[key].qtyConsumed += consumed;
+    byRawMat[key].cost        += lineCost;
+    if (costPerUnit <= 0) byRawMat[key].missingCost = true;
+  }
+  const sortedRawMat = Object.values(byRawMat).sort((a, b) => b.cost - a.cost);
+
   let returnValue = 0;
   for (const ret of returns) {
     for (const item of ret.items) {
@@ -92,7 +123,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
   }
 
   const grossProfit  = revenue - cogs;
-  const netProfit    = grossProfit - returnValue;
+  const netProfit    = grossProfit - returnValue - rawMatCost;
   const grossMargin  = revenue > 0 ? (grossProfit / revenue) * 100 : 0;
   const netMargin    = revenue > 0 ? (netProfit   / revenue) * 100 : 0;
 
@@ -141,7 +172,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         </div>
       </div>
 
-      {/* Missing cost price warning */}
+      {/* Missing variant cost price warning */}
       {missingCost > 0 && (
         <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg text-sm">
           ⚠ <strong>{missingCost} order line(s)</strong> have no cost price set on the variant — COGS and profit are understated.
@@ -149,14 +180,24 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         </div>
       )}
 
+      {/* Missing raw material cost warning */}
+      {rawMatMissingCost && (
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg text-sm">
+          ⚠ Some <strong>raw materials consumed in production</strong> have no Cost per Unit set — production material cost is understated.
+          Go to <Link href="/admin/raw-materials" className="underline font-bold">Raw Materials</Link> and set the Cost per Unit on each ingredient.
+        </div>
+      )}
+
       {/* Summary cards */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <SummaryCard label="Total Revenue"   value={fmt(revenue)}     sub={`${totalOrders} orders`}         color="green" />
-        <SummaryCard label="Cost of Goods"   value={fmt(cogs)}        sub="Ingredient + material cost"      color="slate" />
-        <SummaryCard label="Gross Profit"    value={fmt(grossProfit)} sub={`Margin ${grossMargin.toFixed(1)}%`} color={grossProfit >= 0 ? 'green' : 'red'} />
-        <SummaryCard label="Returns / Refunds" value={fmt(returnValue)} sub={`${totalReturns} return(s)`}   color="orange" />
-        <SummaryCard label="Net Profit"      value={fmt(netProfit)}   sub={`Net margin ${netMargin.toFixed(1)}%`} color={isProfitable ? 'green' : 'red'} large />
-        <SummaryCard label="Avg Order Value" value={fmt(totalOrders > 0 ? revenue / totalOrders : 0)} sub="Revenue ÷ orders" color="slate" />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <SummaryCard label="Total Revenue"        value={fmt(revenue)}      sub={`${totalOrders} orders`}                    color="green" />
+        <SummaryCard label="Variant COGS"         value={fmt(cogs)}         sub="Cost price × qty sold"                      color="slate" />
+        <SummaryCard label="Production Mat. Cost" value={fmt(rawMatCost)}   sub={`${sortedRawMat.length} material(s) used`}  color="slate" />
+        <SummaryCard label="Returns / Refunds"    value={fmt(returnValue)}  sub={`${totalReturns} return(s)`}                color="orange" />
+        <SummaryCard label="Gross Profit"         value={fmt(grossProfit)}  sub={`Margin ${grossMargin.toFixed(1)}%`}        color={grossProfit >= 0 ? 'green' : 'red'} />
+        <SummaryCard label="Net Profit"           value={fmt(netProfit)}    sub={`Net margin ${netMargin.toFixed(1)}%`}      color={isProfitable ? 'green' : 'red'} large />
+        <SummaryCard label="Avg Order Value"      value={fmt(totalOrders > 0 ? revenue / totalOrders : 0)} sub="Revenue ÷ orders" color="slate" />
+        <SummaryCard label="Total Cost"           value={fmt(cogs + rawMatCost + returnValue)} sub="COGS + production + returns" color="slate" />
       </div>
 
       {/* P&L Statement */}
@@ -166,11 +207,12 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         </div>
         <table className="w-full text-sm">
           <tbody className="divide-y divide-[#F5F5F5]">
-            <PLRow label="Gross Revenue"        value={fmt(revenue)}      note="All delivered/completed orders" />
-            <PLRow label="Cost of Goods Sold"   value={`(${fmt(cogs)})`}  note="Sum of variant cost prices × qty sold" negative />
-            <PLRow label="Gross Profit"         value={fmt(grossProfit)}  bold highlight={grossProfit >= 0 ? 'green' : 'red'} />
-            <PLRow label="Returns & Refunds"    value={`(${fmt(returnValue)})`} note={`${totalReturns} approved return(s)`} negative />
-            <PLRow label="Net Profit / (Loss)"  value={fmt(netProfit)}    bold large highlight={isProfitable ? 'green' : 'red'} />
+            <PLRow label="Gross Revenue"             value={fmt(revenue)}          note="All delivered/completed orders" />
+            <PLRow label="Cost of Goods Sold"        value={`(${fmt(cogs)})`}      note="Variant cost price × qty sold" negative />
+            <PLRow label="Gross Profit"              value={fmt(grossProfit)}      bold highlight={grossProfit >= 0 ? 'green' : 'red'} />
+            <PLRow label="Production Material Cost"  value={`(${fmt(rawMatCost)})`} note={`${sortedRawMat.length} raw material(s) consumed in production`} negative />
+            <PLRow label="Returns & Refunds"         value={`(${fmt(returnValue)})`} note={`${totalReturns} approved return(s)`} negative />
+            <PLRow label="Net Profit / (Loss)"       value={fmt(netProfit)}        bold large highlight={isProfitable ? 'green' : 'red'} />
           </tbody>
         </table>
       </div>
@@ -215,6 +257,72 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
                   </tr>
                 );
               })}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Raw material consumption breakdown */}
+      <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#F0F0F0] flex items-center justify-between">
+          <div>
+            <h2 className="font-bold text-[#212121]">Production Material Cost</h2>
+            <p className="text-xs text-[#9E9E9E] mt-0.5">Raw materials consumed during production batches logged in this period</p>
+          </div>
+          <span className="text-xs text-[#9E9E9E]">{sortedRawMat.length} materials · {fmt(rawMatCost)}</span>
+        </div>
+        {sortedRawMat.length === 0 ? (
+          <p className="text-sm text-[#9E9E9E] px-6 py-8 text-center">
+            No production batches logged in this period.{' '}
+            <Link href="/admin/production" className="underline text-[#006A38]">Log a production batch →</Link>
+          </p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead className="bg-[#F5F5F5] text-[11px] uppercase font-bold text-[#9E9E9E] tracking-wider">
+              <tr>
+                <th className="px-6 py-3 text-left">Raw Material</th>
+                <th className="px-6 py-3 text-right">Qty Consumed</th>
+                <th className="px-6 py-3 text-right">Cost / Unit</th>
+                <th className="px-6 py-3 text-right">Total Cost</th>
+                <th className="px-6 py-3 text-right">% of Prod. Cost</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#F5F5F5]">
+              {sortedRawMat.map((m, i) => {
+                const pct = rawMatCost > 0 ? (m.cost / rawMatCost) * 100 : 0;
+                return (
+                  <tr key={i} className="hover:bg-[#FAFAFA]">
+                    <td className="px-6 py-3 font-medium text-[#212121]">
+                      {m.name}
+                      {m.missingCost && <span className="ml-2 text-[10px] text-amber-600 font-bold">⚠ cost missing</span>}
+                    </td>
+                    <td className="px-6 py-3 text-right font-mono text-[#424242]">
+                      {m.qtyConsumed.toFixed(3)} {m.unit}
+                    </td>
+                    <td className="px-6 py-3 text-right text-[#9E9E9E]">
+                      {m.missingCost ? <span className="text-amber-500">—</span> : fmt(m.cost / m.qtyConsumed)}
+                    </td>
+                    <td className="px-6 py-3 text-right font-mono font-bold text-[#212121]">
+                      {m.cost > 0 ? fmt(m.cost) : <span className="text-amber-500">—</span>}
+                    </td>
+                    <td className="px-6 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="w-16 bg-[#F0F0F0] rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-[#006A38] h-1.5 rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
+                        </div>
+                        <span className="text-xs font-mono text-[#424242] w-10 text-right">{pct.toFixed(1)}%</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+              <tr className="bg-[#F5F5F5] font-bold">
+                <td className="px-6 py-3 text-[#212121]">Total</td>
+                <td className="px-6 py-3" />
+                <td className="px-6 py-3" />
+                <td className="px-6 py-3 text-right font-mono text-[#212121]">{fmt(rawMatCost)}</td>
+                <td className="px-6 py-3 text-right text-xs font-mono text-[#9E9E9E]">100%</td>
+              </tr>
             </tbody>
           </table>
         )}

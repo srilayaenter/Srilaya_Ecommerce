@@ -1,35 +1,46 @@
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isOwner } from "@/lib/permissions";
 import Link from "next/link";
 
 export default async function AdminOverviewPage() {
+  const session = await getServerSession(authOptions);
+  const ownerView = isOwner(session?.user?.role ?? '');
+
   const [
     totalOrdersCount,
     pendingOrdersCount,
     paidOrders,
     lowStockVariants,
-    recentOrders
+    recentOrders,
+    lowRawMaterials,
   ] = await Promise.all([
     prisma.order.count(),
     prisma.order.count({ where: { status: 'pending' } }),
     prisma.order.findMany({ where: { status: 'paid' }, select: { total: true } }),
     prisma.productVariant.findMany({ select: { stock: true, reorderThreshold: true } }),
-    prisma.order.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' }
-    })
+    prisma.order.findMany({ take: 5, orderBy: { createdAt: 'desc' } }),
+    ownerView
+      ? prisma.rawMaterial.findMany({
+          select: { id: true, name: true, stockQty: true, reorderThreshold: true, unit: true },
+          orderBy: { name: 'asc' },
+        }).then(all => all.filter(m => m.stockQty <= m.reorderThreshold))
+      : Promise.resolve([]),
   ]);
 
   const totalRevenue = paidOrders.reduce((sum: number, order: any) => sum + toNum(order.total), 0);
   const pendingVerificationCount = pendingOrdersCount;
   const lowStockCount = (lowStockVariants as any[]).filter(v => v.stock <= (v.reorderThreshold ?? 10)).length;
+  const lowRawCount = lowRawMaterials.length;
 
   // PRD Strict Semantic Colors Applied
   const metrics = [
-    { title: "Gross Revenues", value: `₹${totalRevenue.toFixed(2)}`, description: "From all confirmed paid orders", icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
-    { title: "Awaiting Approval", value: pendingVerificationCount.toString(), description: "Pending UTR verifications", icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" },
-    { title: "Total Orders placed", value: totalOrdersCount.toString(), description: "Lifetime transaction count", icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" },
-    { title: "Low Stock Alerts", value: lowStockCount.toString(), description: "Variants at or below reorder threshold", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
+    { title: "Gross Revenues",     value: `₹${totalRevenue.toFixed(2)}`, description: "From all confirmed paid orders",       icon: "💰", color: "text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20" },
+    { title: "Awaiting Approval",  value: pendingVerificationCount.toString(), description: "Pending UTR verifications",       icon: "⏳", color: "text-[#FF9800] bg-[#FF9800]/10 border-[#FF9800]/20" },
+    { title: "Total Orders placed",value: totalOrdersCount.toString(),   description: "Lifetime transaction count",            icon: "📦", color: "text-[#2196F3] bg-[#2196F3]/10 border-[#2196F3]/20" },
+    { title: "Low Stock Alerts",   value: lowStockCount.toString(),       description: "Variants at or below reorder threshold", icon: "⚠️", color: "text-[#F44336] bg-[#F44336]/10 border-[#F44336]/20" },
   ];
 
   return (
@@ -44,7 +55,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${ownerView ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
         {metrics.map((card) => (
           <div key={card.title} className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 duration-300">
             <div className="flex items-center justify-between gap-4">
@@ -59,7 +70,62 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
         ))}
+
+        {/* Owner-only: Raw material low stock card */}
+        {ownerView && (
+          <Link href="/admin/raw-materials" className="block">
+            <div className={`rounded-[12px] border shadow-[0_2px_8px_rgba(0,0,0,0.05)] p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 duration-300 h-full ${
+              lowRawCount > 0
+                ? 'bg-red-50 border-red-200'
+                : 'bg-white border-[#E0E0E0]'
+            }`}>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">Raw Material Alerts</span>
+                <span className={`w-9 h-9 rounded-lg border flex items-center justify-center text-lg shadow-sm ${
+                  lowRawCount > 0 ? 'text-red-600 bg-red-100 border-red-200' : 'text-[#4CAF50] bg-[#4CAF50]/10 border-[#4CAF50]/20'
+                }`}>
+                  🌱
+                </span>
+              </div>
+              <div className="mt-4">
+                <span className={`text-[28px] font-bold tracking-tight block ${lowRawCount > 0 ? 'text-red-600' : 'text-[#212121]'}`}>
+                  {lowRawCount}
+                </span>
+                <span className="text-[11px] text-[#9E9E9E] font-medium block mt-1">
+                  {lowRawCount > 0 ? 'Raw materials need restock' : 'All raw materials OK'}
+                </span>
+              </div>
+            </div>
+          </Link>
+        )}
       </div>
+
+      {/* Owner-only: Raw material low stock detail banner */}
+      {ownerView && lowRawCount > 0 && (
+        <div className="bg-red-50 border border-red-200 rounded-[12px] px-5 py-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold text-red-700 mb-2">
+                🌱 {lowRawCount} raw material{lowRawCount > 1 ? 's' : ''} at or below reorder threshold
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {lowRawMaterials.map(m => (
+                  <Link key={m.id} href={`/admin/raw-materials/${m.id}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-red-200 text-xs font-semibold text-red-700 hover:bg-red-100 transition-colors">
+                    {m.name}
+                    <span className="font-mono font-bold">{m.stockQty.toFixed(2)}{m.unit}</span>
+                    <span className="text-red-400">/ {m.reorderThreshold}{m.unit}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <Link href="/admin/raw-materials"
+              className="shrink-0 text-xs font-bold text-red-600 hover:text-red-800 underline whitespace-nowrap">
+              Manage →
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Main Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
