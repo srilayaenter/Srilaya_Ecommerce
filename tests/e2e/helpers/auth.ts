@@ -16,7 +16,8 @@ export async function loginAsUser(page: Page) {
   await page.getByLabel(/email/i).fill(TEST_USER.email);
   await page.getByLabel(/password/i).fill(TEST_USER.password);
   await page.getByRole("button", { name: /sign in/i }).click();
-  await page.waitForURL("/");
+  // Accept any successful redirect away from login (owner may go to /account or /)
+  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 25000 });
 }
 
 export async function loginAsAdmin(page: Page) {
@@ -27,8 +28,8 @@ export async function loginAsAdmin(page: Page) {
   page.once("dialog", dialog => dialog.dismiss());
   // Button text is "Authorize Access" on admin login
   await page.getByRole("button", { name: /authorize|sign in/i }).click();
-  // Wait for redirect away from the login page (not /admin/login)
-  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 15000 });
+  // Wait for redirect away from the login page (not /admin/login) — generous timeout for dev server
+  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 25000 });
 }
 
 export async function logout(page: Page) {

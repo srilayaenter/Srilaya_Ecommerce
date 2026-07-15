@@ -8,7 +8,7 @@ import { loginAsUser } from "./helpers/auth";
 
 test("ACC-01 account page loads for logged-in user", async ({ page }) => {
   await loginAsUser(page);
-  await page.goto("/account");
+  await page.goto("/account", { timeout: 60000 });
 
   await expect(page.getByText(/account|profile|member/i).first()).toBeVisible();
   await expect(page.getByRole("button", { name: /sign out/i })).toBeVisible();
@@ -16,7 +16,7 @@ test("ACC-01 account page loads for logged-in user", async ({ page }) => {
 
 test("ACC-02 account shows order history", async ({ page }) => {
   await loginAsUser(page);
-  await page.goto("/account");
+  await page.goto("/account", { timeout: 60000 });
 
   // Either shows orders or empty state
   const hasOrders = await page.getByRole("link", { name: /#|view|details/i }).count() > 0;

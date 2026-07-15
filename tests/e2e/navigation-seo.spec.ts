@@ -54,10 +54,10 @@ test("NAV-06 cart badge increments after add", async ({ page }) => {
 
   await page.getByRole("button", { name: "+" }).click();
   await page.getByRole("button", { name: /add to cart/i }).click();
-  await page.waitForTimeout(800);
 
   const badge = page.locator("a[href='/cart'] span").first();
-  const text = await badge.textContent({ timeout: 5000 }).catch(() => "0");
+  await expect(badge).not.toHaveText("0", { timeout: 10000 }).catch(() => {});
+  const text = await badge.textContent({ timeout: 10000 }).catch(() => "0");
   expect(parseInt(text || "0")).toBeGreaterThan(0);
 });
 

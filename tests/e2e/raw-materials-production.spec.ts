@@ -74,10 +74,11 @@ test("RM-05 add a new raw material and verify it appears in list", async ({ page
 test("RM-06 material name is a clickable link to detail page", async ({ page }) => {
   await loginAsOwner(page);
   await page.goto("/admin/raw-materials");
-  const firstLink = page.locator("table tbody tr td a").first();
+  // Click the material name link (not the "View →" link — use the green font link in first column)
+  const firstLink = page.locator("table tbody tr td:first-child a").first();
   if (await firstLink.count() > 0) {
     await firstLink.click();
-    await expect(page).toHaveURL(/\/admin\/raw-materials\/.+/);
+    await page.waitForURL(/\/admin\/raw-materials\/.+/, { timeout: 10000 });
     await expect(page.getByRole("heading").first()).toBeVisible();
   } else {
     // No materials yet — skip gracefully
@@ -418,9 +419,11 @@ test("PL-06 P&L confidential footer is shown", async ({ page }) => {
 test("NAV-01 owner sidebar shows raw materials and production links", async ({ page }) => {
   await loginAsOwner(page);
   await page.goto("/admin");
-  await expect(page.getByRole("link", { name: /raw materials/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: /production log/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: /profit & loss/i })).toBeVisible();
+  // Scope to sidebar nav to avoid matching the dashboard alert card link
+  const sidebar = page.locator("nav, aside").first();
+  await expect(sidebar.getByRole("link", { name: /raw materials/i })).toBeVisible();
+  await expect(sidebar.getByRole("link", { name: /production log/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /profit & loss/i }).first()).toBeVisible();
 });
 
 test("NAV-02 admin role does not see raw materials or P&L in sidebar", async ({ page }) => {

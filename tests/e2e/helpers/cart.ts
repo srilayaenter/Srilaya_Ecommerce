@@ -51,13 +51,17 @@ export async function addFirstProductToCart(page: Page, qty = 1) {
   throw new Error("addFirstProductToCart: no in-stock product found in first 5 results");
 }
 
-/** Clear the cart by visiting /cart and removing all items. */
+/** Clear the cart by visiting /cart and removing all items. Best-effort; never throws. */
 export async function emptyCart(page: Page) {
-  await page.goto("/cart");
-  const removeButtons = page.getByRole("button", { name: /remove/i });
-  const count = await removeButtons.count();
-  for (let i = 0; i < count; i++) {
-    await removeButtons.first().click();
-    await page.waitForTimeout(400);
+  try {
+    await page.goto("/cart", { timeout: 15000 });
+    const removeButtons = page.getByRole("button", { name: /remove/i });
+    const count = await removeButtons.count();
+    for (let i = 0; i < count; i++) {
+      await removeButtons.first().click();
+      await page.waitForTimeout(400);
+    }
+  } catch {
+    // Swallow errors — afterEach cleanup must never fail the test
   }
 }
