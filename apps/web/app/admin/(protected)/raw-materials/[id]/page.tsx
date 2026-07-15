@@ -4,7 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { updateRawMaterial, adjustStock, deleteRawMaterial } from "../actions";
+import { updateRawMaterial, adjustStock } from "../actions";
+import DeleteMaterialButton from "./DeleteMaterialButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -169,18 +170,7 @@ export default async function RawMaterialDetailPage({ params }: Props) {
             <p className="text-xs text-[#9E9E9E] mb-4">
               Permanently deletes this material, all stock logs, and removes it from any recipes.
             </p>
-            <form action={deleteRawMaterial}
-              onSubmit={(e) => {
-                if (!confirm(`Delete "${material.name}" and all its stock history? This cannot be undone.`)) {
-                  e.preventDefault();
-                }
-              }}>
-              <input type="hidden" name="id" value={material.id} />
-              <button type="submit"
-                className="w-full bg-red-50 text-red-600 border border-red-200 font-bold py-2.5 rounded-lg hover:bg-red-100 text-sm">
-                Delete Material
-              </button>
-            </form>
+            <DeleteMaterialButton id={material.id} name={material.name} />
           </div>
         </div>
 
