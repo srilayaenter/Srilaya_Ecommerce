@@ -19,12 +19,14 @@
     "test:report": "playwright show-report tests/report"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@prisma/client": "6.19.0",
     "autoprefixer": "10.4.19",
     "bcryptjs": "2.4.3",
     "next": "14.2.3",
     "next-auth": "4.24.7",
     "otplib": "^13.4.1",
+    "pdf-parse": "^2.4.5",
     "pdfkit": "^0.19.1",
     "postcss": "8.4.41",
     "qrcode": "^1.5.4",
