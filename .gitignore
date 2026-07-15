@@ -5,3 +5,13 @@ node_modules/
 *.log
 .DS_Store
 node_modules/.prisma
+
+# Internal documentation — keep out of public repo
+DESIGN.md
+SETUP.md
+Enhancements.md
+FEATURE_BACKLOG.md
+TEST_CASES.md
+project-tree.txt
+project_tree.txt
+*.env.test
