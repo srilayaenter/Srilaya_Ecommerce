@@ -1,72 +1,13 @@
-'use server';
-
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProductionForm from "./ProductionForm";
+import { logProduction } from "./actions";
 
 export const dynamic = 'force-dynamic';
-
-async function logProduction(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const variantId    = formData.get('variantId')?.toString();
-  const unitsProduced = parseInt(formData.get('unitsProduced')?.toString() ?? '0');
-  const notes        = formData.get('notes')?.toString().trim() || null;
-
-  if (!variantId || unitsProduced <= 0) return;
-
-  // Get recipe
-  const recipe = await prisma.ladduRecipe.findUnique({
-    where: { variantId },
-    include: { lines: { include: { rawMaterial: true } } },
-  });
-  if (!recipe || recipe.lines.length === 0) return;
-
-  const variant = await prisma.productVariant.findUnique({ where: { id: variantId } });
-  if (!variant) return;
-
-  // Calculate raw material consumption
-  // unitsProduced × (size in kg / yieldKg) × qtyPerYield
-  const sizeKgMap: Record<string, number> = { '1kg': 1, '500g': 0.5, '250g': 0.25, '200g': 0.2, '2kg': 2 };
-  const variantKg = sizeKgMap[variant.size] ?? 1;
-  const batchesNeeded = (unitsProduced * variantKg) / recipe.yieldKg;
-
-  await prisma.$transaction(async (tx) => {
-    const batch = await tx.productionBatch.create({
-      data: {
-        variantId,
-        unitsProduced,
-        notes,
-        createdBy: session?.user?.email ?? null,
-      },
-    });
-
-    for (const line of recipe.lines) {
-      const consumed = batchesNeeded * line.qtyPerYield;
-      await tx.rawMaterial.update({
-        where: { id: line.rawMaterialId },
-        data: { stockQty: { decrement: consumed } },
-      });
-      await tx.rawMaterialLog.create({
-        data: {
-          rawMaterialId: line.rawMaterialId,
-          type: 'production',
-          qty: -consumed,
-          note: `${unitsProduced}× ${variant.size} production`,
-          batchId: batch.id,
-        },
-      });
-    }
-  });
-
-  redirect('/admin/production');
-}
 
 export default async function ProductionPage() {
   const session = await getServerSession(authOptions);
@@ -91,7 +32,9 @@ export default async function ProductionPage() {
     },
   });
 
-  const variantsWithRecipe = ladduVariants.filter(v => v.ladduRecipe && v.ladduRecipe.lines.length > 0);
+  const variantsWithRecipe = ladduVariants.filter(
+    v => v.ladduRecipe && v.ladduRecipe.lines.length > 0
+  );
 
   return (
     <div className="space-y-8 pb-12">
@@ -101,10 +44,8 @@ export default async function ProductionPage() {
           <p className="text-sm text-[#8D6E63] mt-1">Record a laddu production run · Auto-deducts raw material stock</p>
         </div>
         <div className="flex gap-3">
-          <Link href="/admin/raw-materials"
-            className="text-sm text-[#006A38] font-bold hover:underline">Raw Materials</Link>
-          <Link href="/admin/raw-materials/recipes"
-            className="text-sm text-[#006A38] font-bold hover:underline">Recipes</Link>
+          <Link href="/admin/raw-materials" className="text-sm text-[#006A38] font-bold hover:underline">Raw Materials</Link>
+          <Link href="/admin/raw-materials/recipes" className="text-sm text-[#006A38] font-bold hover:underline">Recipes</Link>
         </div>
       </div>
 
@@ -116,13 +57,10 @@ export default async function ProductionPage() {
       )}
 
       <div className="grid lg:grid-cols-2 gap-8">
-
-        {/* Log form */}
         {variantsWithRecipe.length > 0 && (
           <ProductionForm variants={variantsWithRecipe} action={logProduction} />
         )}
 
-        {/* Recent batches */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden h-fit">
           <div className="px-6 py-4 border-b border-[#F0F0F0]">
             <h2 className="font-bold text-[#212121]">Recent Production Batches</h2>
@@ -148,7 +86,9 @@ export default async function ProductionPage() {
                     </td>
                     <td className="px-5 py-3 text-right font-bold text-[#006A38]">{b.unitsProduced}</td>
                     <td className="px-5 py-3 text-right text-[#9E9E9E] text-xs">
-                      {new Date(b.producedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      {new Date(b.producedAt).toLocaleDateString('en-IN', {
+                        day: '2-digit', month: 'short', year: 'numeric',
+                      })}
                     </td>
                   </tr>
                 ))}

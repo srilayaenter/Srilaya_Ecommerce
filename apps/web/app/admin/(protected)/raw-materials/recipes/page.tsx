@@ -1,74 +1,17 @@
-'use server';
-
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
+import { saveRecipeLine, deleteRecipeLine, updateYield } from "./actions";
 
 export const dynamic = 'force-dynamic';
-
-async function saveRecipeLine(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const variantId     = formData.get('variantId')?.toString();
-  const rawMaterialId = formData.get('rawMaterialId')?.toString();
-  const qtyPerYield   = parseFloat(formData.get('qtyPerYield')?.toString() ?? '0');
-  const yieldKg       = parseFloat(formData.get('yieldKg')?.toString() ?? '1');
-
-  if (!variantId || !rawMaterialId || qtyPerYield <= 0) return;
-
-  // upsert the recipe header
-  const recipe = await prisma.ladduRecipe.upsert({
-    where: { variantId },
-    create: { variantId, yieldKg },
-    update: { yieldKg },
-  });
-
-  // add the ingredient line (avoid duplicate)
-  const existing = await prisma.recipeLine.findFirst({
-    where: { recipeId: recipe.id, rawMaterialId },
-  });
-  if (existing) {
-    await prisma.recipeLine.update({ where: { id: existing.id }, data: { qtyPerYield } });
-  } else {
-    await prisma.recipeLine.create({ data: { recipeId: recipe.id, rawMaterialId, qtyPerYield } });
-  }
-
-  redirect('/admin/raw-materials/recipes');
-}
-
-async function deleteRecipeLine(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const id = formData.get('id')?.toString();
-  if (id) await prisma.recipeLine.delete({ where: { id } });
-  redirect('/admin/raw-materials/recipes');
-}
-
-async function updateYield(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const recipeId = formData.get('recipeId')?.toString();
-  const yieldKg  = parseFloat(formData.get('yieldKg')?.toString() ?? '1');
-  if (recipeId && yieldKg > 0) {
-    await prisma.ladduRecipe.update({ where: { id: recipeId }, data: { yieldKg } });
-  }
-  redirect('/admin/raw-materials/recipes');
-}
 
 export default async function RecipesPage() {
   const session = await getServerSession(authOptions);
   if (!isOwner(session?.user?.role ?? '')) notFound();
 
-  // Only laddu variants
   const ladduVariants = await prisma.productVariant.findMany({
     where: { product: { title: { contains: 'Laddu', mode: 'insensitive' } } },
     include: {
@@ -94,18 +37,17 @@ export default async function RecipesPage() {
       {materials.length === 0 && (
         <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm">
           ⚠ No raw materials defined yet.{' '}
-          <Link href="/admin/raw-materials" className="underline font-bold">Add raw materials first</Link> before setting up recipes.
+          <Link href="/admin/raw-materials" className="underline font-bold">Add raw materials first</Link>.
         </div>
       )}
 
       <div className="space-y-6">
         {ladduVariants.map(v => {
-          const recipe = v.ladduRecipe;
+          const recipe   = v.ladduRecipe;
           const totalQty = recipe?.lines.reduce((s, l) => s + l.qtyPerYield, 0) ?? 0;
 
           return (
             <div key={v.id} className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
-              {/* Variant header */}
               <div className="px-6 py-4 bg-[#F5F5F5] flex items-center justify-between">
                 <div>
                   <span className="font-bold text-[#212121]">{v.product.title}</span>
@@ -115,17 +57,16 @@ export default async function RecipesPage() {
                   <form action={updateYield} className="flex items-center gap-2">
                     <input type="hidden" name="recipeId" value={recipe.id} />
                     <label className="text-xs text-[#9E9E9E] font-bold">Yield (kg):</label>
-                    <input name="yieldKg" type="number" step="0.1" min="0.1"
-                      defaultValue={recipe.yieldKg}
+                    <input name="yieldKg" type="number" step="0.1" min="0.1" defaultValue={recipe.yieldKg}
                       className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
-                    <button type="submit" className="text-xs bg-[#006A38] text-white px-2 py-1 rounded font-bold hover:bg-[#00522B]">
+                    <button type="submit"
+                      className="text-xs bg-[#006A38] text-white px-2 py-1 rounded font-bold hover:bg-[#00522B]">
                       Save
                     </button>
                   </form>
                 )}
               </div>
 
-              {/* Existing lines */}
               {recipe && recipe.lines.length > 0 && (
                 <table className="w-full text-sm">
                   <thead className="text-[11px] uppercase font-bold text-[#9E9E9E] tracking-wider border-b border-[#F0F0F0]">
@@ -147,7 +88,9 @@ export default async function RecipesPage() {
                         <td className="px-5 py-2 text-right">
                           <form action={deleteRecipeLine} className="inline">
                             <input type="hidden" name="id" value={line.id} />
-                            <button type="submit" className="text-[11px] text-red-400 hover:text-red-600 underline">Remove</button>
+                            <button type="submit" className="text-[11px] text-red-400 hover:text-red-600 underline">
+                              Remove
+                            </button>
                           </form>
                         </td>
                       </tr>
@@ -161,9 +104,9 @@ export default async function RecipesPage() {
                 </table>
               )}
 
-              {/* Add ingredient line */}
               {materials.length > 0 && (
-                <form action={saveRecipeLine} className="px-5 py-4 border-t border-[#F0F0F0] flex items-end gap-3 flex-wrap">
+                <form action={saveRecipeLine}
+                  className="px-5 py-4 border-t border-[#F0F0F0] flex items-end gap-3 flex-wrap">
                   <input type="hidden" name="variantId" value={v.id} />
                   <input type="hidden" name="yieldKg" value={recipe?.yieldKg ?? 1} />
                   <div>

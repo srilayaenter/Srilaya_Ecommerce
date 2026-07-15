@@ -1,70 +1,12 @@
-'use server';
-
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
+import { addRawMaterial, addStock, deleteRawMaterial } from "./actions";
 
 export const dynamic = 'force-dynamic';
-
-// ── Server actions ────────────────────────────────────────────────────────────
-
-async function addRawMaterial(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const name = formData.get('name')?.toString().trim();
-  const unit = formData.get('unit')?.toString().trim() || 'kg';
-  const costPerUnit = parseFloat(formData.get('costPerUnit')?.toString() ?? '0');
-  const reorderThreshold = parseFloat(formData.get('reorderThreshold')?.toString() ?? '5');
-
-  if (!name) return;
-
-  await prisma.rawMaterial.create({
-    data: { name, unit, costPerUnit: costPerUnit > 0 ? costPerUnit : null, reorderThreshold },
-  });
-  redirect('/admin/raw-materials');
-}
-
-async function addStock(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const rawMaterialId = formData.get('rawMaterialId')?.toString();
-  const qty = parseFloat(formData.get('qty')?.toString() ?? '0');
-  const note = formData.get('note')?.toString().trim() || null;
-
-  if (!rawMaterialId || qty <= 0) return;
-
-  await prisma.$transaction([
-    prisma.rawMaterial.update({
-      where: { id: rawMaterialId },
-      data: { stockQty: { increment: qty } },
-    }),
-    prisma.rawMaterialLog.create({
-      data: { rawMaterialId, type: 'purchase', qty, note },
-    }),
-  ]);
-  redirect('/admin/raw-materials');
-}
-
-async function deleteRawMaterial(formData: FormData) {
-  'use server';
-  const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) return;
-
-  const id = formData.get('id')?.toString();
-  if (!id) return;
-
-  await prisma.rawMaterial.delete({ where: { id } });
-  redirect('/admin/raw-materials');
-}
-
-// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function RawMaterialsPage() {
   const session = await getServerSession(authOptions);
@@ -80,7 +22,6 @@ export default async function RawMaterialsPage() {
   return (
     <div className="space-y-8 pb-12">
 
-      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#212121]">Raw Materials</h1>
@@ -102,7 +43,6 @@ export default async function RawMaterialsPage() {
         </div>
       </div>
 
-      {/* Low stock alert */}
       {lowStock.length > 0 && (
         <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
           ⚠ <strong>{lowStock.length} material(s)</strong> at or below reorder threshold:{' '}
@@ -112,7 +52,6 @@ export default async function RawMaterialsPage() {
 
       <div className="grid lg:grid-cols-3 gap-8">
 
-        {/* Left: Material list */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-[#F0F0F0] flex items-center justify-between">
             <h2 className="font-bold text-[#212121]">Inventory</h2>
@@ -154,10 +93,8 @@ export default async function RawMaterialsPage() {
                         <form action={addStock}>
                           <input type="hidden" name="rawMaterialId" value={m.id} />
                           <div className="flex items-center gap-1 justify-center">
-                            <input
-                              type="number" name="qty" step="0.1" min="0.1" placeholder="qty"
-                              className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]"
-                            />
+                            <input type="number" name="qty" step="0.1" min="0.1" placeholder="qty"
+                              className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
                             <button type="submit"
                               className="bg-[#006A38] text-white text-xs px-2 py-1 rounded hover:bg-[#00522B] font-bold">
                               +
@@ -183,7 +120,6 @@ export default async function RawMaterialsPage() {
           )}
         </div>
 
-        {/* Right: Add new material */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm p-6 h-fit">
           <h2 className="font-bold text-[#212121] mb-5">Add Raw Material</h2>
           <form action={addRawMaterial} className="space-y-4">
