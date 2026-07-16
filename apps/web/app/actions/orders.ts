@@ -52,7 +52,11 @@ export async function createOrder(formData: FormData): Promise<void> {
   const couponCodeRaw  = (formData.get('couponCode') as string || '').trim().toUpperCase() || null;
 
   const session = await getServerSession(authOptions);
-  const sessionUserId = session?.user?.id ?? undefined;
+  let sessionUserId: string | undefined;
+  if (session?.user?.id) {
+    const userExists = await prisma.user.findUnique({ where: { id: session.user.id }, select: { id: true } });
+    sessionUserId = userExists?.id;
+  }
 
   const baseTotal = subtotal + taxTotal + shippingFee;
 
@@ -154,6 +158,9 @@ export async function createOrder(formData: FormData): Promise<void> {
     }
     throw err;
   }
+
+  // Clear cart now that the order is placed
+  await prisma.cartItem.deleteMany({ where: { cartId } });
 
   // Log stock deductions
   logStockChanges(cartItems.map(item => ({
