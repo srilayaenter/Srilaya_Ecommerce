@@ -15,3 +15,22 @@ TEST_CASES.md
 project-tree.txt
 project_tree.txt
 *.env.test
+
+# Build artifacts
+apps/web/tsconfig.tsbuildinfo
+
+# Test output
+test-results/
+tests/report/data/
+
+# One-off scripts and OS artifacts
+dump_products.mjs
+nul
+*.mjs.tmp
+
+# Claude Code local settings (permissions are machine-specific)
+.claude/settings.local.json
+
+# Business documents
+*.docx
+packages/db/seed-missing-products.ts
