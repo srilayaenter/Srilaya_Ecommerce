@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import CartRefresher from "./CartRefresher";
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -19,6 +20,7 @@ export default async function CodConfirmPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#F9F6F0] flex items-center justify-center px-4 py-12">
+      <CartRefresher />
       <div className="max-w-lg w-full space-y-6">
 
         {/* Success card */}
