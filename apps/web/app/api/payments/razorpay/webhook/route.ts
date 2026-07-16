@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sendEmail } from "@/lib/email";
 import { buildPaymentFailedAlert } from "@/lib/emails/adminAlerts";
+import { sendStockNotifications } from "@/lib/stockNotifications";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
@@ -86,6 +87,9 @@ export async function POST(request: Request) {
             data: { status: 'failed' }
           });
         });
+
+        // Fire stock notifications asynchronously after stock is restored
+        orderItems.forEach(item => sendStockNotifications(item.variantId).catch(() => {}));
 
         if (process.env.ADMIN_ALERT_EMAIL) {
           await sendEmail({

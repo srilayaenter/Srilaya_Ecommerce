@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email does not match this order" }, { status: 403 });
     }
 
-    if (order.status !== "pending" && order.status !== "paid") {
+    if (order.status !== "pending" && order.status !== "paid" && order.status !== "cod_pending") {
       return NextResponse.json({ error: "This order cannot be cancelled" }, { status: 400 });
     }
 
@@ -62,7 +62,9 @@ export async function POST(request: Request) {
                 Your order <strong>#${shortId}</strong> has been successfully cancelled.
               </p>
               <p style="color:#555;font-size:14px;">
-                If you paid online, your refund will be processed within 5–7 business days back to your original payment method.
+                ${order.status === "cod_pending"
+                  ? `No payment was taken — nothing will be charged.`
+                  : `If you paid online, your refund will be processed within 5–7 business days back to your original payment method.`}
                 For any questions, contact us at <a href="mailto:${BRAND.email}" style="color:#006A38;">${BRAND.email}</a>.
               </p>
             </div>
