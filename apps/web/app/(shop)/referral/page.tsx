@@ -3,6 +3,13 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { generateReferralCode } from "@/lib/loyalty";
 import ReferralClient from "./ReferralClient";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Refer & Earn",
+  description: "Share your referral code and earn loyalty points for every friend who orders.",
+  robots: { index: false },
+};
 
 export default async function ReferralPage() {
   const session = await getServerSession(authOptions);

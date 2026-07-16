@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/db";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Search",
+  robots: { index: false, follow: false },
+};
 
 interface PageProps {
   searchParams: Promise<{ q?: string }>;

@@ -3,6 +3,12 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import AccountClient from "./AccountClient";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Account",
+  robots: { index: false, follow: false },
+};
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);

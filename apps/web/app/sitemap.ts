@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const bundlePages: MetadataRoute.Sitemap = bundles.map(b => ({
-    url:             `${BASE_URL}/bundles`,
+    url:             `${BASE_URL}/bundles/${b.slug}`,
     lastModified:    b.updatedAt,
     changeFrequency: "weekly",
     priority:        0.7,
