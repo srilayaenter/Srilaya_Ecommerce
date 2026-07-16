@@ -25,7 +25,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     { name: "Categories",         href: "/admin/categories",    icon: "🗂️", roles: ['owner','admin','manager','inventory_staff'] },
     { name: "Suppliers",          href: "/admin/suppliers",        icon: "🚚", roles: ['owner','admin','manager','inventory_staff'] },
     { name: "Purchase Orders",    href: "/admin/purchase-orders",  icon: "🛒", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Users & Roles",      href: "/admin/users",         icon: "👥", roles: ['owner','admin','manager'] },
+    { name: "Users & Roles",      href: "/admin/users",         icon: "👥", roles: ['owner','admin'] },
     { name: "Reviews",            href: "/admin/reviews",       icon: "⭐", roles: ['owner','admin','manager'] },
     { name: "Returns",            href: "/admin/returns",       icon: "↩️", roles: ['owner','admin','manager'] },
     { name: "Coupons",            href: "/admin/coupons",       icon: "🎟️", roles: ['owner','admin','manager'] },

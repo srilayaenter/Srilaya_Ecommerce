@@ -3,10 +3,16 @@ import { redirect } from "next/navigation";
 import { ROLE_LABELS, AppRole } from "@/lib/permissions";
 import bcrypt from "bcryptjs";
 
+const ALLOWED_ROLES = ['customer', 'admin', 'manager', 'inventory_staff', 'billing_staff'] as const;
+type AllowedRole = typeof ALLOWED_ROLES[number];
+
 async function updateUserRole(formData: FormData) {
   'use server';
   const userId = formData.get('userId') as string;
   const role   = formData.get('role') as string;
+  if (!ALLOWED_ROLES.includes(role as AllowedRole)) {
+    throw new Error('Invalid role');
+  }
   await prisma.user.update({ where: { id: userId }, data: { role } });
   redirect('/admin/users?saved=true');
 }
@@ -16,6 +22,9 @@ async function createStaffUser(formData: FormData) {
   const email    = (formData.get('email') as string).trim().toLowerCase();
   const password = formData.get('password') as string;
   const role     = formData.get('role') as string;
+  if (!ALLOWED_ROLES.includes(role as AllowedRole)) {
+    throw new Error('Invalid role');
+  }
   const hash     = await bcrypt.hash(password, 10);
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -175,7 +184,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
 function roleDescription(role: AppRole): string {
   switch (role) {
     case 'admin':           return 'Full access — all settings, users, and data';
-    case 'manager':         return 'All pages except Store Settings and user promotion';
+    case 'manager':         return 'All operational pages — cannot manage users or store settings';
     case 'inventory_staff': return 'Products, Categories, Suppliers only';
     case 'billing_staff':   return 'Orders page only';
     default:                return '';
