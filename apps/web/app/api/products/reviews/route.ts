@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 // GET /api/products/reviews?slug=xxx
 export async function GET(request: Request) {
@@ -32,6 +33,11 @@ export async function GET(request: Request) {
 // POST /api/products/reviews
 export async function POST(request: Request) {
   try {
+    // 5 review submissions per hour per IP
+    if (!checkRateLimit(`review:${getIp(request)}`, 5, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
+    }
+
     const { slug, email, customerName, rating, comment, photoUrl } = await request.json();
 
     if (!slug || !email || !customerName || !rating) {

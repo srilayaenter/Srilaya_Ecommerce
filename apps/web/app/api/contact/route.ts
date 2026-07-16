@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
   try {
+    // 3 contact submissions per hour per IP
+    if (!checkRateLimit(`contact:${getIp(request)}`, 3, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
+    }
+
     const { name, email, phone, message } = await request.json();
 
     if (!name || !email || !message) {

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({ where: { slug }, select: { title: true, excerpt: true } });
   if (!post) return {};
-  return { title: `${post.title} | SriLaYa Naturals`, description: post.excerpt ?? undefined };
+  return { title: post.title, description: post.excerpt ?? undefined };
 }
 
 export default async function BlogPostPage({ params }: Props) {

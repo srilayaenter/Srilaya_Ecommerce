@@ -19,7 +19,7 @@ export default function AddToCartWithDropdown({
   onVariantChange?: (id: string) => void;
 }) {
   const [selectedId, setSelectedId] = useState(variants[0]?.id || "");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const { refreshCartCount } = useCart();
@@ -33,7 +33,7 @@ export default function AddToCartWithDropdown({
       const result = await addToCart(selected.id, quantity);
       if (result.success) {
         setMessage("Added!");
-        setQuantity(0);
+        setQuantity(1);
         await refreshCartCount();
         setTimeout(() => setMessage(""), 2000);
       } else {
@@ -56,7 +56,7 @@ export default function AddToCartWithDropdown({
             value={selectedId}
             onChange={(e) => {
               setSelectedId(e.target.value);
-              setQuantity(0);
+              setQuantity(1);
               onVariantChange?.(e.target.value);
             }}
             className="w-full appearance-none border-2 border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-[#006A38] focus:border-[#006A38] outline-none text-base bg-white text-[#212121] cursor-pointer"
@@ -95,8 +95,9 @@ export default function AddToCartWithDropdown({
         <div className="flex items-center gap-3">
           <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
             <button
-              onClick={() => setQuantity(q => Math.max(0, q - 1))}
-              className="px-3 py-2 hover:bg-gray-100 font-bold"
+              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              disabled={quantity <= 1}
+              className="px-3 py-2 hover:bg-gray-100 font-bold disabled:opacity-40 disabled:cursor-not-allowed"
               type="button"
             >
               −

@@ -189,30 +189,52 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
     <div className="min-h-screen bg-[#F9F6F0]">
       <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">My Orders</h1>
-        <p className="text-[#FFF8E1] text-sm mt-1">Enter your email to view all your past orders.</p>
+        <p className="text-[#FFF8E1] text-sm mt-1">Sign in or look up by email to view your orders.</p>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+
+        {/* Primary CTA — sign in */}
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E0D5] p-6 text-center">
+          <div className="text-4xl mb-3">👤</div>
+          <h2 className="font-bold text-[#212121] text-lg mb-1">Sign in to your account</h2>
+          <p className="text-sm text-[#757575] mb-5">See all your orders, track deliveries, manage your profile, and view your loyalty points — all in one place.</p>
+          <a
+            href="/login"
+            className="inline-block w-full sm:w-auto bg-[#006A38] text-white font-bold px-8 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors"
+          >
+            Sign In
+          </a>
+          <p className="text-xs text-[#9E9E9E] mt-3">
+            New here?{" "}
+            <a href="/register" className="text-[#006A38] font-bold hover:underline">Create an account</a>
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1 border-t border-[#E0E0E0]" />
+          <span className="text-xs text-[#9E9E9E] font-medium uppercase tracking-wider">or look up as guest</span>
+          <div className="flex-1 border-t border-[#E0E0E0]" />
+        </div>
+
+        {/* Secondary — guest email lookup */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#E8E0D5] p-6">
+          <h2 className="font-semibold text-[#424242] mb-3 text-sm">Look up orders by email</h2>
           <form onSubmit={handleGuestLookup} className="flex flex-col sm:flex-row gap-3">
             <input
               type="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)}
-              placeholder="Email used at checkout" required autoFocus
+              placeholder="Email used at checkout" required
               className="flex-1 border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006A38]"
             />
             <button
               type="submit" disabled={guestLoading}
-              className="bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60 whitespace-nowrap"
+              className="border border-[#006A38] text-[#006A38] font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#e8f5ee] transition-colors disabled:opacity-60 whitespace-nowrap"
             >
               {guestLoading ? "Looking up…" : "View Orders"}
             </button>
           </form>
           {guestError && <p className="mt-3 text-sm text-red-600 font-medium">{guestError}</p>}
-          <p className="mt-3 text-xs text-[#9E9E9E]">
-            Have an account?{" "}
-            <a href="/login" className="text-[#006A38] font-bold hover:underline">Sign in</a>
-            {" "}to see all your orders automatically.
-          </p>
         </div>
 
         {guestOrders !== null && (

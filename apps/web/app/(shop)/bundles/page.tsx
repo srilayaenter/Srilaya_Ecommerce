@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import AddBundleButton from "./AddBundleButton";
 
-export const metadata = { title: "Bundle Packs | SriLaYa Naturals" };
+export const metadata = { title: "Bundle Packs" };
 
 export default async function BundlesPage() {
   const bundles = await prisma.bundle.findMany({

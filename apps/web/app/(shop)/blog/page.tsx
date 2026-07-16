@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 
-export const metadata = { title: "Blog & Recipes | SriLaYa Naturals" };
+export const metadata = { title: "Blog & Recipes" };
 
 const CATEGORY_LABELS: Record<string, string> = {
   recipe: "Recipe", article: "Article", health: "Health & Wellness", news: "News",
