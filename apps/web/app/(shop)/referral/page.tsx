@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Refer & Earn",
   description: "Share your referral code and earn loyalty points for every friend who orders.",
-  robots: { index: false },
+  robots: { index: false, follow: false },
 };
 
 export default async function ReferralPage() {

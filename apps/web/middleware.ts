@@ -16,7 +16,15 @@ export default withAuth(
 
     if (isLoginPage || isPublicAdminPage) {
       if (isAuth && isLoginPage) {
-        return NextResponse.redirect(new URL("/admin", req.url));
+        const role = token?.role as string | undefined;
+        const allowed = ROLE_ALLOWED_PATHS[role as AppRole] ?? [];
+        // Unrestricted roles (owner/admin) land on /admin dashboard
+        // Restricted roles land directly on their first permitted page
+        const landing =
+          allowed.length === 1 && allowed[0] === "/admin"
+            ? "/admin"
+            : (allowed[0] ?? "/admin");
+        return NextResponse.redirect(new URL(landing, req.url));
       }
       return NextResponse.next();
     }
