@@ -115,7 +115,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                   const variant = product.variants.find(v => v.id === e.target.value);
                   if (variant) setSelectedVariant(variant);
                 }}
-                className="w-full bg-white text-[#212121] text-xs border border-[#E0E0E0] rounded-lg p-2 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer"
+                className="w-full appearance-none bg-white text-[#212121] text-xs border border-[#E0E0E0] rounded-lg p-2 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer"
               >
                 {product.variants.map((v) => (
                   <option key={v.id} value={v.id}>

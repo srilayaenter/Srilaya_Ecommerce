@@ -76,7 +76,7 @@ export default function ProductListingClient({ products, categories }: Props) {
             id="sort"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#212121] bg-white focus:outline-none focus:ring-2 focus:ring-[#006A38] focus:border-transparent"
+            className="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#212121] bg-white focus:outline-none focus:ring-2 focus:ring-[#006A38] focus:border-transparent"
           >
             {SORT_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
