@@ -102,12 +102,14 @@ test("REG-08 no ?? corruption on any major page", async ({ page }) => {
   }
 });
 
-test("REG-09 brand name is SriLaYa Naturals everywhere", async ({ page }) => {
+test("REG-09 brand name is SriLaYa Naturals in page text", async ({ page }) => {
+  // "SriLaYa Enterprises" is the parent company and appears in the logo image — that is intentional.
+  // This test checks that "Enterprises" does not appear in visible page TEXT (outside of image alt/src).
   const paths = ["/", "/about", "/contact", "/login"];
   for (const path of paths) {
     await page.goto(path);
-    const content = await page.content();
-    expect(content, `Enterprises found on ${path}`).not.toContain("Enterprises");
+    const bodyText = await page.locator("body").innerText();
+    expect(bodyText, `"Enterprises" found in page text on ${path}`).not.toContain("Enterprises");
   }
 });
 

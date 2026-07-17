@@ -59,9 +59,10 @@ test("MOB-02b product page no horizontal overflow", async ({ page }) => {
 });
 
 test("MOB-03 checkout order summary appears above form", async ({ page }) => {
-  // Add item first
+  // Add item first — navigate directly to avoid click-interception by overlaid wishlist button
   await page.goto("/product");
-  await page.locator("a[href^='/product/']").first().click();
+  const firstProductHref = await page.locator("a[href^='/product/']").first().getAttribute("href");
+  await page.goto(firstProductHref!);
   await page.waitForLoadState("networkidle");
   await page.getByRole("button", { name: "+" }).click();
   await page.getByRole("button", { name: /add to cart/i }).click();
@@ -85,7 +86,8 @@ test("MOB-03 checkout order summary appears above form", async ({ page }) => {
 
 test("MOB-04 size dropdown arrow is visible on mobile", async ({ page }) => {
   await page.goto("/product");
-  await page.locator("a[href^='/product/']").first().click();
+  const firstProductHref = await page.locator("a[href^='/product/']").first().getAttribute("href");
+  await page.goto(firstProductHref!);
   await page.waitForLoadState("networkidle");
 
   // The custom SVG chevron should be visible

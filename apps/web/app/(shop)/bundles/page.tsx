@@ -44,7 +44,7 @@ export default async function BundlesPage() {
                 <div key={bundle.id} className="bg-white rounded-2xl border border-[#E8E0D5] shadow-sm overflow-hidden">
                   {savings > 0 && (
                     <div className="bg-[#006A38] text-white text-[11px] font-bold text-center py-1.5 tracking-wider">
-                      SAVE ?{savings.toFixed(0)} vs buying separately
+                      SAVE ₹{savings.toFixed(0)} vs buying separately
                     </div>
                   )}
                   <div className="p-6">
