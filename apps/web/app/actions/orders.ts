@@ -221,6 +221,7 @@ export async function createOrder(formData: FormData): Promise<void> {
           city: orderWithItems.city || "",
           state: orderWithItems.state || "",
           zipCode: orderWithItems.zipCode || "",
+          isCod: true,
         });
         let pdfBuffer: Buffer | undefined;
         try {

@@ -64,7 +64,7 @@ export default async function CodConfirmPage({ params }: Props) {
           <ul className="space-y-1 list-disc list-inside">
             <li>Our team will process your order within 24 hours.</li>
             <li>You'll receive a dispatch notification via WhatsApp/email.</li>
-            <li>Keep ₹{toNum(order.total).toFixed(2)} ready for the delivery person.</li>
+            <li>Keep <strong>₹{toNum(order.total).toFixed(2)}</strong> ready to pay on delivery — by <strong>Cash or UPI</strong>. No card machine will be available.</li>
           </ul>
         </div>
 

@@ -31,7 +31,7 @@ export function orderConfirmedMessage({
   total: number;
   paymentMethod: string;
 }) {
-  const payLabel = paymentMethod === "cod" ? "Cash on Delivery" : "Online";
+  const payLabel = paymentMethod === "cod" ? "Pay on Delivery (Cash/UPI)" : "Online";
   return `Hi ${customerName}! 🌾 Your SriLaYa Naturals order *#${shortId}* has been placed successfully.\n\nTotal: ₹${total.toFixed(2)} | Payment: ${payLabel}\n\nTrack your order: ${process.env.NEXTAUTH_URL ?? "https://srilaya.com"}/track?orderId=${shortId}\n\nThank you for choosing SriLaYa!`;
 }
 

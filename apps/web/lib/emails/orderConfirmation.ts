@@ -13,6 +13,7 @@ export function buildOrderConfirmationEmail({
   city,
   state,
   zipCode,
+  isCod = false,
 }: {
   customerName: string;
   orderId: string;
@@ -26,6 +27,7 @@ export function buildOrderConfirmationEmail({
   city: string;
   state: string;
   zipCode: string;
+  isCod?: boolean;
 }) {
   const itemRows = items
     .map(
@@ -55,7 +57,10 @@ export function buildOrderConfirmationEmail({
       <div style="background:#f0fdf4;border-left:4px solid #006A38;padding:20px 32px;">
         <h2 style="color:#166534;margin:0 0 6px;font-size:18px;">✅ Order Confirmed!</h2>
         <p style="color:#166534;margin:0;font-size:14px;">
-          Thank you, <strong>${customerName}</strong>! Your payment has been received and your order is confirmed.
+          ${isCod
+            ? `Thank you, <strong>${customerName}</strong>! Your order is confirmed. Please keep <strong>₹${total.toFixed(2)}</strong> ready to pay on delivery — you can pay by <strong>Cash or UPI</strong>. No card machine will be available.`
+            : `Thank you, <strong>${customerName}</strong>! Your payment has been received and your order is confirmed.`
+          }
         </p>
       </div>
 
@@ -115,7 +120,10 @@ export function buildOrderConfirmationEmail({
 
         <!-- Note -->
         <div style="margin-top:24px;background:#FFF8E1;border-radius:8px;padding:14px 18px;font-size:12px;color:#8D6E63;">
-          <strong>⚠️ Note:</strong> For bank transfer orders, please share your transaction reference / UTR number with us on WhatsApp or email to expedite dispatch.
+          ${isCod
+            ? `<strong>💵 Pay on Delivery:</strong> Our delivery partner accepts <strong>Cash or UPI</strong> at the time of delivery. Please keep the exact amount ready. No card/POS machine will be available.`
+            : `<strong>⚠️ Note:</strong> For bank transfer orders, please share your transaction reference / UTR number with us on WhatsApp or email to expedite dispatch.`
+          }
         </div>
       </div>
 
