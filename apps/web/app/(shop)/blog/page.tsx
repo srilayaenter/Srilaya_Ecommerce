@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 
-export const metadata = { title: "Blog & Recipes" };
+export const metadata = { title: "Blog" };
 
 const CATEGORY_LABELS: Record<string, string> = {
   recipe: "Recipe", article: "Article", health: "Health & Wellness", news: "News",
@@ -18,8 +18,8 @@ export default async function BlogPage() {
   return (
     <main className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-[#212121]">Blog & Recipes</h1>
-        <p className="text-[#757575] mt-1">Millet recipes, health tips, and natural living guides from SriLaYa Naturals.</p>
+        <h1 className="text-3xl font-black text-[#212121]">Blog</h1>
+        <p className="text-[#757575] mt-1">Health guides, family stories, and natural living tips from SriLaYa Naturals.</p>
       </div>
 
       {posts.length === 0 ? (
