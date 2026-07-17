@@ -13,7 +13,8 @@ export default async function Header() {
   // Build category links from DB, then append static "Recipes" blog link
   const categoryLinks = [
     ...dbCategories.map(c => ({ name: c.name, href: `/category/${c.slug}` })),
-    { name: "Recipes", href: "/blog" },
+    { name: "Recipes", href: "/recipes" },
+    { name: "Blog", href: "/blog" },
   ];
 
   return <HeaderClient categoryLinks={categoryLinks} />;

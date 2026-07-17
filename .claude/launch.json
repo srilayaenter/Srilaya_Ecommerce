@@ -4,7 +4,7 @@
     {
       "name": "srilaya-web",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--workspace=apps/web"],
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]
