@@ -72,11 +72,13 @@ async function updateFulfillmentStatus(formData: FormData) {
 
 async function markCodPaid(formData: FormData) {
   "use server";
-  const orderId = formData.get("orderId") as string;
+  const orderId          = formData.get("orderId") as string;
+  const codPaymentMethod = (formData.get("codPaymentMethod") as string) || "cash";
+  const codUpiRef        = (formData.get("codUpiRef") as string)?.trim() || null;
   if (!orderId) return;
   await prisma.order.update({
     where: { id: orderId },
-    data: { status: "paid" },
+    data:  { status: "paid", codPaymentMethod, codUpiRef: codUpiRef || null },
   });
   revalidatePath("/admin/orders");
   revalidatePath("/admin");
@@ -206,8 +208,15 @@ export default async function OrdersPage({
                           {order.fulfillmentStatus}
                         </span>
                         <span className={`text-[9px] font-semibold ${order.status === 'paid' ? 'text-green-600' : order.status === 'cod_pending' ? 'text-blue-600' : 'text-orange-500'}`}>
-                          {order.status === 'cod_pending' ? '🛵 COD' : `Payment: ${order.status}`}
+                          {order.status === 'cod_pending'
+                            ? '🛵 COD Pending'
+                            : order.paymentMethod === 'cod' && order.codPaymentMethod
+                              ? `💰 COD · ${order.codPaymentMethod.toUpperCase()}`
+                              : `Payment: ${order.status}`}
                         </span>
+                        {order.codUpiRef && (
+                          <span className="text-[9px] text-[#9E9E9E]">Ref: {order.codUpiRef}</span>
+                        )}
                       </div>
                     </td>
                     
@@ -256,13 +265,32 @@ export default async function OrdersPage({
                         )}
 
                         {order.status === 'cod_pending' && (
-                          <form action={markCodPaid}>
+                          <form action={markCodPaid} className="space-y-1.5 min-w-[170px]">
                             <input type="hidden" name="orderId" value={order.id} />
+                            <p className="text-[10px] font-bold text-[#9E9E9E] uppercase tracking-wider">Collected by</p>
+                            <div className="flex gap-1.5">
+                              <label className="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="codPaymentMethod" value="cash" defaultChecked
+                                  className="accent-[#006A38]" />
+                                <span className="text-[11px] font-semibold">💵 Cash</span>
+                              </label>
+                              <label className="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="codPaymentMethod" value="upi"
+                                  className="accent-[#006A38]" />
+                                <span className="text-[11px] font-semibold">📱 UPI</span>
+                              </label>
+                            </div>
+                            <input
+                              type="text"
+                              name="codUpiRef"
+                              placeholder="UPI ref / UTR (optional)"
+                              className="w-full border border-[#E0E0E0] rounded px-2 py-1 text-[11px] focus:outline-none focus:border-[#006A38]"
+                            />
                             <button
                               type="submit"
-                              className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                              className="w-full bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
                             >
-                              ✓ COD Collected
+                              ✓ Confirm Collection
                             </button>
                           </form>
                         )}

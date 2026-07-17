@@ -190,6 +190,8 @@ model Order {
   orderChannel      String      @default("online")
   paymentMethod     String?
   paymentId         String?
+  codPaymentMethod  String?  // "cash" | "upi" — recorded when COD is collected
+  codUpiRef         String?  // UPI transaction ref / UTR (optional)
   invoiceNo         String?
   couponCode        String?
   discountAmount    Decimal?    @db.Decimal(10,2)
