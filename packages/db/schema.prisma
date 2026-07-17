@@ -260,8 +260,9 @@ model Supplier {
   address       String?
   notes         String?
   active        Boolean         @default(true)
-  products      Product[]
-  purchaseOrders PurchaseOrder[]
+  products        Product[]
+  purchaseOrders  PurchaseOrder[]
+  packagingItems  PackagingItem[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
@@ -436,6 +437,39 @@ model ProductionBatch {
   createdBy   String?
 
   logs        RawMaterialLog[]
+}
+
+model PackagingItem {
+  id               String              @id @default(cuid())
+  name             String              @unique
+  category         String              // "pouch" | "box" | "tape" | "label" | "protection" | "other"
+  unit             String              @default("pcs")
+  stockQty         Int                 @default(0)
+  reorderThreshold Int                 @default(50)
+  costPerUnit      Decimal?            @db.Decimal(10,2)
+  supplierId       String?
+  supplier         Supplier?           @relation(fields: [supplierId], references: [id])
+  notes            String?
+  active           Boolean             @default(true)
+  stockLogs        PackagingStockLog[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([category])
+  @@index([supplierId])
+}
+
+model PackagingStockLog {
+  id              String        @id @default(cuid())
+  packagingItemId String
+  packagingItem   PackagingItem @relation(fields: [packagingItemId], references: [id], onDelete: Cascade)
+  type            String        // "purchase" | "used" | "adjustment" | "damaged"
+  qty             Int           // positive = stock in, negative = consumed/damaged
+  note            String?
+  createdAt       DateTime      @default(now())
+
+  @@index([packagingItemId])
+  @@index([createdAt])
 }
 
 model RawMaterialLog {
