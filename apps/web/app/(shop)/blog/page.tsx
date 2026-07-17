@@ -10,7 +10,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
-    where: { published: true },
+    where: { published: true, category: { not: "recipe" } },
     orderBy: { publishedAt: "desc" },
     select: { id: true, slug: true, title: true, excerpt: true, category: true, image: true, readMins: true, publishedAt: true },
   });
