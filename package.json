@@ -32,6 +32,7 @@
     "pdf-parse": "^2.4.5",
     "pdfkit": "^0.19.1",
     "postcss": "8.4.41",
+    "posthog-js": "^1.404.1",
     "qrcode": "^1.5.4",
     "razorpay": "2.9.3",
     "react": "^18.2.0",

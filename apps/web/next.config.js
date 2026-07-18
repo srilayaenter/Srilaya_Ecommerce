@@ -28,7 +28,7 @@ const securityHeaders = [
       // Razorpay payment iframe
       "frame-src https://checkout.razorpay.com https://api.razorpay.com",
       // API calls to Razorpay and Google OAuth
-      "connect-src 'self' https://api.razorpay.com https://accounts.google.com https://o*.ingest.sentry.io",
+      "connect-src 'self' https://api.razorpay.com https://accounts.google.com https://o*.ingest.sentry.io https://eu.i.posthog.com https://eu-assets.i.posthog.com",
       "font-src 'self' data:",
       "object-src 'none'",
       "base-uri 'self'",

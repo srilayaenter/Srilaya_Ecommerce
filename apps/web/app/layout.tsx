@@ -2,7 +2,11 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CartProvider } from "@/context/CartContext";
+import dynamic from "next/dynamic";
 import "./globals.css";
+
+const PostHogProvider = dynamic(() => import("@/components/PostHogProvider"), { ssr: false });
+const CookieConsent   = dynamic(() => import("@/components/CookieConsent"),   { ssr: false });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://srilayafoods.com"),
@@ -42,8 +46,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-black antialiased">
-        <CartProvider>{children}</CartProvider>
-        <SpeedInsights />
+        <PostHogProvider>
+          <CartProvider>{children}</CartProvider>
+          <SpeedInsights />
+          <CookieConsent />
+        </PostHogProvider>
       </body>
     </html>
   );

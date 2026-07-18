@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "How SriLaYa Naturals collects, uses, and protects your personal information.",
 };
 
-const LAST_UPDATED = "30 June 2026";
+const LAST_UPDATED = "18 July 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -108,6 +108,51 @@ export default function PrivacyPolicyPage() {
               We may update this policy from time to time. The "Last updated" date at the top will
               reflect the latest revision. Continued use of the website after changes constitutes
               acceptance of the updated policy.
+            </p>
+          </Section>
+
+          <Section title="11. Your Rights Under the Digital Personal Data Protection Act 2023 (DPDP)">
+            <p className="mb-3">
+              Under India's <strong>Digital Personal Data Protection Act 2023</strong>, you have the
+              following rights as a <strong>Data Principal</strong>:
+            </p>
+            <ul className="list-disc pl-5 space-y-2 mb-4">
+              <li>
+                <strong>Right to Access</strong> — Request a summary of the personal data we hold
+                about you and the purposes for which it is being processed.
+              </li>
+              <li>
+                <strong>Right to Correction</strong> — Request correction of inaccurate or
+                incomplete personal data.
+              </li>
+              <li>
+                <strong>Right to Erasure</strong> — Request deletion of your personal data when it
+                is no longer necessary for the purpose it was collected, subject to legal retention
+                obligations (e.g., GST invoice records must be retained for 6 years under Indian tax law).
+              </li>
+              <li>
+                <strong>Right to Grievance Redressal</strong> — Raise a complaint or grievance
+                about how we handle your personal data. We will respond within 30 days.
+              </li>
+              <li>
+                <strong>Right to Nominate</strong> — Nominate another person to exercise your
+                rights in the event of your death or incapacity.
+              </li>
+            </ul>
+            <p className="mb-3">
+              To exercise any of these rights, write to us at{" "}
+              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">
+                {BRAND.email}
+              </a>{" "}
+              with the subject line <strong>"DPDP Data Rights Request"</strong>. Please include
+              your full name, email address used at checkout, and a description of your request.
+              We will acknowledge your request within 3 business days and resolve it within 30
+              days.
+            </p>
+            <p>
+              <strong>Data Fiduciary:</strong> {BRAND.name}, {BRAND.address}.{" "}
+              For escalations that we have not resolved to your satisfaction, you may approach the
+              <strong> Data Protection Board of India</strong> once it is constituted under the Act.
             </p>
           </Section>
 
