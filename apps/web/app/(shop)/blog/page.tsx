@@ -33,7 +33,7 @@ export default async function BlogPage() {
         <div className="text-center py-20 text-[#9E9E9E]">No posts published yet. Check back soon!</div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
+          {posts.map((post: (typeof posts)[number]) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden hover:shadow-md transition-shadow">
               {post.image ? (
                 <div className="relative h-44 bg-[#F5F5F5]">
