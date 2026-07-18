@@ -1,9 +1,15 @@
 ﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { parseBody, CouponApplySchema } from "@/lib/validation";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
   try {
+    // 20 attempts per hour per IP — prevents brute-forcing coupon codes
+    if (!checkRateLimit(`coupon:${getIp(request)}`, 20, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
     const parsed = await parseBody(request, CouponApplySchema);
     if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     const { code, orderTotal } = parsed.data;

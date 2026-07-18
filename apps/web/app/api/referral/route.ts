@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { generateReferralCode } from "@/lib/loyalty";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 // GET /api/referral?email=xxx — get or create referral code for a customer
 export async function GET(request: Request) {
+  // 30 lookups per hour per IP — prevents customer email enumeration
+  if (!checkRateLimit(`referral:${getIp(request)}`, 30, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   const { searchParams } = new URL(request.url);
   const email = searchParams.get("email")?.trim().toLowerCase();
   if (!email || !email.includes("@")) {

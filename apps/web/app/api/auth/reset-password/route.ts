@@ -3,9 +3,15 @@ import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { parseBody, ResetPasswordSchema } from "@/lib/validation";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
   try {
+    // 10 attempts per hour per IP
+    if (!checkRateLimit(`reset-password:${getIp(request)}`, 10, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
     const parsed = await parseBody(request, ResetPasswordSchema);
     if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     const { token, password } = parsed.data;

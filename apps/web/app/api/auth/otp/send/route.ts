@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendOtpSms } from "@/lib/sms";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 function generateOtp(): string {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -8,6 +9,11 @@ function generateOtp(): string {
 
 export async function POST(request: Request) {
   try {
+    // IP-based limit: 10 OTP requests per hour per IP — prevents Twilio cost attacks
+    if (!checkRateLimit(`otp:${getIp(request)}`, 10, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
     const { phone } = await request.json();
 
     if (!phone || !/^\d{10}$/.test(phone.replace(/\s/g, ""))) {
