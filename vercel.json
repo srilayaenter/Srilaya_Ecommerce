@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/release-stock",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 0 * * *"
     },
     {
       "path": "/api/cron/low-stock-check",
@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/cron/abandoned-cart",
-      "schedule": "0 * * * *"
+      "schedule": "0 1 * * *"
     },
     {
       "path": "/api/cron/cleanup-failed-emails",
