@@ -33,7 +33,7 @@ export default async function AllProductsPage() {
   }));
 
   // Deduplicated, sorted category list
-  const categories = [...new Set(products.map((p) => p.category.name as string))].sort();
+  const categories = ([...new Set(products.map((p) => p.category.name as string))].sort()) as string[];
 
   return (
     <div className="container mx-auto px-4 py-12">
