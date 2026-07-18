@@ -112,6 +112,7 @@ jobs:
       - name: Run smoke tests
         env:
           TEST_BASE_URL: ${{ steps.preview.outputs.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           # Smoke tests are public-route only — no auth env vars needed
           CI: "true"
         run: |
