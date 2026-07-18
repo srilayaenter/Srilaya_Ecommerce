@@ -4,8 +4,8 @@ import fs from "fs";
 
 const STORAGE_STATE_PATH = path.join(__dirname, ".auth", "bypass.json");
 
-// Pages to pre-warm so unstable_cache is hot before tests run.
-// Each request also exercises the Vercel serverless function cold start.
+// Hit these pages sequentially so each one benefits from the previous warm-up.
+// Order matters: "/" warms the category cache first; subsequent pages are fast.
 const WARM_PATHS = ["/", "/about", "/blog", "/cart", "/product", "/sitemap.xml", "/robots.txt"];
 
 export default async function globalSetup() {
@@ -17,13 +17,17 @@ export default async function globalSetup() {
   const ctx = await request.newContext({ baseURL });
   const headers = { "x-vercel-protection-bypass": bypassSecret };
 
-  // Hit all key pages in parallel to warm Vercel function + Next.js unstable_cache.
-  // Ignore errors — we just want the cache warmed, not to assert anything yet.
-  await Promise.allSettled(
-    WARM_PATHS.map(p => ctx.get(p, { headers }))
-  );
+  // Sequential warm-up: "/" populates unstable_cache for categories,
+  // every page after that hits a warm function and warm cache.
+  for (const p of WARM_PATHS) {
+    try {
+      await ctx.get(p, { headers });
+    } catch {
+      // ignore individual errors — purpose is cache warm-up, not assertion
+    }
+  }
 
-  // Save the session cookie Vercel set so browser contexts don't hit the auth gate.
+  // Save the Vercel session cookie so browser contexts skip the auth gate.
   const storageState = await ctx.storageState();
   await ctx.dispose();
 

@@ -88,11 +88,12 @@ jobs:
               echo "  Deployment $DEPLOY_ID state: $STATE"
 
               if [ "$STATE" = "success" ]; then
-                PREVIEW_URL=$(echo "$STATUS_JSON" | jq -r 'first | .target_url // empty')
-                # Strip trailing slash
-                PREVIEW_URL="${PREVIEW_URL%/}"
-                echo "  Preview URL: $PREVIEW_URL"
-                echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+                # Use the stable branch URL rather than the per-commit preview URL.
+                # Per-commit URLs spin up cold function instances every push;
+                # the branch URL reuses warm instances across deployments.
+                STABLE_URL="https://srilaya-ecommerce-git-staging-avrsrikanth-4431s-projects.vercel.app"
+                echo "  Using stable branch URL: $STABLE_URL"
+                echo "url=$STABLE_URL" >> "$GITHUB_OUTPUT"
                 exit 0
               elif [ "$STATE" = "failure" ] || [ "$STATE" = "error" ]; then
                 echo "  Vercel deployment failed (state=$STATE) — aborting smoke run"

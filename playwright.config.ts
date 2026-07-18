@@ -21,6 +21,9 @@ export default defineConfig({
   // the first tests to reach a not-yet-compiled admin route can exceed the 30s
   // default before the page (and its Prisma-backed KPIs) finishes loading.
   timeout: 60000,
+  // Vercel cold-start + US→Mumbai DB latency means pages can take 10-15s to
+  // render on first hit. 30s gives ample headroom without masking real errors.
+  expect: { timeout: 30000 },
   reporter: [["html", { outputFolder: "tests/report" }], ["list"]],
   use: {
     baseURL: process.env.TEST_BASE_URL || "http://localhost:3000",
