@@ -30,14 +30,15 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
-    // Bypass Vercel Preview Protection in CI:
-    // - storageState cookie covers page.goto() (browser navigations)
-    // - extraHTTPHeaders covers request fixture (raw API calls)
+    // Bypass Vercel Preview Protection in CI.
+    // globalSetup hits the staging URL with the bypass header, which causes
+    // Vercel to set a session cookie. storageState loads that cookie into
+    // every context (both page and request fixtures — Playwright 1.32+ applies
+    // storageState to the request fixture as well). Sending the header AND the
+    // cookie simultaneously confuses Vercel's protection logic, so we rely
+    // solely on the cookie here.
     storageState: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
       ? "./tests/e2e/.auth/bypass.json"
-      : undefined,
-    extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
       : undefined,
   },
   projects: [

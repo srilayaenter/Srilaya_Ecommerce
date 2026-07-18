@@ -95,7 +95,9 @@ test("SMOKE-09 sitemap.xml is valid XML with at least one URL", async ({ request
   const text = await res.text();
   expect(text).toContain("<urlset");
   expect(text).toContain("<loc>");
-  expect(text).toContain("srilayafoods.com");
+  // Domain varies per environment (staging uses its own domain), so just
+  // verify URLs are present and well-formed.
+  expect(text).toMatch(/<loc>https:\/\//i);
 });
 
 test("SMOKE-10 robots.txt disallows /admin on staging", async ({ request }) => {
