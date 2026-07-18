@@ -14,10 +14,6 @@ const getCategories = unstable_cache(
 
 export default async function Header() {
   const dbCategories = await getCategories();
-    where:   { parentId: null, products: { some: {} } },
-    orderBy: { name: "asc" },
-    select:  { name: true, slug: true },
-  });
 
   // Build category links from DB, then append static "Recipes" blog link
   const categoryLinks = [
