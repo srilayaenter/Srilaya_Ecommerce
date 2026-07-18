@@ -1,5 +1,13 @@
 import { BRAND } from "@/lib/brand";
 
+const BANK = {
+  accountName:   process.env.BANK_ACCOUNT_NAME   || BRAND.name,
+  bankName:      process.env.BANK_NAME            || "State Bank of India (SBI)",
+  accountNumber: process.env.BANK_ACCOUNT_NUMBER  || "— set BANK_ACCOUNT_NUMBER in environment —",
+  ifsc:          process.env.BANK_IFSC            || "— set BANK_IFSC in environment —",
+  branch:        process.env.BANK_BRANCH          || "Bengaluru, Karnataka",
+};
+
 export default function PaymentDetailsPage() {
   return (
     <div className="bg-white text-[#212121]">
@@ -70,35 +78,27 @@ export default function PaymentDetailsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
               <div className="flex justify-between py-2 border-b border-[#E0E0E0]">
                 <span className="text-[#757575] font-medium">Account Name</span>
-                <span className="font-bold text-[#212121] text-right">{BRAND.name}</span>
+                <span className="font-bold text-[#212121] text-right">{BANK.accountName}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0]">
                 <span className="text-[#757575] font-medium">Bank Name</span>
-                <span className="font-bold text-[#212121] text-right">
-                  State Bank of India (SBI)
-                </span>
+                <span className="font-bold text-[#212121] text-right">{BANK.bankName}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0]">
                 <span className="text-[#757575] font-medium">Account Number</span>
-                <span className="font-mono font-bold text-[#212121] text-right">
-                  XXXXXXXX9482
-                </span>
+                <span className="font-mono font-bold text-[#212121] text-right">{BANK.accountNumber}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0]">
                 <span className="text-[#757575] font-medium">IFSC Code</span>
-                <span className="font-mono font-bold text-[#006A38] text-right">
-                  SBIN0040182
-                </span>
+                <span className="font-mono font-bold text-[#006A38] text-right">{BANK.ifsc}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0] sm:col-span-2">
                 <span className="text-[#757575] font-medium">Branch Location</span>
-                <span className="font-bold text-[#212121] text-right">
-                  Bengaluru, Karnataka
-                </span>
+                <span className="font-bold text-[#212121] text-right">{BANK.branch}</span>
               </div>
             </div>
 
