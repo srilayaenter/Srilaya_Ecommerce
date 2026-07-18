@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     images: ["/brand/srilaya-logo.png"],
   },
   robots: { index: true, follow: true },
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION && {
+    verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION },
+  }),
 };
 
 export default function RootLayout({
