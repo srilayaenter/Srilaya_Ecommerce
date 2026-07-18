@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const { withSentryConfig } = require("@sentry/nextjs");
 
 const securityHeaders = [
   // Prevent the site from being embedded in iframes on other origins (clickjacking)
@@ -26,7 +27,7 @@ const securityHeaders = [
       // Razorpay payment iframe
       "frame-src https://checkout.razorpay.com https://api.razorpay.com",
       // API calls to Razorpay and Google OAuth
-      "connect-src 'self' https://api.razorpay.com https://accounts.google.com",
+      "connect-src 'self' https://api.razorpay.com https://accounts.google.com https://o*.ingest.sentry.io",
       "font-src 'self' data:",
       "object-src 'none'",
       "base-uri 'self'",
@@ -63,4 +64,25 @@ const nextConfig = {
     ],
   },
 };
-module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+
+  // Route Sentry events through the Next.js app (/monitoring) so they pass
+  // through our own domain — avoids needing sentry.io in the script-src CSP.
+  tunnelRoute: "/monitoring",
+
+  // Don't print Sentry build output on every Next.js compile
+  silent: !process.env.CI,
+
+  // Hide source maps from the public bundle — uploaded to Sentry only
+  hideSourceMaps: true,
+
+  webpack: {
+    // Tree-shake Sentry debug/logger statements from the production bundle
+    treeshake: { removeDebugLogging: true },
+    // Automatically instrument Vercel Cron Monitors
+    automaticVercelMonitors: true,
+  },
+});
