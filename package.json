@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev apps/web",
-    "build": "next build apps/web",
+    "build": "prisma generate --schema=./packages/db/schema.prisma && next build apps/web",
     "start": "next start apps/web",
     "prisma:generate": "prisma generate --schema=./packages/db/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=./packages/db/schema.prisma",
@@ -42,6 +42,9 @@
     "twilio": "^6.0.2",
     "typescript": "5.9.3",
     "zod": "^4.4.3"
+  },
+  "prisma": {
+    "schema": "packages/db/schema.prisma"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
