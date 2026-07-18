@@ -26,8 +26,6 @@ const productQuery = {
   include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
 } as const;
 
-type ProductWithVariants = Awaited<ReturnType<typeof prisma.product.findMany<typeof productQuery>>>[number];
-
 // Rich content for known category slugs. Any new category added via admin
 // will automatically appear on the homepage using a gradient fallback.
 const CATEGORY_RICH: Record<string, {
