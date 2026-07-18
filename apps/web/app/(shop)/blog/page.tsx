@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Blog" };
 
 const CATEGORY_LABELS: Record<string, string> = {

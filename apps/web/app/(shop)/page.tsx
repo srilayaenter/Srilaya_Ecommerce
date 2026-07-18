@@ -1,13 +1,15 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { toNum } from "@/lib/decimal";
+
+export const dynamic = "force-dynamic";
 import Image from "next/image";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
-const Testimonials   = dynamic(() => import("@/components/Testimonials"),   { ssr: false });
-const RecentlyViewed = dynamic(() => import("@/components/RecentlyViewed"), { ssr: false });
+const Testimonials   = dynamicImport(() => import("@/components/Testimonials"),   { ssr: false });
+const RecentlyViewed = dynamicImport(() => import("@/components/RecentlyViewed"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",

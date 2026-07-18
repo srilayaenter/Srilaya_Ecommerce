@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const BASE_URL = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

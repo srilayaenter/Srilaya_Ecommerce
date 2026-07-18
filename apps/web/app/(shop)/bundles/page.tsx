@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import AddBundleButton from "./AddBundleButton";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Bundle Packs" };
 
 export default async function BundlesPage() {
