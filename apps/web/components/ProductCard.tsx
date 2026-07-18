@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { addToCart } from "@/app/actions/cart";
 import { useCart } from "@/context/CartContext";
 import WishlistButton from "@/components/WishlistButton";
@@ -71,10 +72,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Image Frame */}
       <Link href={`/product/${product.slug}`} className="w-full h-52 bg-[#F9F9F9] relative overflow-hidden flex items-center justify-center p-4">
         {product.image ? (
-          <img
+          <Image
             src={product.image}
             alt={product.title}
-            className="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-contain group-hover:scale-105 transition duration-300 p-4"
           />
         ) : (
           <div className="flex flex-col items-center justify-center text-[#BDBDBD] gap-2">

@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -109,13 +110,12 @@ export default async function CategoryPage({ params }: PageProps) {
                 className="group border border-[#E0E0E0] rounded-xl p-4 hover:shadow-lg transition-shadow bg-white flex flex-col"
               >
                 <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src={
-                      product.image ||
-                      "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"
-                    }
+                  <Image
+                    src={product.image || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
                     alt={product.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-105 transition-transform"
                   />
                 </div>
                 <h2 className="font-bold text-[#212121] mb-1">{product.title}</h2>

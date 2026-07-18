@@ -52,7 +52,6 @@ export default function RecentlyViewed({ excludeSlug }: { excludeSlug?: string }
                 fill
                 className="object-contain p-2"
                 sizes="200px"
-                unoptimized={!!p.image}
               />
             </div>
             <div className="p-2">

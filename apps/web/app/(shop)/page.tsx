@@ -3,10 +3,12 @@ import Link from "next/link";
 import { toNum } from "@/lib/decimal";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
-import Testimonials from "@/components/Testimonials";
-import RecentlyViewed from "@/components/RecentlyViewed";
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
+
+const Testimonials   = dynamic(() => import("@/components/Testimonials"),   { ssr: false });
+const RecentlyViewed = dynamic(() => import("@/components/RecentlyViewed"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",
