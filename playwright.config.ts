@@ -31,14 +31,10 @@ export default defineConfig({
     screenshot: "only-on-failure",
     video: "off",
     // Bypass Vercel Preview Protection in CI.
-    // globalSetup launches a real Chromium browser, navigates with the bypass
-    // header so Vercel grants a proper browser session cookie, then saves the
-    // full browser storage state. storageState here loads that cookie into every
-    // page context. extraHTTPHeaders covers the request fixture (SMOKE-01/09/10)
-    // which creates a fresh APIRequestContext that doesn't inherit storageState.
-    storageState: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      ? "./tests/e2e/.auth/bypass.json"
-      : undefined,
+    // extraHTTPHeaders covers the request fixture (SMOKE-01/09/10).
+    // Page-fixture tests use page.route() in smoke.spec.ts beforeEach, which
+    // intercepts at Playwright's network layer and works for navigation requests
+    // (unlike extraHTTPHeaders which only works reliably for raw API calls).
     extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
       ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
       : undefined,
