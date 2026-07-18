@@ -19,7 +19,8 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const allMenuItems = [
     { name: "Overview Dashboard", href: "/admin",               icon: "📊", roles: ['owner','admin','manager'] },
     { name: "Manage Orders",      href: "/admin/orders",        icon: "📦", roles: ['owner','admin','manager','billing_staff'] },
-    { name: "Inventory Matrix",   href: "/admin/products",      icon: "🌾", roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Inventory Matrix",   href: "/admin/products",         icon: "🌾", roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Bulk Pricing",       href: "/admin/bulk-pricing",     icon: "💲", roles: ['owner','admin','manager'] },
     { name: "Bulk Stock Import",  href: "/admin/inventory-import", icon: "📥", roles: ['owner','admin','manager','inventory_staff'] },
     { name: "Stock Log",          href: "/admin/stock-log",        icon: "📋", roles: ['owner','admin','manager','inventory_staff'] },
     { name: "Categories",         href: "/admin/categories",    icon: "🗂️", roles: ['owner','admin','manager','inventory_staff'] },
