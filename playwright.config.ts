@@ -10,6 +10,9 @@ try {
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  globalSetup: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    ? "./tests/e2e/globalSetup"
+    : undefined,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
@@ -24,9 +27,9 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
-    // Bypass Vercel Preview Protection when running against a preview URL in CI
-    extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+    // Reuse the Vercel protection cookie established in globalSetup
+    storageState: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      ? "./tests/e2e/.auth/bypass.json"
       : undefined,
   },
   projects: [
