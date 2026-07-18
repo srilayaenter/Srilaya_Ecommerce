@@ -17,8 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({ where: { slug } });
+  if (!post) notFound();
   const isLive = post.published || (post.publishedAt && post.publishedAt <= new Date());
-  if (!post || !isLive) notFound();
+  if (!isLive) notFound();
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
   const articleJsonLd = {

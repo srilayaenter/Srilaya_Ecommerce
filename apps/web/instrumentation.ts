@@ -26,5 +26,5 @@ export const onRequestError = async (
   context: { routeType: string }
 ) => {
   const { captureRequestError } = await import("@sentry/nextjs");
-  captureRequestError(err, request, context);
+  captureRequestError(err, request as any, context as any);
 };

@@ -10,14 +10,16 @@ import { generateInvoicePdf } from "../../../../../lib/generateInvoicePdf";
 import { log, logPaymentVerified, logPaymentFailed, logError } from "../../../../../lib/logger";
 
 export async function POST(request: Request) {
+  let dbOrderId: string | undefined;
   try {
     const body = await request.json();
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      dbOrderId,
+      dbOrderId: _dbOrderId,
     } = body;
+    dbOrderId = _dbOrderId;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !dbOrderId) {
       logPaymentFailed({ reason: "missing_fields" });

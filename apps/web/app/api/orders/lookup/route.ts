@@ -17,7 +17,6 @@ export async function GET(request: Request) {
     include: {
       items: {
         include: { variant: { include: { product: { select: { title: true } } } } },
-        orderBy: { createdAt: "asc" },
       },
     },
   });
@@ -39,7 +38,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: `The ${RETURN_WINDOW_DAYS}-day return window for this order has passed.` }, { status: 400 });
   }
 
-  const items = order.items.map(i => ({
+  const items = order.items.map((i: (typeof order.items)[number]) => ({
     variantId: i.variantId,
     title:     i.variant?.product?.title ?? "Product",
     size:      i.variant?.size ?? "",
