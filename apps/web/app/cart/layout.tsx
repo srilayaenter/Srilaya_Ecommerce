@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+function HeaderSkeleton() {
+  return <div className="h-16 bg-white border-b sticky top-0 z-50" aria-hidden="true" />;
+}
 
 export default function CartLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +15,9 @@ export default function CartLayout({ children }: { children: React.ReactNode }) 
       >
         Skip to main content
       </a>
-      <Header />
+      <Suspense fallback={<HeaderSkeleton />}>
+        <Header />
+      </Suspense>
       <main id="main-content" className="min-h-screen">{children}</main>
       <Footer />
     </>
