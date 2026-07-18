@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { BRAND } from "@/lib/brand";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -18,8 +19,27 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post || !post.published) notFound();
 
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt ?? undefined,
+    image: post.image ? [post.image] : undefined,
+    datePublished: post.publishedAt?.toISOString() ?? post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    author: { "@type": "Organization", name: BRAND.name, url: baseUrl },
+    publisher: {
+      "@type": "Organization",
+      name: BRAND.name,
+      logo: { "@type": "ImageObject", url: `${baseUrl}/brand/srilaya-logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${baseUrl}/blog/${slug}` },
+  };
+
   return (
     <main className="max-w-2xl mx-auto px-4 py-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <Link href="/blog" className="text-sm text-[#006A38] font-semibold hover:underline inline-flex items-center gap-1 mb-6">
         ← Back to Blog
       </Link>

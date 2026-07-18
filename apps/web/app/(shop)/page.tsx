@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import Testimonials from "@/components/Testimonials";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import type { Metadata } from "next";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",
@@ -153,8 +154,44 @@ export default async function HomePage() {
     }),
   ]);
 
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: BRAND.name,
+    url: baseUrl,
+    logo: `${baseUrl}/brand/srilaya-logo.png`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: BRAND.phone,
+      contactType: "customer service",
+      areaServed: "IN",
+      availableLanguage: ["English", "Hindi"],
+    },
+    sameAs: [
+      BRAND.social.facebook,
+      BRAND.social.instagram,
+      BRAND.social.twitter,
+    ].filter(Boolean),
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: BRAND.name,
+    url: baseUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${baseUrl}/search?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <div className="bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
 
       {/* -- HERO ----------------------------------------------- */}
       <section className="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 text-white overflow-hidden">
