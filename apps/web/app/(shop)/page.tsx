@@ -2,7 +2,6 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { toNum } from "@/lib/decimal";
 import Image from "next/image";
-import { Prisma } from "@prisma/client";
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
@@ -25,9 +24,9 @@ export const metadata: Metadata = {
 
 const productQuery = {
   include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
-} satisfies Prisma.ProductFindManyArgs;
+} as const;
 
-type ProductWithVariants = Prisma.ProductGetPayload<typeof productQuery>;
+type ProductWithVariants = Awaited<ReturnType<typeof prisma.product.findMany<typeof productQuery>>>[number];
 
 // Rich content for known category slugs. Any new category added via admin
 // will automatically appear on the homepage using a gradient fallback.
