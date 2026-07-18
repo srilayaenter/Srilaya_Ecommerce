@@ -34,7 +34,7 @@
     "postcss": "8.4.41",
     "posthog-js": "^1.404.1",
     "qrcode": "^1.5.4",
-    "razorpay": "2.9.3",
+    "razorpay": "2.9.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resend": "^4.0.0",
