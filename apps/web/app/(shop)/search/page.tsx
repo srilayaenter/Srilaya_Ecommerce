@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
           take: 6,
         }),
       ])
-    : [[], []] as [typeof [] & any[], typeof [] & any[]];
+    : [[], []] as [any[], any[]];
 
   // Suggestions when no results
   const suggestions = ["millet", "rice", "flakes", "flour", "rava", "sweetener"];
