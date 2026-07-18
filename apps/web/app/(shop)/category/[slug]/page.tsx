@@ -81,7 +81,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   : "text-[#006A38] bg-[#006A38]/10 hover:bg-[#006A38]/20"
               }`}
             >
-              Millet {sib.name}
+              {sib.name}
             </Link>
           ))}
         </div>
