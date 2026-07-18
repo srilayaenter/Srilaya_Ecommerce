@@ -1,10 +1,19 @@
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import HeaderClient from "./HeaderClient";
 
+const getCategories = unstable_cache(
+  () => prisma.category.findMany({
+    where:   { parentId: null, products: { some: {} } },
+    orderBy: { name: "asc" },
+    select:  { name: true, slug: true },
+  }),
+  ["header-categories"],
+  { revalidate: 3600, tags: ["categories"] }
+);
+
 export default async function Header() {
-  noStore();
-  const dbCategories = await prisma.category.findMany({
+  const dbCategories = await getCategories();
     where:   { parentId: null, products: { some: {} } },
     orderBy: { name: "asc" },
     select:  { name: true, slug: true },
