@@ -14,7 +14,8 @@ function normalise(s: string) {
 // Convert PDF to images using pdf-parse for text, falling back to base64 for vision
 async function extractFromPdf(buffer: Buffer): Promise<{ text: string } | null> {
   try {
-    const pdfParse = (await import('pdf-parse')).default as unknown as (buf: Buffer) => Promise<{ text: string }>;
+    const mod = await import('pdf-parse');
+    const pdfParse = (mod.default ?? mod) as unknown as (buf: Buffer) => Promise<{ text: string }>;
     const data = await pdfParse(buffer);
     return { text: data.text };
   } catch {

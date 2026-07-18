@@ -86,7 +86,8 @@ export async function POST(req: NextRequest) {
   let text = '';
   try {
     // Dynamic import to avoid Edge runtime issues
-    const pdfParse = (await import('pdf-parse')).default as unknown as (buf: Buffer) => Promise<{ text: string }>;
+    const mod = await import('pdf-parse');
+    const pdfParse = (mod.default ?? mod) as unknown as (buf: Buffer) => Promise<{ text: string }>;
     const data = await pdfParse(buffer);
     text = data.text;
   } catch (e) {
