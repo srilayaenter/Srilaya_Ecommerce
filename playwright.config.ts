@@ -27,9 +27,14 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
-    // Reuse the Vercel protection cookie established in globalSetup
+    // Bypass Vercel Preview Protection in CI:
+    // - storageState cookie covers page.goto() (browser navigations)
+    // - extraHTTPHeaders covers request fixture (raw API calls)
     storageState: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
       ? "./tests/e2e/.auth/bypass.json"
+      : undefined,
+    extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
       : undefined,
   },
   projects: [
