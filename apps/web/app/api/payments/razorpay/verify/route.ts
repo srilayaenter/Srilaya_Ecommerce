@@ -7,6 +7,7 @@ import { buildOrderConfirmationEmail } from "../../../../../lib/emails/orderConf
 import { toNum } from "../../../../../lib/decimal";
 import { earnPoints, processReferral } from "../../../../../lib/loyalty";
 import { generateInvoicePdf } from "../../../../../lib/generateInvoicePdf";
+import { log, logPaymentVerified, logPaymentFailed, logError } from "../../../../../lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -19,6 +20,8 @@ export async function POST(request: Request) {
     } = body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !dbOrderId) {
+      logPaymentFailed({ reason: "missing_fields" });
+      await log.flush();
       return NextResponse.json(
         { error: "Missing payment details" },
         { status: 400 }
@@ -41,6 +44,8 @@ export async function POST(request: Request) {
     const isValid = expectedSignature === razorpay_signature;
 
     if (!isValid) {
+      logPaymentFailed({ razorpayOrderId: razorpay_order_id, reason: "invalid_signature" });
+      await log.flush();
       return NextResponse.json(
         { error: "Invalid payment signature" },
         { status: 400 }
@@ -62,6 +67,14 @@ export async function POST(request: Request) {
 
     if (order.status !== 'paid') {
       const invoiceNo = order.invoiceNo || `INV-${Date.now()}`;
+
+      logPaymentVerified({
+        orderId: dbOrderId,
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        total: toNum(order.total),
+        email: order.email ?? "",
+      });
 
       const updatedOrder = await prisma.order.update({
         where: { id: dbOrderId },
@@ -152,6 +165,7 @@ export async function POST(request: Request) {
       await prisma.cartItem.deleteMany({ where: { cartId } });
     }
 
+    await log.flush();
     return NextResponse.json({
       success: true,
       message: "Payment verified successfully",
@@ -159,6 +173,8 @@ export async function POST(request: Request) {
     });
 
   } catch (error: any) {
+    logError("payment.verify", error, { dbOrderId });
+    await log.flush();
     console.error("Payment verification error:", error);
     return NextResponse.json(
       { error: "Payment verification failed" },

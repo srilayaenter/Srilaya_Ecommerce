@@ -13,6 +13,7 @@ import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
+import { logOrderPlaced } from "@/lib/logger";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -161,6 +162,18 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   // Clear cart now that the order is placed
   await prisma.cartItem.deleteMany({ where: { cartId } });
+
+  logOrderPlaced({
+    orderId,
+    invoiceNo: "",
+    customerName,
+    email: email || "",
+    total,
+    paymentMethod: paymentMethod || "online",
+    itemCount: cartItems.length,
+    city,
+    state,
+  });
 
   // Log stock deductions
   logStockChanges(cartItems.map(item => ({

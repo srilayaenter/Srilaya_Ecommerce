@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const { withSentryConfig } = require("@sentry/nextjs");
+const { withAxiom } = require("next-axiom");
 
 const securityHeaders = [
   // Prevent the site from being embedded in iframes on other origins (clickjacking)
@@ -64,7 +65,7 @@ const nextConfig = {
     ],
   },
 };
-module.exports = withSentryConfig(nextConfig, {
+module.exports = withAxiom(withSentryConfig(nextConfig, {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -85,4 +86,4 @@ module.exports = withSentryConfig(nextConfig, {
     // Automatically instrument Vercel Cron Monitors
     automaticVercelMonitors: true,
   },
-});
+}));

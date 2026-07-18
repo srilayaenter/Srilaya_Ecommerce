@@ -6,6 +6,7 @@ import { sendStockNotifications } from "@/lib/stockNotifications";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
+import { log, logPaymentFailed, logError } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -71,6 +72,14 @@ export async function POST(request: Request) {
       });
 
       if (order && order.status === 'pending') {
+        logPaymentFailed({
+          orderId: order.id,
+          razorpayOrderId,
+          reason: "payment.failed_webhook",
+          email: order.email ?? undefined,
+          total: toNum(order.total),
+        });
+
         const orderItems = await prisma.orderItem.findMany({
           where: { orderId: order.id }
         });
@@ -111,9 +120,12 @@ export async function POST(request: Request) {
       data: { provider: 'razorpay', eventId }
     });
 
+    await log.flush();
     return NextResponse.json({ success: true });
 
   } catch (error: any) {
+    logError("payment.webhook", error);
+    await log.flush();
     console.error("Webhook processing error:", error);
     return NextResponse.json(
       { error: "Webhook processing failed" },
