@@ -1,0 +1,130 @@
+name: Staging smoke
+
+on:
+  # Gate: every PR targeting main must pass before it can merge
+  pull_request:
+    branches: [main]
+  # CI: run on every push to staging so failures are caught before a PR is opened
+  push:
+    branches: [staging]
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-test:
+    name: smoke / smoke-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── 2. Runtime ───────────────────────────────────────────────────────────
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 3. Playwright browsers (chromium only for speed) ────────────────────
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install Playwright (chromium only)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Install Playwright system deps (cached hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      # ── 4. Wait for Vercel preview deployment ───────────────────────────────
+      #
+      # Vercel registers a GitHub Deployment for every push/PR. We poll the
+      # GitHub Deployments API (no extra secrets needed — GITHUB_TOKEN is built-in)
+      # until the deployment succeeds, then extract the preview URL.
+      #
+      - name: Wait for Vercel preview URL
+        id: preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            SHA="${{ github.sha }}"
+          fi
+
+          echo "Waiting for Vercel preview deployment (SHA: $SHA)..."
+
+          for i in $(seq 1 36); do
+            # Look for a Deployment whose environment name contains "preview"
+            DEPLOY_JSON=$(gh api \
+              "repos/${{ github.repository }}/deployments?sha=$SHA&per_page=20" \
+              2>/dev/null || echo "[]")
+
+            DEPLOY_ID=$(echo "$DEPLOY_JSON" \
+              | jq -r 'map(select(.environment | ascii_downcase | test("preview"))) | first | .id // empty')
+
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATUS_JSON=$(gh api \
+                "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                2>/dev/null || echo "[]")
+
+              STATE=$(echo "$STATUS_JSON" | jq -r 'first | .state // empty')
+              echo "  Deployment $DEPLOY_ID state: $STATE"
+
+              if [ "$STATE" = "success" ]; then
+                PREVIEW_URL=$(echo "$STATUS_JSON" | jq -r 'first | .target_url // empty')
+                # Strip trailing slash
+                PREVIEW_URL="${PREVIEW_URL%/}"
+                echo "  Preview URL: $PREVIEW_URL"
+                echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+                exit 0
+              elif [ "$STATE" = "failure" ] || [ "$STATE" = "error" ]; then
+                echo "  Vercel deployment failed (state=$STATE) — aborting smoke run"
+                exit 1
+              fi
+            else
+              echo "  No matching deployment found yet (attempt $i/36)"
+            fi
+
+            sleep 10
+          done
+
+          echo "ERROR: timed out waiting for Vercel preview (6 min)"
+          exit 1
+
+      # ── 5. Run smoke tests ───────────────────────────────────────────────────
+      - name: Run smoke tests
+        env:
+          TEST_BASE_URL: ${{ steps.preview.outputs.url }}
+          # Smoke tests are public-route only — no auth env vars needed
+          CI: "true"
+        run: |
+          echo "Running smoke tests against: $TEST_BASE_URL"
+          pnpm exec playwright test tests/e2e/smoke.spec.ts \
+            --project=chromium \
+            --reporter=list
+
+      # ── 6. Upload Playwright report on failure ───────────────────────────────
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-report-${{ github.run_id }}
+          path: tests/report/
+          retention-days: 7

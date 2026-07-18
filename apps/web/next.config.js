@@ -3,6 +3,11 @@ const { withSentryConfig } = require("@sentry/nextjs");
 const { withAxiom } = require("next-axiom");
 
 const securityHeaders = [
+  // Tell crawlers not to index preview / staging deployments.
+  // VERCEL_ENV is "production" only on the main production deployment.
+  ...(process.env.VERCEL_ENV !== 'production'
+    ? [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }]
+    : []),
   // Prevent the site from being embedded in iframes on other origins (clickjacking)
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   // Stop browsers from sniffing the MIME type
