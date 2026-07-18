@@ -48,6 +48,7 @@ export default function Footer() {
               <li><Link href="/about" className="hover:text-[#4CAF50] transition-colors">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-[#4CAF50] transition-colors">Blog & Recipes</Link></li>
               <li><Link href="/contact" className="hover:text-[#4CAF50] transition-colors">Contact Us</Link></li>
+              <li><Link href="/feedback" className="hover:text-[#4CAF50] transition-colors">Share Feedback</Link></li>
               <li><Link href="/track" className="hover:text-[#4CAF50] transition-colors">Track Order</Link></li>
               <li><Link href="/account" className="hover:text-[#4CAF50] transition-colors">My Orders</Link></li>
               <li><Link href="/wishlist" className="hover:text-[#4CAF50] transition-colors">Wishlist</Link></li>

@@ -2,30 +2,67 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 
-export default async function InventoryMatrixPage() {
+interface PageProps { searchParams: Promise<{ status?: string }> }
+
+export default async function InventoryMatrixPage({ searchParams }: PageProps) {
+  const { status } = await searchParams;
+  const showDraft = status === "draft";
+
   const products = await prisma.product.findMany({
-    include: {
-      category: true,
-      variants: true,
-    },
+    where: showDraft ? { active: false } : undefined,
+    include: { category: true, variants: true },
     orderBy: { createdAt: 'desc' },
   });
 
+  const draftCount = showDraft
+    ? products.length
+    : await prisma.product.count({ where: { active: false } });
+
   return (
     <div className="space-y-6 font-sans pb-12">
-      
+
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#212121]">Inventory Matrix</h1>
           <p className="text-sm text-[#8D6E63] mt-1">Manage your millet product catalog and stock levels.</p>
         </div>
-        <Link 
-          href="/admin/products/new" 
+        <Link
+          href="/admin/products/new"
           className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors"
         >
           + Add New Product
         </Link>
+      </div>
+
+      {/* Draft alert */}
+      {draftCount > 0 && !showDraft && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-3 flex items-center justify-between">
+          <p className="text-sm font-semibold text-amber-800">
+            {draftCount} inactive product{draftCount !== 1 ? "s" : ""} — not visible to customers
+          </p>
+          <Link href="/admin/products?status=draft"
+            className="text-xs font-bold text-amber-700 hover:underline">
+            Review drafts →
+          </Link>
+        </div>
+      )}
+
+      {/* Filter tabs */}
+      <div className="flex gap-2">
+        {[
+          { label: "All products", href: "/admin/products" },
+          { label: `Drafts (${draftCount})`, href: "/admin/products?status=draft" },
+        ].map(tab => (
+          <Link key={tab.href} href={tab.href}
+            className={`px-4 py-1.5 text-sm font-semibold rounded-lg border transition-colors ${
+              (tab.href === "/admin/products?status=draft") === showDraft
+                ? "bg-[#006A38] text-white border-[#006A38]"
+                : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
+            }`}>
+            {tab.label}
+          </Link>
+        ))}
       </div>
 
       {/* Main Table Container */}

@@ -12,18 +12,25 @@ export async function PATCH(request: Request, { params }: { params: Params }) {
   }
   const { id } = await params;
   const body = await request.json();
-  const { title, excerpt, content, category, image, readMins, published } = body;
+  const { title, excerpt, content, category, image, readMins, published, scheduledAt } = body;
+
+  const schedDate = scheduledAt !== undefined ? (scheduledAt ? new Date(scheduledAt) : null) : undefined;
+  const isScheduled = schedDate && schedDate > new Date();
 
   const post = await prisma.blogPost.update({
     where: { id },
     data: {
-      ...(title     !== undefined && { title:    title.trim() }),
-      ...(excerpt   !== undefined && { excerpt:  excerpt?.trim() || null }),
-      ...(content   !== undefined && { content:  content.trim() }),
-      ...(category  !== undefined && { category }),
-      ...(image     !== undefined && { image: image?.trim() || null }),
-      ...(readMins  !== undefined && { readMins: Number(readMins) || 3 }),
-      ...(published !== undefined && {
+      ...(title      !== undefined && { title:    title.trim() }),
+      ...(excerpt    !== undefined && { excerpt:  excerpt?.trim() || null }),
+      ...(content    !== undefined && { content:  content.trim() }),
+      ...(category   !== undefined && { category }),
+      ...(image      !== undefined && { image: image?.trim() || null }),
+      ...(readMins   !== undefined && { readMins: Number(readMins) || 3 }),
+      ...(scheduledAt !== undefined && {
+        published:   isScheduled ? false : (published !== undefined ? !!published : undefined),
+        publishedAt: isScheduled ? schedDate : (published ? new Date() : null),
+      }),
+      ...(published  !== undefined && scheduledAt === undefined && {
         published: !!published,
         publishedAt: published ? new Date() : null,
       }),

@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    groups:
+      next-ecosystem:
+        patterns: ["next", "react", "react-dom", "@types/react*", "eslint-config-next"]
+      prisma:
+        patterns: ["prisma", "@prisma/*"]
+      sentry:
+        patterns: ["@sentry/*", "sentry"]
+      auth:
+        patterns: ["next-auth", "@auth/*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

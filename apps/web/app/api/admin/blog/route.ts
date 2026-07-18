@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const body = await request.json();
-  const { title, excerpt, content, category, image, readMins, published } = body;
+  const { title, excerpt, content, category, image, readMins, published, scheduledAt } = body;
   if (!title?.trim() || !content?.trim()) {
     return NextResponse.json({ error: "Title and content required" }, { status: 400 });
   }
@@ -30,6 +30,9 @@ export async function POST(request: Request) {
   let s = base;
   let i = 1;
   while (await prisma.blogPost.findUnique({ where: { slug: s } })) s = `${base}-${i++}`;
+
+  const schedDate = scheduledAt ? new Date(scheduledAt) : null;
+  const isScheduled = schedDate && schedDate > new Date();
 
   const post = await prisma.blogPost.create({
     data: {
@@ -39,8 +42,8 @@ export async function POST(request: Request) {
       category: category || "article",
       image: image?.trim() || null,
       readMins: Number(readMins) || 3,
-      published: !!published,
-      publishedAt: published ? new Date() : null,
+      published: isScheduled ? false : !!published,
+      publishedAt: isScheduled ? schedDate : (published ? new Date() : null),
     },
   });
   return NextResponse.json({ post }, { status: 201 });
