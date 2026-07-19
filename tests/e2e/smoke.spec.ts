@@ -25,8 +25,8 @@ test.beforeEach(async ({ page }) => {
 
 test("SMOKE-01 health endpoint returns 200", async ({ request }) => {
   const res = await request.get("/api/healthz");
-  expect(res.status()).toBe(200);
-  const body = await res.json();
+  const body = await res.json().catch(() => ({}));
+  expect(res.status(), `healthz body: ${JSON.stringify(body)}`).toBe(200);
   expect(body.status).toBe("ok");
 });
 
