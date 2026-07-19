@@ -50,7 +50,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-white text-black antialiased">
         <PostHogProvider>
-          <CartProvider>{children}</CartProvider>
+          <CartProvider>
+            <main id="main-content">{children}</main>
+          </CartProvider>
           <SpeedInsights />
           <CookieConsent />
         </PostHogProvider>

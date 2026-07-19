@@ -22,7 +22,7 @@ export default function ShopLayout({
       <Suspense fallback={<HeaderSkeleton />}>
         <Header />
       </Suspense>
-      <main id="main-content" className="min-h-screen">{children}</main>
+      <div className="min-h-screen">{children}</div>
       <Footer />
     </>
   );
