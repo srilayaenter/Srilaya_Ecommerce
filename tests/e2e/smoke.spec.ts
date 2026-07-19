@@ -82,7 +82,7 @@ test("SMOKE-06 cart page loads (empty state is fine)", async ({ page }) => {
 });
 
 test("SMOKE-07 blog listing loads at least one post", async ({ page }) => {
-  await page.goto("/blog", { waitUntil: "networkidle" });
+  await page.goto("/blog", { waitUntil: "domcontentloaded" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   await expect(page.locator("main")).toBeVisible();
   await expect(page.locator("h1, h2, h3").first()).toBeVisible();
