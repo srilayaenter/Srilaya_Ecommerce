@@ -15,7 +15,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">
+    <main className="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">
       <div className="text-center max-w-md">
         <div className="text-5xl mb-4">⚠️</div>
         <h1 className="text-2xl font-bold text-[#212121] mb-3">Something went wrong</h1>
@@ -37,6 +37,6 @@ export default function GlobalError({
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

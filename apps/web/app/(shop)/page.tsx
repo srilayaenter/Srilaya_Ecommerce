@@ -1,8 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { toNum } from "@/lib/decimal";
-
-export const dynamic = "force-dynamic";
 import Image from "next/image";
 import dynamicImport from "next/dynamic";
 import type { Metadata } from "next";
@@ -24,9 +23,26 @@ export const metadata: Metadata = {
   },
 };
 
-const productQuery = {
-  include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
-} as const;
+const fetchHomeProducts = unstable_cache(
+  () => prisma.product.findMany({
+    where: { active: true },
+    include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
+    take: 8,
+    orderBy: { reviews: "desc" },
+  }),
+  ["home-products"],
+  { revalidate: 300, tags: ["products"] }
+);
+
+const fetchHomeCategories = unstable_cache(
+  () => prisma.category.findMany({
+    where: { parentId: null, products: { some: {} } },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
+  }),
+  ["home-categories"],
+  { revalidate: 300, tags: ["categories"] }
+);
 
 // Rich content for known category slugs. Any new category added via admin
 // will automatically appear on the homepage using a gradient fallback.
@@ -141,19 +157,19 @@ const whyUs = [
 ];
 
 export default async function HomePage() {
-  const [products, dbCategories] = await Promise.all([
-    prisma.product.findMany({
-      ...productQuery,
-      where: { active: true },
-      take: 8,
-      orderBy: { reviews: "desc" },
-    }),
-    prisma.category.findMany({
-      where: { parentId: null, products: { some: {} } },
-      orderBy: { name: "asc" },
-      select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
-    }),
-  ]);
+  let products: Awaited<ReturnType<typeof fetchHomeProducts>> = [];
+  let dbCategories: Awaited<ReturnType<typeof fetchHomeCategories>> = [];
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("home-timeout")), 8000)
+    );
+    [products, dbCategories] = await Promise.race([
+      Promise.all([fetchHomeProducts(), fetchHomeCategories()]),
+      timeout,
+    ]);
+  } catch {
+    // DB unavailable on cold start — render with empty data
+  }
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
 

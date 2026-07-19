@@ -5,6 +5,8 @@ import { request } from "@playwright/test";
 // query doesn't cold-start during the actual test assertions.
 // The bypass header is sent here so Vercel allows the warm-up requests;
 // the real per-test bypass is handled via page.route() in smoke.spec.ts.
+// Warm "/" first so home-products + home-categories cache populates before other pages.
+// "/product" next so all-products cache is hot before SMOKE-03/04 run.
 const WARM_PATHS = ["/", "/product", "/blog", "/about", "/cart", "/search?q=millet", "/sitemap.xml"];
 
 export default async function globalSetup() {

@@ -31,15 +31,15 @@ test("SMOKE-01 health endpoint returns 200", async ({ request }) => {
 });
 
 test("SMOKE-02 homepage loads with brand name", async ({ page }) => {
-  await page.goto("/");
-  // Page title comes from layout metadata — appears in initial HTML before any
-  // DB queries resolve, so this check is fast and DB-latency-independent.
+  // domcontentloaded: title is in <head> (first streaming chunk); no need to
+  // wait for body streaming or network-idle.
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveTitle(/srilaya/i);
   await expect(page).not.toHaveTitle(/error|not found/i);
 });
 
 test("SMOKE-03 products listing renders at least one product", async ({ page }) => {
-  await page.goto("/product");
+  await page.goto("/product", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   const productLinks = page.locator("a[href^='/product/']");
   // No explicit timeout — global 30s accommodates cold-start DB latency
@@ -48,13 +48,13 @@ test("SMOKE-03 products listing renders at least one product", async ({ page }) 
 });
 
 test("SMOKE-04 product detail page loads with price and Add to Cart", async ({ page }) => {
-  await page.goto("/product");
+  await page.goto("/product", { waitUntil: "networkidle" });
   const firstLink = page.locator("a[href^='/product/']").first();
   await expect(firstLink).toBeVisible();
   const href = await firstLink.getAttribute("href");
   expect(href).toBeTruthy();
 
-  await page.goto(href!);
+  await page.goto(href!, { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   await expect(page.getByText(/₹\s*\d+/).first()).toBeVisible();
   await expect(
@@ -63,7 +63,7 @@ test("SMOKE-04 product detail page loads with price and Add to Cart", async ({ p
 });
 
 test("SMOKE-05 search returns results for 'millet'", async ({ page }) => {
-  await page.goto("/search?q=millet");
+  await page.goto("/search?q=millet", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   const results = page.locator("a[href^='/product/']").or(
     page.getByText(/\d+\s+result/i)
@@ -72,7 +72,7 @@ test("SMOKE-05 search returns results for 'millet'", async ({ page }) => {
 });
 
 test("SMOKE-06 cart page loads (empty state is fine)", async ({ page }) => {
-  await page.goto("/cart");
+  await page.goto("/cart", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   // <main> is in the layout shell — appears before any DB query resolves
   await expect(page.locator("main")).toBeVisible();
@@ -82,7 +82,7 @@ test("SMOKE-06 cart page loads (empty state is fine)", async ({ page }) => {
 });
 
 test("SMOKE-07 blog listing loads at least one post", async ({ page }) => {
-  await page.goto("/blog");
+  await page.goto("/blog", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   await expect(page.locator("main")).toBeVisible();
   await expect(page.locator("h1, h2, h3").first()).toBeVisible();
@@ -91,7 +91,7 @@ test("SMOKE-07 blog listing loads at least one post", async ({ page }) => {
 test("SMOKE-08 key static pages render without 500", async ({ page }) => {
   const routes = ["/about", "/contact", "/privacy", "/terms", "/shipping-policy"];
   for (const route of routes) {
-    const res = await page.goto(route);
+    const res = await page.goto(route, { waitUntil: "networkidle" });
     expect(
       res?.status(),
       `${route} returned ${res?.status()}`
