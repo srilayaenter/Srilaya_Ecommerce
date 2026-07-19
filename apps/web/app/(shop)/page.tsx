@@ -61,6 +61,17 @@ const CATEGORY_RICH: Record<string, {
       "🥣 Great oats alternative for breakfast",
     ],
   },
+  // short-slug alias (staging DB uses simpler slugs)
+  "flakes": {
+    image:   "/categories/Pamphlet_MilletFlakes.png",
+    color:   "from-amber-900/80 to-amber-700/50",
+    wellness: [
+      "⚡ Ready in under 5 minutes",
+      "💪 High protein & heart-healthy",
+      "🌿 Promotes healthy gut flora",
+      "🥣 Great oats alternative for breakfast",
+    ],
+  },
   "millet-rice": {
     image:   "/categories/Pamphlet_MilletRice.png",
     color:   "from-teal-900/80 to-teal-700/50",
@@ -69,6 +80,36 @@ const CATEGORY_RICH: Record<string, {
       "✅ Ideal for diabetics & weight-watchers",
       "⏱️ Keeps you fuller for longer",
       "💎 More nutrients than polished white rice",
+    ],
+  },
+  "rice": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-teal-900/80 to-teal-700/50",
+    wellness: [
+      "📉 Low glycaemic index",
+      "✅ Ideal for diabetics & weight-watchers",
+      "⏱️ Keeps you fuller for longer",
+      "💎 More nutrients than polished white rice",
+    ],
+  },
+  "traditional-rice": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-teal-800/80 to-teal-600/50",
+    wellness: [
+      "🌾 Heritage varieties — hand-picked & sun-dried",
+      "💎 Rich in micronutrients & antioxidants",
+      "🍚 Authentic flavour from traditional farming",
+      "✅ Low-intervention, chemical-free cultivation",
+    ],
+  },
+  "parboiled": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-lime-900/80 to-lime-700/50",
+    wellness: [
+      "📊 Higher resistant starch than white rice",
+      "⚡ Better nutrient retention than raw milling",
+      "❤️ Supports gut health & steady energy",
+      "🍽️ Firm texture — perfect for biryanis & meals",
     ],
   },
   "millet-flour": {
@@ -81,7 +122,27 @@ const CATEGORY_RICH: Record<string, {
       "🚫 No maida, no refined grains",
     ],
   },
+  "flour": {
+    image:   "/categories/Pamphlet_MilletFlour.png",
+    color:   "from-orange-900/80 to-orange-700/50",
+    wellness: [
+      "🫓 Perfect for rotis, dosas & bakes",
+      "🦴 High calcium — great for bone health",
+      "🌟 Rich in B-vitamins & antioxidants",
+      "🚫 No maida, no refined grains",
+    ],
+  },
   "millet-rava": {
+    image:   "/categories/Pamphlet_MilletRava.png",
+    color:   "from-indigo-900/80 to-indigo-700/50",
+    wellness: [
+      "❤️ Heart-healthy high-fibre base",
+      "📊 Keeps cholesterol levels in check",
+      "⚡ Slow-release energy all morning",
+      "🍲 Versatile — upma, porridge, khichdi",
+    ],
+  },
+  "rava": {
     image:   "/categories/Pamphlet_MilletRava.png",
     color:   "from-indigo-900/80 to-indigo-700/50",
     wellness: [
@@ -111,6 +172,16 @@ const CATEGORY_RICH: Record<string, {
       "✅ Direct 1:1 substitute in all recipes",
     ],
   },
+  // local slug is "muesli-and-granola"; "muesli-granola" kept as staging alias
+  "muesli-and-granola": {
+    color:   "from-yellow-900/80 to-yellow-700/50",
+    wellness: [
+      "🌾 Whole grain oats & millet base",
+      "🍯 Sweetened with natural jaggery & honey",
+      "💪 High fibre — keeps you full all morning",
+      "🥛 Perfect with milk, curd, or smoothie bowls",
+    ],
+  },
   "muesli-granola": {
     color:   "from-yellow-900/80 to-yellow-700/50",
     wellness: [
@@ -118,6 +189,44 @@ const CATEGORY_RICH: Record<string, {
       "🍯 Sweetened with natural jaggery & honey",
       "💪 High fibre — keeps you full all morning",
       "🥛 Perfect with milk, curd, or smoothie bowls",
+    ],
+  },
+  "malt-and-health-mixes": {
+    color:   "from-purple-900/80 to-purple-700/50",
+    wellness: [
+      "🌿 Sprouted malt for easy digestion",
+      "💪 High protein & calorie-dense for active lifestyles",
+      "🧒 Ideal for growing children & nursing mothers",
+      "🍵 Mix with warm milk for a nourishing drink",
+    ],
+  },
+  "malt-health-mixes": {
+    color:   "from-purple-900/80 to-purple-700/50",
+    wellness: [
+      "🌿 Sprouted malt for easy digestion",
+      "💪 High protein & calorie-dense for active lifestyles",
+      "🧒 Ideal for growing children & nursing mothers",
+      "🍵 Mix with warm milk for a nourishing drink",
+    ],
+  },
+  "millet-parboiled": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-lime-900/80 to-lime-700/50",
+    wellness: [
+      "📊 Higher resistant starch than white rice",
+      "⚡ Better nutrient retention than raw milling",
+      "❤️ Supports gut health & steady energy",
+      "🍽️ Firm texture — perfect for biryanis & meals",
+    ],
+  },
+  "parboiled": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-lime-900/80 to-lime-700/50",
+    wellness: [
+      "📊 Higher resistant starch than white rice",
+      "⚡ Better nutrient retention than raw milling",
+      "❤️ Supports gut health & steady energy",
+      "🍽️ Firm texture — perfect for biryanis & meals",
     ],
   },
 };
