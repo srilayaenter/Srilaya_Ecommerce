@@ -219,16 +219,6 @@ const CATEGORY_RICH: Record<string, {
       "🍽️ Firm texture — perfect for biryanis & meals",
     ],
   },
-  "parboiled": {
-    image:   "/categories/Pamphlet_MilletRice.png",
-    color:   "from-lime-900/80 to-lime-700/50",
-    wellness: [
-      "📊 Higher resistant starch than white rice",
-      "⚡ Better nutrient retention than raw milling",
-      "❤️ Supports gut health & steady energy",
-      "🍽️ Firm texture — perfect for biryanis & meals",
-    ],
-  },
 };
 
 // Fallback gradient colours for any future category
