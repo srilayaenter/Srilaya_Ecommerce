@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
@@ -13,46 +14,67 @@ interface PageProps {
   searchParams: Promise<{ q?: string }>;
 }
 
+const fetchSearchResults = unstable_cache(
+  async (query: string, tokens: string[]) => {
+    return Promise.all([
+      prisma.product.findMany({
+        where: {
+          active: true,
+          AND: tokens.map(t => ({
+            OR: [
+              { title:       { contains: t, mode: "insensitive" } },
+              { description: { contains: t, mode: "insensitive" } },
+              { category: { name: { contains: t, mode: "insensitive" } } },
+              { sku:       { contains: t, mode: "insensitive" } },
+            ],
+          })),
+        },
+        include: {
+          category: true,
+          variants: { where: { active: true }, orderBy: { price: "asc" } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.bundle.findMany({
+        where: {
+          active: true,
+          AND: tokens.map(t => ({
+            OR: [
+              { title:       { contains: t, mode: "insensitive" } },
+              { description: { contains: t, mode: "insensitive" } },
+            ],
+          })),
+        },
+        take: 6,
+      }),
+    ]);
+  },
+  ["search"],
+  { revalidate: 300 }
+);
+
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q } = await searchParams;
   const query = q?.trim() || "";
 
   const tokens = query.split(/\s+/).filter(Boolean);
 
-  const [products, bundles] = query
-    ? await Promise.all([
-        prisma.product.findMany({
-          where: {
-            active: true,
-            AND: tokens.map(t => ({
-              OR: [
-                { title:       { contains: t, mode: "insensitive" } },
-                { description: { contains: t, mode: "insensitive" } },
-                { category: { name: { contains: t, mode: "insensitive" } } },
-                { sku:       { contains: t, mode: "insensitive" } },
-              ],
-            })),
-          },
-          include: {
-            category: true,
-            variants: { where: { active: true }, orderBy: { price: "asc" } },
-          },
-          orderBy: { createdAt: "desc" },
-        }),
-        prisma.bundle.findMany({
-          where: {
-            active: true,
-            AND: tokens.map(t => ({
-              OR: [
-                { title:       { contains: t, mode: "insensitive" } },
-                { description: { contains: t, mode: "insensitive" } },
-              ],
-            })),
-          },
-          take: 6,
-        }),
-      ])
-    : [[], []] as [any[], any[]];
+  let products: any[] = [];
+  let bundles: any[] = [];
+
+  if (query) {
+    try {
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("search-timeout")), 8000)
+      );
+      [products, bundles] = await Promise.race([
+        fetchSearchResults(query, tokens),
+        timeout,
+      ]);
+    } catch {
+      // DB unavailable — render empty results
+    }
+  }
 
   // Suggestions when no results
   const suggestions = ["millet", "rice", "flakes", "flour", "rava", "sweetener"];
