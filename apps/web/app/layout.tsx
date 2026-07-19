@@ -49,10 +49,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-black antialiased">
+        <CartProvider>
+          <main id="main-content">{children}</main>
+        </CartProvider>
         <PostHogProvider>
-          <CartProvider>
-            <main id="main-content">{children}</main>
-          </CartProvider>
           <SpeedInsights />
           <CookieConsent />
         </PostHogProvider>
