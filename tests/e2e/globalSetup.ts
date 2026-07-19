@@ -5,7 +5,7 @@ import { request } from "@playwright/test";
 // query doesn't cold-start during the actual test assertions.
 // The bypass header is sent here so Vercel allows the warm-up requests;
 // the real per-test bypass is handled via page.route() in smoke.spec.ts.
-const WARM_PATHS = ["/", "/product", "/blog", "/about", "/cart", "/sitemap.xml"];
+const WARM_PATHS = ["/", "/product", "/blog", "/about", "/cart", "/search?q=millet", "/sitemap.xml"];
 
 export default async function globalSetup() {
   const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;

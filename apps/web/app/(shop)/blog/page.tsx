@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,19 +11,32 @@ const CATEGORY_LABELS: Record<string, string> = {
   recipe: "Recipe", article: "Article", health: "Health & Wellness", news: "News",
 };
 
-export default async function BlogPage() {
-  const now = new Date();
-  const posts = await prisma.blogPost.findMany({
+const fetchPosts = unstable_cache(
+  () => prisma.blogPost.findMany({
     where: {
       category: { not: "recipe" },
       OR: [
         { published: true },
-        { publishedAt: { lte: now } },
+        { publishedAt: { lte: new Date() } },
       ],
     },
     orderBy: { publishedAt: "desc" },
     select: { id: true, slug: true, title: true, excerpt: true, category: true, image: true, readMins: true, publishedAt: true },
-  });
+  }),
+  ["blog-posts"],
+  { revalidate: 300, tags: ["blog"] }
+);
+
+export default async function BlogPage() {
+  let posts: Awaited<ReturnType<typeof fetchPosts>> = [];
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("blog-timeout")), 8000)
+    );
+    posts = await Promise.race([fetchPosts(), timeout]);
+  } catch {
+    // DB unavailable — render empty state
+  }
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-10">

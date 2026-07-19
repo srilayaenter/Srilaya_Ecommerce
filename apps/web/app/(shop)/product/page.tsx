@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import type { Metadata } from "next";
@@ -11,15 +12,29 @@ export const metadata: Metadata = {
     "Browse our complete range of organic millets, millet flour, rava, flakes, rice, and traditional laddus. Multiple sizes available with pan-India delivery.",
 };
 
-export default async function AllProductsPage() {
-  const products = await prisma.product.findMany({
+const fetchProducts = unstable_cache(
+  () => prisma.product.findMany({
     where: { active: true },
     include: {
       category: true,
       variants: { where: { active: true }, orderBy: { price: "asc" } },
     },
     orderBy: { title: "asc" },
-  });
+  }),
+  ["all-products"],
+  { revalidate: 300, tags: ["products"] }
+);
+
+export default async function AllProductsPage() {
+  let products: Awaited<ReturnType<typeof fetchProducts>> = [];
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("products-timeout")), 8000)
+    );
+    products = await Promise.race([fetchProducts(), timeout]);
+  } catch {
+    // DB unavailable on cold start — render empty state rather than crashing stream
+  }
 
   // Serialise — Decimal → number so the client component gets plain objects
   const serialised = products.map((p) => ({
