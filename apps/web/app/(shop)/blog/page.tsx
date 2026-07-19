@@ -39,7 +39,7 @@ export default async function BlogPage() {
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-black text-[#212121]">Blog</h1>
         <p className="text-[#757575] mt-1">Health guides, family stories, and natural living tips from SriLaYa Naturals.</p>
@@ -77,6 +77,6 @@ export default async function BlogPage() {
           ))}
         </div>
       )}
-    </main>
+    </div>
   );
 }
