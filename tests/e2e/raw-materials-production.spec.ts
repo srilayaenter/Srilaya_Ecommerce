@@ -5,17 +5,8 @@
  * (avrsrikanth@gmail.com) and verify pages load, forms work, and RBAC
  * blocks non-owner access.
  */
-import { test, expect, Page } from "@playwright/test";
-import { loginAsAdmin } from "./helpers/auth";
-
-// ── Owner login (avrsrikanth@gmail.com has role = 'owner') ────────────────────
-async function loginAsOwner(page: Page) {
-  await page.goto("/admin/login");
-  await page.getByLabel(/email/i).fill("avrsrikanth@gmail.com");
-  await page.getByLabel(/password/i).fill("RaSa@1500");
-  await page.getByRole("button", { name: /authorize|sign in/i }).click();
-  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 15000 });
-}
+import { test, expect } from "@playwright/test";
+import { loginAsAdmin, loginAsOwner } from "./helpers/auth";
 
 // ════════════════════════════════════════════════════════════════════════════════
 // RAW MATERIALS — TC-RM-*

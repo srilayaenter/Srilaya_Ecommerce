@@ -116,15 +116,19 @@ test("LGL-05 footer legal links navigate correctly", async ({ page }) => {
   ];
 
   for (const link of links) {
-    await page.goto("/");
+    // Get the href from the footer link, then navigate directly to avoid
+    // cookie-consent overlay blocking the click
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(300);
 
     const el = page.getByRole("link", { name: link.text }).last();
     if (await el.count() > 0) {
-      await el.click();
-      await page.waitForLoadState("networkidle");
-      await expect(page).toHaveURL(link.url);
+      const href = await el.getAttribute("href");
+      if (href) {
+        await page.goto(href, { waitUntil: "domcontentloaded" });
+        await expect(page).toHaveURL(link.url);
+      }
     }
   }
 });

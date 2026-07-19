@@ -11,6 +11,11 @@ export const ADMIN_USER = {
   password: process.env.TEST_ADMIN_PASSWORD || "admin123",
 };
 
+export const OWNER_USER = {
+  email: process.env.TEST_OWNER_EMAIL || "",
+  password: process.env.TEST_OWNER_PASSWORD || "",
+};
+
 export async function loginAsUser(page: Page) {
   await page.goto("/login");
   await page.getByLabel(/email/i).fill(TEST_USER.email);
@@ -29,6 +34,18 @@ export async function loginAsAdmin(page: Page) {
   // Button text is "Authorize Access" on admin login
   await page.getByRole("button", { name: /authorize|sign in/i }).click();
   // Wait for redirect away from the login page (not /admin/login) — generous timeout for dev server
+  await page.waitForURL(url => !url.href.includes("/login"), { timeout: 25000 });
+}
+
+export async function loginAsOwner(page: Page) {
+  if (!OWNER_USER.email || !OWNER_USER.password) {
+    throw new Error("TEST_OWNER_EMAIL / TEST_OWNER_PASSWORD are not set — see .env.test");
+  }
+  await page.goto("/admin/login");
+  await page.getByLabel(/email/i).fill(OWNER_USER.email);
+  await page.getByLabel(/password/i).fill(OWNER_USER.password);
+  page.once("dialog", dialog => dialog.dismiss());
+  await page.getByRole("button", { name: /authorize|sign in/i }).click();
   await page.waitForURL(url => !url.href.includes("/login"), { timeout: 25000 });
 }
 
