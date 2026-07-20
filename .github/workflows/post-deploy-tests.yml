@@ -1,0 +1,222 @@
+name: Post-deploy tests
+
+# Runs automatically on every push to staging.
+# Detects whether DB schema/migration files changed (→ full suite)
+# or regular code changed (→ module-specific specs only).
+# Always emails results; opens a GitHub issue on failure.
+
+on:
+  push:
+    branches: [staging]
+
+concurrency:
+  group: post-deploy-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (staging)
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history needed for git diff
+
+      # ── 2. Detect test scope ─────────────────────────────────────────────────
+      - name: Detect test scope
+        id: scope
+        run: |
+          # Changed files between the previous push SHA and this one
+          BEFORE="${{ github.event.before }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            # First push on branch — diff against one commit back
+            CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          else
+            CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" 2>/dev/null || echo "")
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          # DB schema / migration change → always full suite
+          if echo "$CHANGED" | grep -qE 'packages/db/schema\.prisma|packages/db/migrations/|prisma/migrations/'; then
+            echo "DB schema or migration changed — running full suite"
+            echo "run_full=true"  >> "$GITHUB_OUTPUT"
+            echo "test_specs="    >> "$GITHUB_OUTPUT"
+            echo "scope_label=Full suite (DB change)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Map changed files to specific test specs
+          node scripts/ci/get-test-specs.js "$CHANGED" >> "$GITHUB_OUTPUT"
+
+          # Human-readable label for email
+          RUN_FULL=$(grep '^run_full=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2)
+          if [ "$RUN_FULL" = "true" ]; then
+            echo "scope_label=Full suite (shared code change)" >> "$GITHUB_OUTPUT"
+          else
+            SPECS=$(grep '^test_specs=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2-)
+            echo "scope_label=Module tests: ${SPECS}" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── 3. Runtime ───────────────────────────────────────────────────────────
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 4. Playwright browsers ───────────────────────────────────────────────
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install Playwright (chromium only)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Install Playwright system deps (cached hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      # ── 5. Wait for Vercel deployment ────────────────────────────────────────
+      - name: Wait for Vercel staging deployment
+        id: preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA="${{ github.sha }}"
+          STABLE_URL="https://srilaya-ecommerce-git-staging-avrsrikanth-4431s-projects.vercel.app"
+          echo "Waiting for Vercel deployment (SHA: $SHA)..."
+
+          DEPLOY_FOUND=false
+          for i in $(seq 1 18); do
+            DEPLOY_JSON=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&per_page=20" 2>/dev/null || echo "[]")
+            DEPLOY_ID=$(echo "$DEPLOY_JSON" | jq -r 'map(select(.environment | ascii_downcase | test("preview"))) | first | .id // empty')
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              echo "Found deployment $DEPLOY_ID (attempt $i)"
+              DEPLOY_FOUND=true
+              break
+            fi
+            echo "No deployment yet (attempt $i/18)"; sleep 10
+          done
+
+          if [ "$DEPLOY_FOUND" = "true" ]; then
+            for j in $(seq 1 36); do
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" 2>/dev/null | jq -r 'first | .state // empty')
+              echo "  state=$STATE (poll $j/36)"
+              if   [ "$STATE" = "success" ]; then break
+              elif [ "$STATE" = "failure" ] || [ "$STATE" = "error" ]; then
+                echo "ERROR: Vercel build failed — aborting tests"; exit 1
+              fi
+              sleep 10
+            done
+          else
+            echo "WARNING: No GitHub Deployment found — proceeding with stable branch URL"
+          fi
+
+          echo "url=$STABLE_URL" >> "$GITHUB_OUTPUT"
+
+      # ── 6. Run tests ─────────────────────────────────────────────────────────
+      - name: Run tests
+        id: run
+        env:
+          TEST_BASE_URL: ${{ steps.preview.outputs.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CI: "true"
+        run: |
+          RUN_FULL="${{ steps.scope.outputs.run_full }}"
+          SPECS="${{ steps.scope.outputs.test_specs }}"
+
+          if [ "$RUN_FULL" = "true" ]; then
+            echo "Running FULL test suite against $TEST_BASE_URL"
+            set +e
+            pnpm exec playwright test --project=chromium --reporter=list 2>&1 | tee pw-output.txt
+            EXIT=$?
+            set -e
+          else
+            echo "Running module tests: $SPECS"
+            echo "Target: $TEST_BASE_URL"
+            set +e
+            # shellcheck disable=SC2086
+            pnpm exec playwright test $SPECS --project=chromium --reporter=list 2>&1 | tee pw-output.txt
+            EXIT=$?
+            set -e
+          fi
+
+          # Parse summary line: "N passed (Xs)" or "N failed, N passed (Xs)"
+          SUMMARY=$(grep -E '^\s+[0-9]+ (passed|failed)' pw-output.txt | tail -1 || echo "")
+          PASSED=$(echo "$SUMMARY" | grep -oP '\d+(?= passed)' || echo "0")
+          FAILED=$(echo "$SUMMARY" | grep -oP '\d+(?= failed)' || echo "0")
+          TOTAL=$(( PASSED + FAILED ))
+
+          echo "passed=$PASSED" >> "$GITHUB_OUTPUT"
+          echo "failed=$FAILED" >> "$GITHUB_OUTPUT"
+          echo "total=$TOTAL"   >> "$GITHUB_OUTPUT"
+          echo "exit=$EXIT"     >> "$GITHUB_OUTPUT"
+
+      # ── 7. Upload Playwright report ──────────────────────────────────────────
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-deploy-report-${{ github.run_id }}
+          path: tests/report/
+          retention-days: 14
+
+      # ── 8. Create GitHub issue on failure ────────────────────────────────────
+      - name: Create issue on failure
+        id: issue
+        if: steps.run.outputs.failed != '0' && steps.run.outputs.failed != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FAILED="${{ steps.run.outputs.failed }}"
+          TOTAL="${{ steps.run.outputs.total }}"
+          SCOPE="${{ steps.scope.outputs.scope_label }}"
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMIT_SHORT=$(echo "${{ github.sha }}" | cut -c1-7)
+          DATE=$(date -u '+%d %b %Y %H:%M UTC')
+
+          ISSUE_URL=$(gh issue create \
+            --title "CI: ${FAILED} test(s) failed on staging (${COMMIT_SHORT}) — ${DATE}" \
+            --body "**Failed:** ${FAILED} / ${TOTAL}
+**Scope:** ${SCOPE}
+**Trigger:** Post-deploy (push to staging)
+**Commit:** \`${COMMIT_SHORT}\` (${{ github.sha }})
+**Branch:** staging
+**Actions run:** ${RUN_URL}
+
+Check the Actions run linked above for the full Playwright HTML report and failure details." \
+            --label "bug,test" \
+            --repo "${{ github.repository }}" 2>&1)
+
+          echo "Issue created: $ISSUE_URL"
+          echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+
+      # ── 9. Send email ────────────────────────────────────────────────────────
+      - name: Send results email
+        if: always()
+        env:
+          RESEND_API_KEY:   ${{ secrets.RESEND_API_KEY }}
+          REPORT_PASSED:    ${{ steps.run.outputs.passed }}
+          REPORT_FAILED:    ${{ steps.run.outputs.failed }}
+          REPORT_TOTAL:     ${{ steps.run.outputs.total }}
+          REPORT_SCOPE:     ${{ steps.scope.outputs.scope_label }}
+          REPORT_COMMIT:    ${{ github.sha }}
+          REPORT_RUN_URL:   https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPORT_TRIGGER:   push
+          REPORT_ISSUE_URL: ${{ steps.issue.outputs.issue_url }}
+        run: node scripts/ci/send-test-email.js
