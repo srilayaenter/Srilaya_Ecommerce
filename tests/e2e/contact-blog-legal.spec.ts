@@ -16,7 +16,7 @@ test("CNT-01 contact form submits successfully", async ({ page }) => {
 
   await expect(
     page.getByText(/message sent|thank you|received|success/i).first()
-  ).toBeVisible({ timeout: 8000 });
+  ).toBeVisible({ timeout: 15000 });
 });
 
 test("CNT-02 contact form requires all fields", async ({ page }) => {

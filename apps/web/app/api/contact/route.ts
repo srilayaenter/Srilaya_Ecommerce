@@ -14,20 +14,21 @@ function h(s: string): string {
 
 export async function POST(request: Request) {
   try {
-    // 3 contact submissions per hour per IP
-    if (!checkRateLimit(`contact:${getIp(request)}`, 3, 60 * 60 * 1000)) {
-      return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
-    }
-
     const { name, email, phone, message } = await request.json();
-    const safeName    = h(name    ?? "");
-    const safeEmail   = h(email   ?? "");
-    const safePhone   = h(phone   ?? "");
-    const safeMessage = h(message ?? "");
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    // 3 contact submissions per hour per IP (validate first so invalid requests don't count)
+    if (!checkRateLimit(`contact:${getIp(request)}`, 3, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
+    }
+
+    const safeName    = h(name    ?? "");
+    const safeEmail   = h(email   ?? "");
+    const safePhone   = h(phone   ?? "");
+    const safeMessage = h(message ?? "");
 
     const html = `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
