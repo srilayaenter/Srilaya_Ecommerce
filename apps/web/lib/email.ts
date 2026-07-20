@@ -12,6 +12,7 @@ interface SendEmailParams {
   html: string;
   context?: string;
   attachments?: Attachment[];
+  replyTo?: string;
 }
 
 async function attemptSend({ to, subject, html, attachments }: SendEmailParams) {

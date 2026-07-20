@@ -1,14 +1,14 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { toNum } from "@/lib/decimal";
 import Image from "next/image";
-import { Prisma } from "@prisma/client";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 
-const Testimonials   = dynamic(() => import("@/components/Testimonials"),   { ssr: false });
-const RecentlyViewed = dynamic(() => import("@/components/RecentlyViewed"), { ssr: false });
+const Testimonials   = dynamicImport(() => import("@/components/Testimonials"),   { ssr: false });
+const RecentlyViewed = dynamicImport(() => import("@/components/RecentlyViewed"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "SriLaYa Naturals — Ancient Grains. Modern Nutrition.",
@@ -23,11 +23,26 @@ export const metadata: Metadata = {
   },
 };
 
-const productQuery = {
-  include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
-} satisfies Prisma.ProductFindManyArgs;
+const fetchHomeProducts = unstable_cache(
+  () => prisma.product.findMany({
+    where: { active: true },
+    include: { variants: { where: { active: true }, orderBy: { price: "asc" as const } } },
+    take: 8,
+    orderBy: { reviews: "desc" },
+  }),
+  ["home-products"],
+  { revalidate: 300, tags: ["products"] }
+);
 
-type ProductWithVariants = Prisma.ProductGetPayload<typeof productQuery>;
+const fetchHomeCategories = unstable_cache(
+  () => prisma.category.findMany({
+    where: { parentId: null, products: { some: {} } },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
+  }),
+  ["home-categories"],
+  { revalidate: 300, tags: ["categories"] }
+);
 
 // Rich content for known category slugs. Any new category added via admin
 // will automatically appear on the homepage using a gradient fallback.
@@ -37,6 +52,17 @@ const CATEGORY_RICH: Record<string, {
   wellness: string[];
 }> = {
   "millet-flakes": {
+    image:   "/categories/Pamphlet_MilletFlakes.png",
+    color:   "from-amber-900/80 to-amber-700/50",
+    wellness: [
+      "⚡ Ready in under 5 minutes",
+      "💪 High protein & heart-healthy",
+      "🌿 Promotes healthy gut flora",
+      "🥣 Great oats alternative for breakfast",
+    ],
+  },
+  // short-slug alias (staging DB uses simpler slugs)
+  "flakes": {
     image:   "/categories/Pamphlet_MilletFlakes.png",
     color:   "from-amber-900/80 to-amber-700/50",
     wellness: [
@@ -56,6 +82,36 @@ const CATEGORY_RICH: Record<string, {
       "💎 More nutrients than polished white rice",
     ],
   },
+  "rice": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-teal-900/80 to-teal-700/50",
+    wellness: [
+      "📉 Low glycaemic index",
+      "✅ Ideal for diabetics & weight-watchers",
+      "⏱️ Keeps you fuller for longer",
+      "💎 More nutrients than polished white rice",
+    ],
+  },
+  "traditional-rice": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-teal-800/80 to-teal-600/50",
+    wellness: [
+      "🌾 Heritage varieties — hand-picked & sun-dried",
+      "💎 Rich in micronutrients & antioxidants",
+      "🍚 Authentic flavour from traditional farming",
+      "✅ Low-intervention, chemical-free cultivation",
+    ],
+  },
+  "parboiled": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-lime-900/80 to-lime-700/50",
+    wellness: [
+      "📊 Higher resistant starch than white rice",
+      "⚡ Better nutrient retention than raw milling",
+      "❤️ Supports gut health & steady energy",
+      "🍽️ Firm texture — perfect for biryanis & meals",
+    ],
+  },
   "millet-flour": {
     image:   "/categories/Pamphlet_MilletFlour.png",
     color:   "from-orange-900/80 to-orange-700/50",
@@ -66,7 +122,27 @@ const CATEGORY_RICH: Record<string, {
       "🚫 No maida, no refined grains",
     ],
   },
+  "flour": {
+    image:   "/categories/Pamphlet_MilletFlour.png",
+    color:   "from-orange-900/80 to-orange-700/50",
+    wellness: [
+      "🫓 Perfect for rotis, dosas & bakes",
+      "🦴 High calcium — great for bone health",
+      "🌟 Rich in B-vitamins & antioxidants",
+      "🚫 No maida, no refined grains",
+    ],
+  },
   "millet-rava": {
+    image:   "/categories/Pamphlet_MilletRava.png",
+    color:   "from-indigo-900/80 to-indigo-700/50",
+    wellness: [
+      "❤️ Heart-healthy high-fibre base",
+      "📊 Keeps cholesterol levels in check",
+      "⚡ Slow-release energy all morning",
+      "🍲 Versatile — upma, porridge, khichdi",
+    ],
+  },
+  "rava": {
     image:   "/categories/Pamphlet_MilletRava.png",
     color:   "from-indigo-900/80 to-indigo-700/50",
     wellness: [
@@ -96,6 +172,16 @@ const CATEGORY_RICH: Record<string, {
       "✅ Direct 1:1 substitute in all recipes",
     ],
   },
+  // local slug is "muesli-and-granola"; "muesli-granola" kept as staging alias
+  "muesli-and-granola": {
+    color:   "from-yellow-900/80 to-yellow-700/50",
+    wellness: [
+      "🌾 Whole grain oats & millet base",
+      "🍯 Sweetened with natural jaggery & honey",
+      "💪 High fibre — keeps you full all morning",
+      "🥛 Perfect with milk, curd, or smoothie bowls",
+    ],
+  },
   "muesli-granola": {
     color:   "from-yellow-900/80 to-yellow-700/50",
     wellness: [
@@ -103,6 +189,34 @@ const CATEGORY_RICH: Record<string, {
       "🍯 Sweetened with natural jaggery & honey",
       "💪 High fibre — keeps you full all morning",
       "🥛 Perfect with milk, curd, or smoothie bowls",
+    ],
+  },
+  "malt-and-health-mixes": {
+    color:   "from-purple-900/80 to-purple-700/50",
+    wellness: [
+      "🌿 Sprouted malt for easy digestion",
+      "💪 High protein & calorie-dense for active lifestyles",
+      "🧒 Ideal for growing children & nursing mothers",
+      "🍵 Mix with warm milk for a nourishing drink",
+    ],
+  },
+  "malt-health-mixes": {
+    color:   "from-purple-900/80 to-purple-700/50",
+    wellness: [
+      "🌿 Sprouted malt for easy digestion",
+      "💪 High protein & calorie-dense for active lifestyles",
+      "🧒 Ideal for growing children & nursing mothers",
+      "🍵 Mix with warm milk for a nourishing drink",
+    ],
+  },
+  "millet-parboiled": {
+    image:   "/categories/Pamphlet_MilletRice.png",
+    color:   "from-lime-900/80 to-lime-700/50",
+    wellness: [
+      "📊 Higher resistant starch than white rice",
+      "⚡ Better nutrient retention than raw milling",
+      "❤️ Supports gut health & steady energy",
+      "🍽️ Firm texture — perfect for biryanis & meals",
     ],
   },
 };
@@ -142,19 +256,19 @@ const whyUs = [
 ];
 
 export default async function HomePage() {
-  const [products, dbCategories] = await Promise.all([
-    prisma.product.findMany({
-      ...productQuery,
-      where: { active: true },
-      take: 8,
-      orderBy: { reviews: "desc" },
-    }),
-    prisma.category.findMany({
-      where: { parentId: null, products: { some: {} } },
-      orderBy: { name: "asc" },
-      select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
-    }),
-  ]);
+  let products: Awaited<ReturnType<typeof fetchHomeProducts>> = [];
+  let dbCategories: Awaited<ReturnType<typeof fetchHomeCategories>> = [];
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("home-timeout")), 8000)
+    );
+    [products, dbCategories] = await Promise.race([
+      Promise.all([fetchHomeProducts(), fetchHomeCategories()]),
+      timeout,
+    ]);
+  } catch {
+    // DB unavailable on cold start — render with empty data
+  }
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://srilayafoods.com";
 

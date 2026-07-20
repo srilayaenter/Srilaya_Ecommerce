@@ -1,4 +1,5 @@
-﻿import { prisma } from "@/lib/db";
+﻿import { unstable_cache } from "next/cache";
+import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
@@ -14,30 +15,8 @@ import { BRAND } from "@/lib/brand";
 
 type Params = Promise<{ slug: string }>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    select: { title: true, description: true, image: true },
-  });
-  if (!product) return { title: "Product Not Found" };
-  const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Naturals — organic, minimally processed.`;
-  return {
-    title: product.title,
-    description: desc,
-    openGraph: {
-      title: `${product.title} | SriLaYa Naturals`,
-      description: desc,
-      images: product.image ? [{ url: product.image }] : [],
-      type: "website",
-    },
-  };
-}
-
-export default async function ProductDetailPage({ params }: { params: Params }) {
-  const { slug } = await params;
-
-  const product = await prisma.product.findUnique({
+const fetchProductDetail = unstable_cache(
+  async (slug: string) => prisma.product.findUnique({
     where: { slug },
     include: {
       variants: { where: { active: true }, orderBy: { price: "asc" } },
@@ -48,7 +27,44 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
         select: { id: true, customerName: true, rating: true, comment: true, photoUrl: true, createdAt: true },
       },
     },
-  });
+  }),
+  ["product-detail"],
+  { revalidate: 300, tags: ["products"] }
+);
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const product = await fetchProductDetail(slug);
+    if (!product) return { title: "Product Not Found" };
+    const desc = product.description?.slice(0, 160) || `Buy ${product.title} from SriLaYa Naturals — organic, minimally processed.`;
+    return {
+      title: product.title,
+      description: desc,
+      openGraph: {
+        title: `${product.title} | SriLaYa Naturals`,
+        description: desc,
+        images: product.image ? [{ url: product.image }] : [],
+        type: "website",
+      },
+    };
+  } catch {
+    return { title: "Product" };
+  }
+}
+
+export default async function ProductDetailPage({ params }: { params: Params }) {
+  const { slug } = await params;
+
+  let product: Awaited<ReturnType<typeof fetchProductDetail>>;
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("product-detail-timeout")), 8000)
+    );
+    product = await Promise.race([fetchProductDetail(slug), timeout]);
+  } catch {
+    notFound();
+  }
 
   if (!product) notFound();
 

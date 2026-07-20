@@ -40,7 +40,7 @@ export default async function PackagingPage() {
   const lowStock = items.filter(i => i.stockQty <= i.reorderThreshold);
 
   // Group by category
-  const grouped = items.reduce<Record<string, typeof items>>((acc, item) => {
+  const grouped = items.reduce((acc: Record<string, typeof items>, item) => {
     if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
     return acc;

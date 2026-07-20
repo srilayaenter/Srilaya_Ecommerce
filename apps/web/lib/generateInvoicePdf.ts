@@ -35,7 +35,7 @@ export function generateInvoicePdf(data: InvoiceData): Promise<Buffer> {
     const chunks: Buffer[] = [];
 
     doc.on("data", (chunk: Buffer) => chunks.push(chunk));
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
+    doc.on("end", () => resolve(Buffer.concat(chunks as unknown as Uint8Array[])));
     doc.on("error", reject);
 
     const green  = "#006A38";

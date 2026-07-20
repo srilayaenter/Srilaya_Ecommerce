@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CartProvider } from "@/context/CartContext";
@@ -49,8 +49,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-black antialiased">
+        <CartProvider>
+          <main id="main-content">{children}</main>
+        </CartProvider>
         <PostHogProvider>
-          <CartProvider>{children}</CartProvider>
           <SpeedInsights />
           <CookieConsent />
         </PostHogProvider>

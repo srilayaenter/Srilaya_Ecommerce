@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import AddBundleButton from "./AddBundleButton";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Bundle Packs" };
 
 export default async function BundlesPage() {
@@ -32,7 +34,7 @@ export default async function BundlesPage() {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-6">
-            {bundles.map(bundle => {
+            {bundles.map((bundle: (typeof bundles)[number]) => {
               const originalTotal = bundle.items.reduce(
                 (sum, item) => sum + parseFloat(item.variant.price?.toString() ?? "0") * item.quantity,
                 0

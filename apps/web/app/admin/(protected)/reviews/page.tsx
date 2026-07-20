@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import ReviewModerationClient from "./ReviewModerationClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminReviewsPage() {
   const reviews = await prisma.productReview.findMany({
     orderBy: { createdAt: "desc" },

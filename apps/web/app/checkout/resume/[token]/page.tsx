@@ -88,7 +88,7 @@ export default async function ResumeOrderPage({ params }: PageProps) {
   if (!cartId) {
     const newCart = await prisma.cart.create({ data: { userId: null } });
     cartId = newCart.id;
-    cookieStore.set('cartId', cartId, {
+    cookieStore.set('cartId', cartId!, {
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true,
       path: '/',

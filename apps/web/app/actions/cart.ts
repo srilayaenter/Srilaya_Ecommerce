@@ -27,7 +27,7 @@ export async function addToCart(variantId: string, quantity: number = 1) {
       });
       cartId = newCart.id;
 
-      cookieStore.set('cartId', cartId, {
+      cookieStore.set('cartId', cartId!, {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: true,
         path: '/',

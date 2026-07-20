@@ -41,7 +41,7 @@ export default async function AccountPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const serialised = orders.map(o => ({
+  const serialised = orders.map((o: (typeof orders)[number]) => ({
     id: o.id,
     shortId: o.id.slice(0, 8).toUpperCase(),
     status: o.status,
@@ -51,7 +51,7 @@ export default async function AccountPage() {
     total: toNum(o.total),
     createdAt: o.createdAt.toISOString(),
     itemCount: o.items.length,
-    itemSummary: o.items.map(i => ({
+    itemSummary: o.items.map((i: (typeof o.items)[number]) => ({
       title: i.variant.product.title,
       size:  i.variant.size,
       quantity: i.quantity,

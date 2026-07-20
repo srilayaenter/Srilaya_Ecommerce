@@ -96,13 +96,21 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Sidebar Footer Link */}
-        <div className="p-4 bg-[#00522B] flex-shrink-0 mt-auto">
+        <div className="p-4 bg-[#00522B] flex-shrink-0 mt-auto space-y-3">
           <Link
             href="/"
             className="flex items-center justify-center gap-2 w-full bg-white text-[#006A38] hover:bg-[#FFF8E1] font-bold text-[13px] py-2.5 px-4 rounded-[8px] transition-all shadow-sm"
           >
             <span>🌐</span> View Storefront
           </Link>
+          <div className="text-center">
+            <span className="text-[10px] text-white/40 font-mono tracking-wider">
+              v{process.env.NEXT_PUBLIC_APP_VERSION ?? "1.0.0"}
+              {process.env.VERCEL_GIT_COMMIT_SHA
+                ? ` · ${process.env.VERCEL_GIT_COMMIT_SHA.slice(0, 7)}`
+                : ""}
+            </span>
+          </div>
         </div>
       </aside>
 

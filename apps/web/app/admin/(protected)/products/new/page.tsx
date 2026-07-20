@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import NewProductForm from "./NewProductForm";
 

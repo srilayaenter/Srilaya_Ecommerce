@@ -1,6 +1,9 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Blog" };
 
@@ -8,22 +11,35 @@ const CATEGORY_LABELS: Record<string, string> = {
   recipe: "Recipe", article: "Article", health: "Health & Wellness", news: "News",
 };
 
-export default async function BlogPage() {
-  const now = new Date();
-  const posts = await prisma.blogPost.findMany({
+const fetchPosts = unstable_cache(
+  () => prisma.blogPost.findMany({
     where: {
       category: { not: "recipe" },
       OR: [
         { published: true },
-        { publishedAt: { lte: now } },
+        { publishedAt: { lte: new Date() } },
       ],
     },
     orderBy: { publishedAt: "desc" },
     select: { id: true, slug: true, title: true, excerpt: true, category: true, image: true, readMins: true, publishedAt: true },
-  });
+  }),
+  ["blog-posts"],
+  { revalidate: 300, tags: ["blog"] }
+);
+
+export default async function BlogPage() {
+  let posts: Awaited<ReturnType<typeof fetchPosts>> = [];
+  try {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("blog-timeout")), 8000)
+    );
+    posts = await Promise.race([fetchPosts(), timeout]);
+  } catch {
+    // DB unavailable — render empty state
+  }
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-black text-[#212121]">Blog</h1>
         <p className="text-[#757575] mt-1">Health guides, family stories, and natural living tips from SriLaYa Naturals.</p>
@@ -33,7 +49,7 @@ export default async function BlogPage() {
         <div className="text-center py-20 text-[#9E9E9E]">No posts published yet. Check back soon!</div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
+          {posts.map((post: (typeof posts)[number]) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden hover:shadow-md transition-shadow">
               {post.image ? (
                 <div className="relative h-44 bg-[#F5F5F5]">
@@ -61,6 +77,6 @@ export default async function BlogPage() {
           ))}
         </div>
       )}
-    </main>
+    </div>
   );
 }

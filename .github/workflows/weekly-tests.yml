@@ -1,0 +1,124 @@
+name: Weekly full test suite
+
+# Runs every Friday at 08:00 IST (02:30 UTC).
+# Always runs the complete Playwright suite against staging.
+# Emails results; opens a GitHub issue on any failure.
+
+on:
+  schedule:
+    - cron: '30 2 * * 5'   # Friday 02:30 UTC = 08:00 IST
+  workflow_dispatch:         # allow manual trigger from Actions tab
+
+jobs:
+  weekly-test:
+    name: Full suite (staging)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── 2. Runtime ───────────────────────────────────────────────────────────
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 3. Playwright browsers ───────────────────────────────────────────────
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install Playwright (chromium only)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Install Playwright system deps (cached hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      # ── 4. Run full test suite ───────────────────────────────────────────────
+      - name: Run full test suite
+        id: run
+        env:
+          TEST_BASE_URL: https://srilaya-ecommerce-git-staging-avrsrikanth-4431s-projects.vercel.app
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CI: "true"
+        run: |
+          echo "Weekly full suite against $TEST_BASE_URL"
+          set +e
+          pnpm exec playwright test --project=chromium --reporter=list 2>&1 | tee pw-output.txt
+          EXIT=$?
+          set -e
+
+          SUMMARY=$(grep -E '^\s+[0-9]+ (passed|failed)' pw-output.txt | tail -1 || echo "")
+          PASSED=$(echo "$SUMMARY" | grep -oP '\d+(?= passed)' || echo "0")
+          FAILED=$(echo "$SUMMARY" | grep -oP '\d+(?= failed)' || echo "0")
+          TOTAL=$(( PASSED + FAILED ))
+
+          echo "passed=$PASSED" >> "$GITHUB_OUTPUT"
+          echo "failed=$FAILED" >> "$GITHUB_OUTPUT"
+          echo "total=$TOTAL"   >> "$GITHUB_OUTPUT"
+          echo "exit=$EXIT"     >> "$GITHUB_OUTPUT"
+
+      # ── 5. Upload Playwright report ──────────────────────────────────────────
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report-${{ github.run_id }}
+          path: tests/report/
+          retention-days: 30
+
+      # ── 6. Create GitHub issue on failure ────────────────────────────────────
+      - name: Create issue on failure
+        id: issue
+        if: steps.run.outputs.failed != '0' && steps.run.outputs.failed != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FAILED="${{ steps.run.outputs.failed }}"
+          TOTAL="${{ steps.run.outputs.total }}"
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          DATE=$(date -u '+%d %b %Y')
+
+          ISSUE_URL=$(gh issue create \
+            --title "CI: Weekly full suite — ${FAILED} test(s) failed (${DATE})" \
+            --body "**Failed:** ${FAILED} / ${TOTAL}
+**Scope:** Full suite
+**Trigger:** Weekly scheduled run (Friday 08:00 IST)
+**Branch:** staging (HEAD)
+**Actions run:** ${RUN_URL}
+
+Check the Actions run linked above for the full Playwright HTML report and failure details." \
+            --label "bug,test" \
+            --repo "${{ github.repository }}" 2>&1)
+
+          echo "Issue created: $ISSUE_URL"
+          echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+
+      # ── 7. Send email ────────────────────────────────────────────────────────
+      - name: Send results email
+        if: always()
+        env:
+          RESEND_API_KEY:   ${{ secrets.RESEND_API_KEY }}
+          REPORT_PASSED:    ${{ steps.run.outputs.passed }}
+          REPORT_FAILED:    ${{ steps.run.outputs.failed }}
+          REPORT_TOTAL:     ${{ steps.run.outputs.total }}
+          REPORT_SCOPE:     Full suite (weekly)
+          REPORT_COMMIT:    ${{ github.sha }}
+          REPORT_RUN_URL:   https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPORT_TRIGGER:   schedule
+          REPORT_ISSUE_URL: ${{ steps.issue.outputs.issue_url }}
+        run: node scripts/ci/send-test-email.js

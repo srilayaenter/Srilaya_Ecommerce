@@ -1,5 +1,7 @@
 import { prisma } from "../../../../lib/db";
 import { sendEmail } from "../../../../lib/email";
+
+export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation";
 
 async function retryEmail(formData: FormData) {

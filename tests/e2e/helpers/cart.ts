@@ -5,8 +5,8 @@ import { Page, expect } from "@playwright/test";
  * Tries up to 5 products to find one with an enabled Add to Cart button.
  */
 export async function addFirstProductToCart(page: Page, qty = 1) {
-  await page.goto("/product");
-  await page.waitForLoadState("networkidle");
+  await page.goto("/product", { waitUntil: "domcontentloaded" });
+  await page.locator("a[href^='/product/']").first().waitFor({ state: "attached", timeout: 15000 });
 
   const productLinks = page.locator("a[href^='/product/']");
   const count = await productLinks.count();
@@ -15,12 +15,13 @@ export async function addFirstProductToCart(page: Page, qty = 1) {
     const href = await productLinks.nth(i).getAttribute("href");
     if (!href) continue;
 
-    await page.goto(href);
-    await page.waitForLoadState("networkidle");
-
+    // networkidle ensures the add-to-cart server action has completed before we proceed
+    await page.goto(href, { waitUntil: "networkidle", timeout: 45000 }).catch(() => {
+      // PostHog may prevent true networkidle — fall through, button waitFor below handles it
+    });
     const addBtn = page.getByRole("button", { name: /add to cart/i });
-    const isVisible = await addBtn.isVisible();
-    if (!isVisible) continue; // all variants out of stock, try next product
+    const isVisible = await addBtn.waitFor({ state: "visible", timeout: 15000 }).then(() => true).catch(() => false);
+    if (!isVisible) continue; // all variants out of stock or page not loaded, try next product
 
     // Increment quantity
     for (let j = 0; j < qty; j++) {
@@ -32,18 +33,24 @@ export async function addFirstProductToCart(page: Page, qty = 1) {
     await expect(addBtn).toBeEnabled({ timeout: 3000 });
     await addBtn.click();
 
-    // Wait for "Added!" confirmation message (Supabase writes can take a few seconds)
+    // Wait for "Added!" confirmation message (server action has completed when this shows)
     await expect(
       page.getByText(/added|added to cart/i)
     ).toBeVisible({ timeout: 15000 });
 
-    // Verify cartId cookie was set by the server action
-    const cookies = await page.context().cookies();
-    const cartCookie = cookies.find(c => c.name === 'cartId');
+    // Wait for cartId cookie — poll up to 5s since cookie is set by server action
+    let cartCookie: { name: string } | undefined;
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const cookies = await page.context().cookies();
+      cartCookie = cookies.find(c => c.name === "cartId");
+      if (cartCookie) break;
+      await page.waitForTimeout(500);
+    }
     if (!cartCookie) {
-      // Cookie missing — force-set it by calling the count API which will
-      // trigger the server to recognise the session, then retry
-      await page.waitForTimeout(1000);
+      // Navigate to cart to force a server-side cart session resolution
+      await page.goto("/cart", { waitUntil: "domcontentloaded" });
+      const cartCookies = await page.context().cookies();
+      cartCookie = cartCookies.find(c => c.name === "cartId");
     }
     return;
   }

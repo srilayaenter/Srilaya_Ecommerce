@@ -1,6 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+function HeaderSkeleton() {
+  return <div className="h-16 bg-white border-b sticky top-0 z-50" aria-hidden="true" />;
+}
 
 export default function ShopLayout({
   children,
@@ -15,8 +19,10 @@ export default function ShopLayout({
       >
         Skip to main content
       </a>
-      <Header />
-      <main id="main-content" className="min-h-screen">{children}</main>
+      <Suspense fallback={<HeaderSkeleton />}>
+        <Header />
+      </Suspense>
+      <div className="min-h-screen">{children}</div>
       <Footer />
     </>
   );

@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
   const response = NextResponse.json({ success: true });
   if (isNewCart) {
-    response.cookies.set("cartId", cartId, { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 30 });
+    response.cookies.set("cartId", cartId!, { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 30 });
   }
   return response;
 }

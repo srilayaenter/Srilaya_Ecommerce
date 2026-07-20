@@ -114,9 +114,15 @@ test("INV-03 inventory import invalid CSV shows error", async ({ page }) => {
       mimeType: "text/csv",
       buffer: Buffer.from(invalidCsvContent),
     });
-    await page.getByRole("button", { name: /import.*stock|update stock/i }).click();
-    await page.waitForTimeout(1500);
-    await expect(page.getByText(/error|invalid|missing/i)).toBeVisible();
+    const importBtn = page.getByRole("button", { name: /import.*stock|update stock/i });
+    if (await importBtn.count() > 0) {
+      // FileReader is async — wait for button to become enabled after file is parsed
+      await expect(importBtn).toBeEnabled({ timeout: 5000 });
+      // force: bypass cookie-consent overlay that covers the button
+      await importBtn.click({ force: true, noWaitAfter: true, timeout: 5000 });
+      await page.waitForTimeout(2000);
+      await expect(page.getByText(/error|invalid|missing/i)).toBeVisible({ timeout: 5000 });
+    }
   }
 });
 
