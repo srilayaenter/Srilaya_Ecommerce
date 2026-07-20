@@ -1,4 +1,8 @@
 version: 2
+# DISABLED: Dependabot is paused during development (open-pull-requests-limit: 0).
+# TO RE-ENABLE before go-live: set open-pull-requests-limit back to 5 (or remove the line).
+# Also ensure CI workflows handle Dependabot PRs gracefully before re-enabling
+# (Vercel preview deployments are not created for Dependabot on Hobby plan).
 updates:
   - package-ecosystem: npm
     directory: "/"
@@ -7,7 +11,7 @@ updates:
       day: monday
       time: "06:00"
       timezone: "Asia/Kolkata"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     groups:
       next-ecosystem:
         patterns: ["next", "react", "react-dom", "@types/react*", "eslint-config-next"]
