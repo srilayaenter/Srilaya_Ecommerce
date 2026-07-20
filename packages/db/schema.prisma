@@ -260,6 +260,13 @@ model Supplier {
   phone         String?
   email         String?
   address       String?
+  gstin         String?
+  paymentTerms  String?         // "30 days net" | "advance" | "COD" etc.
+  bankName      String?
+  bankAccount   String?
+  bankIfsc      String?
+  leadTimeDays  Int?
+  rating        Int?            // 1–5 internal quality rating
   notes         String?
   active        Boolean         @default(true)
   products        Product[]
