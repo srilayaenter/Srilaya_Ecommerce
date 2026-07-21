@@ -207,9 +207,9 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
 
       {/* Create ad-hoc staff account */}
       <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
-        <h2 className="text-base font-bold text-[#212121] mb-1">Create or Update Staff Account</h2>
-        <p className="text-xs text-[#8D6E63] mb-4">For accounts outside the named slots. If the email already exists, role and password are updated.</p>
-        <form action={createStaffUser} className="grid grid-cols-3 gap-4">
+        <h2 className="text-base font-bold text-[#212121] mb-1">Add Staff Account</h2>
+        <p className="text-xs text-[#8D6E63] mb-4">For one-off accounts outside the named slots. If the email already exists, its role and password will be overwritten.</p>
+        <form action={createStaffUser} className="grid grid-cols-3 gap-4" autoComplete="off">
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
             <input type="email" name="email" required placeholder="staff@srilaya.com"
