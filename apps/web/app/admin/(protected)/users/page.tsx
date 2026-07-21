@@ -37,13 +37,6 @@ async function resetPassword(formData: FormData) {
   redirect('/admin/users?saved=true');
 }
 
-async function deactivateUser(formData: FormData) {
-  'use server';
-  const userId = formData.get('userId') as string;
-  await prisma.user.update({ where: { id: userId }, data: { role: 'customer' } });
-  redirect('/admin/users?saved=true');
-}
-
 async function createStaffUser(formData: FormData) {
   'use server';
   const email    = (formData.get('email') as string).trim().toLowerCase();
@@ -188,32 +181,22 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                     {new Date(user.createdAt).toLocaleDateString('en-IN')}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center gap-2 justify-end">
-                      <form action={updateUserRole} className="flex items-center gap-2">
-                        <input type="hidden" name="userId" value={user.id} />
-                        <select
-                          name="role"
-                          defaultValue={user.role}
-                          className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-[#006A38]"
-                        >
-                          <option value="customer">Customer</option>
-                          {STAFF_ROLES.map(r => (
-                            <option key={r} value={r}>{ROLE_LABELS[r]}</option>
-                          ))}
-                        </select>
-                        <button type="submit" className="bg-[#006A38] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#00522B] transition-colors">
-                          Save
-                        </button>
-                      </form>
-                      {STAFF_ROLES.includes(user.role as AppRole) && (
-                        <form action={deactivateUser}>
-                          <input type="hidden" name="userId" value={user.id} />
-                          <button type="submit" className="text-xs font-bold px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors">
-                            Deactivate
-                          </button>
-                        </form>
-                      )}
-                    </div>
+                    <form action={updateUserRole} className="flex items-center gap-2 justify-end">
+                      <input type="hidden" name="userId" value={user.id} />
+                      <select
+                        name="role"
+                        defaultValue={user.role}
+                        className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-[#006A38]"
+                      >
+                        <option value="customer">Customer</option>
+                        {STAFF_ROLES.map(r => (
+                          <option key={r} value={r}>{ROLE_LABELS[r]}</option>
+                        ))}
+                      </select>
+                      <button type="submit" className="bg-[#006A38] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#00522B] transition-colors">
+                        Save
+                      </button>
+                    </form>
                   </td>
                 </tr>
               ))}
