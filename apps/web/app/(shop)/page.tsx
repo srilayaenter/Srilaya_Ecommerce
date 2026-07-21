@@ -52,7 +52,7 @@ const CATEGORY_RICH: Record<string, {
   wellness: string[];
 }> = {
   "millet-flakes": {
-    image:   "/categories/Pamphlet_MilletFlakes.png",
+    // TODO: replace with dedicated Flakes flyer when ready
     color:   "from-amber-900/80 to-amber-700/50",
     wellness: [
       "⚡ Ready in under 5 minutes",
@@ -61,9 +61,8 @@ const CATEGORY_RICH: Record<string, {
       "🥣 Great oats alternative for breakfast",
     ],
   },
-  // short-slug alias (staging DB uses simpler slugs)
   "flakes": {
-    image:   "/categories/Pamphlet_MilletFlakes.png",
+    // TODO: replace with dedicated Flakes flyer when ready
     color:   "from-amber-900/80 to-amber-700/50",
     wellness: [
       "⚡ Ready in under 5 minutes",
@@ -73,7 +72,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "millet-rice": {
-    image:   "/categories/Pamphlet_MilletRice.png",
+    image:   "/categories/Pamphlet_RawMillet.webp",
     color:   "from-teal-900/80 to-teal-700/50",
     wellness: [
       "📉 Low glycaemic index",
@@ -83,7 +82,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "rice": {
-    image:   "/categories/Pamphlet_MilletRice.png",
+    image:   "/categories/Pamphlet_RawMillet.webp",
     color:   "from-teal-900/80 to-teal-700/50",
     wellness: [
       "📉 Low glycaemic index",
@@ -93,7 +92,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "traditional-rice": {
-    image:   "/categories/Pamphlet_MilletRice.png",
+    image:   "/categories/Pamphlet_TraditionalRice.webp",
     color:   "from-teal-800/80 to-teal-600/50",
     wellness: [
       "🌾 Heritage varieties — hand-picked & sun-dried",
@@ -103,7 +102,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "parboiled": {
-    image:   "/categories/Pamphlet_MilletRice.png",
+    image:   "/categories/Pamphlet_ParboiledMillet.webp",
     color:   "from-lime-900/80 to-lime-700/50",
     wellness: [
       "📊 Higher resistant starch than white rice",
@@ -113,7 +112,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "millet-flour": {
-    image:   "/categories/Pamphlet_MilletFlour.png",
+    image:   "/categories/Pamphlet_MilletFlour.webp",
     color:   "from-orange-900/80 to-orange-700/50",
     wellness: [
       "🫓 Perfect for rotis, dosas & bakes",
@@ -123,7 +122,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "flour": {
-    image:   "/categories/Pamphlet_MilletFlour.png",
+    image:   "/categories/Pamphlet_MilletFlour.webp",
     color:   "from-orange-900/80 to-orange-700/50",
     wellness: [
       "🫓 Perfect for rotis, dosas & bakes",
@@ -133,7 +132,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "millet-rava": {
-    image:   "/categories/Pamphlet_MilletRava.png",
+    image:   "/categories/Pamphlet_MilletRava.webp",
     color:   "from-indigo-900/80 to-indigo-700/50",
     wellness: [
       "❤️ Heart-healthy high-fibre base",
@@ -143,7 +142,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "rava": {
-    image:   "/categories/Pamphlet_MilletRava.png",
+    image:   "/categories/Pamphlet_MilletRava.webp",
     color:   "from-indigo-900/80 to-indigo-700/50",
     wellness: [
       "❤️ Heart-healthy high-fibre base",
@@ -153,7 +152,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "laddu": {
-    image:   "/categories/Pamphlet_MilletFlakes.png",
+    // TODO: replace with dedicated Laddu flyer when ready
     color:   "from-rose-900/80 to-rose-700/50",
     wellness: [
       "🍯 No refined sugar — sweetened with jaggery",
@@ -163,7 +162,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "sweeteners": {
-    image:   "/categories/Pamphlet_Sweetnercollection.png",
+    image:   "/categories/Pamphlet_Sweetnercollection.webp",
     color:   "from-amber-900/80 to-amber-700/50",
     wellness: [
       "📉 Lower GI than refined white sugar",
@@ -172,8 +171,8 @@ const CATEGORY_RICH: Record<string, {
       "✅ Direct 1:1 substitute in all recipes",
     ],
   },
-  // local slug is "muesli-and-granola"; "muesli-granola" kept as staging alias
   "muesli-and-granola": {
+    image:   "/categories/Pamphlet_ReadytoEat.webp",
     color:   "from-yellow-900/80 to-yellow-700/50",
     wellness: [
       "🌾 Whole grain oats & millet base",
@@ -183,6 +182,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "muesli-granola": {
+    image:   "/categories/Pamphlet_ReadytoEat.webp",
     color:   "from-yellow-900/80 to-yellow-700/50",
     wellness: [
       "🌾 Whole grain oats & millet base",
@@ -210,7 +210,7 @@ const CATEGORY_RICH: Record<string, {
     ],
   },
   "millet-parboiled": {
-    image:   "/categories/Pamphlet_MilletRice.png",
+    image:   "/categories/Pamphlet_ParboiledMillet.webp",
     color:   "from-lime-900/80 to-lime-700/50",
     wellness: [
       "📊 Higher resistant starch than white rice",
