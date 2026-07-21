@@ -64,7 +64,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
   // Slot accounts first, then others
   const slotEmails = Object.keys(SLOT_LABELS);
   const slotUsers  = slotEmails.map(e => users.find(u => u.email === e)).filter(Boolean) as typeof users;
-  const otherUsers = users.filter(u => !slotEmails.includes(u.email ?? ''));
+  const otherUsers = users.filter(u => !slotEmails.includes(u.email ?? '') && u.role !== 'owner');
 
   return (
     <div className="space-y-6 font-sans pb-12">
