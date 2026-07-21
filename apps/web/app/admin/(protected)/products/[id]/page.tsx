@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import StyledSelect from "@/components/StyledSelect";
 import ImageManager from "./ImageManager";
+import MainImageUploader from "./MainImageUploader";
 import DeleteVariantButton from "./DeleteVariantButton";
 import { logStockChange } from "@/lib/stockLog";
 import { getServerSession } from "next-auth";
@@ -303,6 +304,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
 
       {/* Image gallery manager */}
       <div className="mt-8">
+        <MainImageUploader productId={product.id} currentImage={(product as any).image ?? null} />
         <ImageManager productId={product.id} />
       </div>
     </div>

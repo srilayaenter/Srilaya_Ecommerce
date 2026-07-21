@@ -151,7 +151,7 @@ export async function createOrder(formData: FormData): Promise<void> {
       }
 
       return order.id;
-    });
+    }, { timeout: 15000 });
   } catch (err: any) {
     if (typeof err.message === 'string' && err.message.startsWith('INSUFFICIENT_STOCK:')) {
       const info = err.message.replace('INSUFFICIENT_STOCK:', '');

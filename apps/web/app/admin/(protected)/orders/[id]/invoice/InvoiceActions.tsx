@@ -87,6 +87,9 @@ export default function InvoiceActions({ orderId, defaultEmail, whatsappUrl }: I
         >
           🖨️ Print / Save as PDF
         </button>
+        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
+          💡 To hide the URL in the printout: in the print dialog click <strong>More settings</strong> → uncheck <strong>Headers and footers</strong>.
+        </p>
       </div>
     </div>
   );

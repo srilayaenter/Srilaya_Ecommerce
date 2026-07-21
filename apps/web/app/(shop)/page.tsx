@@ -384,7 +384,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
             {dbCategories.map((cat, idx) => {
               const rich    = CATEGORY_RICH[cat.slug];
-              const imgSrc  = cat.image ?? rich?.image;
+              const imgSrc  = rich?.image ?? cat.image;
               const color   = rich?.color ?? FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
               const wellness = rich?.wellness ?? [];
               const description = cat.description ?? "";
