@@ -2,17 +2,44 @@
 
 import Image from 'next/image';
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 
 interface NavCategory { name: string; href: string; }
+interface SessionUser  { name: string | null; email: string | null; }
 
-export default function HeaderClient({ categoryLinks }: { categoryLinks: NavCategory[] }) {
+export default function HeaderClient({
+  categoryLinks,
+  sessionUser,
+}: {
+  categoryLinks: NavCategory[];
+  sessionUser: SessionUser | null;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { cartCount } = useCart();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+        setAccountOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const initials = sessionUser?.name
+    ? sessionUser.name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)
+    : sessionUser?.email
+    ? sessionUser.email.slice(0, 2).toUpperCase()
+    : null;
 
   const primaryLinks = [
     { name: "Home",         href: "/" },
@@ -100,6 +127,53 @@ export default function HeaderClient({ categoryLinks }: { categoryLinks: NavCate
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 </button>
               </form>
+
+              {/* Account icon */}
+              <div ref={accountRef} className="relative">
+                {sessionUser ? (
+                  <>
+                    <button
+                      onClick={() => setAccountOpen(o => !o)}
+                      aria-label="Account menu"
+                      className="w-8 h-8 rounded-full bg-[#006A38] text-white text-[12px] font-black flex items-center justify-center hover:bg-[#00522B] transition-colors"
+                    >
+                      {initials}
+                    </button>
+                    {accountOpen && (
+                      <div className="absolute right-0 top-10 w-48 bg-white rounded-xl shadow-xl border border-[#E0E0E0] py-1 z-50">
+                        <div className="px-4 py-2.5 border-b border-[#F0F0F0]">
+                          <p className="text-[11px] font-bold text-[#212121] truncate">{sessionUser.name ?? sessionUser.email}</p>
+                          {sessionUser.name && <p className="text-[10px] text-[#9E9E9E] truncate">{sessionUser.email}</p>}
+                        </div>
+                        <Link href="/account" onClick={() => setAccountOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                          My Orders
+                        </Link>
+                        <Link href="/account#profile" onClick={() => setAccountOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                          My Profile
+                        </Link>
+                        <div className="border-t border-[#F0F0F0] mt-1">
+                          <button
+                            onClick={() => { setAccountOpen(false); signOut({ callbackUrl: "/" }); }}
+                            className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-[#E53935] hover:bg-red-50 transition-colors"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign Out
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link href="/login" aria-label="Sign in"
+                    className="flex items-center gap-1.5 text-[#424242] hover:text-[#006A38] transition-colors p-1">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  </Link>
+                )}
+              </div>
 
               <Link href="/cart" aria-label={cartCount > 0 ? `View cart, ${cartCount} item${cartCount === 1 ? "" : "s"}` : "View cart"} className="relative text-[#424242] hover:text-[#006A38] p-1">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -223,7 +297,7 @@ export default function HeaderClient({ categoryLinks }: { categoryLinks: NavCate
             </nav>
 
             {/* Footer */}
-            <div className="px-5 py-4 border-t border-[#F0F0F0] bg-[#F5F5F5]">
+            <div className="px-5 py-4 border-t border-[#F0F0F0] bg-[#F5F5F5] space-y-2">
               <Link
                 href="/cart"
                 onClick={closeMenu}
@@ -232,6 +306,24 @@ export default function HeaderClient({ categoryLinks }: { categoryLinks: NavCate
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 View Cart {cartCount > 0 && `(${cartCount})`}
               </Link>
+              {sessionUser ? (
+                <button
+                  onClick={() => { closeMenu(); signOut({ callbackUrl: "/" }); }}
+                  className="flex items-center justify-center gap-2 w-full border border-[#E0E0E0] text-[#E53935] font-bold py-3 rounded-xl text-sm hover:bg-red-50 transition-colors bg-white"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={closeMenu}
+                  className="flex items-center justify-center gap-2 w-full border border-[#006A38] text-[#006A38] font-bold py-3 rounded-xl text-sm hover:bg-[#F0FFF7] transition-colors bg-white"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         </div>

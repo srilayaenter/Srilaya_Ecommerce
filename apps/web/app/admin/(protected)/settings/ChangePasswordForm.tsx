@@ -40,15 +40,15 @@ export default function ChangePasswordForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="your@email.com" className={inputClass} />
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="your@email.com" autoComplete="email" className={inputClass} />
       </div>
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Current Password</label>
-        <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required className={inputClass} />
+        <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required autoComplete="current-password" className={inputClass} />
       </div>
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">New Password</label>
-        <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} required minLength={8} className={inputClass} />
+        <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} required minLength={8} autoComplete="new-password" className={inputClass} />
         <p className="text-[11px] text-[#9E9E9E] mt-1">Minimum 8 characters.</p>
       </div>
       <button

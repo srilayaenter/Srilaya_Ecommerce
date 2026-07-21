@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { ROLE_LABELS, AppRole } from "@/lib/permissions";
 import { isOwner } from "@/lib/permissions";
 import LogoutButton from "./LogoutButton";
+import AdminSidebarNav from "./AdminSidebarNav";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -80,19 +81,8 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Navigation Menu */}
-        <div className="flex-grow overflow-y-auto py-6 custom-scrollbar">
-          <nav className="px-4 flex flex-col gap-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-[8px] text-white/90 hover:text-white hover:bg-[#00522B] transition-colors"
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span className="tracking-wide">{item.name}</span>
-              </Link>
-            ))}
-          </nav>
+        <div className="flex-grow overflow-y-auto py-4 custom-scrollbar">
+          <AdminSidebarNav items={menuItems} />
         </div>
 
         {/* Sidebar Footer Link */}

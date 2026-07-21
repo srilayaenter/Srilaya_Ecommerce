@@ -214,6 +214,22 @@ test("ADM-BLG-02 admin create blog post", async ({ page }) => {
     return;
   }
   expect(postVisible || formReset).toBe(true);
+
+  // Cleanup: delete any blog posts whose title starts with "Auto Test Post"
+  // to avoid accumulating junk posts on staging after each CI run.
+  try {
+    const res  = await page.request.get("/api/admin/blog");
+    if (res.ok()) {
+      const posts: { id: string; title: string }[] = await res.json();
+      for (const p of posts) {
+        if (p.title.startsWith("Auto Test Post")) {
+          await page.request.delete(`/api/admin/blog/${p.id}`);
+        }
+      }
+    }
+  } catch {
+    // cleanup failure is non-fatal
+  }
 });
 
 // ─── Reviews ─────────────────────────────────────────────────────────────────

@@ -24,16 +24,23 @@ interface CheckoutFormProps {
   cartItems: CartSummaryItem[];
   subtotal: number;
   taxTotal: number;
-  defaultEmail?: string;
-  defaultPhone?: string;
-  emailRequired?: boolean;
+  defaultEmail?:   string;
+  defaultPhone?:   string;
+  defaultName?:    string;
+  defaultAddress?: string;
+  defaultCity?:    string;
+  defaultState?:   string;
+  defaultZip?:     string;
+  emailRequired?:  boolean;
 }
 
 export default function CheckoutForm({
   cartItems, subtotal, taxTotal,
-  defaultEmail = "", defaultPhone = "", emailRequired = true,
+  defaultEmail = "", defaultPhone = "",
+  defaultName = "", defaultAddress = "", defaultCity = "", defaultState = "", defaultZip = "",
+  emailRequired = true,
 }: CheckoutFormProps) {
-  const [state, setState] = useState("");
+  const [state, setState] = useState(defaultState);
   const [selectedCourier, setSelectedCourier] = useState<CourierKey | "">("");
   const [isPending, setIsPending] = useState(false);
 
@@ -130,6 +137,7 @@ export default function CheckoutForm({
                 </label>
                 <input
                   id="chk-name" type="text" name="name" required
+                  defaultValue={defaultName}
                   placeholder="Ravi Kumar"
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                 />
@@ -167,6 +175,7 @@ export default function CheckoutForm({
                 </label>
                 <textarea
                   id="chk-address" name="address" required rows={3}
+                  defaultValue={defaultAddress}
                   placeholder="Street address, flat/house number..."
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242] resize-none"
                 />
@@ -179,6 +188,7 @@ export default function CheckoutForm({
                   </label>
                   <input
                     id="chk-city" type="text" name="city" required
+                    defaultValue={defaultCity}
                     placeholder="Mysuru"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
@@ -204,6 +214,7 @@ export default function CheckoutForm({
                   </label>
                   <input
                     id="chk-zipcode" type="text" name="zipCode" required
+                    defaultValue={defaultZip}
                     placeholder="570001"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
