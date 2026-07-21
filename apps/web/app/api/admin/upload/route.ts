@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { supabaseAdmin, STORAGE_BUCKET } from "@/lib/supabase";
+import { getSupabaseAdmin, STORAGE_BUCKET } from "@/lib/supabase";
 import { isAdminRole } from "@/lib/permissions";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const { error } = await supabaseAdmin.storage
+  const client = getSupabaseAdmin();
+  const { error } = await client.storage
     .from(STORAGE_BUCKET)
     .upload(path, buffer, { contentType: file.type, upsert: false });
 
@@ -39,6 +40,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const { data } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  const { data } = client.storage.from(STORAGE_BUCKET).getPublicUrl(path);
   return NextResponse.json({ url: data.publicUrl });
 }
