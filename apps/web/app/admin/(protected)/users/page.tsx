@@ -212,12 +212,12 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         <form action={createStaffUser} className="grid grid-cols-3 gap-4" autoComplete="off">
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
-            <input type="email" name="email" required placeholder="staff@srilaya.com"
+            <input type="email" name="email" required placeholder="staff@srilaya.com" autoComplete="off"
               className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Password</label>
-            <input type="password" name="password" required minLength={8} placeholder="Min 8 characters"
+            <input type="password" name="password" required minLength={8} placeholder="Min 8 characters" autoComplete="new-password"
               className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
           </div>
           <div>
