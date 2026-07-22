@@ -17,9 +17,10 @@ model User {
   role         String   @default("customer")
   totpSecret   String?
   totpEnabled  Boolean  @default(false)
-  orders       Order[]
-  carts        Cart[]
-  createdAt    DateTime @default(now())
+  orders        Order[]
+  carts         Cart[]
+  wishlistItems WishlistItem[]
+  createdAt     DateTime @default(now())
 }
 
 model PhoneOtp {
@@ -72,9 +73,10 @@ model Product {
   supplier    Supplier?        @relation(fields: [supplierId], references: [id])
   variants    ProductVariant[]
   productReviews ProductReview[]
-  images      ProductImage[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  images         ProductImage[]
+  wishlistItems  WishlistItem[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model ProductImage {
@@ -494,4 +496,16 @@ model RawMaterialLog {
 
   @@index([rawMaterialId])
   @@index([createdAt])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
 }

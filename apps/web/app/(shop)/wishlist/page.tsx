@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 
@@ -14,23 +15,62 @@ interface Product {
   variants: { id: string; size: string; price: string; stock: number }[];
 }
 
+async function fetchByIds(ids: string[]): Promise<Product[]> {
+  if (ids.length === 0) return [];
+  const res = await fetch("/api/products/by-ids", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ids }),
+  });
+  const data = await res.json();
+  return data.products ?? [];
+}
+
 export default function WishlistPage() {
+  const { data: session, status } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading,  setLoading]  = useState(true);
 
   useEffect(() => {
-    const ids: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    if (ids.length === 0) { setLoading(false); return; }
+    if (status === "loading") return;
 
-    fetch("/api/products/by-ids", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids }),
-    })
-      .then(r => r.json())
-      .then(data => { setProducts(data.products ?? []); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, []);
+    async function load() {
+      try {
+        if (session?.user?.id) {
+          // Logged in — fetch from DB
+          const res = await fetch("/api/wishlist");
+          const { productIds } = await res.json();
+
+          // Also merge any localStorage items saved while guest
+          const localIds: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
+          const toSync = localIds.filter(id => !productIds.includes(id));
+          if (toSync.length > 0) {
+            await Promise.all(toSync.map(productId =>
+              fetch("/api/wishlist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ productId }),
+              })
+            ));
+            localStorage.removeItem("wishlist");
+          }
+
+          const allIds = [...new Set([...productIds, ...toSync])];
+          setProducts(await fetchByIds(allIds));
+        } else {
+          // Guest — use localStorage
+          const ids: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
+          setProducts(await fetchByIds(ids));
+        }
+      } catch {
+        // silently fail — show empty list
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, [session, status]);
 
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
