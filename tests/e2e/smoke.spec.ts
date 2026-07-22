@@ -119,3 +119,24 @@ test("SMOKE-10 robots.txt disallows /admin on staging", async ({ request }) => {
   const text = await res.text();
   expect(text).toContain("Disallow: /admin");
 });
+
+test("SMOKE-11 wishlist page loads without error (guest empty state)", async ({ page }) => {
+  await page.goto("/wishlist", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.locator("main")).toBeVisible();
+  // Guest sees either the empty-state message or a loading indicator — no crash
+  await expect(
+    page.getByText(/wishlist|saved|heart/i).first()
+  ).toBeVisible();
+});
+
+test("SMOKE-12 product detail page shows wishlist heart button", async ({ page }) => {
+  await page.goto("/product", { waitUntil: "networkidle" });
+  const firstLink = page.locator("a[href^='/product/']").first();
+  const href = await firstLink.getAttribute("href");
+  await page.goto(href!, { waitUntil: "networkidle" });
+  // WishlistButton renders as a button with aria-label containing "wishlist"
+  await expect(
+    page.getByRole("button", { name: /wishlist/i }).first()
+  ).toBeVisible();
+});
