@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 export default function WishlistButton({ productId }: { productId: string }) {
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const [saved, setSaved] = useState(false);
 
   // On mount: load from DB if logged in, else localStorage
   useEffect(() => {
-    if (session === undefined) return; // still loading
+    if (sessionResult === undefined || sessionResult.status === "loading") return;
     if (session?.user?.id) {
       fetch("/api/wishlist")
         .then(r => r.json())
