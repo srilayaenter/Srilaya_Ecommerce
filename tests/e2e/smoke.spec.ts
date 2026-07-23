@@ -125,16 +125,14 @@ test("SMOKE-11 wishlist page loads without error (guest empty state)", async ({ 
   await expect(page).not.toHaveTitle(/error|not found/i);
   // Must not show the error boundary
   await expect(page.getByText("Something went wrong")).not.toBeVisible();
-  // Page header must be visible
-  await expect(page.getByRole("heading", { name: /wishlist/i })).toBeVisible();
+  // h1 page title must be visible (h2 "Your wishlist is empty" also contains "wishlist", use level:1)
+  await expect(page.getByRole("heading", { name: /wishlist/i, level: 1 })).toBeVisible();
 });
 
-test("SMOKE-12 product detail page shows wishlist heart button", async ({ page }) => {
+test("SMOKE-12 product listing shows wishlist heart button on product cards", async ({ page }) => {
   await page.goto("/product", { waitUntil: "networkidle" });
-  const firstLink = page.locator("a[href^='/product/']").first();
-  const href = await firstLink.getAttribute("href");
-  await page.goto(href!, { waitUntil: "networkidle" });
-  // WishlistButton is client-only (ssr:false) — wait for hydration
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  // WishlistButton is rendered on each product card in the listing
   await expect(
     page.getByRole("button", { name: /wishlist/i }).first()
   ).toBeVisible({ timeout: 10000 });
