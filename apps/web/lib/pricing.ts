@@ -4,7 +4,7 @@
 
 export function calcCouponDiscount(
   baseTotal: number,
-  coupon: { type: string; value: number | string }
+  coupon: { type: string; value: { toString(): string } | number | string }
 ): number {
   if (coupon.type === "percentage") {
     return parseFloat(((baseTotal * Number(coupon.value)) / 100).toFixed(2));
