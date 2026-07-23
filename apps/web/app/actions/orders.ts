@@ -188,7 +188,7 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   // Increment coupon usage counter
   if (validatedCouponCode) {
-    prisma.coupon.update({
+    void prisma.coupon.update({
       where: { code: validatedCouponCode },
       data:  { usedCount: { increment: 1 } },
     }).catch(() => {});

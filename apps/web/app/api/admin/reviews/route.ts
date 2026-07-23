@@ -10,7 +10,9 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
 
-  const { reviewId, approved } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { reviewId, approved } = body;
   if (!reviewId) return NextResponse.json({ error: "reviewId required" }, { status: 400 });
 
   const review = await prisma.productReview.update({

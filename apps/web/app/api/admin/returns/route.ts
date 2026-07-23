@@ -25,7 +25,9 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
-  const { returnId, status, adminNote } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { returnId, status, adminNote } = body;
 
   const updated = await prisma.return.update({
     where: { id: returnId },

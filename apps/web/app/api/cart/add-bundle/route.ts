@@ -3,7 +3,9 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
-  const { bundleSlug } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { bundleSlug } = body;
   if (!bundleSlug) return NextResponse.json({ error: "bundleSlug required" }, { status: 400 });
 
   const bundle = await prisma.bundle.findUnique({

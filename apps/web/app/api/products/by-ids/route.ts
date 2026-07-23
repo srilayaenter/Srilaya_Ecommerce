@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
-  const { ids } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { ids } = body;
   if (!Array.isArray(ids) || ids.length === 0) {
     return NextResponse.json({ products: [] });
   }

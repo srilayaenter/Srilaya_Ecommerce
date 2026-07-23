@@ -18,7 +18,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   const { code, type, value, minOrder, maxUses, expiresAt } = body;
 
   if (!code || !type || !value) {
@@ -44,7 +45,9 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
-  const { id, active } = await request.json();
+  const patch = await request.json().catch(() => null);
+  if (!patch) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { id, active } = patch;
   const coupon = await prisma.coupon.update({ where: { id }, data: { active } });
   return NextResponse.json({ coupon });
 }
