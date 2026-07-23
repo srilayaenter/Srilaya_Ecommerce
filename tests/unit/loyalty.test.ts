@@ -4,7 +4,7 @@ import {
   pointsToRupees,
   maxRedeemablePoints,
   generateReferralCode,
-} from "../../apps/web/lib/loyalty";
+} from "../../apps/web/lib/loyaltyMath";
 import {
   POINTS_PER_RUPEE,
   RUPEES_PER_POINT,
