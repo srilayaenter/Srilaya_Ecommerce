@@ -10,6 +10,7 @@ import { buildOrderConfirmationEmail } from "@/lib/emails/orderConfirmation";
 import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
+import { calcCouponDiscount, calcOrderTotal } from "@/lib/pricing";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
@@ -85,14 +86,12 @@ export async function createOrder(formData: FormData): Promise<void> {
       (!coupon.minOrder || baseTotal >= Number(coupon.minOrder));
 
     if (isValid && coupon) {
-      couponDiscount = coupon.type === "percentage"
-        ? parseFloat(((baseTotal * Number(coupon.value)) / 100).toFixed(2))
-        : Math.min(Number(coupon.value), baseTotal);
+      couponDiscount = calcCouponDiscount(baseTotal, coupon);
       validatedCouponCode = coupon.code;
     }
   }
 
-  const total = Math.max(0, baseTotal - loyaltyDiscount - couponDiscount);
+  const total = calcOrderTotal(baseTotal, loyaltyDiscount, couponDiscount);
 
   let orderId: string;
 
