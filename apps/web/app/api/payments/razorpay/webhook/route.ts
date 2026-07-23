@@ -9,8 +9,9 @@ import { revalidatePath } from "next/cache";
 import { log, logPaymentFailed, logError } from "@/lib/logger";
 
 export async function POST(request: Request) {
+  let rawBody = "";
   try {
-    const rawBody = await request.text();
+    rawBody = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
 
     if (!process.env.RAZORPAY_WEBHOOK_SECRET) {
@@ -126,7 +127,17 @@ export async function POST(request: Request) {
   } catch (error: any) {
     logError("payment.webhook", error);
     await log.flush();
-    console.error("Webhook processing error:", error);
+    // Save to FailedWebhook so it can be reviewed and retried from the admin panel
+    try {
+      await prisma.failedWebhook.create({
+        data: {
+          provider:     "razorpay",
+          eventId:      (error as any)?._eventId ?? null,
+          rawBody:      rawBody ?? "",
+          errorMessage: error?.message ?? String(error),
+        },
+      });
+    } catch { /* don't mask the original error */ }
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }

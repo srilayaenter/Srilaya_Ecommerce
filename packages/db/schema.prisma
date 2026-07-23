@@ -243,6 +243,20 @@ model WebhookEvent {
   processedAt DateTime @default(now())
 }
 
+model FailedWebhook {
+  id           String    @id @default(cuid())
+  provider     String
+  eventId      String?
+  rawBody      String
+  errorMessage String
+  retries      Int       @default(0)
+  resolvedAt   DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([provider])
+  @@index([resolvedAt])
+}
+
 model FailedEmail {
   id           String    @id @default(cuid())
   to           String
