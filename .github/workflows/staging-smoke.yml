@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
+
       # ── 3. Playwright browsers (chromium only for speed) ────────────────────
       - name: Cache Playwright browsers
         uses: actions/cache@v4
