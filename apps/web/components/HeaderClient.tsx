@@ -50,7 +50,7 @@ export default function HeaderClient({
     { name: "Contact Us",   href: "/contact" },
   ];
 
-  const utilityLinks = [
+  const utilityLinks: { name: string; href: string; badge?: string }[] = [
     { name: "Track Order",     href: "/track" },
     { name: "My Orders",       href: "/account" },
     { name: "Refer & Earn",    href: "/referral" },
