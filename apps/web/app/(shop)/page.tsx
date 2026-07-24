@@ -34,200 +34,63 @@ const fetchHomeProducts = unstable_cache(
   { revalidate: 300, tags: ["products"] }
 );
 
-const fetchHomeCategories = unstable_cache(
-  () => prisma.category.findMany({
-    where: { parentId: null, products: { some: {} } },
-    orderBy: { name: "asc" },
-    select: { id: true, name: true, slug: true, description: true, image: true, _count: { select: { products: true } } },
-  }),
-  ["home-categories"],
-  { revalidate: 300, tags: ["categories"] }
-);
-
-// Rich content for known category slugs. Any new category added via admin
-// will automatically appear on the homepage using a gradient fallback.
-const CATEGORY_RICH: Record<string, {
-  image?: string;
-  color: string;
-  wellness: string[];
-}> = {
-  "millet-flakes": {
-    // TODO: replace with dedicated Flakes flyer when ready
-    color:   "from-amber-900/80 to-amber-700/50",
-    wellness: [
-      "⚡ Ready in under 5 minutes",
-      "💪 High protein & heart-healthy",
-      "🌿 Promotes healthy gut flora",
-      "🥣 Great oats alternative for breakfast",
-    ],
+const COLLECTIONS = [
+  {
+    name: "Millet Rava",
+    tagline: "7 varieties. Low GI. Ready in minutes.",
+    href: "/rava",
+    emoji: "🌾",
+    bg: "#D99B26",
+    text: "#2D1A00",
   },
-  "flakes": {
-    // TODO: replace with dedicated Flakes flyer when ready
-    color:   "from-amber-900/80 to-amber-700/50",
-    wellness: [
-      "⚡ Ready in under 5 minutes",
-      "💪 High protein & heart-healthy",
-      "🌿 Promotes healthy gut flora",
-      "🥣 Great oats alternative for breakfast",
-    ],
+  {
+    name: "Millet Flour",
+    tagline: "Stone-ground. 8 varieties. No maida.",
+    href: "/flour",
+    emoji: "🫓",
+    bg: "#5C3A21",
+    text: "#FFF8F0",
   },
-  "millet-rice": {
-    image:   "/categories/Pamphlet_RawMillet.webp",
-    color:   "from-teal-900/80 to-teal-700/50",
-    wellness: [
-      "📉 Low glycaemic index",
-      "✅ Ideal for diabetics & weight-watchers",
-      "⏱️ Keeps you fuller for longer",
-      "💎 More nutrients than polished white rice",
-    ],
+  {
+    name: "Natural Sweeteners",
+    tagline: "Jaggery powder. 3 types. Zero chemicals.",
+    href: "/sweeteners",
+    emoji: "🍯",
+    bg: "#b45309",
+    text: "#FFF8E1",
   },
-  "rice": {
-    image:   "/categories/Pamphlet_RawMillet.webp",
-    color:   "from-teal-900/80 to-teal-700/50",
-    wellness: [
-      "📉 Low glycaemic index",
-      "✅ Ideal for diabetics & weight-watchers",
-      "⏱️ Keeps you fuller for longer",
-      "💎 More nutrients than polished white rice",
-    ],
+  {
+    name: "Traditional Rice",
+    tagline: "4 heritage varieties. Antioxidant rich.",
+    href: "/traditional-rice",
+    emoji: "🍚",
+    bg: "#9f1239",
+    text: "#FFF1F2",
   },
-  "traditional-rice": {
-    image:   "/categories/Pamphlet_TraditionalRice.webp",
-    color:   "from-teal-800/80 to-teal-600/50",
-    wellness: [
-      "🌾 Heritage varieties — hand-picked & sun-dried",
-      "💎 Rich in micronutrients & antioxidants",
-      "🍚 Authentic flavour from traditional farming",
-      "✅ Low-intervention, chemical-free cultivation",
-    ],
+  {
+    name: "Muesli & Granola",
+    tagline: "8 varieties. Whole grain. No preservatives.",
+    href: "/muesli",
+    emoji: "🥣",
+    bg: "#92400e",
+    text: "#FFFBEB",
   },
-  "parboiled": {
-    image:   "/categories/Pamphlet_ParboiledMillet.webp",
-    color:   "from-lime-900/80 to-lime-700/50",
-    wellness: [
-      "📊 Higher resistant starch than white rice",
-      "⚡ Better nutrient retention than raw milling",
-      "❤️ Supports gut health & steady energy",
-      "🍽️ Firm texture — perfect for biryanis & meals",
-    ],
+  {
+    name: "Whole Millet Grains",
+    tagline: "8 unpolished varieties. Cook like rice.",
+    href: "/raw-millets",
+    emoji: "🌱",
+    bg: "#2E6F40",
+    text: "#F0FDF4",
   },
-  "millet-flour": {
-    image:   "/categories/Pamphlet_MilletFlour.webp",
-    color:   "from-orange-900/80 to-orange-700/50",
-    wellness: [
-      "🫓 Perfect for rotis, dosas & bakes",
-      "🦴 High calcium — great for bone health",
-      "🌟 Rich in B-vitamins & antioxidants",
-      "🚫 No maida, no refined grains",
-    ],
+  {
+    name: "Parboiled Millets",
+    tagline: "Enhanced nutrition. Better digestibility.",
+    href: "/parboiled-millets",
+    emoji: "💧",
+    bg: "#1e40af",
+    text: "#EFF6FF",
   },
-  "flour": {
-    image:   "/categories/Pamphlet_MilletFlour.webp",
-    color:   "from-orange-900/80 to-orange-700/50",
-    wellness: [
-      "🫓 Perfect for rotis, dosas & bakes",
-      "🦴 High calcium — great for bone health",
-      "🌟 Rich in B-vitamins & antioxidants",
-      "🚫 No maida, no refined grains",
-    ],
-  },
-  "millet-rava": {
-    image:   "/categories/Pamphlet_MilletRava.webp",
-    color:   "from-indigo-900/80 to-indigo-700/50",
-    wellness: [
-      "❤️ Heart-healthy high-fibre base",
-      "📊 Keeps cholesterol levels in check",
-      "⚡ Slow-release energy all morning",
-      "🍲 Versatile — upma, porridge, khichdi",
-    ],
-  },
-  "rava": {
-    image:   "/categories/Pamphlet_MilletRava.webp",
-    color:   "from-indigo-900/80 to-indigo-700/50",
-    wellness: [
-      "❤️ Heart-healthy high-fibre base",
-      "📊 Keeps cholesterol levels in check",
-      "⚡ Slow-release energy all morning",
-      "🍲 Versatile — upma, porridge, khichdi",
-    ],
-  },
-  "laddu": {
-    // TODO: replace with dedicated Laddu flyer when ready
-    color:   "from-rose-900/80 to-rose-700/50",
-    wellness: [
-      "🍯 No refined sugar — sweetened with jaggery",
-      "⚡ Natural energy boost for kids & adults",
-      "💪 Rich in iron & traditional herbs",
-      "🎁 Festive gifting with a healthy twist",
-    ],
-  },
-  "sweeteners": {
-    image:   "/categories/Pamphlet_Sweetnercollection.webp",
-    color:   "from-amber-900/80 to-amber-700/50",
-    wellness: [
-      "📉 Lower GI than refined white sugar",
-      "💎 Retains natural minerals & trace elements",
-      "🌿 Unrefined palm & cane jaggery",
-      "✅ Direct 1:1 substitute in all recipes",
-    ],
-  },
-  "muesli-and-granola": {
-    image:   "/categories/Pamphlet_ReadytoEat.webp",
-    color:   "from-yellow-900/80 to-yellow-700/50",
-    wellness: [
-      "🌾 Whole grain oats & millet base",
-      "🍯 Sweetened with natural jaggery & honey",
-      "💪 High fibre — keeps you full all morning",
-      "🥛 Perfect with milk, curd, or smoothie bowls",
-    ],
-  },
-  "muesli-granola": {
-    image:   "/categories/Pamphlet_ReadytoEat.webp",
-    color:   "from-yellow-900/80 to-yellow-700/50",
-    wellness: [
-      "🌾 Whole grain oats & millet base",
-      "🍯 Sweetened with natural jaggery & honey",
-      "💪 High fibre — keeps you full all morning",
-      "🥛 Perfect with milk, curd, or smoothie bowls",
-    ],
-  },
-  "malt-and-health-mixes": {
-    color:   "from-purple-900/80 to-purple-700/50",
-    wellness: [
-      "🌿 Sprouted malt for easy digestion",
-      "💪 High protein & calorie-dense for active lifestyles",
-      "🧒 Ideal for growing children & nursing mothers",
-      "🍵 Mix with warm milk for a nourishing drink",
-    ],
-  },
-  "malt-health-mixes": {
-    color:   "from-purple-900/80 to-purple-700/50",
-    wellness: [
-      "🌿 Sprouted malt for easy digestion",
-      "💪 High protein & calorie-dense for active lifestyles",
-      "🧒 Ideal for growing children & nursing mothers",
-      "🍵 Mix with warm milk for a nourishing drink",
-    ],
-  },
-  "millet-parboiled": {
-    image:   "/categories/Pamphlet_ParboiledMillet.webp",
-    color:   "from-lime-900/80 to-lime-700/50",
-    wellness: [
-      "📊 Higher resistant starch than white rice",
-      "⚡ Better nutrient retention than raw milling",
-      "❤️ Supports gut health & steady energy",
-      "🍽️ Firm texture — perfect for biryanis & meals",
-    ],
-  },
-};
-
-// Fallback gradient colours for any future category
-const FALLBACK_COLORS = [
-  "from-emerald-900/80 to-emerald-700/50",
-  "from-cyan-900/80 to-cyan-700/50",
-  "from-violet-900/80 to-violet-700/50",
-  "from-green-900/80 to-green-700/50",
-  "from-sky-900/80 to-sky-700/50",
 ];
 
 const usps = [
@@ -257,15 +120,11 @@ const whyUs = [
 
 export default async function HomePage() {
   let products: Awaited<ReturnType<typeof fetchHomeProducts>> = [];
-  let dbCategories: Awaited<ReturnType<typeof fetchHomeCategories>> = [];
   try {
     const timeout = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("home-timeout")), 8000)
     );
-    [products, dbCategories] = await Promise.race([
-      Promise.all([fetchHomeProducts(), fetchHomeCategories()]),
-      timeout,
-    ]);
+    products = await Promise.race([fetchHomeProducts(), timeout]);
   } catch {
     // DB unavailable on cold start — render with empty data
   }
@@ -365,82 +224,69 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* -- CATEGORY SHOWCASE ---------------------------------- */}
+      {/* -- COLLECTIONS SHOWCASE -------------------------------- */}
       <section className="py-12 md:py-20 bg-[#F9F9F9]">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
-              Browse by Category
+              Specialty Collections
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-[#212121] mt-4 mb-3 tracking-tight">
-              What Are You Looking For?
+              Every Grain. Every Benefit.
             </h2>
             <p className="text-[#757575] max-w-lg mx-auto text-sm md:text-base">
-              From everyday millet grains to ready-to-cook flakes and traditional sweets —
-              we have something for every health goal.
+              Each collection is curated around a grain's unique story, health benefit, and kitchen use.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
-            {dbCategories.map((cat, idx) => {
-              const rich    = CATEGORY_RICH[cat.slug];
-              const imgSrc  = rich?.image ?? cat.image;
-              const color   = rich?.color ?? FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
-              const wellness = rich?.wellness ?? [];
-              const description = cat.description ?? "";
-              return (
-                <Link
-                  key={cat.id}
-                  href={`/category/${cat.slug}`}
-                  className="group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+            {COLLECTIONS.map((c) => (
+              <Link
+                key={c.href}
+                href={c.href}
+                className="group flex flex-col items-center text-center rounded-2xl p-6 md:p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-black/5"
+                style={{ backgroundColor: c.bg }}
+              >
+                <span className="text-4xl md:text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {c.emoji}
+                </span>
+                <h3
+                  className="font-black text-sm md:text-base leading-snug mb-1"
+                  style={{ color: c.text }}
                 >
-                  {/* Image area */}
-                  <div className="relative aspect-[4/5]">
-                    {imgSrc ? (
-                      <Image
-                        src={imgSrc}
-                        alt={cat.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 640px) 50vw, 33vw"
-                      />
-                    ) : (
-                      /* Gradient placeholder for categories without a photo */
-                      <div className={`absolute inset-0 bg-gradient-to-br ${color} flex items-center justify-center`}>
-                        <span className="text-5xl opacity-60">🌾</span>
-                      </div>
-                    )}
-                    <div className={`absolute inset-0 bg-gradient-to-t ${color} group-hover:opacity-95 transition-opacity duration-300`} />
-                  </div>
+                  {c.name}
+                </h3>
+                <p
+                  className="text-[11px] md:text-xs leading-relaxed opacity-80"
+                  style={{ color: c.text }}
+                >
+                  {c.tagline}
+                </p>
+                <span
+                  className="mt-4 text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity"
+                  style={{ color: c.text }}
+                >
+                  Explore →
+                </span>
+              </Link>
+            ))}
 
-                  {/* Info panel */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                    <h3 className="text-white font-black text-base md:text-lg leading-tight drop-shadow">
-                      {cat.name}
-                    </h3>
-                    {description && (
-                      <p className="text-white/80 text-xs mt-1 font-medium">{description}</p>
-                    )}
-
-                    {wellness.length > 0 && (
-                      <div className="max-h-0 group-hover:max-h-52 overflow-hidden transition-all duration-500 ease-in-out">
-                        <ul className="mt-3 space-y-1.5">
-                          {wellness.map((tip) => (
-                            <li key={tip} className="text-white/90 text-[11px] md:text-xs leading-snug">
-                              {tip}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    <span className="inline-block mt-3 text-xs font-black text-amber-300 group-hover:text-amber-200 group-hover:tracking-wide transition-all duration-200">
-                      Shop Now →
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+            {/* View all collections tile */}
+            <Link
+              href="/collections"
+              className="group flex flex-col items-center justify-center text-center rounded-2xl p-6 md:p-7 border-2 border-dashed border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300"
+            >
+              <span className="text-4xl md:text-5xl mb-4">🗂️</span>
+              <h3 className="font-black text-sm md:text-base text-emerald-800 leading-snug mb-1">
+                All Collections
+              </h3>
+              <p className="text-[11px] md:text-xs text-emerald-600 leading-relaxed">
+                See everything, including upcoming launches.
+              </p>
+              <span className="mt-4 text-[10px] font-black uppercase tracking-widest text-emerald-700 group-hover:text-emerald-900 transition-colors">
+                View All →
+              </span>
+            </Link>
           </div>
         </div>
       </section>
