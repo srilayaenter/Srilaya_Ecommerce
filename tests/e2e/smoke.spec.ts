@@ -192,6 +192,18 @@ test("SMOKE-16 /rava floating WhatsApp button is present", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("SMOKE-22 /muesli landing page loads with hero and product cards", async ({ page }) => {
+  await page.goto("/muesli", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /wake up to/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Honey Muesli & Granola", "Chocolate Muesli", "Sugar Free Muesli"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
 test("SMOKE-21 /traditional-rice landing page loads with hero and all 4 varieties", async ({ page }) => {
   await page.goto("/traditional-rice", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
