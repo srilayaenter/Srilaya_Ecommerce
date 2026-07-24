@@ -370,23 +370,12 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
           </div>
         </section>
 
-        {/* Uses */}
-        <section className="text-center">
-          <h2 className="font-serif text-2xl font-bold text-[#5C3A21] mb-6">What Can You Make?</h2>
-          <div className="flex flex-wrap justify-center gap-3">
-            {["Roti & Chapati", "Dosa & Uttapam", "Puttu", "Kheer & Porridge", "Traditional Ladoos", "Healthy Bakes", "Baby Food", "Smoothie Boosters"].map((use) => (
-              <span
-                key={use}
-                className="px-4 py-2 bg-[#FDF0E8] border border-[#5C3A21]/20 text-[#5C3A21] font-semibold text-sm rounded-full"
-              >
-                {use}
-              </span>
-            ))}
-          </div>
-          <p className="text-gray-500 text-sm mt-8">
-            Looking for collection ideas?{" "}
-            <Link href="/collections" className="text-[#2E6F40] font-semibold hover:underline">
-              Browse all collections →
+        {/* Recipes teaser */}
+        <section className="text-center py-4">
+          <p className="text-gray-500 text-sm">
+            Looking for recipe ideas?{" "}
+            <Link href="/recipes" className="text-[#2E6F40] font-semibold hover:underline">
+              Browse millet flour recipes →
             </Link>
           </p>
         </section>

@@ -21,6 +21,69 @@ const RECIPE_IMG = _base
   ? `${_base}/storage/v1/object/public/recipe-images`
   : null;
 
+const FEATURED_FLOUR_RECIPES = [
+  {
+    title: "Millet Roti & Chapati",
+    tag: "Daily Staple",
+    emoji: "🫓",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-roti.jpg` : "",
+    readMins: 20,
+    excerpt: "Soft, wholesome flatbread made with millet flour — a nutritious daily swap for refined wheat rotis.",
+    desc: "Mix millet flour with warm water, a pinch of salt, and a teaspoon of oil. Knead into a soft dough and rest 10 minutes. Roll out thin circles and cook on a hot tawa for 1–2 mins each side until light golden spots appear. Serve hot with ghee, dal, or vegetable curry.",
+    best: "Any millet flour",
+  },
+  {
+    title: "Millet Dosa & Uttapam",
+    tag: "Instant Breakfast",
+    emoji: "🥞",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-dosa.jpg` : "",
+    readMins: 15,
+    excerpt: "Crispy instant dosas and soft uttapams made from millet flour — no fermentation needed, ready in minutes.",
+    desc: "Whisk millet flour with water, salt, cumin, and green chilli into a smooth pourable batter (thinner for dosa, thicker for uttapam). Heat a greased tawa, spread thin for dosa or pour thick and top with onions, tomatoes, and coriander for uttapam. Cook until done. Serve with coconut chutney or sambar.",
+    best: "Any millet flour",
+  },
+  {
+    title: "Millet Puttu",
+    tag: "South Indian Classic",
+    emoji: "🍚",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-puttu.jpg` : "",
+    readMins: 20,
+    excerpt: "A steamed South Indian breakfast with millet flour layered with grated coconut — fluffy and filling.",
+    desc: "Lightly roast millet flour until nutty. Mix with grated coconut, a pinch of salt, and just enough water for a moist crumbly texture. Pack into a puttu maker in alternating layers of flour and coconut. Steam for 10–12 minutes until firm. Serve with kadala curry, banana, or jaggery.",
+    best: "Finger (Ragi) flour or Foxtail flour",
+  },
+  {
+    title: "Millet Kheer & Porridge",
+    tag: "Comfort Dessert",
+    emoji: "🍮",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-kheer.jpg` : "",
+    readMins: 20,
+    excerpt: "A rich, creamy kheer or warming porridge made with millet flour, milk, and natural sweeteners — no soaking required.",
+    desc: "Whisk millet flour into warm milk to avoid lumps. Simmer on low heat, stirring continuously, until thickened. Sweeten with jaggery powder, flavour with crushed cardamom and a pinch of dry ginger, and garnish with ghee-roasted cashews and raisins. For porridge, use water instead of milk.",
+    best: "Any millet flour",
+  },
+  {
+    title: "Traditional Millet Ladoos",
+    tag: "Festive Sweet",
+    emoji: "🍬",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-ladoo.jpg` : "",
+    readMins: 30,
+    excerpt: "Handcrafted millet ladoos with roasted flour, jaggery, and ghee — a traditional sweet that keeps well for days.",
+    desc: "Dry roast millet flour on low heat for 8–10 minutes until aromatic and lightly golden. Cool, then mix with melted jaggery, ghee, crushed cardamom, and chopped nuts. While warm, shape into firm round ladoos. Add a spoon of warm ghee if the mixture is too dry. Store in an airtight container for up to a week.",
+    best: "Any millet flour — Ragi and Foxtail are traditional favourites",
+  },
+  {
+    title: "Millet Healthy Bakes",
+    tag: "Guilt-Free Snack",
+    emoji: "🧁",
+    image: RECIPE_IMG ? `${RECIPE_IMG}/millet-bakes.jpg` : "",
+    readMins: 30,
+    excerpt: "Soft, moist millet flour muffins and cookies — wholesome guilt-free bakes with no maida, no refined sugar.",
+    desc: "Mix millet flour with baking powder, salt, and add-ins (banana, dates, nuts, or cocoa). Combine with eggs or flax egg, coconut oil, and jaggery powder. Fold gently — do not overmix. Pour into a greased muffin tray or shape into cookies and bake at 180°C for 18–22 minutes until a toothpick comes out clean.",
+    best: "Any millet flour — Kodo or Barnyard gives a lighter crumb",
+  },
+];
+
 const FEATURED_RECIPES = [
   {
     title: "Millet Upma",
@@ -106,6 +169,40 @@ export default async function RecipesPage() {
                   <p className="text-sm text-[#757575] line-clamp-2 mb-3">{r.excerpt}</p>
                   <p className="text-xs text-gray-600 leading-relaxed mb-3">{r.desc}</p>
                   <div className="text-xs font-semibold text-[#006A38] bg-[#E8F5E9] px-3 py-2 rounded-lg">
+                    👍 Best with: {r.best}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Static featured millet flour recipes */}
+        <div className="mb-10">
+          <h2 className="text-sm font-bold text-[#006A38] uppercase tracking-widest mb-4">Featured Millet Flour Recipes</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURED_FLOUR_RECIPES.map((r) => (
+              <div key={r.title} className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
+                {r.image ? (
+                  <div className="relative h-44 bg-[#F5F5F5]">
+                    <Image src={r.image} alt={r.title} fill className="object-cover" unoptimized />
+                    <span className="absolute top-3 left-3 text-xs font-bold text-[#006A38] bg-white/90 px-3 py-0.5 rounded-full">{r.tag}</span>
+                  </div>
+                ) : (
+                  <div className="h-44 bg-gradient-to-br from-[#FDF0E8] to-[#F5D9C0] flex flex-col items-center justify-center gap-2">
+                    <span className="text-5xl">{r.emoji}</span>
+                    <span className="text-xs font-bold text-[#5C3A21] bg-white/70 px-3 py-0.5 rounded-full">{r.tag}</span>
+                  </div>
+                )}
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-bold text-[#5C3A21] bg-[#FDF0E8] px-2 py-0.5 rounded-full">Recipe</span>
+                    <span className="text-xs text-[#9E9E9E]">{r.readMins} min</span>
+                  </div>
+                  <h2 className="font-black text-[#212121] leading-snug mb-1">{r.title}</h2>
+                  <p className="text-sm text-[#757575] line-clamp-2 mb-3">{r.excerpt}</p>
+                  <p className="text-xs text-gray-600 leading-relaxed mb-3">{r.desc}</p>
+                  <div className="text-xs font-semibold text-[#5C3A21] bg-[#FDF0E8] px-3 py-2 rounded-lg">
                     👍 Best with: {r.best}
                   </div>
                 </div>
