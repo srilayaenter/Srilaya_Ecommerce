@@ -41,7 +41,7 @@ export default function HeaderClient({
     ? sessionUser.email.slice(0, 2).toUpperCase()
     : null;
 
-  const primaryLinks = [
+  const primaryLinks: { name: string; href: string; badge?: string }[] = [
     { name: "Home",         href: "/" },
     { name: "All Products", href: "/product" },
     { name: "Millet Rava",  href: "/rava",    badge: "New" },
@@ -111,7 +111,7 @@ export default function HeaderClient({
                   className="relative text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13.5px] whitespace-nowrap"
                 >
                   {link.name}
-                  {"badge" in link && (
+                  {link.badge && (
                     <span className="absolute -top-2 -right-5 bg-[#D99B26] text-white text-[8px] font-black px-1 py-0.5 rounded leading-none uppercase tracking-wide">
                       {link.badge}
                     </span>
@@ -277,7 +277,7 @@ export default function HeaderClient({
                       className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors"
                     >
                       {link.name}
-                      {"badge" in link && (
+                      {link.badge && (
                         <span className="bg-[#D99B26] text-white text-[8px] font-black px-1.5 py-0.5 rounded leading-none uppercase tracking-wide">
                           {link.badge}
                         </span>
