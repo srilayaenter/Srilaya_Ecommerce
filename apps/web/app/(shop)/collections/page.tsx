@@ -111,14 +111,14 @@ const COLLECTIONS = [
     name: "Natural Sweeteners",
     tagline: "Sweet without the guilt.",
     description:
-      "Palm jaggery, coconut sugar, and other unrefined natural sweeteners. Sweetness the way nature intended.",
-    href: "/category/sweeteners",
+      "Sugarcane, Palm & Coconut Jaggery Powder — unrefined, mineral-rich, low GI alternatives to refined sugar.",
+    href: "/sweeteners",
     emoji: "🍯",
     accent: "#b45309",
     accentLight: "#FEF3C7",
-    badge: "Coming Soon",
-    badgeBg: "bg-gray-100 text-gray-500 border-gray-300",
-    highlights: ["Unrefined", "Low GI", "Natural"],
+    badge: "Live",
+    badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    highlights: ["3 varieties", "Low GI", "Zero chemicals"],
   },
 ];
 

@@ -192,6 +192,18 @@ test("SMOKE-16 /rava floating WhatsApp button is present", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("SMOKE-20 /sweeteners landing page loads with hero heading and all 3 varieties", async ({ page }) => {
+  await page.goto("/sweeteners", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /sweet without/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Sugarcane Jaggery Powder", "Palm Jaggery Powder", "Coconut Jaggery Powder"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
 test("SMOKE-18 /flour landing page loads with hero heading and product cards", async ({ page }) => {
   await page.goto("/flour", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
