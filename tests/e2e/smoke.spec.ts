@@ -192,6 +192,18 @@ test("SMOKE-16 /rava floating WhatsApp button is present", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("SMOKE-21 /traditional-rice landing page loads with hero and all 4 varieties", async ({ page }) => {
+  await page.goto("/traditional-rice", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /ancient gems/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Mapillai Samba Rice", "Karupu Kavuni Rice", "Poongar Rice", "Seeraga Samba Rice"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
 test("SMOKE-20 /sweeteners landing page loads with hero heading and all 3 varieties", async ({ page }) => {
   await page.goto("/sweeteners", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
