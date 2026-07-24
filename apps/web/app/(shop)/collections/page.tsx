@@ -42,13 +42,13 @@ const COLLECTIONS = [
     tagline: "Bake better. Eat smarter.",
     description:
       "Stone-ground millet flours for rotis, dosas, and bakes. Pure, unadulterated, with the full bran intact.",
-    href: "/category/millet-flour",
+    href: "/flour",
     emoji: "🫓",
     accent: "#5C3A21",
     accentLight: "#FDF0E8",
-    badge: "Coming Soon",
-    badgeBg: "bg-gray-100 text-gray-500 border-gray-300",
-    highlights: ["Stone-ground", "Whole grain", "Gluten-free options"],
+    badge: "Live",
+    badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    highlights: ["Stone-ground", "8 varieties", "Gluten-free options"],
   },
   {
     id: "laddu",

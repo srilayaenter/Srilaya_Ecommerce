@@ -192,6 +192,25 @@ test("SMOKE-16 /rava floating WhatsApp button is present", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("SMOKE-18 /flour landing page loads with hero heading and product cards", async ({ page }) => {
+  await page.goto("/flour", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /bake better/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Foxtail Flour", "Finger Flour (Ragi)", "Sprouted Ragi Flour"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
+test("SMOKE-19 /collections page shows 2 live collections", async ({ page }) => {
+  await page.goto("/collections", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  const liveBadges = page.getByText("Live", { exact: true });
+  expect(await liveBadges.count()).toBeGreaterThanOrEqual(2);
+});
+
 test("SMOKE-17 /recipes shows all 3 featured millet rava recipe cards", async ({ page }) => {
   await page.goto("/recipes", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
