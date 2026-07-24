@@ -247,6 +247,30 @@ test("SMOKE-19 /collections page shows 2 live collections", async ({ page }) => 
   expect(await liveBadges.count()).toBeGreaterThanOrEqual(2);
 });
 
+test("SMOKE-23 /raw-millets landing page loads with hero and product cards", async ({ page }) => {
+  await page.goto("/raw-millets", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /nature.s supergrains/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Foxtail Millet Grains", "Finger (Ragi) Millet Grains", "Pearl Millet Grains (Bajra)"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
+test("SMOKE-24 /parboiled-millets landing page loads with hero and product cards", async ({ page }) => {
+  await page.goto("/parboiled-millets", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /nutritional milestone/i, level: 1 })
+  ).toBeVisible();
+  for (const name of ["Parboiled Foxtail Millet", "Parboiled Finger (Ragi) Millet", "Parboiled Pearl Millet"]) {
+    await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+});
+
 test("SMOKE-17 /recipes shows all 3 featured millet rava recipe cards", async ({ page }) => {
   await page.goto("/recipes", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
