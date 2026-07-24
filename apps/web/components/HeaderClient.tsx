@@ -44,6 +44,7 @@ export default function HeaderClient({
   const primaryLinks = [
     { name: "Home",         href: "/" },
     { name: "All Products", href: "/product" },
+    { name: "Millet Rava",  href: "/rava",    badge: "New" },
     { name: "Bundle Packs", href: "/bundles" },
     { name: "About Us",     href: "/about" },
     { name: "Contact Us",   href: "/contact" },
@@ -107,9 +108,14 @@ export default function HeaderClient({
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13.5px] whitespace-nowrap"
+                  className="relative text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13.5px] whitespace-nowrap"
                 >
                   {link.name}
+                  {"badge" in link && (
+                    <span className="absolute -top-2 -right-5 bg-[#D99B26] text-white text-[8px] font-black px-1 py-0.5 rounded leading-none uppercase tracking-wide">
+                      {link.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
             </nav>
@@ -268,9 +274,14 @@ export default function HeaderClient({
                     <Link
                       href={link.href}
                       onClick={closeMenu}
-                      className="block px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors"
                     >
                       {link.name}
+                      {"badge" in link && (
+                        <span className="bg-[#D99B26] text-white text-[8px] font-black px-1.5 py-0.5 rounded leading-none uppercase tracking-wide">
+                          {link.badge}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 ))}
