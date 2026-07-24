@@ -44,7 +44,7 @@ export default function HeaderClient({
   const primaryLinks: { name: string; href: string; badge?: string }[] = [
     { name: "Home",         href: "/" },
     { name: "All Products", href: "/product" },
-    { name: "Millet Rava",  href: "/rava",    badge: "New" },
+    { name: "Collections",  href: "/collections", badge: "New" },
     { name: "Bundle Packs", href: "/bundles" },
     { name: "About Us",     href: "/about" },
     { name: "Contact Us",   href: "/contact" },
