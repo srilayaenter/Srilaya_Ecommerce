@@ -183,16 +183,12 @@ test("SMOKE-15 /rava filter buttons narrow the visible product cards", async ({ 
   expect(await grid.getByRole("heading", { level: 3 }).count()).toBe(7);
 });
 
-test("SMOKE-16 /rava quick order builder has WhatsApp send button", async ({ page }) => {
+test("SMOKE-16 /rava floating WhatsApp button is present", async ({ page }) => {
   await page.goto("/rava", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
-  // Order builder section heading
+  // Floating button in hero and fixed floating button
   await expect(
-    page.getByRole("heading", { name: /build your order/i })
-  ).toBeVisible();
-  // Send via WhatsApp button
-  await expect(
-    page.getByRole("button", { name: /send order.*whatsapp/i })
+    page.getByRole("button", { name: /chat on whatsapp/i }).first()
   ).toBeVisible();
 });
 
