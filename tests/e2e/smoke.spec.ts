@@ -137,3 +137,76 @@ test("SMOKE-12 product listing shows wishlist heart button on product cards", as
     page.getByRole("button", { name: /wishlist/i }).first()
   ).toBeVisible({ timeout: 10000 });
 });
+
+test("SMOKE-13 /rava landing page loads with hero heading", async ({ page }) => {
+  await page.goto("/rava", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  await expect(page.getByText("Something went wrong")).not.toBeVisible();
+  // h1 hero heading must be visible
+  await expect(
+    page.getByRole("heading", { name: /granular gems/i, level: 1 })
+  ).toBeVisible();
+});
+
+test("SMOKE-14 /rava product grid renders all 7 variety cards", async ({ page }) => {
+  await page.goto("/rava", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  // Each variety card has an h3 with the product name — check a spread of them
+  for (const name of ["Foxtail Rava", "Finger Rava", "Barnyard Rava", "Mapillai Samba Rava"]) {
+    await expect(
+      page.getByRole("heading", { name, level: 3 })
+    ).toBeVisible();
+  }
+  // Total: all 7 h3 product headings should be present in "All Varieties" default view
+  expect(await page.getByRole("heading", { level: 3 }).count()).toBeGreaterThanOrEqual(7);
+});
+
+test("SMOKE-15 /rava filter buttons narrow the visible product cards", async ({ page }) => {
+  await page.goto("/rava", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+
+  // Scope to the product grid section — other sections also have h3 (benefits cards)
+  const grid = page.locator("#collection");
+
+  // Default "All Varieties" shows 7 product cards
+  const allCount = await grid.getByRole("heading", { level: 3 }).count();
+  expect(allCount).toBe(7);
+
+  // "Diabetic Care" filter — foxtail + barnyard are tagged; count must drop
+  await page.getByRole("button", { name: /diabetic care/i }).click();
+  const diabeticCount = await grid.getByRole("heading", { level: 3 }).count();
+  expect(diabeticCount).toBeGreaterThan(0);
+  expect(diabeticCount).toBeLessThan(allCount);
+
+  // Restoring "All Varieties" shows all 7 again
+  await page.getByRole("button", { name: /all varieties/i }).click();
+  expect(await grid.getByRole("heading", { level: 3 }).count()).toBe(7);
+});
+
+test("SMOKE-16 /rava quick order builder has WhatsApp send button", async ({ page }) => {
+  await page.goto("/rava", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  // Order builder section heading
+  await expect(
+    page.getByRole("heading", { name: /build your order/i })
+  ).toBeVisible();
+  // Send via WhatsApp button
+  await expect(
+    page.getByRole("button", { name: /send order.*whatsapp/i })
+  ).toBeVisible();
+});
+
+test("SMOKE-17 /recipes shows all 3 featured millet rava recipe cards", async ({ page }) => {
+  await page.goto("/recipes", { waitUntil: "networkidle" });
+  await expect(page).not.toHaveTitle(/error|not found/i);
+  // Static featured recipes section heading
+  await expect(
+    page.getByRole("heading", { name: /featured millet rava recipes/i })
+  ).toBeVisible();
+  // All 3 recipe card headings must render
+  for (const title of ["Millet Upma", "Rava Kheer", "Millet Pongal"]) {
+    await expect(
+      page.getByRole("heading", { name: title })
+    ).toBeVisible();
+  }
+});
