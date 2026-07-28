@@ -43,7 +43,7 @@ const GROUPS: { label: string; icon: string; hrefs: string[] }[] = [
   {
     label: 'Admin',
     icon: '⚙️',
-    hrefs: ['/admin/users', '/admin/failed-emails', '/admin/mfa-setup', '/admin/settings'],
+    hrefs: ['/admin/users', '/admin/failed-emails', '/admin/mfa-setup', '/admin/settings', '/admin/ops-app'],
   },
 ];
 

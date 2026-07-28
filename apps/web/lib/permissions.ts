@@ -41,6 +41,7 @@ export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
     '/admin/failed-emails',
     '/admin/mfa-setup',
     '/admin/mfa-verify',
+    '/admin/ops-app',
   ],
   inventory_staff: [
     '/admin/products',

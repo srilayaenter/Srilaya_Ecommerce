@@ -44,6 +44,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     { name: "Failed Emails",      href: "/admin/failed-emails", icon: "✉️", roles: ['owner','admin','manager'] },
     { name: "MFA Setup",          href: "/admin/mfa-setup",     icon: "🔐", roles: ['owner','admin','manager','inventory_staff','billing_staff'] },
     { name: "Store Settings",     href: "/admin/settings",      icon: "⚙️", roles: ['owner','admin'] },
+    { name: "Ops App",            href: "/admin/ops-app",       icon: "📲", roles: ['owner','admin','manager'] },
   ];
 
   const menuItems = allMenuItems.filter(item => item.roles.includes(role));
