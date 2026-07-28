@@ -16,7 +16,13 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const client = getSupabaseAdmin();
+  let client;
+  try {
+    client = getSupabaseAdmin();
+  } catch {
+    return NextResponse.json({ error: "Storage not configured on this environment" }, { status: 503 });
+  }
+
   const { data, error } = await client.storage.from(STORAGE_BUCKET).download(APK_PATH);
 
   if (error || !data) {
