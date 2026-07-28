@@ -22,7 +22,9 @@ apps/web/tsconfig.tsbuildinfo
 
 # Test output
 test-results/
-tests/report/data/
+tests/report/
+scripts/compare-report/
+scripts/compare-admin-report/
 
 # One-off scripts and OS artifacts
 dump_products.mjs
