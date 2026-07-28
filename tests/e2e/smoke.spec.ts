@@ -254,7 +254,7 @@ test("SMOKE-23 /raw-millets landing page loads with hero and product cards", asy
   await expect(
     page.getByRole("heading", { name: /nature.s supergrains/i, level: 1 })
   ).toBeVisible();
-  for (const name of ["Foxtail Millet Grains", "Finger (Ragi) Millet Grains", "Pearl Millet Grains (Bajra)"]) {
+  for (const name of ["Foxtail Millet Grains", "Finger Millet Grains (Ragi)", "Pearl Millet Grains (Bajra)"]) {
     await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
   }
 });
@@ -266,7 +266,7 @@ test("SMOKE-24 /parboiled-millets landing page loads with hero and product cards
   await expect(
     page.getByRole("heading", { name: /nutritional milestone/i, level: 1 })
   ).toBeVisible();
-  for (const name of ["Parboiled Foxtail Millet", "Parboiled Finger (Ragi) Millet", "Parboiled Pearl Millet"]) {
+  for (const name of ["Parboiled Foxtail", "Parboiled Finger Millets (Ragi)", "Parboiled Pearl"]) {
     await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
   }
 });
