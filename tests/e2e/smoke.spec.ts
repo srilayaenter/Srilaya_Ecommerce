@@ -264,7 +264,7 @@ test("SMOKE-24 /parboiled-millets landing page loads with hero and product cards
   await expect(page).not.toHaveTitle(/error|not found/i);
   await expect(page.getByText("Something went wrong")).not.toBeVisible();
   await expect(
-    page.getByRole("heading", { name: /nutritional milestone/i, level: 1 })
+    page.getByRole("heading", { name: /powerhouse/i, level: 1 })
   ).toBeVisible();
   for (const name of ["Parboiled Foxtail", "Parboiled Finger Millets (Ragi)", "Parboiled Pearl"]) {
     await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
