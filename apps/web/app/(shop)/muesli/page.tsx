@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import MuesliPageClient from "./MuesliPageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Muesli & Granola Collection — Instant Millet Meal Revolution | SriLaYa Naturals",
   description:

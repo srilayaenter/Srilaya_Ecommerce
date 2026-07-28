@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import TraditionalRicePageClient from "./TraditionalRicePageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Traditional Rice Collection — Nature's Ancient Gems | SriLaYa Naturals",
   description:

@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import ParboiledMilletsPageClient from "./ParboiledMilletsPageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Parboiled Millet Collection — The Nutritional Milestone | SriLaYa Naturals",
   description:

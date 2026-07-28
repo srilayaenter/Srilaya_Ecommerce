@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import RavaPageClient from "./RavaPageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Millet Rava Collection — Nature's Granular Gems | SriLaYa Naturals",
   description:

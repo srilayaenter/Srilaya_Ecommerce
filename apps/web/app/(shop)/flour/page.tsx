@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import FlourPageClient from "./FlourPageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Millet Flour Collection — Bake Better, Eat Smarter | SriLaYa Naturals",
   description:

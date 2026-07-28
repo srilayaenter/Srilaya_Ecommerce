@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import RawMilletsPageClient from "./RawMilletsPageClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Whole Millet Grains Collection — Nature's Supergrains | SriLaYa Naturals",
   description:
