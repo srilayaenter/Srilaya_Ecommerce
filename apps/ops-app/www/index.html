@@ -19,7 +19,7 @@
   <header class="bg-emerald-800 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
     <div>
       <h1 class="font-bold text-lg leading-tight">SriLaYa Ops</h1>
-      <p class="text-xs text-emerald-200">Recipe & Batch Scale Manager</p>
+      <p class="text-xs text-emerald-200" x-text="lang === 'ta' ? 'செய்முறை & அளவு மேலாளர்' : 'Recipe & Batch Scale Manager'"></p>
       <button @click="syncFromCloud()" class="text-[11px] mt-0.5 flex items-center gap-1"
               :class="syncStatus === 'offline' ? 'text-amber-300' : 'text-emerald-300'">
         <span x-show="syncStatus === 'syncing'">🔄 Syncing Foods &amp; Laddus…</span>
@@ -29,6 +29,7 @@
       </button>
     </div>
     <div class="flex items-center gap-2">
+      <button @click="lang = lang === 'en' ? 'ta' : 'en'" title="Switch language" class="text-xs px-2 py-1.5 rounded-lg border border-white/60 text-white font-semibold hover:bg-white/10" x-text="lang === 'en' ? 'தமிழ்' : 'English'"></button>
       <button x-show="isUnlocked" @click="lockEditing()" title="Lock editing again" class="text-xs px-2 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-900/60">🔓</button>
       <button @click="requireUnlock(() => openAddModal())" class="bg-emerald-600 hover:bg-emerald-500 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1">
         <span>+ Add Recipe</span>
@@ -40,22 +41,22 @@
 
     <!-- SEARCH & FILTER -->
     <div class="mb-4 space-y-2">
-      <input type="text" x-model="searchQuery" placeholder="🔍 Search laddus, soaps, batters..."
+      <input type="text" x-model="searchQuery" :placeholder="t('searchPlaceholder')"
              class="w-full p-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white shadow-sm">
 
       <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
-        <button @click="selectedCategory = 'All'" :class="selectedCategory === 'All' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm">All Items (<span x-text="items.length"></span>)</button>
-        <button @click="selectedCategory = 'Foods'" :class="selectedCategory === 'Foods' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm">🌾 Foods & Laddus</button>
-        <button @click="selectedCategory = 'Lye-Free'" :class="selectedCategory === 'Lye-Free' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm">🧼 Lye-Free Soaps</button>
-        <button @click="selectedCategory = 'Cold Process'" :class="selectedCategory === 'Cold Process' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm">🧪 Cold Process</button>
+        <button @click="selectedCategory = 'All'" :class="selectedCategory === 'All' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm"><span x-text="t('allItems')"></span> (<span x-text="items.length"></span>)</button>
+        <button @click="selectedCategory = 'Foods'" :class="selectedCategory === 'Foods' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catFoods')"></button>
+        <button @click="selectedCategory = 'Lye-Free'" :class="selectedCategory === 'Lye-Free' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catLyeFree')"></button>
+        <button @click="selectedCategory = 'Cold Process'" :class="selectedCategory === 'Cold Process' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catColdProcess')"></button>
       </div>
     </div>
 
     <!-- BACKUP / RESTORE -->
     <div x-show="activeTab === 'catalog'" class="flex gap-2 mb-3 text-xs">
-      <button @click="exportAllData()" class="flex-1 bg-white border border-slate-300 text-slate-600 py-1.5 rounded-lg font-medium hover:bg-slate-50">⬇ Backup All Recipes</button>
+      <button @click="exportAllData()" class="flex-1 bg-white border border-slate-300 text-slate-600 py-1.5 rounded-lg font-medium hover:bg-slate-50" x-text="t('backup')"></button>
       <label class="flex-1 bg-white border border-slate-300 text-slate-600 py-1.5 rounded-lg font-medium hover:bg-slate-50 text-center cursor-pointer">
-        ⬆ Restore Backup
+        <span x-text="t('restore')"></span>
         <input type="file" accept="application/json,.json" class="hidden" @change="importAllData($event)">
       </label>
     </div>
@@ -68,16 +69,15 @@
             <div>
               <span class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full"
                     :class="item.category === 'Foods' ? 'bg-amber-100 text-amber-800' : (item.category === 'Lye-Free' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800')"
-                    x-text="item.category"></span>
-              <h3 class="font-bold text-slate-900 mt-1 text-sm" x-text="item.name"></h3>
+                    x-text="categoryLabel(item.category)"></span>
+              <h3 class="font-bold text-slate-900 mt-1 text-sm" x-text="displayName(item)"></h3>
             </div>
           </div>
 
-          <p class="text-xs text-slate-500 mt-1 line-clamp-2" x-text="item.details"></p>
+          <p class="text-xs text-slate-500 mt-1 line-clamp-2" x-text="displayDetails(item)"></p>
 
           <div class="mt-3 flex gap-2 pt-2 border-t border-slate-100">
-            <button @click="openCalculator(item)" class="flex-1 bg-emerald-700 text-white text-xs py-1.5 rounded-lg font-semibold hover:bg-emerald-800 transition">
-              🧮 Scale Batch
+            <button @click="openCalculator(item)" class="flex-1 bg-emerald-700 text-white text-xs py-1.5 rounded-lg font-semibold hover:bg-emerald-800 transition" x-text="t('scaleBatch')">
             </button>
             <button @click="requireUnlock(() => openEditModal(item))" title="Edit recipe" class="px-2.5 bg-slate-100 text-slate-600 text-xs py-1.5 rounded-lg border hover:bg-slate-200 font-medium">
               ✏️
@@ -96,34 +96,43 @@
     <!-- TAB 2: BATCH CALCULATOR VIEW -->
     <div x-show="activeTab === 'calculator'" class="bg-white p-4 rounded-xl shadow-md border border-slate-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
-        <h2 class="font-bold text-slate-900 text-base" x-text="'Scale: ' + selectedItem?.name"></h2>
-        <button @click="activeTab = 'catalog'" class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold">← Back</button>
+        <h2 class="font-bold text-slate-900 text-base" x-text="t('scalePrefix') + (selectedItem ? displayName(selectedItem) : '')"></h2>
+        <button @click="activeTab = 'catalog'" class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold" x-text="t('back')"></button>
       </div>
 
       <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 flex items-center justify-between">
-        <label class="text-xs font-bold text-emerald-900">Target Batch Yield (kg):</label>
+        <label class="text-xs font-bold text-emerald-900" x-text="t('targetYield')"></label>
         <input type="number" step="0.1" min="0.1" x-model="targetYield" class="w-20 p-1.5 text-center font-bold text-sm rounded border border-emerald-400 bg-white">
       </div>
 
       <div>
         <div class="flex justify-between items-center mb-2">
-          <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Required Ingredients (tap to check off):</h4>
-          <button @click="resetChecklist()" class="text-[10px] text-slate-400 hover:text-slate-600 font-semibold underline">Reset</button>
+          <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider" x-text="t('requiredIngredients')"></h4>
+          <button @click="resetChecklist()" class="text-[10px] text-slate-400 hover:text-slate-600 font-semibold underline" x-text="t('reset')"></button>
         </div>
         <div class="space-y-1.5">
           <template x-for="(ing, idx) in calculatedIngredients" :key="idx">
-            <button type="button" @click="toggleChecked(ing.name)"
+            <button type="button" @click="toggleChecked(ing.key)"
                  class="w-full flex justify-between items-center p-2 rounded text-xs border text-left transition"
-                 :class="checkedIngredients[ing.name] ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'">
+                 :class="checkedIngredients[ing.key] ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'">
               <span class="font-medium flex items-center gap-2"
-                    :class="checkedIngredients[ing.name] ? 'text-slate-400 line-through' : 'text-slate-700'">
-                <span x-text="checkedIngredients[ing.name] ? '✅' : '⬜'"></span>
-                <span x-text="ing.name"></span>
+                    :class="checkedIngredients[ing.key] ? 'text-slate-400 line-through' : 'text-slate-700'">
+                <span x-text="checkedIngredients[ing.key] ? '✅' : '⬜'"></span>
+                <span x-text="ing.label"></span>
               </span>
-              <span class="font-bold" :class="checkedIngredients[ing.name] ? 'text-slate-400 line-through' : 'text-emerald-800'" x-text="ing.grams + ' g'"></span>
+              <span class="font-bold" :class="checkedIngredients[ing.key] ? 'text-slate-400 line-through' : 'text-emerald-800'" x-text="ing.grams + ' g'"></span>
             </button>
           </template>
         </div>
+      </div>
+
+      <div x-show="selectedItem && displaySteps(selectedItem).length" class="border-t border-slate-100 pt-3">
+        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" x-text="t('prepSteps')"></h4>
+        <ol class="space-y-1.5 list-decimal list-inside">
+          <template x-for="(step, idx) in (selectedItem ? displaySteps(selectedItem) : [])" :key="idx">
+            <li class="text-xs text-slate-700 leading-relaxed" x-text="step"></li>
+          </template>
+        </ol>
       </div>
     </div>
 
@@ -196,10 +205,10 @@
   <!-- NAVIGATION BAR -->
   <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 flex justify-around p-2 text-xs z-40 shadow-lg">
     <button @click="activeTab = 'catalog'" :class="activeTab === 'catalog' ? 'text-emerald-800 font-bold' : 'text-slate-400'" class="flex flex-col items-center">
-      <span>📚</span><span>Catalog</span>
+      <span>📚</span><span x-text="t('navCatalog')"></span>
     </button>
     <button @click="activeTab = 'calculator'" :class="activeTab === 'calculator' ? 'text-emerald-800 font-bold' : 'text-slate-400'" class="flex flex-col items-center">
-      <span>🧮</span><span>Batch Scale</span>
+      <span>🧮</span><span x-text="t('navBatchScale')"></span>
     </button>
   </nav>
 
@@ -208,6 +217,7 @@
     function srilayaApp() {
       return {
         activeTab: 'catalog',
+        lang: 'en',
         searchQuery: '',
         selectedCategory: 'All',
         showAddModal: false,
@@ -251,6 +261,52 @@
           { id: 109, name: 'Black Rice Dosa Batter Mix', category: 'Foods', details: 'Black Rice (1.5 cups), Kodo Millet (1.5 cups), Black Urad Dal (1/2 cup), Fenugreek[cite: 2]', baseRatios: [{name: 'Millet Grains', ratio: 0.85}, {name: 'Black Urad Dal', ratio: 0.14}, {name: 'Fenugreek', ratio: 0.01}] },
           { id: 110, name: 'Horse Gram Chutney Powder', category: 'Foods', details: 'Horse Gram (1 cup), Fried Gram (1/2 cup), Moong Dal (1/2 cup), Jaggery (1 cup), Spices[cite: 2]', baseRatios: [{name: 'Millet Grains', ratio: 0.33}, {name: 'Pottukadalai', ratio: 0.33}, {name: 'Jaggery', ratio: 0.30}, {name: 'Spices', ratio: 0.04}] },
           { id: 111, name: 'Urad Dal Laddu', category: 'Foods', details: 'Urad Dal (3/4 cup), Groundnut (1/2 cup), Fried Gram (1/2 cup), Sugar (3/4 cup), Ghee[cite: 2]', baseRatios: [{name: 'Black Urad Dal', ratio: 0.30}, {name: 'Groundnut', ratio: 0.20}, {name: 'Pottukadalai', ratio: 0.20}, {name: 'Naattu Sakkarai', ratio: 0.25}, {name: 'Ghee', ratio: 0.05}] },
+
+          // ==================== MILLET & HEALTH FOODS (SKU-029 to 035) ====================
+          { id: 112, name: 'Multi-Millet Health Mix (Sathu Maavu)', nameTa: 'சத்து மாவு', category: 'Foods', details: 'Sprouted Ragi (20%), Kambu (15%), Cholam (10%), Thinai (10%), Samai (10%), Varagu (10%), Roasted Channa Dal (10%), Almonds & Cashews (8%), Sukku & Elakkai (7%)', detailsTa: 'முளைகட்டிய ராகி (20%), முளைகட்டிய கம்பு (15%), முளைகட்டிய சோளம் (10%), தினை (10%), சாமை (10%), வரகு (10%), பொட்டுக்கடல் (10%), பாதாம் & முந்திரி (8%), சுக்கு & ஏலக்காய் (7%)', baseRatios: [{name: 'Sprouted Ragi', nameTa: 'முளைகட்டிய ராகி', ratio: 0.20}, {name: 'Sprouted Kambu', nameTa: 'முளைகட்டிய கம்பு', ratio: 0.15}, {name: 'Sprouted Cholam', nameTa: 'முளைகட்டிய சோளம்', ratio: 0.10}, {name: 'Thinai', nameTa: 'தினை', ratio: 0.10}, {name: 'Samai', nameTa: 'சாமை', ratio: 0.10}, {name: 'Varagu', nameTa: 'வரகு', ratio: 0.10}, {name: 'Roasted Channa Dal', nameTa: 'பொட்டுக்கடல்', ratio: 0.10}, {name: 'Almonds & Cashews Blend', nameTa: 'பாதாம் & முந்திரி', ratio: 0.08}, {name: 'Sukku & Elakkai', nameTa: 'சுக்கு & ஏலக்காய்', ratio: 0.07}],
+            steps: ['Cleaning & Soaking: Wash Ragi, Kambu, and Cholam thoroughly; soak in water for 12 hours.', 'Sprouting: Drain water, tie grains in a clean cotton muslin cloth, and ferment/sprout for 24 hours.', 'Sun-Drying: Spread sprouted grains on clean drying mats under direct sunlight for 8 to 10 hours until moisture drops below 4%.', 'Roasting Phase: Slow-roast all millets, roasted gram, nuts, Sukku, and Elakkai separately on low heat until aromatic.', 'Pulverization & Sifting: Mill the roasted batch in a commercial flour mill. Pass through a #80 mesh sieve.', 'Packaging: Cool completely, pack into 500g air-tight zip-lock stand-up pouches, and heat-seal.'],
+            stepsTa: ['ஊறவைத்தல்: ராகி, கம்பு மற்றும் சோளத்தைக் கழுவி 12 மணி நேரம் ஊறவைக்கவும்.', 'முளைகட்டுதல்: தண்ணீரை வடித்து, பருத்தித் துணியில் 24 மணி நேரம் முளைகட்ட வைக்கவும்.', 'உலர்த்துதல்: முளைகட்டிய தானியங்களை 8-10 மணி நேரம் வெயிலில் காயவைக்கவும் (ஈரப்பதம் <4%).', 'வறுத்தல்: அனைத்து சிறுதானியங்கள், பொட்டுக்கடலை, நட்ஸ், சுக்கு மற்றும் ஏலக்காயை தனித்தனியாக மிதமான தீயில் பொன்னிறமாக வறுக்கவும்.', 'அரைத்தல் & சலித்தல்: மாவு மெஷினில் அரைத்து #80 மெஷ் சல்லடையில் நைஸாக சலிக்கவும்.', 'பேக்கிங்: ஆறவைத்து, 500 கிராம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 113, name: 'Little Millet (Samai) Rice Flakes', nameTa: 'சாமை அவல்', category: 'Foods', details: 'Raw Little Millet Grain (98%), Rock Salt Water Spray (2%)', detailsTa: 'சாமை அரிசி (98%), கல் உப்பு நீர் தெளிப்பு (2%)', baseRatios: [{name: 'Raw Little Millet Grain', nameTa: 'சாமை அரிசி', ratio: 0.98}, {name: 'Rock Salt Water Spray', nameTa: 'கல் உப்பு நீர் தெளிப்பு', ratio: 0.02}],
+            steps: ['Cleaning: De-stone and winnow raw Little Millet grains to eliminate husk and dust.', 'Soaking & Steaming: Soak grains in water for 4 hours; steam in a batch cooker for 20 minutes to soften the starch.', 'Flaking (Edge-Roller Mill): Pass warm steamed millet grains through a heavy-duty roller flaking machine to flatten into uniform flakes.', 'Drying Phase: Spread thin flakes on stainless steel drying trays in a solar dryer for 6 hours until crisp.', 'Quality Control & Packaging: Screen through a coarse mesh to remove fine powder. Pack into 500g sealed transparent pouches.'],
+            stepsTa: ['சுத்தம் செய்தல்: சாமை அரிசியில் உள்ள கல் மற்றும் தூசியை நீக்கி சுத்தம் செய்யவும்.', 'அவித்தல்: 4 மணி நேரம் ஊறவைத்து, நீராவியில் 20 நிமிடங்கள் வேகவைக்கவும்.', 'அவல் ஆக்குதல்: சூடான தானியங்களை அவல் மெஷினில் கொடுத்து மெல்லிய அவலாகத் தட்டையாக்கவும்.', 'உலர்த்துதல்: சோலார் டிரையரில் 6 மணி நேரம் நன்றாகக் காயவைக்கவும்.', 'பேக்கிங்: நைஸ் தூளைச் சலித்து நீக்கி, 500 கிராம் வெளிப்படையான பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 114, name: 'Kodo Millet (Varagu) Flakes', nameTa: 'வரகு அவல்', category: 'Foods', details: 'Raw Kodo Millet Grain (98%), Rock Salt Water Spray (2%)', detailsTa: 'வரகு அரிசி (98%), கல் உப்பு நீர் தெளிப்பு (2%)', baseRatios: [{name: 'Raw Kodo Millet Grain', nameTa: 'வரகு அரிசி', ratio: 0.98}, {name: 'Rock Salt Water Spray', nameTa: 'கல் உப்பு நீர் தெளிப்பு', ratio: 0.02}],
+            steps: ['Grain Cleaning: De-hull and clean raw Kodo millet to ensure zero bran dust.', 'Steaming: Soak for 4 hours and steam for 20 minutes in a commercial steamer.', 'Roller Flaking: Flatten steamed grains using heavy-duty roller pressure.', 'Dehydration: Tray-dry flakes in a hot-air dryer at 55°C for 4 hours until moisture is below 5%.', 'Packaging: Sift out broken bits and pack 500g into moisture-proof printed pouches.'],
+            stepsTa: ['சுத்தம் செய்தல்: வரகு அரிசியை சுத்தம் செய்து கல் மற்றும் உமியை அகற்றுக்கவும்.', 'வேகவைத்தல்: 4 மணி நேரம் ஊறவைத்து 20 நிமிடங்கள் நீராவியில் வேகவைக்கவும்.', 'அவல் தயாரிப்பு: அவல் உருளை மெஷினில் செலுத்தி அவலாக மாற்றுக்கவும்.', 'உலர்த்துதல்: ஹாட்-ஏர் டிரையரில் 55°C வெப்பத்தில் 4 மணி நேரம் காயவைக்கவும்.', 'பேக்கிங்: நொறுங்கிய தூள்களைச் சலித்து நீக்கி, 500 கிராம் பாக்கெட்டுகளில் சீல் செய்யவும்.'] },
+          { id: 115, name: 'Foxtail Millet (Thinai) Flour', nameTa: 'தினை மாவு', category: 'Foods', details: 'De-hulled Foxtail Millet / Thinai Rice (100%)', detailsTa: 'தினை அரிசி (100%)', baseRatios: [{name: 'De-hulled Foxtail Millet', nameTa: 'தினை அரிசி', ratio: 1.0}],
+            steps: ['Cleaning: Winnow and wash de-hulled Thinai rice in clean water.', 'Roasting: Lightly dry-roast Thinai rice on low heat for 5 minutes to release aroma and eliminate moisture.', 'Fine Milling: Mill in a commercial stone pulverizer to produce fine flour.', 'Sifting: Pass through a #100 mesh stainless steel sieve to achieve soft, lump-free texture.', 'Packaging: Cool completely and pack 500g into laminated air-tight pouches.'],
+            stepsTa: ['சுத்தம் செய்தல்: தினை அரிசியைக் கழுவி கல் நீக்கி சுத்தம் செய்யவும்.', 'வறுத்தல்: மிதமான தீயில் 5 நிமிடங்கள் லேசாக வறுத்து ஈரம் நீக்கவும்.', 'அரைத்தல்: மாவு எந்திரத்தில் கொடுத்து நைஸாக அரைக்கவும்.', 'சலித்தல்: #100 மெஷ் சல்லடையில் கட்டியில்லாமல் சலித்தெடுக்கவும்.', 'பேக்கிங்: ஆறவைத்து 500 கிராம் காற்று புகாத பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 116, name: 'Barnyard Millet (Kuthiraivali) Grain', nameTa: 'குதிரைவாலி அரிசி', category: 'Foods', details: 'Raw Unrefined Barnyard Grain (100%)', detailsTa: 'குதிரைவாலி நெல் (100%)', baseRatios: [{name: 'Raw Unrefined Barnyard Grain', nameTa: 'குதிரைவாலி நெல்', ratio: 1.0}],
+            steps: ['De-hulling: Pass raw Barnyard millet through an impact de-huller to strip outer husk without stripping inner bran nutrients.', 'Gravity Separation: Pass through a gravity separator to separate un-hulled paddy seeds and light husk.', 'Destoning: Pass de-hulled grains through a commercial destoner machine to ensure zero sand/stone particles.', 'Polishing Check: Ensure unpolished, high-fiber natural state.', 'Packaging: Pack 500g into thick barrier pouches and vacuum-seal or heat-seal.'],
+            stepsTa: ['தோல் நீக்குதல்: குதிரைவாலி நெல்லை டி-ஹல்லர் மெஷினில் கொடுத்து தவிடு அழியாமல் தோல் நீக்கவும்.', 'உமி பிரித்தல்: கிராவிட்டி செப்பரேட்டர் மூலம் உமி மற்றும் உசாவைப் பிரிக்கவும்.', 'கல் நீக்குதல்: டிஸ்டோனர் மெஷின் மூலம் கல் மற்றும் மணலை முற்றிலும் அகற்றவும்.', 'பரிசோதனை: பாலிஷ் செய்யப்படாத இயற்கை அரிசியை உறுதி செய்யவும்.', 'பேக்கிங்: 500 கிராம் பாக்கெட்டுகளில் சீல் செய்யவும்.'] },
+          { id: 117, name: 'Mapillai Samba Rice Flakes (Aval)', nameTa: 'மாப்பிள்ளை சம்பா அவல்', category: 'Foods', details: 'Traditional Mapillai Samba Paddy (98%), Rock Salt Water Spray (2%)', detailsTa: 'மாப்பிள்ளை சம்பா நெல் (98%), கல் உப்பு நீர் தெளிப்பு (2%)', baseRatios: [{name: 'Traditional Mapillai Samba Paddy', nameTa: 'மாப்பிள்ளை சம்பா நெல்', ratio: 0.98}, {name: 'Rock Salt Water Spray', nameTa: 'கல் உப்பு நீர் தெளிப்பு', ratio: 0.02}],
+            steps: ['Paddy Soaking: Soak organic Mapillai Samba paddy in water for 18 hours.', 'Roasting/Steaming: Parboil/steam soaked paddy in a traditional iron vessel for 30 minutes.', 'Flaking Mill: Flatten hot parboiled paddy directly in an edge-runner machine to produce thick red flakes.', 'Husk Separation: Blow off husk using an aspirator fan.', 'Drying & Packaging: Sun-dry flakes for 6 hours until crisp. Pack 500g into sealed pouches.'],
+            stepsTa: ['ஊறவைத்தல்: மாப்பிள்ளை சம்பா நெல்லை 18 மணி நேரம் தண்ணீரில் ஊறவைக்கவும்.', 'அவித்தல்: ஊறவைத்த நெல்லை பாத்திரத்தில் 30 நிமிடங்கள் நீராவியில் அவிக்கவும்.', 'அவல் தட்டுதல்: சூடான நெல்லை எட்ஜ்-ரன்னர் மெஷினில் கொடுத்து தடிமனான சிகப்பு அவலாகத் தட்டவும்.', 'உமி நீக்குதல்: ஃபேனில் ஊதி உமியைப் பிரிக்கவும்.', 'பேக்கிங்: 6 மணி நேரம் வெயிலில் காயவைத்து, 500 கிராம் பாக்கெட்டுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 118, name: 'Black Rice (Karuppu Kavuni) Flour / Batter Mix', nameTa: 'கருப்புகவுனி மாவு', category: 'Foods', details: 'Organic Black Rice (70%), Whole Black Urad Dal (28%), Fenugreek Seeds (2%)', detailsTa: 'கருப்புகவுனி அரிசி (70%), கருப்பு உளுந்து (28%), வெந்தயம் (2%)', baseRatios: [{name: 'Organic Black Rice', nameTa: 'கருப்புகவுனி அரிசி', ratio: 0.70}, {name: 'Whole Black Urad Dal', nameTa: 'கருப்பு உளுந்து', ratio: 0.28}, {name: 'Fenugreek Seeds', nameTa: 'வெந்தயம்', ratio: 0.02}],
+            steps: ['Cleaning: Wash Karuppu Kavuni rice, Black Urad dal, and Fenugreek seeds separately.', 'Drying: Sun-dry all ingredients for 6 hours until completely dry.', 'Roasting: Lightly dry-roast Urad dal and Fenugreek on low flame until fragrant.', 'Milling: Pulverize Black rice, Urad dal, and Fenugreek together into a coarse-fine flour mixture suitable for instantaneous Dosa/Idli batter prep.', 'Packaging: Sift through a #60 mesh sieve and pack 500g into air-tight laminated pouches.'],
+            stepsTa: ['சுத்தம் செய்தல்: கருப்புகவுனி அரிசி, கருப்பு உளுந்து மற்றும் வெந்தயத்தைக் கழுவி சுத்தம் செய்யவும்.', 'உலர்த்துதல்: 6 மணி நேரம் வெயிலில் காயவைக்கவும்.', 'வறுத்தல்: உளுந்து மற்றும் வெந்தயத்தை மிதமான தீயில் வறுக்கவும்.', 'அரைத்தல்: அரிசி, உளுந்து, வெந்தயத்தை ஒன்றாகச் சேர்த்து தோசை மாவு பதத்திற்கு கொரகொரப்பாக அரைக்கவும்.', 'பேக்கிங்: #60 மெஷ் சல்லடையில் சலித்து 500 கிராம் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+
+          // ==================== TRADITIONAL SPICES & POWDERS (SKU-036 to 042) ====================
+          { id: 119, name: 'Traditional Sambar Powder', nameTa: 'பாரம்பரிய சாம்பார் பொடி', category: 'Foods', details: 'Dry Red Chillies (35%), Coriander Seeds (35%), Toor Dal (8%), Channa Dal (8%), Cumin Seeds (4%), Black Pepper (3%), Turmeric (3%), Fenugreek (2%), Asafoetida (2%)', detailsTa: 'காய்ந்த மிளகாய் (35%), கொத்தமல்லி விதை (35%), துவரம் பருப்பு (8%), கடலைப்பருப்பு (8%), சீரகம் (4%), மிளகு (3%), மஞ்சள் தூள் (3%), வெந்தயம் (2%), பெருங்காயம் (2%)', baseRatios: [{name: 'Dry Red Chillies', nameTa: 'காய்ந்த மிளகாய்', ratio: 0.35}, {name: 'Coriander Seeds', nameTa: 'கொத்தமல்லி விதை', ratio: 0.35}, {name: 'Toor Dal', nameTa: 'துவரம் பருப்பு', ratio: 0.08}, {name: 'Channa Dal', nameTa: 'கடலைப்பருப்பு', ratio: 0.08}, {name: 'Cumin Seeds', nameTa: 'சீரகம்', ratio: 0.04}, {name: 'Black Pepper', nameTa: 'மிளகு', ratio: 0.03}, {name: 'Turmeric Powder', nameTa: 'மஞ்சள் தூள்', ratio: 0.03}, {name: 'Fenugreek Seeds', nameTa: 'வெந்தயம்', ratio: 0.02}, {name: 'Asafoetida Powder', nameTa: 'பெருங்காயம்', ratio: 0.02}],
+            steps: ['Cleaning: Sun-dry red chillies and coriander seeds for 4 hours to eliminate residual moisture (< 4% moisture).', 'Individual Dry Roasting: Slow-roast Toor dal, Channa dal, Jeeragam, Milagu, and Vendhayam separately on low heat until aromatic.', 'Chilly & Coriander Flash Roasting: Lightly warm red chillies and coriander seeds without burning/discoloring.', 'Pulverization & Sifting: Combine all ingredients (add Turmeric and Asafoetida during grinding) and pulverize through a commercial mill. Pass through a #60 mesh sieve for a fine, traditional texture.', 'Cooling & Packaging: Allow ground masala to cool completely on stainless steel trays to retain volatile aroma oils. Pack into 100g air-tight aluminum foil stand-up pouches and heat-seal.'],
+            stepsTa: ['உலர்த்துதல்: காய்ந்த மிளகாய் மற்றும் மல்லி விதைகளை 4 மணி நேரம் வெயிலில் காயவைக்கவும்.', 'தனித்தனி வறுவல்: துவரம்பருப்பு, கடலைப்பருப்பு, சீரகம், மிளகு மற்றும் வெந்தயத்தை மிதமான தீயில் தனித்தனியாக வறுக்கவும்.', 'மிளகாய் வறுவல்: மிளகாய் மற்றும் மல்லியை நிறம் மாறாமல் லேசாகச் சூடேற்றவும்.', 'அரைத்தல் & சலித்தல்: பெருங்காயம், மஞ்சள் தூள் சேர்த்து மிஷினில் அரைத்து #60 மெஷ் சல்லடையில் சலிக்கவும்.', 'பேக்கிங்: மாவு நன்றாக ஆறிய பின் 100 கிராம் அலுமினியம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 120, name: 'Rasam Powder', nameTa: 'இரசம் பொடி', category: 'Foods', details: 'Cumin Seeds (30%), Black Pepper (25%), Coriander Seeds (25%), Dry Red Chillies (10%), Toor Dal (5%), Asafoetida & Turmeric (5%)', detailsTa: 'சீரகம் (30%), மிளகு (25%), கொத்தமல்லி விதை (25%), காய்ந்த மிளகாய் (10%), துவரம் பருப்பு (5%), பெருங்காயம் & மஞ்சள் (5%)', baseRatios: [{name: 'Cumin Seeds', nameTa: 'சீரகம்', ratio: 0.30}, {name: 'Black Pepper', nameTa: 'மிளகு', ratio: 0.25}, {name: 'Coriander Seeds', nameTa: 'கொத்தமல்லி விதை', ratio: 0.25}, {name: 'Dry Red Chillies', nameTa: 'காய்ந்த மிளகாய்', ratio: 0.10}, {name: 'Toor Dal', nameTa: 'துவரம் பருப்பு', ratio: 0.05}, {name: 'Asafoetida & Turmeric', nameTa: 'பெருங்காயம் & மஞ்சள்', ratio: 0.05}],
+            steps: ['Drying: Sun-dry black pepper and cumin seeds for 3 hours.', 'Roasting: Lightly dry-roast Toor dal, pepper, and cumin on low flame until essential oils release.', 'Coarse Milling: Pulse ingredients through a pulverizer mill to achieve a coarse, granular texture (not ultra-fine flour).', 'Blending: Mix in turmeric and asafoetida powder thoroughly.', 'Packaging: Pack 100g into zip-lock foil pouches immediately to lock in freshness.'],
+            stepsTa: ['உலர்த்துதல்: சீரகம், மிளகை 3 மணி நேரம் வெயிலில் காயவைக்கவும்.', 'வறுத்தல்: துவரம்பருப்பு, மிளகு, சீரகத்தை மிதமான தீயில் லேசாக வறுக்கவும்.', 'அரைத்தல்: கொரகொரப்பான ரசப்பொடி பதத்திற்கு அரைக்கவும் (நைஸாக அரைக்கக் கூடாது).', 'கலத்தல்: மஞ்சள் தூள் மற்றும் பெருங்காயத்தைச் சேர்த்துக் கலக்கவும்.', 'பேக்கிங்: 100 கிராம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 121, name: 'Idli Milagai Podi', nameTa: 'இட்லி மிளகாய் பொடி', category: 'Foods', details: 'Whole Black Urad Dal (45%), Channa Dal (20%), Dry Red Chillies (20%), Sesame Seeds (8%), Rock Salt (5%), Asafoetida (2%)', detailsTa: 'கருப்பு உளுந்து (45%), கடலைப்பருப்பு (20%), காய்ந்த மிளகாய் (20%), எள்ளு (8%), இந்துப்பு / உப்பு (5%), பெருங்காயம் (2%)', baseRatios: [{name: 'Whole Black Urad Dal', nameTa: 'கருப்பு உளுந்து', ratio: 0.45}, {name: 'Channa Dal', nameTa: 'கடலைப்பருப்பு', ratio: 0.20}, {name: 'Dry Red Chillies', nameTa: 'காய்ந்த மிளகாய்', ratio: 0.20}, {name: 'Sesame Seeds', nameTa: 'எள்ளு', ratio: 0.08}, {name: 'Rock Salt', nameTa: 'இந்துப்பு / உப்பு', ratio: 0.05}, {name: 'Asafoetida', nameTa: 'பெருங்காயம்', ratio: 0.02}],
+            steps: ['Separate Roasting: Dry-roast Black Urad dal and Channa dal separately on low flame until golden-brown and nutty.', 'Till Roasting: Roast sesame seeds until they pop, then remove immediately from hot pan.', 'Chilly & Salt Roasting: Roast red chillies with 1 tsp oil and salt until crisp.', 'Coarse Milling: Pulse cooled ingredients in a mill to a coarse crunchy texture.', 'Packaging: Pack 100g into stand-up pouches and heat-seal.'],
+            stepsTa: ['பருப்பு வறுவல்: கருப்பு உளுந்து மற்றும் கடலைப்பருப்பை தனித்தனியாக மிதமான தீயில் வறுக்கவும்.', 'எள்ளு வறுவல்: எள்ளு பொரியும் வரை வறுத்து தனியாக எடுக்கவும்.', 'மிளகாய் வறுவல்: மிளகாயை 1 ஸ்பூன் எண்ணெய் மற்றும் உப்பு சேர்த்து வறுக்கவும்.', 'அரைத்தல்: ஆறவைத்து கொரகொரப்பான இட்லி பொடி பதத்தில் அரைக்கவும்.', 'பேக்கிங்: 100 கிராம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 122, name: 'Horse Gram Chutney Powder (Kollu Thuvaiyal)', nameTa: 'கொள்ளு துவையல் பொடி', category: 'Foods', details: 'Horse Gram (40%), Fried Gram (20%), Dry Red Chillies (15%), Garlic Cloves (10%), Cumin & Pepper Blend (8%), Rock Salt & Asafoetida (7%)', detailsTa: 'கொள்ளு (40%), பொட்டுக்கடலை (20%), காய்ந்த மிளகாய் (15%), காய்ந்த பூண்டு (10%), சீரகம் & மிளகு (8%), உப்பு & பெருங்காயம் (7%)', baseRatios: [{name: 'Horse Gram', nameTa: 'கொள்ளு', ratio: 0.40}, {name: 'Fried Gram', nameTa: 'பொட்டுக்கடலை', ratio: 0.20}, {name: 'Dry Red Chillies', nameTa: 'காய்ந்த மிளகாய்', ratio: 0.15}, {name: 'Garlic Cloves', nameTa: 'காய்ந்த பூண்டு', ratio: 0.10}, {name: 'Cumin & Pepper Blend', nameTa: 'சீரகம் & மிளகு', ratio: 0.08}, {name: 'Rock Salt & Asafoetida', nameTa: 'உப்பு & பெருங்காயம்', ratio: 0.07}],
+            steps: ['Cleaning: De-stone Horse Gram thoroughly.', 'Roasting: Slow-roast Horse gram on medium flame for 10 minutes until aroma releases and seeds turn dark brown. Roast pottukadalai, chillies, and dried garlic separately.', 'Milling: Cool all ingredients and coarse-grind into a chutney powder consistency.', 'Blending: Mix in rock salt and asafoetida.', 'Packaging: Pack 100g into air-tight pouches.'],
+            stepsTa: ['சுத்தம் செய்தல்: கொள்ளில் உள்ள கல் மற்றும் மணலை நீக்கவும்.', 'வறுத்தல்: கொள்ளை மிதமான தீயில் 10 நிமிடங்கள் சிவக்க வறுக்கவும். பொட்டுக்கடலை, மிளகாய், பூண்டை தனித்தனியாக வறுக்கவும்.', 'அரைத்தல்: ஆறவைத்து கொரகொரப்பாக அரைக்கவும்.', 'கலத்தல்: உப்பு மற்றும் பெருங்காயம் சேர்த்துக் கலக்கவும்.', 'பேக்கிங்: 100 கிராம் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 123, name: 'Curry Leaves Rice Powder', nameTa: 'கருவேப்பிலை பொடி', category: 'Foods', details: 'Fresh Shade-Dried Curry Leaves (40%), Urad Dal (25%), Channa Dal (15%), Dry Red Chillies (10%), Black Pepper & Cumin (5%), Asafoetida & Rock Salt (5%)', detailsTa: 'காய்ந்த கருவேப்பிலை (40%), உளுந்தம்பருப்பு (25%), கடலைப்பருப்பு (15%), காய்ந்த மிளகாய் (10%), மிளகு & சீரகம் (5%), பெருங்காயம் & உப்பு (5%)', baseRatios: [{name: 'Shade-Dried Curry Leaves', nameTa: 'காய்ந்த கருவேப்பிலை', ratio: 0.40}, {name: 'Urad Dal', nameTa: 'உளுந்தம்பருப்பு', ratio: 0.25}, {name: 'Channa Dal', nameTa: 'கடலைப்பருப்பு', ratio: 0.15}, {name: 'Dry Red Chillies', nameTa: 'காய்ந்த மிளகாய்', ratio: 0.10}, {name: 'Black Pepper & Cumin', nameTa: 'மிளகு & சீரகம்', ratio: 0.05}, {name: 'Asafoetida & Rock Salt', nameTa: 'பெருங்காயம் & உப்பு', ratio: 0.05}],
+            steps: ['Drying: Wash fresh curry leaves and shade-dry until completely crisp (moisture < 3%).', 'Roasting: Dry-roast curry leaves on low flame without blackening. Roast dals, chillies, pepper, and cumin separately.', 'Milling: Pulverize all ingredients together into a fine-coarse herbal rice powder.', 'Sifting & Packaging: Pass through a #60 mesh sieve and pack 100g into air-tight pouches.'],
+            stepsTa: ['உலர்த்துதல்: கருவேப்பிலையைக் கழுவி நிழலில் மொறுமொறுப்பாகக் காயவைக்கவும்.', 'வறுத்தல்: கருவேப்பிலையை கருகாமல் லேசாக வறுக்கவும். பருப்பு, மிளகாய், மிளகு, சீரகத்தை தனியாக வறுக்கவும்.', 'அரைத்தல்: அனைத்து பொருட்களையும் சேர்த்து பொடியாக அரைக்கவும்.', 'பேக்கிங்: #60 மெஷ் சல்லடையில் சலித்து 100 கிராம் பாக்கெட்டுகளில் சீல் செய்யவும்.'] },
+          { id: 124, name: 'Pure Turmeric Powder', nameTa: 'தூய்மையான மஞ்சள் தூள்', category: 'Foods', details: 'Organic Dried Turmeric Rhizomes / Erode Viral Manjal (100%)', detailsTa: 'ஈரோடு விரலி மஞ்சள் (100%)', baseRatios: [{name: 'Organic Dried Turmeric Rhizomes', nameTa: 'ஈரோடு விரலி மஞ்சள்', ratio: 1.0}],
+            steps: ['Inspection: Select high-curcumin Erode viral manjal rhizomes.', 'Crushing: Break whole rhizomes into smaller pieces using a stone breaker before milling.', 'Milling: Pulverize in a heavy-duty commercial mill.', 'Sifting: Pass through a #100 mesh stainless steel sieve for vibrant color and fine texture.', 'Packaging: Pack 500g into air-tight UV-protected pouches.'],
+            stepsTa: ['பரிசோதனை: நல்ல ஈரோடு விரலி மஞ்சளைத் தேர்வு செய்யவும்.', 'உடைத்தல்: மஞ்சளைச் சிறிய துண்டுகளாக உடைத்துக் கொள்ளவும்.', 'அரைத்தல்: மிஷினில் கொடுத்து நைஸாக அரைக்கவும்.', 'சலித்தல்: #100 மெஷ் சல்லடையில் நைஸாக சலித்தெடுக்கவும்.', 'பேக்கிங்: 500 கிராம் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
+          { id: 125, name: 'Biryani & Garam Masala Blend', nameTa: 'பிரியாணி கரம் மசாலா', category: 'Foods', details: 'Coriander Seeds (30%), Cumin Seeds (20%), Cinnamon Bark (15%), Cloves (10%), Cardamom (10%), Star Anise & Mace (8%), Fennel Seeds & Bay Leaf (7%)', detailsTa: 'கொத்தமல்லி விதை (30%), சீரகம் (20%), இலவங்கப்பட்டை (15%), கிராம்பு (10%), ஏலக்காய் (10%), அன்னாசிப்பூ & ஜாதிபத்திரி (8%), சோம்பு & பிரிஞ்சி இலை (7%)', baseRatios: [{name: 'Coriander Seeds', nameTa: 'கொத்தமல்லி விதை', ratio: 0.30}, {name: 'Cumin Seeds', nameTa: 'சீரகம்', ratio: 0.20}, {name: 'Cinnamon Bark', nameTa: 'இலவங்கப்பட்டை', ratio: 0.15}, {name: 'Cloves', nameTa: 'கிராம்பு', ratio: 0.10}, {name: 'Cardamom', nameTa: 'ஏலக்காய்', ratio: 0.10}, {name: 'Star Anise & Mace', nameTa: 'அன்னாசிப்பூ & ஜாதிபத்திரி', ratio: 0.08}, {name: 'Fennel Seeds & Bay Leaf', nameTa: 'சோம்பு & பிரிஞ்சி இலை', ratio: 0.07}],
+            steps: ['Sun-Drying: Sun-dry all whole spices for 3 hours.', 'Gentle Warming: Warm spices on low heat for 2 minutes to release natural aromatic oils (do not brown/burn).', 'Pulverization: Grind all spices in a commercial mill.', 'Sifting: Pass through a #80 mesh sieve.', 'Packaging: Pack 100g into zip-lock foil pouches immediately to seal in volatile aroma.'],
+            stepsTa: ['உலர்த்துதல்: அனைத்து மசாலா பொருட்களையும் 3 மணி நேரம் வெயிலில் காயவைக்கவும்.', 'சூடேற்றுதல்: மிதமான தீயில் 2 நிமிடங்கள் லேசாகச் சூடேற்றவும் (கருகக் கூடாது).', 'அரைத்தல்: மிஷினில் கொடுத்து நைஸாக அரைக்கவும்.', 'சலித்தல்: #80 மெஷ் சல்லடையில் சலித்தெடுக்கவும்.', 'பேக்கிங்: வாசனை போகாமல் இருக்க உடனடியாக 100 கிராம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
 
           // ==================== COLD PROCESS SOAPS (9 VARIETIES) ====================
           { id: 201, name: 'Bioenzyme Cold Process Soap', category: 'Cold Process', details: 'Coconut Oil (450g), Castor Oil (25g), Butter (25g), Lye (87.5g), Bioenzyme (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.66}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Butter', ratio: 0.04}, {name: 'Caustic Soda (Lye)', ratio: 0.13}, {name: 'Bioenzyme Liquid', ratio: 0.13}] },
@@ -459,11 +515,72 @@
           this.checkedIngredients = {};
         },
 
+        uiText: {
+          en: {
+            searchPlaceholder: '🔍 Search laddus, soaps, batters...',
+            allItems: 'All Items',
+            catFoods: '🌾 Foods & Laddus',
+            catLyeFree: '🧼 Lye-Free Soaps',
+            catColdProcess: '🧪 Cold Process',
+            backup: '⬇ Backup All Recipes',
+            restore: '⬆ Restore Backup',
+            scaleBatch: '🧮 Scale Batch',
+            back: '← Back',
+            scalePrefix: 'Scale: ',
+            targetYield: 'Target Batch Yield (kg):',
+            requiredIngredients: 'Required Ingredients (tap to check off):',
+            reset: 'Reset',
+            prepSteps: 'Preparation Steps:',
+            navCatalog: 'Catalog',
+            navBatchScale: 'Batch Scale'
+          },
+          ta: {
+            searchPlaceholder: '🔍 லட்டு, சோப், மாவு தேடுங்கள்...',
+            allItems: 'அனைத்தும்',
+            catFoods: '🌾 உணவுகள் & லட்டு',
+            catLyeFree: '🧼 லை-இல்லா சோப்',
+            catColdProcess: '🧪 கோல்ட் ப்ராசஸ்',
+            backup: '⬇ காப்புப்பிரதி எடு',
+            restore: '⬆ மீட்டமை',
+            scaleBatch: '🧮 அளவிடு',
+            back: '← பின்',
+            scalePrefix: 'அளவு: ',
+            targetYield: 'இலக்கு அளவு (கிலோ):',
+            requiredIngredients: 'தேவையான பொருட்கள் (தட்டவும்):',
+            reset: 'மீட்டமை',
+            prepSteps: 'தயாரிப்பு முறை:',
+            navCatalog: 'பட்டியல்',
+            navBatchScale: 'அளவிடல்'
+          }
+        },
+        t(key) {
+          return (this.uiText[this.lang] && this.uiText[this.lang][key]) || this.uiText.en[key];
+        },
+        categoryLabel(category) {
+          if (this.lang !== 'ta') return category;
+          const map = { 'Foods': 'உணவுகள்', 'Lye-Free': 'லை-இல்லா', 'Cold Process': 'கோல்ட் ப்ராசஸ்' };
+          return map[category] || category;
+        },
+
+        displayName(item) {
+          return this.lang === 'ta' && item.nameTa ? item.nameTa : item.name;
+        },
+        displayDetails(item) {
+          return this.lang === 'ta' && item.detailsTa ? item.detailsTa : item.details;
+        },
+        displaySteps(item) {
+          return this.lang === 'ta' && item.stepsTa && item.stepsTa.length ? item.stepsTa : (item.steps || []);
+        },
+        displayIngName(ing) {
+          return this.lang === 'ta' && ing.nameTa ? ing.nameTa : ing.name;
+        },
+
         get calculatedIngredients() {
           if (!this.selectedItem) return [];
           const totalGrams = this.targetYield * 1000;
           return this.selectedItem.baseRatios.map(ing => ({
-            name: ing.name,
+            key: ing.name,
+            label: this.displayIngName(ing),
             grams: (totalGrams * ing.ratio).toFixed(1)
           }));
         },
