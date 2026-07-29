@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "update-sw-version": "node scripts/update-sw-version.js",
+    "build": "node scripts/update-sw-version.js && cap copy android"
   },
   "keywords": [],
   "author": "",

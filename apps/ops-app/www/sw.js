@@ -1,4 +1,4 @@
-const CACHE_NAME = 'srilaya-ops-v7';
+const CACHE_NAME = 'srilaya-ops-1.2.0';
 const PRECACHE_URLS = [
   './',
   './index.html',
