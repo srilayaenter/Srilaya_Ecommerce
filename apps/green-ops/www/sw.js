@@ -1,4 +1,4 @@
-const CACHE_NAME = 'srilaya-green-ops-1.0.0';
+const CACHE_NAME = 'srilaya-green-ops-1.1.0';
 const PRECACHE_URLS = [
   './',
   './index.html',

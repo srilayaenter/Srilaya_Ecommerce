@@ -10,23 +10,34 @@
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <meta name="theme-color" content="#065f46">
   <script src="./vendor/tailwind.js"></script>
+  <script src="./vendor/supabase.js"></script>
+  <script src="./js/ops-logic.js"></script>
   <script src="./vendor/alpine.min.js" defer></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans pb-20 select-none" x-data="srilayaGreenApp()">
 
   <!-- HEADER -->
-  <header class="bg-emerald-800 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
-    <div>
-      <h1 class="font-bold text-lg leading-tight">SriLaYa Green Ops</h1>
-      <p class="text-xs text-emerald-200"><span x-text="lang === 'ta' ? 'நலம், முடி, சருமம் & வீட்டுப் பராமரிப்பு அளவு மேலாளர்' : 'Wellness, Hair, Skin & Home Care Batch Manager'"></span> <span class="text-emerald-400 opacity-70">v1.0</span></p>
+  <header class="bg-emerald-800 text-white p-4 sticky top-0 z-50 shadow-md">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="font-bold text-lg leading-tight">SriLaYa Green Ops</h1>
+        <p class="text-xs text-emerald-200"><span x-text="lang === 'ta' ? 'நலம், முடி, சருமம் & வீட்டுப் பராமரிப்பு அளவு மேலாளர்' : 'Wellness, Hair, Skin & Home Care Batch Manager'"></span> <span class="text-emerald-400 opacity-70">v1.0</span></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button @click="lang = lang === 'en' ? 'ta' : 'en'" title="Switch language" class="text-xs px-2 py-1.5 rounded-lg border border-white/60 text-white font-semibold hover:bg-white/10" x-text="lang === 'en' ? 'தமிழ்' : 'English'"></button>
+        <button x-show="isUnlocked" @click="lockEditing()" title="Lock editing again" class="text-xs px-2 py-1.5 rounded-lg border border-white/60 text-white hover:bg-white/10">🔓</button>
+        <button @click="requireUnlock(() => openAddModal())" class="bg-emerald-600 hover:bg-emerald-500 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1">
+          <span>+ Add Recipe</span>
+        </button>
+      </div>
     </div>
-    <div class="flex items-center gap-2">
-      <button @click="lang = lang === 'en' ? 'ta' : 'en'" title="Switch language" class="text-xs px-2 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-900/60 font-semibold" x-text="lang === 'en' ? 'தமிழ்' : 'English'"></button>
-      <button x-show="isUnlocked" @click="lockEditing()" title="Lock editing again" class="text-xs px-2 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-900/60">🔓</button>
-      <button @click="requireUnlock(() => openAddModal())" class="bg-emerald-600 hover:bg-emerald-500 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1">
-        <span>+ Add Recipe</span>
-      </button>
-    </div>
+    <!-- Sync status bar -->
+    <button @click="syncFromCloud()" class="mt-2 text-[10px] text-emerald-200 hover:text-white flex items-center gap-1 opacity-80 hover:opacity-100">
+      <span x-show="syncStatus === 'syncing'">🔄 Syncing recipes…</span>
+      <span x-show="syncStatus === 'synced'">☁️ Recipes synced — tap to refresh</span>
+      <span x-show="syncStatus === 'offline'">⚠️ Offline — showing last-synced data</span>
+      <span x-show="syncStatus === 'idle'">☁️ Tap to sync recipes</span>
+    </button>
   </header>
 
   <main class="p-4 max-w-lg mx-auto">
@@ -38,12 +49,12 @@
 
       <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
         <button @click="selectedCategory = 'All'" :class="selectedCategory === 'All' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm"><span x-text="t('allItems')"></span> (<span x-text="items.length"></span>)</button>
-        <button @click="selectedCategory = 'Wellness'" :class="selectedCategory === 'Wellness' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catWellness')"></button>
-        <button @click="selectedCategory = 'Hair Care'" :class="selectedCategory === 'Hair Care' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catHairCare')"></button>
-        <button @click="selectedCategory = 'Skincare'" :class="selectedCategory === 'Skincare' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catSkincare')"></button>
-        <button @click="selectedCategory = 'Household'" :class="selectedCategory === 'Household' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catHousehold')"></button>
-        <button @click="selectedCategory = 'Lye-Free'" :class="selectedCategory === 'Lye-Free' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catLyeFree')"></button>
-        <button @click="selectedCategory = 'Cold Process'" :class="selectedCategory === 'Cold Process' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catColdProcess')"></button>
+        <button @click="selectedCategory = 'Wellness'" :class="selectedCategory === 'Wellness' ? 'bg-purple-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catWellness')"></button>
+        <button @click="selectedCategory = 'Hair Care'" :class="selectedCategory === 'Hair Care' ? 'bg-rose-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catHairCare')"></button>
+        <button @click="selectedCategory = 'Skincare'" :class="selectedCategory === 'Skincare' ? 'bg-blue-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catSkincare')"></button>
+        <button @click="selectedCategory = 'Household'" :class="selectedCategory === 'Household' ? 'bg-amber-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catHousehold')"></button>
+        <button @click="selectedCategory = 'Lye-Free'" :class="selectedCategory === 'Lye-Free' ? 'bg-teal-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catLyeFree')"></button>
+        <button @click="selectedCategory = 'Cold Process'" :class="selectedCategory === 'Cold Process' ? 'bg-orange-700 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catColdProcess')"></button>
       </div>
     </div>
 
@@ -221,6 +232,14 @@
         targetYield: 1.0,
         selectedItem: null,
         checkedIngredients: {},
+
+        // Supabase cloud sync — wire up when green.com DB is live.
+        // Table needed: GreenOpsRecipe (id text PK, name text, category text, details text, baseRatios jsonb)
+        SUPABASE_URL: '',
+        SUPABASE_ANON_KEY: '',
+        sbClient: null,
+        syncStatus: 'idle', // idle | syncing | synced | offline
+        SYNCED_CATEGORIES: ['Wellness', 'Hair Care', 'Skincare', 'Household', 'Lye-Free', 'Cold Process'],
 
         // Simple shared PIN gate against casual edits by whoever's holding the phone.
         // Not real security — anyone can read this in the page source. Change the PIN here.
@@ -408,6 +427,62 @@
           const savedItems = this.loadFromStorage('srilaya-green-ops-items');
           this.items = savedItems || this.defaultItems;
           this.$watch('items', value => this.saveToStorage('srilaya-green-ops-items', value));
+
+          try {
+            this.sbClient = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
+          } catch (e) {
+            this.sbClient = null;
+          }
+          this.syncFromCloud();
+        },
+
+        async syncFromCloud() {
+          if (!this.sbClient) return;
+          this.syncStatus = 'syncing';
+          try {
+            const { data, error } = await this.sbClient
+              .from('GreenOpsRecipe')
+              .select('id, name, category, details, baseRatios')
+              .order('name', { ascending: true });
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+              const localOnlyItems = this.items.filter(i => !this.SYNCED_CATEGORIES.includes(i.category));
+              this.items = [...data, ...localOnlyItems];
+            }
+            this.syncStatus = 'synced';
+          } catch (e) {
+            this.syncStatus = 'offline';
+          }
+        },
+
+        async pushUpsert(record) {
+          if (!this.sbClient || !this.SYNCED_CATEGORIES.includes(record.category)) return;
+          try {
+            const { error } = await this.sbClient.from('GreenOpsRecipe').upsert({
+              id: String(record.id),
+              name: record.name,
+              category: record.category,
+              details: record.details,
+              baseRatios: record.baseRatios,
+            });
+            if (error) throw error;
+            this.syncStatus = 'synced';
+          } catch (e) {
+            this.syncStatus = 'offline';
+          }
+        },
+
+        async pushDelete(id, category) {
+          if (!this.sbClient || !this.SYNCED_CATEGORIES.includes(category)) return;
+          try {
+            const { error } = await this.sbClient.from('GreenOpsRecipe').delete().eq('id', String(id));
+            if (error) throw error;
+            this.syncStatus = 'synced';
+          } catch (e) {
+            this.syncStatus = 'offline';
+          }
         },
 
         loadFromStorage(key) {
@@ -595,15 +670,19 @@
             const idx = this.items.findIndex(i => i.id === this.editingItemId);
             if (idx !== -1) {
               this.items[idx] = { ...this.items[idx], name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios };
+              this.pushUpsert(this.items[idx]);
             }
           } else {
             const nextId = Math.max(0, ...this.items.map(i => i.id)) + 1;
-            this.items.push({ id: nextId, name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios });
+            const record = { id: nextId, name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios };
+            this.items.push(record);
+            this.pushUpsert(record);
           }
           this.showAddModal = false;
         },
         deleteItem(item) {
           if (!confirm(`Delete "${item.name}"? This cannot be undone.`)) return;
+          this.pushDelete(item.id, item.category);
           this.items = this.items.filter(i => i.id !== item.id);
         },
 

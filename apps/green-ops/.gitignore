@@ -1,0 +1,18 @@
+node_modules/
+
+# Keystore and signing credentials — NEVER commit
+keystore/
+*.jks
+*.keystore
+keystore.properties
+
+# Android build outputs
+android/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/capacitor-cordova-android-plugins/
+
+# Capacitor copies www/ here during sync — generated, not source
+android/app/src/main/assets/public/
+toolchain/
