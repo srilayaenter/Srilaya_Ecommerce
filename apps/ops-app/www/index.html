@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SriLaYa Ops - Mobile App</title>
+  <title>SriLaYa Nature Ops - Mobile App</title>
   <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlNyaUxhWWEgT3BzIiwKICAic2hvcnRfbmFtZSI6ICJTcmlMYVlhT3BzIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNmNGY2IiwKICAidGhlbWVfY29sb3IiOiAiIzA2NWY0NiIsCiAgImljb25zIjogWwogICAgeyAic3JjIjogIi4vaWNvbnMvaWNvbi0xOTIucG5nIiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJhbnkiIH0sCiAgICB7ICJzcmMiOiAiLi9pY29ucy9pY29uLTUxMi5wbmciLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSIgfSwKICAgIHsgInNyYyI6ICIuL2ljb25zL2ljb24tbWFza2FibGUtMTkyLnBuZyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAibWFza2FibGUiIH0sCiAgICB7ICJzcmMiOiAiLi9pY29ucy9pY29uLW1hc2thYmxlLTUxMi5wbmciLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogIm1hc2thYmxlIiB9CiAgXQp9Cg==">
   <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16.png">
@@ -18,7 +18,7 @@
   <!-- HEADER -->
   <header class="bg-emerald-800 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
     <div>
-      <h1 class="font-bold text-lg leading-tight">SriLaYa Ops</h1>
+      <h1 class="font-bold text-lg leading-tight">SriLaYa Nature Ops</h1>
       <p class="text-xs text-emerald-200"><span x-text="lang === 'ta' ? 'செய்முறை & அளவு மேலாளர்' : 'Recipe & Batch Scale Manager'"></span> <span class="text-emerald-400 opacity-70">v1.2</span></p>
       <button @click="syncFromCloud()" class="text-[11px] mt-0.5 flex items-center gap-1"
               :class="syncStatus === 'offline' ? 'text-amber-300' : 'text-emerald-300'">
@@ -675,7 +675,7 @@
               i && typeof i.name === 'string' && Array.isArray(i.baseRatios)
             );
             if (!looksValid) {
-              alert("That file doesn't look like a SriLaYa Ops backup.");
+              alert("That file doesn't look like a SriLaYa Nature Ops backup.");
               return;
             }
 
