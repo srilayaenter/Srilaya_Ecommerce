@@ -47,8 +47,6 @@
       <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
         <button @click="selectedCategory = 'All'" :class="selectedCategory === 'All' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm"><span x-text="t('allItems')"></span> (<span x-text="items.length"></span>)</button>
         <button @click="selectedCategory = 'Foods'" :class="selectedCategory === 'Foods' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catFoods')"></button>
-        <button @click="selectedCategory = 'Lye-Free'" :class="selectedCategory === 'Lye-Free' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catLyeFree')"></button>
-        <button @click="selectedCategory = 'Cold Process'" :class="selectedCategory === 'Cold Process' ? 'bg-emerald-800 text-white' : 'bg-white text-slate-600'" class="px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap shadow-sm" x-text="t('catColdProcess')"></button>
       </div>
     </div>
 
@@ -68,7 +66,7 @@
           <div class="flex justify-between items-start">
             <div>
               <span class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full"
-                    :class="item.category === 'Foods' ? 'bg-amber-100 text-amber-800' : (item.category === 'Lye-Free' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800')"
+                    :class="'bg-amber-100 text-amber-800'"
                     x-text="categoryLabel(item.category)"></span>
               <h3 class="font-bold text-slate-900 mt-1 text-sm" x-text="displayName(item)"></h3>
             </div>
@@ -162,8 +160,6 @@
       <input type="text" x-model="newRecipe.name" placeholder="Recipe Name (e.g., Flaxseed Laddu)" class="w-full p-2 text-xs border rounded">
       <select x-model="newRecipe.category" class="w-full p-2 text-xs border rounded bg-white">
         <option value="Foods">🌾 Foods & Laddus</option>
-        <option value="Lye-Free">🧼 Lye-Free Soaps</option>
-        <option value="Cold Process">🧪 Cold Process Soaps</option>
       </select>
 
       <div class="border-t pt-2 space-y-1.5">
@@ -308,68 +304,6 @@
             steps: ['Sun-Drying: Sun-dry all whole spices for 3 hours.', 'Gentle Warming: Warm spices on low heat for 2 minutes to release natural aromatic oils (do not brown/burn).', 'Pulverization: Grind all spices in a commercial mill.', 'Sifting: Pass through a #80 mesh sieve.', 'Packaging: Pack 100g into zip-lock foil pouches immediately to seal in volatile aroma.'],
             stepsTa: ['உலர்த்துதல்: அனைத்து மசாலா பொருட்களையும் 3 மணி நேரம் வெயிலில் காயவைக்கவும்.', 'சூடேற்றுதல்: மிதமான தீயில் 2 நிமிடங்கள் லேசாகச் சூடேற்றவும் (கருகக் கூடாது).', 'அரைத்தல்: மிஷினில் கொடுத்து நைஸாக அரைக்கவும்.', 'சலித்தல்: #80 மெஷ் சல்லடையில் சலித்தெடுக்கவும்.', 'பேக்கிங்: வாசனை போகாமல் இருக்க உடனடியாக 100 கிராம் ஜிப்லாக் பவுச்சுகளில் அடைத்து சீல் செய்யவும்.'] },
 
-          // ==================== COLD PROCESS SOAPS (9 VARIETIES) ====================
-          { id: 201, name: 'Bioenzyme Cold Process Soap', category: 'Cold Process', details: 'Coconut Oil (450g), Castor Oil (25g), Butter (25g), Lye (87.5g), Bioenzyme (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.66}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Butter', ratio: 0.04}, {name: 'Caustic Soda (Lye)', ratio: 0.13}, {name: 'Bioenzyme Liquid', ratio: 0.13}] },
-          { id: 202, name: 'Ordinary Cold Process Soap', category: 'Cold Process', details: 'Coconut Oil (450g), Castor Oil (25g), Butter (25g), Lye (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.76}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Butter', ratio: 0.04}, {name: 'Caustic Soda (Lye)', ratio: 0.16}] },
-          { id: 203, name: 'Rice Flour Polishing CP Soap', category: 'Cold Process', details: 'Coconut Oil (425g), Castor (25g), Butter (50g), Rice Flour (100g), Lye (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.62}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Butter', ratio: 0.07}, {name: 'Herbal Powders', ratio: 0.14}, {name: 'Caustic Soda (Lye)', ratio: 0.13}] },
-          { id: 204, name: 'Charcoal Deep Clean CP Soap', category: 'Cold Process', details: 'Coconut Oil (425g), Castor (25g), Butter (50g), Charcoal (100g), Perfume (50g), Lye[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.58}, {name: 'Castor Oil', ratio: 0.03}, {name: 'Butter', ratio: 0.07}, {name: 'Herbal Powders', ratio: 0.14}, {name: 'Essential Oils', ratio: 0.06}, {name: 'Caustic Soda (Lye)', ratio: 0.12}] },
-          { id: 205, name: 'Fresh Milk CP Soap', category: 'Cold Process', details: 'Coconut Oil (95g), Castor Oil (5g), Lye (12.5g), Frozen Milk (35g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.64}, {name: 'Castor Oil', ratio: 0.03}, {name: 'Caustic Soda (Lye)', ratio: 0.09}, {name: 'Goat Milk Base', ratio: 0.24}] },
-          { id: 206, name: 'Kasturi Manjal Sun-Infused CP Soap', category: 'Cold Process', details: 'Coconut Oil (90g), Castor (5g), Kasturi Manjal Powder (145g), Lye (12.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.35}, {name: 'Castor Oil', ratio: 0.02}, {name: 'Herbal Powders', ratio: 0.58}, {name: 'Caustic Soda (Lye)', ratio: 0.05}] },
-          { id: 207, name: 'Multhani Mitti Detox CP Soap', category: 'Cold Process', details: 'Coconut Oil (475g), Castor (25g), Multhani Mitti (100g), Perfume (30g), Lye[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.66}, {name: 'Castor Oil', ratio: 0.03}, {name: 'Herbal Powders', ratio: 0.14}, {name: 'Essential Oils', ratio: 0.04}, {name: 'Caustic Soda (Lye)', ratio: 0.13}] },
-          { id: 208, name: 'Aavaram Poo Radiance CP Soap', category: 'Cold Process', details: 'Coconut Oil (250g), Aavaram Poo Oil (225g), Castor (25g), Lye (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.81}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Caustic Soda (Lye)', ratio: 0.15}] },
-          { id: 209, name: 'Aloe Vera Gel CP Soap', category: 'Cold Process', details: 'Aloe Infused Coconut Oil (475g), Castor (25g), Butter (50g), Lye (87.5g)[cite: 1]', baseRatios: [{name: 'Coconut Oil', ratio: 0.74}, {name: 'Castor Oil', ratio: 0.04}, {name: 'Butter', ratio: 0.08}, {name: 'Caustic Soda (Lye)', ratio: 0.14}] },
-
-          // ==================== 100% LYE-FREE MELT & POUR SOAPS (50 VARIETIES) ====================
-          { id: 1, name: 'Pure Goat Milk Soap', category: 'Lye-Free', details: 'Goat Milk Base (88%), Coconut Oil (4%), Sweet Almond (3%), Goat Milk Powder (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.88}, {name: 'Coconut Oil', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.08}] },
-          { id: 2, name: 'Kuppaimeni Skin Healing Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Kuppaimeni Extract (3%), Coconut/Neem Oil (8%), Lavender EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 3, name: 'Kasturi Manjal Brightening Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Wild Turmeric (3%), Coconut & Almond Oil (9%), Sandal EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 4, name: 'Red Sandalwood (Rakta Chandan) Soap', category: 'Lye-Free', details: 'Clear Glycerin Base (86%), Red Sandalwood Powder (3%), Castor Oil (9%), Essential Oil (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 5, name: 'Avarampoo Golden Glow Soap', category: 'Lye-Free', details: 'Goat Milk Base (87%), Avarampoo Petal Extract (3%), Almond Blend (8%), Ylang Ylang EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 6, name: 'Nalangu Mavu Traditional Soap', category: 'Lye-Free', details: 'Goat Milk Base (85%), 12-Herb Nalangu Mavu (5%), Virgin Coconut Oil (8%), EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.85}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.05}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 7, name: 'Activated Charcoal Detox Soap', category: 'Lye-Free', details: 'Clear Glycerin Base (87%), Bamboo Charcoal (2%), Coconut Oil (9%), Tea Tree EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 8, name: 'Neem & Tulsi Anti-Acne Soap', category: 'Lye-Free', details: 'Clear Glycerin Base (87%), Neem-Tulsi Extract (3%), Neem Oil (8%), Peppermint EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 9, name: 'Aloe Vera Hydrating Cooling Soap', category: 'Lye-Free', details: 'Clear Glycerin Base (86%), Fresh Aloe Gel (4%), Cold-Pressed Coconut Oil (8%), Mint EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 10, name: 'Saffron & Goat Milk Luxury Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Kashmiri Saffron Strands (1%), Almond Oil (11%), Rose EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.11}, {name: 'Herbal Powders', ratio: 0.01}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 11, name: 'Sandalwood & Honey Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Chandan Powder (3%), Raw Honey (2%), Sesame Oil (7%), EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.07}, {name: 'Herbal Powders', ratio: 0.05}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 12, name: 'Vetiver (Khus) Cooling Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Ground Vetiver Root (2%), Castor Oil (9%), Pure Vetiver EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Castor Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 13, name: 'Potato Juice Anti-Pigmentation Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Concentrated Potato Extract (3%), Coconut Oil (9%), Lemon EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 14, name: 'Papaya Tan Removal Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Raw Papaya Fruit Extract (3%), Almond Blend (9%), Orange EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 15, name: 'Tomato Radiance Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Fresh Tomato Extract (3%), Coconut Oil (8%), Bergamot EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 16, name: 'Cucumber Refreshing Mint Soap', category: 'Lye-Free', details: 'Clear Base (87%), Cucumber Juice (3%), Coconut Oil (8%), Spearmint EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 17, name: 'Coffee Scrub Exfoliating Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Arabica Coffee Grounds (3%), Coconut & Cocoa Butter (9%), Vanilla EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 18, name: 'Oatmeal & Milk Soothing Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Colloidal Oats (3%), Raw Honey (2%), Sweet Almond Oil (7%), EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.07}, {name: 'Herbal Powders', ratio: 0.05}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 19, name: 'Multani Mitti Clay Detox Soap', category: 'Lye-Free', details: 'Clear Base (86%), Fuller Earth Clay (4%), Coconut Oil (8%), Patchouli EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 20, name: 'Green Tea Antioxidant Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Matcha Green Tea Powder (2%), Coconut Oil (9%), Lime EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 21, name: 'Rice Water Skin Polishing Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Fermented Rice Extract (3%), Sesame Oil (9%), Jasmine EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 22, name: 'Rose Petal & Rose Water Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Dried Rose Petals + Rose Extract (3%), Almond Oil (9%), Damask Rose EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 23, name: 'Hibiscus Hair & Body Care Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Red Hibiscus Powder (3%), Castor Oil (8%), Rosemary EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Castor Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 24, name: 'Bhringraj & Shikakai Scalp Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Bhringraj-Shikakai Blend (4%), Coconut Oil (8%), Cedarwood EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 25, name: 'Nochi Leaves Sinus & Pain Relief Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Nochi Leaf Juice Extract (3%), Neem & Coconut Oil (9%), Eucalyptus EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 26, name: 'Vettiver & Lotus Luxury Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Lotus Extract + Vetiver Root (3%), Coconut Oil (9%), Lotus EO (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 27, name: 'Lemon & Honey Brightening Soap', category: 'Lye-Free', details: 'Clear Base (87%), Raw Honey (2%), Cold-Pressed Coconut Oil (8%), Lemon EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 28, name: 'Lavender Calming Sleep Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Lavender Buds (2%), Sweet Almond Oil (9%), French Lavender EO (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 29, name: 'Tea Tree & Neem Anti-Fungal Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Neem Oil (5%), Coconut Oil (4%), Pure Australian Tea Tree EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.05}] },
-          { id: 30, name: 'Eucalyptus & Mint Refresh Soap', category: 'Lye-Free', details: 'Clear Base (87%), Coconut Oil (9%), Eucalyptus & Menthol Blend (4%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.04}] },
-          { id: 31, name: 'Orange Peel D-Tan Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Sun-Dried Orange Peel Powder (3%), Castor Oil (8%), Sweet Orange EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 32, name: 'Peppermint Body Cooler Soap', category: 'Lye-Free', details: 'Clear Base (87%), Coconut Oil (9%), Peppermint Crystals & EO (4%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.04}] },
-          { id: 33, name: 'Cinnamon & Clove Anti-Bacterial Soap', category: 'Lye-Free', details: 'Glycerin Base (87%), Ground Cinnamon (2%), Sesame Oil (8%), Clove & Cinnamon EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.87}, {name: 'Castor Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 34, name: 'Jasmine Gentle Fragrance Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Sweet Almond Oil (9%), Natural Madurai Jasmine EO (3%), Petals (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 35, name: 'Ylang Ylang Exotic Spa Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Virgin Coconut Oil (9%), Ylang Ylang Essential Oil (3%), Colors (2%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.05}] },
-          { id: 36, name: 'Kumkumadi Thailam Luxury Glow Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Authentic Kumkumadi Thailam (3%), Almond Oil (8%), Sandal EO (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Kumkumadi Thailam', ratio: 0.03}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 37, name: 'Ezhil Nattu Nattu Herbal Soap', category: 'Lye-Free', details: 'Clear Base (86%), 18-Village Herbal Blend Extract (4%), Coconut Oil (8%), Herbal EO (2%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.02}] },
-          { id: 38, name: 'Shea Butter Extra Moisturizing Soap', category: 'Lye-Free', details: 'Goat Milk Base (82%), Organic Shea Butter (6%), Almond Oil (9%), Essential Oil (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.82}, {name: 'Butter', ratio: 0.06}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 39, name: 'Cocoa Butter Velvet Soap', category: 'Lye-Free', details: 'Goat Milk Base (82%), Natural Cocoa Butter (6%), Castor Oil (9%), Chocolate Vanilla EO (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.82}, {name: 'Butter', ratio: 0.06}, {name: 'Castor Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 40, name: 'Mango Butter Ultra Nourishing Soap', category: 'Lye-Free', details: 'Goat Milk Base (82%), Pure Mango Butter (6%), Virgin Coconut Oil (9%), EO (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.82}, {name: 'Butter', ratio: 0.06}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 41, name: 'Virgin Coconut Oil Deep Hydration Soap', category: 'Lye-Free', details: 'Glycerin Base (85%), Cold-Pressed Virgin Coconut Oil (12%), Essential Oil (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.85}, {name: 'Coconut Oil', ratio: 0.12}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 42, name: 'Sweet Almond Gentle Moisture Soap', category: 'Lye-Free', details: 'Goat Milk Base (85%), Cold-Pressed Almond Oil (12%), Vanilla Essential Oil (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.85}, {name: 'Coconut Oil', ratio: 0.12}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 43, name: 'Jojoba & Vitamin E Repair Soap', category: 'Lye-Free', details: 'Goat Milk Base (85%), Pure Jojoba Oil (10%), Vitamin E Oil (2%), Lavender EO (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.85}, {name: 'Coconut Oil', ratio: 0.12}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 44, name: 'Castor & Olive Thickening Bar Soap', category: 'Lye-Free', details: 'Clear Base (85%), Heavy Castor Oil (7%), Olive Oil (5%), Essential Oil (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.85}, {name: 'Castor Oil', ratio: 0.12}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 45, name: 'Baby Mild Gentle Chamomile Soap', category: 'Lye-Free', details: 'Goat Milk Base (88%), Organic Calendula & Chamomile Oil (9%), Unscented Pure Formula (3%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.88}, {name: 'Coconut Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.03}] },
-          { id: 46, name: 'Baby Tender Aloe & Butter Soap', category: 'Lye-Free', details: 'Goat Milk Base (86%), Shea Butter (4%), Fresh Aloe Gel (6%), Unscented Mild Care (4%)', baseRatios: [{name: 'Goat Milk Base', ratio: 0.86}, {name: 'Butter', ratio: 0.04}, {name: 'Coconut Oil', ratio: 0.06}, {name: 'Herbal Powders', ratio: 0.04}] },
-          { id: 47, name: 'Epsom Salt & Lavender Muscle Relief Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Epsom Salt (3%), Castor Oil (8%), French Lavender EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 48, name: 'Himalayan Pink Salt Scrub Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Fine Pink Salt (3%), Virgin Coconut Oil (8%), Peppermint EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.03}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 49, name: 'Dead Sea Mud Cleansing Soap', category: 'Lye-Free', details: 'Glycerin Base (85%), Authentic Dead Sea Clay (4%), Almond Oil (8%), Tea Tree EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.85}, {name: 'Coconut Oil', ratio: 0.08}, {name: 'Herbal Powders', ratio: 0.04}, {name: 'Essential Oils', ratio: 0.03}] },
-          { id: 50, name: 'Spirulina & Marine Kelp Soap', category: 'Lye-Free', details: 'Glycerin Base (86%), Organic Spirulina Powder (2%), Sesame Oil (9%), Lemongrass EO (3%)', baseRatios: [{name: 'Glycerin Soap Base', ratio: 0.86}, {name: 'Castor Oil', ratio: 0.09}, {name: 'Herbal Powders', ratio: 0.02}, {name: 'Essential Oils', ratio: 0.03}] }
         ],
 
         init() {
@@ -517,11 +451,9 @@
 
         uiText: {
           en: {
-            searchPlaceholder: '🔍 Search laddus, soaps, batters...',
+            searchPlaceholder: '🔍 Search laddus and batters...',
             allItems: 'All Items',
             catFoods: '🌾 Foods & Laddus',
-            catLyeFree: '🧼 Lye-Free Soaps',
-            catColdProcess: '🧪 Cold Process',
             backup: '⬇ Backup All Recipes',
             restore: '⬆ Restore Backup',
             scaleBatch: '🧮 Scale Batch',
@@ -535,11 +467,9 @@
             navBatchScale: 'Batch Scale'
           },
           ta: {
-            searchPlaceholder: '🔍 லட்டு, சோப், மாவு தேடுங்கள்...',
+            searchPlaceholder: '🔍 லட்டு மற்றும் மாவு தேடுங்கள்...',
             allItems: 'அனைத்தும்',
             catFoods: '🌾 உணவுகள் & லட்டு',
-            catLyeFree: '🧼 லை-இல்லா சோப்',
-            catColdProcess: '🧪 கோல்ட் ப்ராசஸ்',
             backup: '⬇ காப்புப்பிரதி எடு',
             restore: '⬆ மீட்டமை',
             scaleBatch: '🧮 அளவிடு',
@@ -558,7 +488,7 @@
         },
         categoryLabel(category) {
           if (this.lang !== 'ta') return category;
-          const map = { 'Foods': 'உணவுகள்', 'Lye-Free': 'லை-இல்லா', 'Cold Process': 'கோல்ட் ப்ராசஸ்' };
+          const map = { 'Foods': 'உணவுகள்' };
           return map[category] || category;
         },
 
