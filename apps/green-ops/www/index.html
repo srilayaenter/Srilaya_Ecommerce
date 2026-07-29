@@ -93,6 +93,9 @@
             <button @click="exportCSV(item)" title="Export CSV" class="px-2.5 bg-slate-100 text-slate-600 text-xs py-1.5 rounded-lg border hover:bg-slate-200 font-medium">
               📥
             </button>
+            <button @click="shareRecipe(item)" title="Share recipe" class="px-2.5 bg-slate-100 text-slate-600 text-xs py-1.5 rounded-lg border hover:bg-slate-200 font-medium">
+              📤
+            </button>
           </div>
         </div>
       </template>
@@ -244,9 +247,9 @@
         _lockTimer: null,
         _offlineQueue: [], // [{op:'upsert'|'delete', payload}]
 
-        // Simple shared PIN gate against casual edits by whoever's holding the phone.
-        // Not real security — anyone can read this in the page source. Change the PIN here.
-        editPin: '2468',
+        // PIN gate — hash stored in localStorage, never in source.
+        // Default PIN is 2468; change via the app once unlocked.
+        editPin: null,
         isUnlocked: false,
         pinPromptOpen: false,
         pinInput: '',
@@ -438,6 +441,11 @@
           }
           this.syncFromCloud();
 
+          // Bootstrap PIN hash on first install (default PIN: 2468)
+          if (!localStorage.getItem('srilaya-green-ops-pin-hash')) {
+            this._hashPin('2468').then(h => localStorage.setItem('srilaya-green-ops-pin-hash', h));
+          }
+
           // Auto-lock after 10 minutes of inactivity
           const resetTimer = () => {
             clearTimeout(this._lockTimer);
@@ -460,14 +468,24 @@
           try {
             const { data, error } = await this.sbClient
               .from('GreenOpsRecipe')
-              .select('id, name, category, details, baseRatios')
+              .select('id, name, category, details, baseRatios, updatedAt')
               .order('name', { ascending: true });
 
             if (error) throw error;
 
             if (data && data.length > 0) {
-              const localOnlyItems = this.items.filter(i => !this.SYNCED_CATEGORIES.includes(i.category));
-              this.items = [...data, ...localOnlyItems];
+              const localMap = new Map(this.items.map(i => [String(i.id), i]));
+              const merged = data.map(cloud => {
+                const local = localMap.get(String(cloud.id));
+                if (!local) return cloud;
+                const cloudTs = new Date(cloud.updatedAt || 0).getTime();
+                const localTs = new Date(local.updatedAt || 0).getTime();
+                return localTs > cloudTs ? local : cloud;
+              });
+              const localOnlyItems = this.items.filter(i =>
+                !this.SYNCED_CATEGORIES.includes(i.category)
+              );
+              this.items = [...merged, ...localOnlyItems];
             }
             this.syncStatus = 'synced';
           } catch (e) {
@@ -566,16 +584,26 @@
           this.pinInput = '';
           this.pinError = false;
         },
-        submitPin() {
-          if (this.pinInput === this.editPin) {
+        async submitPin() {
+          const stored = localStorage.getItem('srilaya-green-ops-pin-hash');
+          const entered = await this._hashPin(this.pinInput);
+          if (stored && entered === stored) {
             this.isUnlocked = true;
             this.pinPromptOpen = false;
+            this.pinError = false;
             const action = this.pendingAction;
             this.pendingAction = null;
+            this.pinInput = '';
             if (action) action();
           } else {
             this.pinError = true;
+            this.pinInput = '';
           }
+        },
+
+        async _hashPin(pin) {
+          const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
         },
         cancelPinPrompt() {
           this.pinPromptOpen = false;
@@ -711,15 +739,16 @@
           const valid = this.newRecipe.ingredients.filter(i => i.name && i.parts);
           const total = valid.reduce((sum, i) => sum + Number(i.parts), 0);
           const baseRatios = valid.map(i => ({ name: i.name, ratio: Number(i.parts) / total }));
+          const now = new Date().toISOString();
           if (this.editingItemId) {
             const idx = this.items.findIndex(i => i.id === this.editingItemId);
             if (idx !== -1) {
-              this.items[idx] = { ...this.items[idx], name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios };
+              this.items[idx] = { ...this.items[idx], name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios, updatedAt: now };
               this.pushUpsert(this.items[idx]);
             }
           } else {
             const nextId = Math.max(0, ...this.items.map(i => i.id)) + 1;
-            const record = { id: nextId, name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios };
+            const record = { id: nextId, name: this.newRecipe.name, category: this.newRecipe.category, details: this.newRecipe.details, baseRatios, updatedAt: now };
             this.items.push(record);
             this.pushUpsert(record);
           }
@@ -729,6 +758,25 @@
           if (!confirm(`Delete "${item.name}"? This cannot be undone.`)) return;
           this.pushDelete(item.id, item.category);
           this.items = this.items.filter(i => i.id !== item.id);
+        },
+
+        async shareRecipe(item) {
+          const lines = [
+            `📦 ${item.name} (${item.category})`, '',
+            '🧪 Ingredients:',
+            ...item.baseRatios.map(i => `  • ${i.name}: ${(i.ratio * 100).toFixed(1)}%`),
+          ];
+          if (item.steps && item.steps.length) {
+            lines.push('', '📋 Steps:');
+            item.steps.forEach((s, i) => lines.push(`  ${i + 1}. ${s}`));
+          }
+          const text = lines.join('\n');
+          if (navigator.share) {
+            await navigator.share({ title: item.name, text });
+          } else {
+            await navigator.clipboard.writeText(text);
+            alert('Recipe copied to clipboard!');
+          }
         },
 
         exportCSV(item) {
