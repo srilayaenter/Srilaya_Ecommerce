@@ -8,7 +8,7 @@ const ALLOWED_ROLES = ["owner", "admin", "manager"];
 // bust that cache on upsert/overwrite (observed: identical eTag returned after
 // delete+recreate with different content). Use a NEW path suffixed with the
 // APK's versionCode for every release rather than overwriting this path in place.
-const APK_PATH = "private/srilaya-ops/app-release-v2.apk";
+const APK_PATH = "private/srilaya-ops/app-release-v3.apk";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
