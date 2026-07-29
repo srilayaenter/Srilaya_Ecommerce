@@ -241,7 +241,9 @@
         SUPABASE_URL: 'https://szsrdtiphbdpdfggxwpw.supabase.co',
         SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6c3JkdGlwaGJkcGRmZ2d4d3B3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NTU2NDgsImV4cCI6MjA5NzQzMTY0OH0.5SHBl6kf1JRHMUaeFSp9Ej6ttQKe_OkMwOXe5EJf7Fs',
         sbClient: null,
-        syncStatus: 'idle', // idle | syncing | synced | offline | error
+        syncStatus: 'idle', // idle | syncing | synced | offline
+        _lockTimer: null,
+        _offlineQueue: [], // [{op:'upsert'|'delete', payload}]
 
         // Simple shared PIN gate against casual edits by whoever's holding the phone.
         // Not real security — anyone can read this in the page source. Change the PIN here.
@@ -330,6 +332,21 @@
             this.sbClient = null;
           }
           this.syncFromCloud();
+
+          // Auto-lock after 10 minutes of inactivity
+          const resetTimer = () => {
+            clearTimeout(this._lockTimer);
+            if (this.isUnlocked) {
+              this._lockTimer = setTimeout(() => { this.isUnlocked = false; }, 10 * 60 * 1000);
+            }
+          };
+          ['touchstart', 'mousedown', 'keydown'].forEach(e => document.addEventListener(e, resetTimer, { passive: true }));
+          this.$watch('isUnlocked', v => { if (v) resetTimer(); else clearTimeout(this._lockTimer); });
+
+          // Flush offline write queue when connectivity is restored
+          window.addEventListener('online', () => this.flushOfflineQueue());
+          const savedQueue = this.loadFromStorage('srilaya-ops-queue');
+          if (savedQueue) this._offlineQueue = savedQueue;
         },
 
         // All food subcategory recipes are synced to naturals.com's database.
@@ -357,7 +374,8 @@
         },
 
         async pushUpsert(record) {
-          if (!this.sbClient || !this.SYNCED_CATEGORIES.includes(record.category)) return;
+          if (!this.SYNCED_CATEGORIES.includes(record.category)) return;
+          if (!this.sbClient) { this._enqueue({ op: 'upsert', payload: record }); return; }
           try {
             const { error } = await this.sbClient.from('OpsRecipe').upsert({
               id: String(record.id),
@@ -370,17 +388,39 @@
             this.syncStatus = 'synced';
           } catch (e) {
             this.syncStatus = 'offline';
+            this._enqueue({ op: 'upsert', payload: record });
           }
         },
 
         async pushDelete(id, category) {
-          if (!this.sbClient || !this.SYNCED_CATEGORIES.includes(category)) return;
+          if (!this.SYNCED_CATEGORIES.includes(category)) return;
+          if (!this.sbClient) { this._enqueue({ op: 'delete', payload: { id, category } }); return; }
           try {
             const { error } = await this.sbClient.from('OpsRecipe').delete().eq('id', String(id));
             if (error) throw error;
             this.syncStatus = 'synced';
           } catch (e) {
             this.syncStatus = 'offline';
+            this._enqueue({ op: 'delete', payload: { id, category } });
+          }
+        },
+
+        _enqueue(item) {
+          this._offlineQueue = this._offlineQueue.filter(q =>
+            !(q.payload.id === item.payload.id && q.op === item.op)
+          );
+          this._offlineQueue.push(item);
+          this.saveToStorage('srilaya-ops-queue', this._offlineQueue);
+        },
+
+        async flushOfflineQueue() {
+          if (!this.sbClient || this._offlineQueue.length === 0) return;
+          const queue = [...this._offlineQueue];
+          this._offlineQueue = [];
+          this.saveToStorage('srilaya-ops-queue', []);
+          for (const item of queue) {
+            if (item.op === 'upsert') await this.pushUpsert(item.payload);
+            else if (item.op === 'delete') await this.pushDelete(item.payload.id, item.payload.category);
           }
         },
 
@@ -437,10 +477,14 @@
         },
 
         get filteredItems() {
+          const q = this.searchQuery.trim().toLowerCase();
           return this.items.filter(item => {
             const matchesCat = this.selectedCategory === 'All' || item.category === this.selectedCategory;
-            const matchesSearch = item.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                                  item.details.toLowerCase().includes(this.searchQuery.toLowerCase());
+            const matchesSearch = !q ||
+              item.name.toLowerCase().includes(q) ||
+              (item.nameTa || '').toLowerCase().includes(q) ||
+              (item.details || '').toLowerCase().includes(q) ||
+              (item.detailsTa || '').toLowerCase().includes(q);
             return matchesCat && matchesSearch;
           });
         },
