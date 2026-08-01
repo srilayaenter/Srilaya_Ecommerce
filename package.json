@@ -10,6 +10,7 @@
     "prisma:migrate": "prisma migrate dev --schema=./packages/db/schema.prisma",
     "prisma:studio": "prisma studio --schema=./packages/db/schema.prisma",
     "seed": "tsx scripts/seed-variants.ts",
+    "label:pdf": "node scripts/render-label-pdf.mjs",
     "test": "playwright test",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
