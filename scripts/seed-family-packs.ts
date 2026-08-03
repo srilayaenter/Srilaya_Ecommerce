@@ -27,6 +27,10 @@ const V = {
   LITTLE_FLAKES_1KG:     "cmqpkjjv6000cuigky9d70mji",
   LITTLE_RAVA_1KG:       "cmqpkjkp7001wuigk01zaqd19",
   COCONUT_JAGGERY_500G:  "cmrkbo1s9004nui4c7p2yc45m",
+  // Multigrain variants (Family Pack Basic 2A+1Teen redesign, 2026-08-03)
+  RAGI_RICE_1KG:         "cmqpkjme30052uigkfuxy153h",
+  BARNYARD_RAVA_1KG:     "cmqpkjksf0022uigk6hephpv9",
+  PEARL_FLOUR_1KG:       "cmqpkjla3002yuigkzsva27kx",
 };
 
 const BUNDLES = [
@@ -35,15 +39,16 @@ const BUNDLES = [
     slug:  "family-pack-basic-2a-1teen",
     title: "Millet Family Pack Basic — 2 Adults + 1 Teen",
     description:
-      "One month of millet-based meals for a family of three. Covers breakfast, lunch, and dinner with parboiled millet rice, flakes for quick mornings, rava for upma, and flour for dosas. Approx. 7.5 kg · 20–25 millet meals/month.",
+      "One month of varied millet-based meals for a family of three — mixes Foxtail, Little, Barnyard, Ragi, and Pearl millet across the pack instead of a single grain, for better nutrient variety. Approx. 8 kg · 20–25 millet meals/month.",
     price: 830,
     items: [
-      { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 3 },
-      { variantId: V.FOXTAIL_RICE_1KG,      quantity: 1 },
+      { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 2 },
+      { variantId: V.LITTLE_PARBOILED_1KG,  quantity: 1 },
+      { variantId: V.RAGI_RICE_1KG,         quantity: 1 },
       { variantId: V.FOXTAIL_FLAKES_1KG,    quantity: 1 },
-      { variantId: V.FOXTAIL_RAVA_1KG,      quantity: 1 },
-      { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 1 },
-      { variantId: V.BROWN_SUGAR_500G,      quantity: 1 },
+      { variantId: V.BARNYARD_RAVA_1KG,     quantity: 1 },
+      { variantId: V.PEARL_FLOUR_1KG,       quantity: 1 },
+      { variantId: V.BROWN_SUGAR_1KG,       quantity: 1 },
     ],
   },
   // ── Pack 1 Plus: 2 Adults + 1 Teen ───────────────────────────────────────
@@ -51,7 +56,7 @@ const BUNDLES = [
     slug:  "family-pack-plus-2a-1teen",
     title: "Millet Family Pack Plus — 2 Adults + 1 Teen",
     description:
-      "More flakes and flour for a growing teenager's appetite, plus millet laddus as an after-school snack. Ideal for a teen boy with full meals at home. Approx. 10 kg · 25–30 millet meals/month. Naturally gluten-free.",
+      "More flakes and flour for a growing teenager's appetite. Ideal for a teen boy with full meals at home. Approx. 8.5 kg · 25–30 millet meals/month. Naturally gluten-free.",
     price: 1149,
     items: [
       { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 3 },
@@ -59,7 +64,6 @@ const BUNDLES = [
       { variantId: V.FOXTAIL_FLAKES_1KG,    quantity: 2 },
       { variantId: V.FOXTAIL_RAVA_1KG,      quantity: 1 },
       { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 1 },
-      { variantId: V.FOXTAIL_LADDU_500G,    quantity: 1 },
       { variantId: V.BROWN_SUGAR_500G,      quantity: 1 },
     ],
   },
@@ -84,7 +88,7 @@ const BUNDLES = [
     slug:  "family-pack-plus-2a-2kids",
     title: "Millet Kids Family Pack Plus — 2 Adults + 2 Children",
     description:
-      "Includes 1 kg of millet laddus — a wholesome, naturally sweetened tiffin snack free from refined flour. More flour for dosas children love. Approx. 12 kg · 30+ millet meals/month. Naturally gluten-free.",
+      "More flour for dosas children love, plus extra flakes for quick breakfasts. Approx. 10 kg · 30+ millet meals/month. Naturally gluten-free.",
     price: 1469,
     items: [
       { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 3 },
@@ -92,7 +96,6 @@ const BUNDLES = [
       { variantId: V.FOXTAIL_FLAKES_1KG,    quantity: 2 },
       { variantId: V.FOXTAIL_RAVA_1KG,      quantity: 1 },
       { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 2 },
-      { variantId: V.FOXTAIL_LADDU_1KG,     quantity: 1 },
       { variantId: V.BROWN_SUGAR_1KG,       quantity: 1 },
     ],
   },
@@ -117,7 +120,7 @@ const BUNDLES = [
     slug:  "millet-couple-pack-plus",
     title: "Millet Couple Pack Plus — 2 Adults",
     description:
-      "Adds millet laddus — a portable, high-fibre afternoon snack that prevents the 5 PM energy crash. Ideal for office-going couples. Approx. 7 kg · 18–20 millet meals/month. Naturally gluten-free.",
+      "A fuller monthly kit for office-going couples, with extra rice and flour for more meal variety. Approx. 6.5 kg · 18–20 millet meals/month. Naturally gluten-free.",
     price: 915,
     items: [
       { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 2 },
@@ -125,7 +128,6 @@ const BUNDLES = [
       { variantId: V.FOXTAIL_FLAKES_1KG,    quantity: 1 },
       { variantId: V.FOXTAIL_RAVA_1KG,      quantity: 1 },
       { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 1 },
-      { variantId: V.FOXTAIL_LADDU_500G,    quantity: 1 },
       { variantId: V.BROWN_SUGAR_500G,      quantity: 1 },
     ],
   },
@@ -150,15 +152,14 @@ const BUNDLES = [
     slug:  "millet-senior-pack-plus",
     title: "Millet Senior Pack Plus — Senior Couple (60+)",
     description:
-      "Everything in the Gentle Pack plus millet laddus sweetened with jaggery — a light, nutritious snack for older adults. No refined sugar in the entire pack. Approx. 7 kg. Naturally gluten-free. Suitable as part of a balanced diet.",
+      "Everything in the Gentle Pack with extra parboiled rice and flour for a fuller month. No refined sugar in the entire pack. Approx. 8 kg. Naturally gluten-free. Suitable as part of a balanced diet.",
     price: 1135,
     items: [
-      { variantId: V.LITTLE_PARBOILED_1KG,  quantity: 2 },
+      { variantId: V.LITTLE_PARBOILED_1KG,  quantity: 3 },
       { variantId: V.LITTLE_RICE_500G,      quantity: 1 },
       { variantId: V.LITTLE_FLAKES_1KG,     quantity: 1 },
       { variantId: V.LITTLE_RAVA_1KG,       quantity: 1 },
-      { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 1 },
-      { variantId: V.FOXTAIL_LADDU_500G,    quantity: 1 },
+      { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 2 },
       { variantId: V.COCONUT_JAGGERY_500G,  quantity: 1 },
     ],
   },
@@ -167,7 +168,7 @@ const BUNDLES = [
     slug:  "millet-joint-family-box",
     title: "Millet Joint Family Box — 4 Adults + 2 Children",
     description:
-      "Flagship 17 kg monthly millet kit for a joint family of 6. Covers breakfast, lunch, dinner, and snacks. Subscribe monthly for doorstep delivery — Bengaluru-wide. Approx. 50–60 millet-based meals/month. Naturally gluten-free.",
+      "Flagship 16 kg monthly millet kit for a joint family of 6. Covers breakfast, lunch, and dinner. Subscribe monthly for doorstep delivery — Bengaluru-wide. Approx. 50–60 millet-based meals/month. Naturally gluten-free.",
     price: 2165,
     items: [
       { variantId: V.FOXTAIL_PARBOILED_1KG, quantity: 6 },
@@ -175,7 +176,6 @@ const BUNDLES = [
       { variantId: V.FOXTAIL_FLAKES_1KG,    quantity: 3 },
       { variantId: V.FOXTAIL_RAVA_1KG,      quantity: 2 },
       { variantId: V.FOXTAIL_FLOUR_1KG,     quantity: 2 },
-      { variantId: V.FOXTAIL_LADDU_1KG,     quantity: 1 },
       { variantId: V.BROWN_SUGAR_1KG,       quantity: 1 },
     ],
   },

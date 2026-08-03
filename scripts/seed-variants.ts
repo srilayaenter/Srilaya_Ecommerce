@@ -108,7 +108,9 @@ const dynamicCatalogSchema: CategoryConfig[] = [
     slug: 'sweeteners',
     image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400',
     standaloneProducts: [
-      { name: 'Brown Sugar', sku: 'BS', prices: { '1kg': 73, '500g': 41 }, image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400', description: 'Natural unrefined brown sugar crystals with rich molasses extraction' }
+      { name: 'Brown Sugar', sku: 'BS', prices: { '1kg': 73, '500g': 41 }, image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400', description: 'Natural unrefined brown sugar crystals with rich molasses extraction' },
+      { name: 'Coconut Jaggery Powder', sku: 'CJP', prices: { '1kg': 332, '500g': 182 }, image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400', description: 'Coconut Jaggery Powder — natural, unrefined traditional sweetener.' },
+      { name: 'Palm Jaggery Powder', sku: 'PJP', prices: { '1kg': 340, '500g': 185 }, image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400', description: 'Palm Jaggery Powder — natural, unrefined traditional sweetener.' }
     ]
   }
 ];

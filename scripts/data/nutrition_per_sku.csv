@@ -1,0 +1,35 @@
+SKU,Product Name,Category,Grain Source,Energy (kcal/100g),Protein (g/100g),Fat (g/100g),Carbohydrate (g/100g),Fiber (g/100g)
+FF,Foxtail Flakes,Millet Flakes,Foxtail Millet,331,11.7,3.9,60.9,7.0
+LF,Little Flakes,Millet Flakes,Little Millet,341,7.7,4.7,67.0,7.6
+KF,Kodo Flakes,Millet Flakes,Kodo Millet,309,8.3,1.4,65.9,9.0
+BF,Barnyard Flakes,Millet Flakes,Barnyard Millet,307,6.2,4.8,67.0,13.6
+RF,Ragi Flakes,Millet Flakes,Ragi (Finger Millet),361,7.3,1.3,72.6,3.6
+PF,Pearl Flakes,Millet Flakes,Pearl Millet (Bajra),336,14.5,5.1,67.5,2.0
+RSF,Red Sorghum Flakes,Millet Flakes,Sorghum (Jowar) -- covers both Red Sorghum and White Sorghum SKUs,360,10.4,3.4,72.1,6.3
+WSF,White Sorghum Flakes,Millet Flakes,Sorghum (Jowar) -- covers both Red Sorghum and White Sorghum SKUs,360,10.4,3.4,72.1,6.3
+BAF,Barley Flakes,Millet Flakes,Barley (pearled),352,9.9,1.2,77.7,15.6
+FTR,Foxtail Rava,Millet Rava,Foxtail Millet,331,11.7,3.9,60.9,7.0
+LTRV,Little Rava,Millet Rava,Little Millet,341,7.7,4.7,67.0,7.6
+BYRV,Barnyard Rava,Millet Rava,Barnyard Millet,307,6.2,4.8,67.0,13.6
+LTFL,Little Flour,Millet Flour,Little Millet,341,7.7,4.7,67.0,7.6
+RGFL,Ragi Flour,Millet Flour,Ragi (Finger Millet),361,7.3,1.3,72.6,3.6
+FTFL,Foxtail Flour,Millet Flour,Foxtail Millet,331,11.7,3.9,60.9,7.0
+BYFL,Barnyard Flour,Millet Flour,Barnyard Millet,307,6.2,4.8,67.0,13.6
+PLFL,Pearl Flour,Millet Flour,Pearl Millet (Bajra),336,14.5,5.1,67.5,2.0
+FXR,Foxtail Rice,Millet Rice (Raw),Foxtail Millet,331,11.7,3.9,60.9,7.0
+LTR,Little Rice,Millet Rice (Raw),Little Millet,341,7.7,4.7,67.0,7.6
+KDR,Kodo Rice,Millet Rice (Raw),Kodo Millet,309,8.3,1.4,65.9,9.0
+BYR,Barnyard Rice,Millet Rice (Raw),Barnyard Millet,307,6.2,4.8,67.0,13.6
+RGR,Ragi Rice,Millet Rice (Raw),Ragi (Finger Millet),361,7.3,1.3,72.6,3.6
+PLR,Pearl Rice,Millet Rice (Raw),Pearl Millet (Bajra),336,14.5,5.1,67.5,2.0
+WSR,White Sorghum Rice,Millet Rice (Raw),Sorghum (Jowar) -- covers both Red Sorghum and White Sorghum SKUs,360,10.4,3.4,72.1,6.3
+FPR,Foxtail Parboiled Rice,Millet Rice (Parboiled),Foxtail Millet,331,11.7,3.9,60.9,7.0
+LPR,Little Parboiled Rice,Millet Rice (Parboiled),Little Millet,341,7.7,4.7,67.0,7.6
+KPR,Kodo Parboiled Rice,Millet Rice (Parboiled),Kodo Millet,309,8.3,1.4,65.9,9.0
+BPR,Barnyard Parboiled Rice,Millet Rice (Parboiled),Barnyard Millet,307,6.2,4.8,67.0,13.6
+RPR,Ragi Parboiled Rice,Millet Rice (Parboiled),Ragi (Finger Millet),361,7.3,1.3,72.6,3.6
+PPR,Pearl Parboiled Rice,Millet Rice (Parboiled),Pearl Millet (Bajra),336,14.5,5.1,67.5,2.0
+WPR,White Sorghum Parboiled Rice,Millet Rice (Parboiled),Sorghum (Jowar) -- covers both Red Sorghum and White Sorghum SKUs,360,10.4,3.4,72.1,6.3
+BS,Brown Sugar,Sweeteners,"Brown Sugar (unrefined, jaggery-style)",383,0.4,0.0,95.0,0.0
+CJP,Coconut Jaggery Powder,Sweeteners,Coconut Jaggery Powder,375,2.6,0.2,92.4,2.2
+PJP,Palm Jaggery Powder,Sweeteners,Palm Jaggery Powder,370,2.6,0.2,92.4,2.2
