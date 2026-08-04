@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { deriveWeightGramsFromSize } from "@/lib/weight";
 
 interface Category {
   id: string;
@@ -74,6 +75,8 @@ export default function NewProductForm({
   const [sku,      setSku]      = useState("");
   const [skuTouched, setSkuTouched] = useState(false);
   const [size,     setSize]     = useState("");
+  const [weightGrams, setWeightGrams] = useState("500");
+  const [weightTouched, setWeightTouched] = useState(false);
 
   const selectedCat = categories.find(c => c.id === catId);
 
@@ -83,6 +86,15 @@ export default function NewProductForm({
     const generated = generateSku(selectedCat?.name ?? "", title);
     setSku(generated);
   }, [catId, title, skuTouched, selectedCat?.name]);
+
+  // Auto-derive weight (grams) from the size field (e.g. "500g" -> 500, "1kg" -> 1000)
+  // unless the admin has manually overridden it. Prevents the size/weight mismatch
+  // that silently defaulted every non-500g variant's weightGrams to 500.
+  useEffect(() => {
+    if (weightTouched) return;
+    const derived = deriveWeightGramsFromSize(size);
+    if (derived !== null) setWeightGrams(String(derived));
+  }, [size, weightTouched]);
 
   const variantSkuPreview = sku && size
     ? `${sku}-${size.toUpperCase().replace(/\s+/g, "")}`
@@ -175,8 +187,15 @@ export default function NewProductForm({
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Weight (grams) *</label>
-              <input type="number" name="weightGrams" required defaultValue="500" className="w-full border rounded-lg px-3 py-2" />
-              <p className="text-xs text-slate-400 mt-1">Include packaging. Used for shipping cost.</p>
+              <input
+                type="number" name="weightGrams" required
+                value={weightGrams}
+                onChange={e => { setWeightGrams(e.target.value); setWeightTouched(true); }}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+              <p className="text-xs text-slate-400 mt-1">
+                {weightTouched ? "Include packaging. Used for shipping cost." : "Auto-filled from Weight/Size above — edit if it needs to differ (e.g. packaging weight)."}
+              </p>
             </div>
           </div>
 

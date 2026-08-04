@@ -1,4 +1,4 @@
-import { PrismaClient } from '../packages/db';
+import { PrismaClient, deriveWeightGramsFromSize } from '../packages/db';
 import * as bcrypt from 'bcryptjs';
 
 // Unique client pointer to avoid global namespace conflicts inside the monorepo workspace
@@ -210,6 +210,7 @@ async function createProductWithVariants(item: any, catId: string, description: 
         size: size,
         price: price as number,
         stock: baseStock,
+        weightGrams: deriveWeightGramsFromSize(size) ?? 500,
         sku: `${item.sku}-${size.toUpperCase()}`
       }
     });

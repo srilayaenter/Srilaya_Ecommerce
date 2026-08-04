@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/db";
+import { deriveWeightGramsFromSize } from "@/lib/weight";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import StyledSelect from "@/components/StyledSelect";
 import ImageManager from "./ImageManager";
 import MainImageUploader from "./MainImageUploader";
 import DeleteVariantButton from "./DeleteVariantButton";
+import AddVariantForm from "./AddVariantForm";
 import { logStockChange } from "@/lib/stockLog";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -44,15 +46,17 @@ async function updateVariant(formData: FormData) {
 
   const costPriceRaw = parseFloat(formData.get('costPrice') as string);
   const hasCostField = formData.has('costPrice');
+  const newSize = formData.get('size') as string;
+  const weightGramsRaw = parseInt(formData.get('weightGrams') as string, 10);
   await prisma.productVariant.update({
     where: { id: variantId },
     data: {
-      size:             formData.get('size') as string,
+      size:             newSize,
       price:            parseFloat(formData.get('price') as string),
       // Only update costPrice if the field was present in the form (owner only)
       ...(hasCostField && { costPrice: !isNaN(costPriceRaw) && costPriceRaw > 0 ? costPriceRaw : null }),
       stock:            newStock,
-      weightGrams:      parseInt(formData.get('weightGrams') as string, 10) || 500,
+      weightGrams:      weightGramsRaw > 0 ? weightGramsRaw : (deriveWeightGramsFromSize(newSize) ?? 500),
       reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,
       imageUrl:         (formData.get('imageUrl') as string)?.trim() || null,
     }
@@ -89,6 +93,7 @@ async function addVariant(formData: FormData) {
   });
 
   const generatedSku = `${product?.sku}-${size.toUpperCase().replace(/\s+/g, '')}`;
+  const newWeightGramsRaw = parseInt(formData.get('newWeightGrams') as string, 10);
 
   await prisma.productVariant.create({
     data: {
@@ -96,7 +101,7 @@ async function addVariant(formData: FormData) {
       size,
       price:            parseFloat(formData.get('newPrice') as string),
       stock:            parseInt(formData.get('newStock') as string, 10),
-      weightGrams:      parseInt(formData.get('newWeightGrams') as string, 10) || 500,
+      weightGrams:      newWeightGramsRaw > 0 ? newWeightGramsRaw : (deriveWeightGramsFromSize(size) ?? 500),
       reorderThreshold: parseInt(formData.get('newReorderThreshold') as string, 10) || 10,
       sku:              generatedSku,
     }
@@ -288,16 +293,8 @@ export default async function EditProductPage({ params, searchParams }: PageProp
           
           <div className="mt-6 pt-6 border-t">
             <h3 className="font-medium mb-3">Add New Variant</h3>
-            <p className="text-xs text-[#9E9E9E] mb-2">SKU will be generated automatically from the product code and size.</p>
-            <form key={Date.now()} action={addVariant} className="grid grid-cols-2 gap-2" autoComplete="off">
-              <input type="hidden" name="productId" value={product.id} />
-              <input name="newSize"                   placeholder="Size (e.g. 500g)"      autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" step="0.01" name="newPrice"        placeholder="Price (₹)"            autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" name="newStock"        placeholder="Stock qty"            autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" name="newWeightGrams"  placeholder="Weight (g, e.g. 550)" autoComplete="off" className="border rounded px-2 py-1 text-sm" required />
-              <input type="number" name="newReorderThreshold" placeholder="Reorder at (default 10)" autoComplete="off" className="border rounded px-2 py-1 text-sm col-span-2" />
-              <button type="submit" className="col-span-2 bg-[#4CAF50] text-white py-2 rounded-lg text-sm font-bold hover:bg-[#388E3C] transition-colors">Add Variant</button>
-            </form>
+            <p className="text-xs text-[#9E9E9E] mb-2">SKU will be generated automatically from the product code and size. Weight auto-fills from the size you enter.</p>
+            <AddVariantForm productId={product.id} action={addVariant} />
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { deriveWeightGramsFromSize } from "@/lib/weight";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,8 @@ async function createProduct(formData: FormData) {
   const price       = parseFloat(formData.get('price') as string);
   const stock       = parseInt(formData.get('stock') as string, 10);
   const gstRate     = parseFloat(formData.get('gstRate') as string) || 0;
-  const weightGrams = parseInt(formData.get('weightGrams') as string, 10) || 500;
+  const weightGramsRaw = parseInt(formData.get('weightGrams') as string, 10);
+  const weightGrams = weightGramsRaw > 0 ? weightGramsRaw : (deriveWeightGramsFromSize(size) ?? 500);
 
   // SKU: use what the client sent (auto-generated or manually edited)
   // Ensure uniqueness by appending a counter if there's a conflict
