@@ -10,7 +10,7 @@ import { buildOrderConfirmationEmail } from "@/lib/emails/orderConfirmation";
 import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
-import { calcCouponDiscount, calcOrderTotal } from "@/lib/pricing";
+import { calcCouponDiscount, calcOrderTotal, calcOrderSubtotals } from "@/lib/pricing";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
@@ -29,15 +29,13 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   if (cartItems.length === 0) redirect('/cart');
 
-  let subtotal = 0;
-  let taxTotal = 0;
-
-  cartItems.forEach((item) => {
-    const price = toNum(item.price);
-    const gst   = toNum(item.gstRate);
-    subtotal += price * item.quantity;
-    taxTotal += (price * item.quantity * gst) / 100;
-  });
+  const { subtotal, taxTotal } = calcOrderSubtotals(
+    cartItems.map((item) => ({
+      price: toNum(item.price),
+      quantity: item.quantity,
+      gstRate: toNum(item.gstRate),
+    }))
+  );
 
   const customerName  = formData.get('name')        as string;
   const email         = ((formData.get('email') as string) || '').trim() || '';
