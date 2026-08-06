@@ -12,7 +12,7 @@ interface ProductImage {
 
 type AddMode = "upload" | "url";
 
-export default function ImageManager({ productId }: { productId: string }) {
+export default function ImageManager({ productId, slug }: { productId: string; slug: string }) {
   const [images, setImages]     = useState<ProductImage[]>([]);
   const [mode, setMode]         = useState<AddMode>("upload");
   const [newUrl, setNewUrl]     = useState("");
@@ -58,7 +58,8 @@ export default function ImageManager({ productId }: { productId: string }) {
     try {
       const form = new FormData();
       form.append("file", file);
-      form.append("folder", `naturals/products/${productId}`);
+      form.append("slug", slug);
+      form.append("position", String(images.length));
       const res = await fetch("/api/admin/upload", { method: "POST", body: form });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Upload failed");

@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
   const form = await req.formData();
   const file = form.get("file") as File | null;
   const folder = (form.get("folder") as string | null) ?? "naturals/products";
+  const slug = form.get("slug") as string | null;
+  const position = form.get("position") as string | null;
 
   if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
   if (!ALLOWED_TYPES.includes(file.type)) {
@@ -28,9 +30,20 @@ export async function POST(req: NextRequest) {
   if (file.size > MAX_SIZE) {
     return NextResponse.json({ error: "File too large (max 5 MB)" }, { status: 400 });
   }
+  if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
+    return NextResponse.json({ error: "A valid product slug is required for naming" }, { status: 400 });
+  }
+  if (position !== null && !/^\d+$/.test(position)) {
+    return NextResponse.json({ error: "Invalid position" }, { status: 400 });
+  }
 
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  // Filenames always follow {slug}.{ext} (main image) or {slug}-{position}.{ext}
+  // (gallery image) — never a random name — so this endpoint stays in sync
+  // with scripts/migrate-image-naming.mjs's convention. upsert:true so
+  // re-uploading a product's image replaces it in place instead of leaking
+  // orphaned files in storage.
+  const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+  const name = position !== null ? `${slug}-${position}.${ext}` : `${slug}.${ext}`;
   const path = `${folder}/${name}`;
 
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -38,7 +51,7 @@ export async function POST(req: NextRequest) {
   const client = getSupabaseAdmin();
   const { error } = await client.storage
     .from(STORAGE_BUCKET)
-    .upload(path, buffer, { contentType: file.type, upsert: false });
+    .upload(path, buffer, { contentType: file.type, upsert: true });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -5,10 +5,11 @@ import Image from "next/image";
 
 interface Props {
   productId: string;
+  slug: string;
   currentImage: string | null;
 }
 
-export default function MainImageUploader({ productId, currentImage }: Props) {
+export default function MainImageUploader({ productId, slug, currentImage }: Props) {
   const [imgSrc, setImgSrc]     = useState(currentImage ?? "");
   const [preview, setPreview]   = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
@@ -32,7 +33,7 @@ export default function MainImageUploader({ productId, currentImage }: Props) {
     try {
       const form = new FormData();
       form.append("file", file);
-      form.append("folder", `naturals/products/${productId}`);
+      form.append("slug", slug);
       const upRes = await fetch("/api/admin/upload", { method: "POST", body: form });
       const upJson = await upRes.json();
       if (!upRes.ok) throw new Error(upJson.error ?? "Upload failed");

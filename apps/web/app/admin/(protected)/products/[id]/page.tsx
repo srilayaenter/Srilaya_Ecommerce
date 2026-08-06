@@ -301,8 +301,8 @@ export default async function EditProductPage({ params, searchParams }: PageProp
 
       {/* Image gallery manager */}
       <div className="mt-8">
-        <MainImageUploader productId={product.id} currentImage={(product as any).image ?? null} />
-        <ImageManager productId={product.id} />
+        <MainImageUploader productId={product.id} slug={product.slug} currentImage={(product as any).image ?? null} />
+        <ImageManager productId={product.id} slug={product.slug} />
       </div>
     </div>
   );
