@@ -24,48 +24,44 @@ const fetchCategories = unstable_cache(
   { revalidate: 3600, tags: ["categories"] }
 );
 
-const fetchSearchResults = unstable_cache(
-  async (query: string, tokens: string[], cat: string) => {
-    const categoryFilter = cat ? { category: { slug: cat } } : {};
-    return Promise.all([
-      prisma.product.findMany({
-        where: {
-          active: true,
-          ...categoryFilter,
-          ...(tokens.length > 0 ? {
-            AND: tokens.map(t => ({
-              OR: [
-                { title:       { contains: t, mode: "insensitive" } },
-                { description: { contains: t, mode: "insensitive" } },
-                { category: { name: { contains: t, mode: "insensitive" } } },
-                { sku:       { contains: t, mode: "insensitive" } },
-              ],
-            })),
-          } : {}),
-        },
-        include: {
-          category: true,
-          variants: { where: { active: true }, orderBy: { price: "asc" } },
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.bundle.findMany({
-        where: {
-          active: true,
+async function fetchSearchResults(query: string, tokens: string[], cat: string) {
+  const categoryFilter = cat ? { category: { slug: cat } } : {};
+  return Promise.all([
+    prisma.product.findMany({
+      where: {
+        active: true,
+        ...categoryFilter,
+        ...(tokens.length > 0 ? {
           AND: tokens.map(t => ({
             OR: [
               { title:       { contains: t, mode: "insensitive" } },
               { description: { contains: t, mode: "insensitive" } },
+              { category: { name: { contains: t, mode: "insensitive" } } },
+              { sku:       { contains: t, mode: "insensitive" } },
             ],
           })),
-        },
-        take: 6,
-      }),
-    ]);
-  },
-  ["search"],
-  { revalidate: 300 }
-);
+        } : {}),
+      },
+      include: {
+        category: true,
+        variants: { where: { active: true }, orderBy: { price: "asc" } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.bundle.findMany({
+      where: {
+        active: true,
+        AND: tokens.map(t => ({
+          OR: [
+            { title:       { contains: t, mode: "insensitive" } },
+            { description: { contains: t, mode: "insensitive" } },
+          ],
+        })),
+      },
+      take: 6,
+    }),
+  ]);
+}
 
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q, cat } = await searchParams;

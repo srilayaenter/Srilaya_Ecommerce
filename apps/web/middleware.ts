@@ -1,12 +1,37 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { canAccessPath, isAdminRole, ROLE_ALLOWED_PATHS, AppRole } from "@/lib/permissions";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 export default withAuth(
   function middleware(req) {
+    const ip = getIp(req as unknown as Request);
+    const path = req.nextUrl.pathname;
+    const method = req.method;
+
+    // Rate limit: login brute force — 10 attempts per 15 min per IP
+    if (path === "/api/auth/callback/credentials" && method === "POST") {
+      if (!checkRateLimit(`login:${ip}`, 10, 15 * 60_000)) {
+        return NextResponse.json({ error: "Too many login attempts. Try again later." }, { status: 429 });
+      }
+    }
+
+    // Rate limit: admin API mutations — 120 per minute per IP
+    if (path.startsWith("/api/admin/") && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+      if (!checkRateLimit(`admin-api:${ip}`, 120, 60_000)) {
+        return NextResponse.json({ error: "Too many requests." }, { status: 429 });
+      }
+    }
+
+    // Rate limit: contact form — 5 submissions per hour per IP
+    if (path === "/api/contact" && method === "POST") {
+      if (!checkRateLimit(`contact:${ip}`, 5, 60 * 60_000)) {
+        return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 });
+      }
+    }
+
     const token = req.nextauth.token;
     const isAuth = !!token;
-    const path = req.nextUrl.pathname;
     const isLoginPage = path.startsWith("/admin/login");
     const isPublicAdminPage =
       path.startsWith("/admin/forgot-password") ||
@@ -74,5 +99,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*"],
+  matcher: ["/admin", "/admin/:path*", "/api/auth/callback/credentials", "/api/admin/:path*", "/api/contact"],
 };

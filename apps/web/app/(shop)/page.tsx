@@ -96,7 +96,7 @@ const COLLECTIONS = [
 const usps = [
   { icon: "🌿", label: "100% Organic", sub: "No chemicals or pesticides" },
   { icon: "🚫", label: "No Preservatives", sub: "Minimally processed grains" },
-  { icon: "😊", label: "75+ Customers", sub: "Across Bengaluru" },
+  { icon: "⭐", label: "5-Star Rated", sub: "By our customers" },
   { icon: "🚚", label: "Pan-India Delivery", sub: "Delhivery, Blue Dart & more" },
 ];
 
@@ -417,7 +417,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { value: "22+", label: "Millet Varieties", icon: "🌾" },
-                { value: "75+", label: "Happy Customers", icon: "😊" },
+                { value: "5★", label: "Top Rated", icon: "⭐" },
                 { value: "100%", label: "Natural & Unprocessed", icon: "🌿" },
                 { value: "0", label: "Preservatives Added", icon: "🚫" },
               ].map((stat) => (

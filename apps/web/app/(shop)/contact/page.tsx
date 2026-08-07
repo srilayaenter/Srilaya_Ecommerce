@@ -74,11 +74,8 @@ export default function ContactUsPage() {
                     Our Processing Unit Address
                   </h4>
                   <p className="text-[#616161] text-xs mt-1 leading-relaxed">
-                    SriLaYa Naturals,
-                    <br />
-                    White Field Hoskote Main Road, Seegehalli,
-                    <br />
-                    Bengaluru, Karnataka - 560067
+                    {BRAND.name},<br />
+                    {BRAND.addressFull}
                   </p>
                 </div>
               </div>
