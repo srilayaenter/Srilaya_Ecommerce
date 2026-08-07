@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { FolderOpen } from "@phosphor-icons/react";
 
 interface ImportResult {
   updated: number;
@@ -85,7 +86,7 @@ export default function InventoryImportPage() {
             onClick={() => fileRef.current?.click()}
             className="bg-[#F5F5F5] border border-[#E0E0E0] text-[#424242] font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#EEEEEE] transition-colors"
           >
-            📂 Upload CSV File
+            <FolderOpen size={14} weight="regular" className="inline-block mr-1.5" />Upload CSV File
           </button>
           <span className="text-sm text-[#9E9E9E]">or paste CSV below</span>
           <input ref={fileRef} type="file" accept=".csv,text/csv" onChange={handleFile} className="hidden" />

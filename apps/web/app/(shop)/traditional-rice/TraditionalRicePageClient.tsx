@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, Flask, TrendDown, Leaf, Scales, Barbell, ChefHat , WhatsappLogo, BookOpen } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -11,7 +12,6 @@ const PRODUCTS = [
     id: "mapillai-samba",
     name: "Mapillai Samba Rice",
     keyword: "mapillai samba",
-    emoji: "👑",
     local: "Bridegroom's Rice / Maravar Samba",
     badge: "Strength Rice",
     badgeColor: "bg-red-100 text-red-900 border-red-300",
@@ -29,7 +29,6 @@ const PRODUCTS = [
     id: "karupu-kavuni",
     name: "Karupu Kavuni Rice",
     keyword: "karupu kavuni",
-    emoji: "🫐",
     local: "Black Rice / Forbidden Rice of Kings",
     badge: "Superfood",
     badgeColor: "bg-purple-100 text-purple-900 border-purple-300",
@@ -47,7 +46,6 @@ const PRODUCTS = [
     id: "poongar",
     name: "Poongar Rice",
     keyword: "poongar",
-    emoji: "🌸",
     local: "Women's Rice / Poongar Arisi",
     badge: "Women's Health",
     badgeColor: "bg-pink-100 text-pink-900 border-pink-300",
@@ -65,7 +63,6 @@ const PRODUCTS = [
     id: "seeraga-samba",
     name: "Seeraga Samba Rice",
     keyword: "seeraga samba",
-    emoji: "✨",
     local: "Jeera Samba / Aromatic Heritage Rice",
     badge: "Aromatic",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -135,7 +132,7 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/10 text-red-900 font-bold text-xs uppercase tracking-wider mb-6 border border-red-900/20">
-            🍚 Heritage & Traditional Rice
+            <Grains className="w-4 h-4" weight="regular" /> Heritage & Traditional Rice
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-red-950 leading-tight max-w-4xl mx-auto mb-4">
@@ -156,13 +153,13 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
               href="#collection"
               className="bg-red-900 hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
 
@@ -234,7 +231,7 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
                       className="h-52 flex items-center justify-center relative"
                       style={{ backgroundColor: p.accentLight }}
                     >
-                      <span className="text-7xl">{p.emoji}</span>
+                      <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>
                         {p.badge}
                       </span>
@@ -263,14 +260,14 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
                         className="text-xs px-3 py-2 rounded-lg mb-4 italic text-gray-600"
                         style={{ backgroundColor: p.accentLight }}
                       >
-                        📖 {p.story}
+                        <BookOpen size={13} weight="regular" className="inline-block mr-1 shrink-0" />{p.story}
                       </div>
 
                       <button
                         onClick={() => openWhatsApp(p)}
                         className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40"
                       >
-                        💬 Enquire on WhatsApp
+                        <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                       </button>
                     </div>
                   </div>
@@ -296,19 +293,19 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { icon: "🫐", title: "Anthocyanin Rich", desc: "Karupu Kavuni's deep pigment contains some of the highest antioxidant levels of any grain." },
-              { icon: "📉", title: "Low Glycemic Response", desc: "Heritage rices release glucose slowly — far gentler on blood sugar than polished white rice." },
-              { icon: "🌿", title: "Gut Microbiome Wellness", desc: "Higher fibre content and natural resistant starch feed beneficial gut bacteria." },
-              { icon: "⚖️", title: "Hormonal Balance", desc: "Poongar rice's natural phytoestrogens support women's hormonal health at every life stage." },
-              { icon: "💪", title: "Essential Nutrient Density", desc: "Vitamins, minerals, and micronutrients lost in polishing are fully retained here." },
-              { icon: "🏺", title: "Cultural Culinary Diversity", desc: "From Biryani to Pongal, Payasam to Idli — each variety has its traditional dish it excels in." },
+              { icon: Flask, title: "Anthocyanin Rich", desc: "Karupu Kavuni's deep pigment contains some of the highest antioxidant levels of any grain." },
+              { icon: TrendDown, title: "Low Glycemic Response", desc: "Heritage rices release glucose slowly — far gentler on blood sugar than polished white rice." },
+              { icon: Leaf, title: "Gut Microbiome Wellness", desc: "Higher fibre content and natural resistant starch feed beneficial gut bacteria." },
+              { icon: Scales, title: "Hormonal Balance", desc: "Poongar rice's natural phytoestrogens support women's hormonal health at every life stage." },
+              { icon: Barbell, title: "Essential Nutrient Density", desc: "Vitamins, minerals, and micronutrients lost in polishing are fully retained here." },
+              { icon: ChefHat, title: "Cultural Culinary Diversity", desc: "From Biryani to Pongal, Payasam to Idli — each variety has its traditional dish it excels in." },
             ].map((b) => (
               <div
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-[#D99B26] rounded-xl flex items-center justify-center text-xl mb-4 shadow">
-                  {b.icon}
+                <div className="w-12 h-12 bg-[#D99B26] rounded-xl flex items-center justify-center mb-4 shadow">
+                  <b.icon className="w-6 h-6 text-[#5C3A21]" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-red-100">{b.desc}</p>

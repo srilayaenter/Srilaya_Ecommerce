@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Gift, Info, CheckCircle } from "@phosphor-icons/react";
 import { REFERRAL_BONUS } from "@/lib/loyaltyConstants";
 
 type ReferralData = { referralCode: string; balance: number; totalEarned: number };
@@ -49,7 +50,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
 
         {/* Header */}
         <div className="text-center">
-          <div className="text-5xl mb-3">🎁</div>
+          <Gift size={48} weight="regular" className="text-[#006A38] mx-auto mb-3" />
           <h1 className="text-3xl font-black text-[#212121]">Refer & Earn</h1>
           <p className="text-[#757575] mt-2 text-sm leading-relaxed">
             Share your referral code with friends. When they place their first order,
@@ -72,7 +73,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
                 onClick={copyCode}
                 className="border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm font-bold text-[#006A38] hover:bg-[#F5F5F5] transition-colors"
               >
-                {copied ? "✅ Copied!" : "Copy"}
+                {copied ? <><CheckCircle size={14} weight="regular" className="inline-block mr-1" />Copied!</> : "Copy"}
               </button>
             </div>
 
@@ -115,7 +116,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
             ) : (
               <>
                 <div className="flex items-start gap-3 bg-[#e8f5ee] rounded-xl p-4 mb-5">
-                  <span className="text-lg">💡</span>
+                  <Info size={18} weight="regular" className="text-[#065F46] shrink-0 mt-0.5" />
                   <p className="text-sm text-[#065F46]">
                     <Link href="/login" className="font-bold underline">Sign in</Link> to see your referral code instantly — no email lookup needed.
                   </p>

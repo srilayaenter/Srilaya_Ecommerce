@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { isAdminRole } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import { addPackagingItem, addPackagingStock, usePackagingStock } from "./actions";
+import { Bag, Package, Scissors, Tag, ShieldCheck, Paperclip, Lightbulb } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +18,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   other:      "Other",
 };
 
-const CATEGORY_ICONS: Record<string, string> = {
-  pouch: "🛍️", box: "📦", tape: "🎀", label: "🏷️", protection: "🛡️", other: "📎",
+const CATEGORY_ICONS: Record<string, PhosphorIcon> = {
+  pouch: Bag, box: Package, tape: Scissors, label: Tag, protection: ShieldCheck, other: Paperclip,
 };
 
 export default async function PackagingPage() {
@@ -80,7 +82,7 @@ export default async function PackagingPage() {
               return (
                 <div key={cat} className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
                   <div className="px-5 py-3 border-b border-[#F0F0F0] flex items-center gap-2 bg-[#FAFAFA]">
-                    <span>{CATEGORY_ICONS[cat]}</span>
+                    {(() => { const I = CATEGORY_ICONS[cat]; return I ? <I size={14} weight="regular" className="text-[#616161]" /> : null; })()}
                     <h2 className="font-bold text-[#212121] text-sm">{label}</h2>
                     <span className="ml-auto text-xs text-[#9E9E9E]">{catItems.length} item{catItems.length !== 1 ? "s" : ""}</span>
                   </div>
@@ -225,7 +227,7 @@ export default async function PackagingPage() {
 
           {/* Supplier reminder */}
           <div className="bg-[#FFF8E1] border border-[#FFD54F] rounded-xl p-4 text-xs text-[#795548]">
-            <p className="font-bold mb-1">💡 Packaging suppliers</p>
+            <p className="font-bold mb-1 inline-flex items-center gap-1"><Lightbulb size={13} weight="regular" /> Packaging suppliers</p>
             <p>Add packaging suppliers under <a href="/admin/suppliers" className="text-[#006A38] underline font-semibold">Admin → Suppliers</a> first, then link them here when adding items.</p>
           </div>
         </div>

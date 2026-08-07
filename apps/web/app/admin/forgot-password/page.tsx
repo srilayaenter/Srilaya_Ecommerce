@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { EnvelopeSimple } from "@phosphor-icons/react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail]       = useState("");
@@ -44,7 +45,7 @@ export default function ForgotPasswordPage() {
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-md p-8">
         {submitted ? (
           <div className="text-center py-4">
-            <div className="text-4xl mb-4">📧</div>
+            <EnvelopeSimple size={40} weight="regular" className="text-[#006A38] mx-auto mb-4" />
             <h2 className="text-lg font-bold text-[#212121] mb-2">Check your inbox</h2>
             <p className="text-sm text-[#616161] mb-6">
               If an account exists for <strong>{email}</strong>, we've sent a password reset link. It expires in 1 hour.

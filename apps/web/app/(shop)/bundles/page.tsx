@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import AddBundleButton from "./AddBundleButton";
+import { Package } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,7 @@ export default async function BundlesPage() {
       <div className="max-w-4xl mx-auto px-4 py-10">
         {bundles.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-3xl mb-3">📦</p>
+            <Package className="w-10 h-10 text-[#9E9E9E] mx-auto mb-3" weight="regular" />
             <p className="font-bold text-[#212121]">No bundles available yet.</p>
             <p className="text-sm text-[#424242] mt-1">Check back soon!</p>
           </div>

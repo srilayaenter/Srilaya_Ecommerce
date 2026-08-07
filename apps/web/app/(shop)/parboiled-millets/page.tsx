@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import ParboiledMilletsPageClient from "./ParboiledMilletsPageClient";
@@ -6,9 +6,9 @@ import ParboiledMilletsPageClient from "./ParboiledMilletsPageClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Parboiled Millet Collection — The Nutritional Milestone | SriLaYa Naturals",
+  title: "Parboiled Millet Collection â€” The Nutritional Milestone | SriLaYa Naturals",
   description:
-    "Shop SriLaYa's parboiled millet collection — 8 varieties including Parboiled Foxtail, Finger (Ragi), Little, Barnyard, Kodo, Pearl, Red & White Sorghum. Enhanced nutrition, easier digestion, longer shelf life. Free local delivery in Whitefield, Bangalore.",
+    "Shop SriLaYa's parboiled millet collection â€” 8 varieties including Parboiled Foxtail, Finger (Ragi), Little, Barnyard, Kodo, Pearl, Red & White Sorghum. Enhanced nutrition, easier digestion, longer shelf life. Free local delivery in Whitefield, Bangalore.",
 };
 
 const fetchParboiledImages = unstable_cache(
@@ -18,14 +18,13 @@ const fetchParboiledImages = unstable_cache(
       select: {
         title: true,
         image: true,
-        imageUrl: true,
         images: { select: { url: true }, orderBy: { position: "asc" }, take: 1 },
       },
     });
 
     const map: Record<string, string> = {};
     for (const p of products) {
-      const url = p.images[0]?.url ?? p.imageUrl ?? p.image ?? "";
+      const url = p.images[0]?.url ?? p.image ?? "";
       if (url) map[p.title.toLowerCase()] = url;
     }
     return map;
@@ -38,3 +37,4 @@ export default async function ParboiledMilletsPage() {
   const productImageMap = await fetchParboiledImages();
   return <ParboiledMilletsPageClient productImageMap={productImageMap} />;
 }
+

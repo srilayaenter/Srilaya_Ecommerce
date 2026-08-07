@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import type { Metadata } from "next";
+import { Target, Handshake, Leaf, Grains, Drop } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -49,7 +50,9 @@ export default function AboutUsPage() {
             <div className="space-y-8">
               <div>
                 <h3 className="text-lg font-bold text-[#212121] flex items-center gap-2 mb-2">
-                  <span className="p-1.5 bg-emerald-700 text-white rounded-lg text-xs">🎯</span>
+                  <span className="p-1.5 bg-emerald-700 text-white rounded-lg flex items-center justify-center">
+                    <Target className="w-4 h-4" weight="regular" />
+                  </span>
                   Our Mission
                 </h3>
                 <p className="text-[#616161] text-sm leading-relaxed">
@@ -58,7 +61,9 @@ export default function AboutUsPage() {
               </div>
               <div className="border-t border-[#E0E0E0]/60 pt-6">
                 <h3 className="text-lg font-bold text-[#212121] flex items-center gap-2 mb-2">
-                  <span className="p-1.5 bg-amber-500 text-white rounded-lg text-xs">🤝</span>
+                  <span className="p-1.5 bg-amber-500 text-white rounded-lg flex items-center justify-center">
+                    <Handshake className="w-4 h-4" weight="regular" />
+                  </span>
                   Our Commitment
                 </h3>
                 <p className="text-[#616161] text-sm leading-relaxed">
@@ -77,8 +82,8 @@ export default function AboutUsPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
-              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                🌿
+              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                <Leaf className="w-6 h-6 text-emerald-700" weight="regular" />
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">100% Organic</h4>
               <p className="text-[#757575] text-xs leading-relaxed max-w-xs">
@@ -87,8 +92,8 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
-              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                🌾
+              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                <Grains className="w-6 h-6 text-emerald-700" weight="regular" />
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">
                 Minimally Processed
@@ -99,8 +104,8 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E0E0E0] flex flex-col items-center">
-              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-xl mb-4">
-                🍯
+              <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                <Drop className="w-6 h-6 text-emerald-700" weight="regular" />
               </div>
               <h4 className="font-bold text-[#212121] text-base mb-2">
                 Pure Sweeteners

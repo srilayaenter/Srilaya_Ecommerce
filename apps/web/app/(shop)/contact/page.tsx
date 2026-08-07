@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BRAND } from "@/lib/brand";
+import { MapPin, Phone, Envelope, CheckCircle } from "@phosphor-icons/react";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -64,10 +65,24 @@ export default function ContactUsPage() {
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
+              {/* Google Maps embed */}
+              <div className="rounded-2xl overflow-hidden border border-[#E0E0E0] shadow-sm">
+                <iframe
+                  title="SriLaYa Naturals location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.0!2d77.7963!3d13.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zWhite+Field+Hoskote+Main+Road%2C+Seegehalli%2C+Bengaluru%2C+Karnataka+560067!5e0!3m2!1sen!2sin!4v1691234567890!5m2!1sen!2sin&q=Seegehalli,Bengaluru,Karnataka+560067"
+                  width="100%"
+                  height="180"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  📍
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
@@ -81,8 +96,8 @@ export default function ContactUsPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  📞
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
@@ -95,8 +110,8 @@ export default function ContactUsPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  ✉️
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Envelope className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
@@ -113,7 +128,7 @@ export default function ContactUsPage() {
           <div className="md:col-span-3 bg-[#F9F9F9] border border-[#E0E0E0]/60 p-6 md:p-8 rounded-2xl shadow-sm">
             {submitted ? (
               <div className="text-center py-12 bg-white rounded-xl border border-emerald-100 shadow-inner p-6">
-                <span className="text-3xl">✅</span>
+                <CheckCircle className="w-10 h-10 text-emerald-600 mx-auto" weight="regular" />
                 <h3 className="text-lg font-bold text-[#212121] mt-3">
                   Message Sent Successfully!
                 </h3>

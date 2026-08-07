@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { ShoppingCart, Storefront, ArrowCounterClockwise, DownloadSimple, PencilSimple, Package, ClipboardText } from "@phosphor-icons/react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 interface LogEntry {
   id: string;
@@ -14,12 +16,21 @@ interface LogEntry {
 }
 
 const REASON_LABELS: Record<string, string> = {
-  order:          "🛒 Online Order",
-  offline_order:  "🏪 In-Store Sale",
-  return_restock: "↩️ Return Restock",
-  csv_import:     "📥 CSV Import",
-  manual_edit:    "✏️ Manual Edit",
-  po_receive:     "📦 PO Receive",
+  order:          "Online Order",
+  offline_order:  "In-Store Sale",
+  return_restock: "Return Restock",
+  csv_import:     "CSV Import",
+  manual_edit:    "Manual Edit",
+  po_receive:     "PO Receive",
+};
+
+const REASON_ICONS: Record<string, PhosphorIcon> = {
+  order:          ShoppingCart,
+  offline_order:  Storefront,
+  return_restock: ArrowCounterClockwise,
+  csv_import:     DownloadSimple,
+  manual_edit:    PencilSimple,
+  po_receive:     Package,
 };
 
 const REASON_COLORS: Record<string, string> = {
@@ -97,7 +108,7 @@ export default function StockLogPage() {
           <div className="py-16 text-center text-[#9E9E9E] text-sm">Loading…</div>
         ) : logs.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-3xl mb-2">📋</p>
+            <ClipboardText size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-2" />
             <p className="font-bold text-[#212121]">No log entries yet</p>
             <p className="text-sm text-[#9E9E9E] mt-1">Stock changes will appear here as orders, imports, and restocks happen.</p>
           </div>
@@ -125,7 +136,8 @@ export default function StockLogPage() {
                     </span>
                   </td>
                   <td className="px-5 py-3">
-                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${REASON_COLORS[log.reason] ?? "bg-gray-100 text-gray-500"}`}>
+                    <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${REASON_COLORS[log.reason] ?? "bg-gray-100 text-gray-500"}`}>
+                      {(() => { const I = REASON_ICONS[log.reason]; return I ? <I size={11} weight="regular" /> : null; })()}
                       {REASON_LABELS[log.reason] ?? log.reason}
                     </span>
                   </td>

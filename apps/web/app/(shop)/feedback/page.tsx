@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { HandsPraying } from "@phosphor-icons/react";
 
 const TYPES = [
   { value: "feature_request",  label: "Feature request",   desc: "Suggest something new" },
@@ -49,7 +50,7 @@ export default function FeedbackPage() {
       <div className="max-w-lg mx-auto px-4 py-12">
         {done ? (
           <div className="bg-white rounded-2xl border border-[#E0E0E0] p-8 text-center">
-            <div className="text-4xl mb-3">🙏</div>
+            <HandsPraying size={40} weight="regular" className="text-[#006A38] mx-auto mb-3" />
             <h2 className="text-lg font-bold text-[#212121] mb-2">Thank you!</h2>
             <p className="text-sm text-[#616161] mb-6">Your feedback has been sent to the team. We read every message.</p>
             <div className="flex gap-3 justify-center">

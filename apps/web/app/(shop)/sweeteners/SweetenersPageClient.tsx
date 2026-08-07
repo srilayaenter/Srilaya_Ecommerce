@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import { Drop, ShoppingCart, Microscope, TrendDown, Leaf, WhatsappLogo, Factory } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -10,7 +11,6 @@ const PRODUCTS = [
     id: "sugarcane",
     name: "Sugarcane Jaggery Powder",
     keyword: "sugarcane jaggery",
-    emoji: "🌿",
     local: "Karumbu Vellam / Ganna Gud",
     badge: "Rich in Iron",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -27,7 +27,6 @@ const PRODUCTS = [
     id: "palm",
     name: "Palm Jaggery Powder",
     keyword: "palm jaggery",
-    emoji: "🌴",
     local: "Karuppatti / Thaati Bellam / Nongu Vellam",
     badge: "Immunity Booster",
     badgeColor: "bg-red-50 text-red-800 border-red-200",
@@ -44,7 +43,6 @@ const PRODUCTS = [
     id: "coconut",
     name: "Coconut Jaggery Powder",
     keyword: "coconut jaggery",
-    emoji: "🥥",
     local: "Thengai Vellam / Nariyal Gud",
     badge: "Low GI",
     badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -97,7 +95,7 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D99B26]/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#D99B26]/30">
-            🍯 Natural Jaggery & Sweeteners
+            <Drop className="w-4 h-4" weight="regular" /> Natural Jaggery & Sweeteners
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
@@ -117,13 +115,13 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
               href="#collection"
               className="bg-[#5C3A21] hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
 
@@ -177,7 +175,7 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
                       className="h-52 flex items-center justify-center relative"
                       style={{ backgroundColor: p.accentLight }}
                     >
-                      <span className="text-7xl">{p.emoji}</span>
+                      <Drop className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>
                         {p.badge}
                       </span>
@@ -203,14 +201,14 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
                       className="text-xs px-3 py-2 rounded-lg mb-4 italic text-gray-600"
                       style={{ backgroundColor: p.accentLight }}
                     >
-                      🏭 {p.production}
+                      <Factory size={13} weight="regular" className="inline-block mr-1" />{p.production}
                     </div>
 
                     <button
                       onClick={() => openWhatsApp(p)}
                       className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-auto"
                     >
-                      💬 Enquire on WhatsApp
+                      <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                     </button>
                   </div>
                 </div>
@@ -235,17 +233,17 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🩸", title: "Retains Iron", desc: "Refined sugar strips iron entirely. Jaggery keeps it in every granule." },
-              { icon: "🦠", title: "Gut Friendly", desc: "Natural inulin in coconut jaggery feeds your healthy gut bacteria." },
-              { icon: "📉", title: "Lower GI", desc: "Natural jaggery raises blood sugar more slowly than white sugar." },
-              { icon: "🌿", title: "Zero Processing", desc: "No bleaching, no chemicals — just evaporated natural plant sap." },
+              { icon: Drop, title: "Retains Iron", desc: "Refined sugar strips iron entirely. Jaggery keeps it in every granule." },
+              { icon: Microscope, title: "Gut Friendly", desc: "Natural inulin in coconut jaggery feeds your healthy gut bacteria." },
+              { icon: TrendDown, title: "Lower GI", desc: "Natural jaggery raises blood sugar more slowly than white sugar." },
+              { icon: Leaf, title: "Zero Processing", desc: "No bleaching, no chemicals — just evaporated natural plant sap." },
             ].map((b) => (
               <div
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow">
-                  {b.icon}
+                <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                  <b.icon className="w-7 h-7 text-white" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-amber-100">{b.desc}</p>

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
+import { ThumbsUp, BowlFood } from "@phosphor-icons/react/dist/ssr";
 
 // Recipe images are served from Supabase Storage (bucket: "recipe-images", public).
 // To add or update a photo — NO code change needed:
@@ -25,7 +26,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Millet Roti & Chapati",
     tag: "Daily Staple",
-    emoji: "🫓",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-roti.jpg` : "",
     readMins: 20,
     excerpt: "Soft, wholesome flatbread made with millet flour — a nutritious daily swap for refined wheat rotis.",
@@ -35,7 +35,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Millet Dosa & Uttapam",
     tag: "Instant Breakfast",
-    emoji: "🥞",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-dosa.jpg` : "",
     readMins: 15,
     excerpt: "Crispy instant dosas and soft uttapams made from millet flour — no fermentation needed, ready in minutes.",
@@ -45,7 +44,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Millet Puttu",
     tag: "South Indian Classic",
-    emoji: "🍚",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-puttu.jpg` : "",
     readMins: 20,
     excerpt: "A steamed South Indian breakfast with millet flour layered with grated coconut — fluffy and filling.",
@@ -55,7 +53,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Millet Kheer & Porridge",
     tag: "Comfort Dessert",
-    emoji: "🍮",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-kheer.jpg` : "",
     readMins: 20,
     excerpt: "A rich, creamy kheer or warming porridge made with millet flour, milk, and natural sweeteners — no soaking required.",
@@ -65,7 +62,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Traditional Millet Ladoos",
     tag: "Festive Sweet",
-    emoji: "🍬",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-ladoo.jpg` : "",
     readMins: 30,
     excerpt: "Handcrafted millet ladoos with roasted flour, jaggery, and ghee — a traditional sweet that keeps well for days.",
@@ -75,7 +71,6 @@ const FEATURED_FLOUR_RECIPES = [
   {
     title: "Millet Healthy Bakes",
     tag: "Guilt-Free Snack",
-    emoji: "🧁",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-bakes.jpg` : "",
     readMins: 30,
     excerpt: "Soft, moist millet flour muffins and cookies — wholesome guilt-free bakes with no maida, no refined sugar.",
@@ -88,7 +83,6 @@ const FEATURED_RECIPES = [
   {
     title: "Millet Upma",
     tag: "Breakfast Classic",
-    emoji: "🍲",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-upma.jpg` : "",
     readMins: 15,
     excerpt: "A quick, nutritious start to your day using roasted millet rava with fresh vegetables and ghee.",
@@ -98,7 +92,6 @@ const FEATURED_RECIPES = [
   {
     title: "Rava Kheer",
     tag: "Guilt-Free Dessert",
-    emoji: "🍮",
     image: RECIPE_IMG ? `${RECIPE_IMG}/rava-kheer.jpg` : "",
     readMins: 20,
     excerpt: "A rich, creamy guilt-free dessert made with millet rava, coconut milk, and jaggery.",
@@ -108,7 +101,6 @@ const FEATURED_RECIPES = [
   {
     title: "Millet Pongal",
     tag: "Savory Comfort",
-    emoji: "🫕",
     image: RECIPE_IMG ? `${RECIPE_IMG}/millet-pongal.jpg` : "",
     readMins: 25,
     excerpt: "Wholesome savory pongal with millet rava and yellow moong dal, tempered in ghee with pepper and cashews.",
@@ -156,7 +148,7 @@ export default async function RecipesPage() {
                   </div>
                 ) : (
                 <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#A5D6A7] flex flex-col items-center justify-center gap-2">
-                  <span className="text-5xl">{r.emoji}</span>
+                  <BowlFood size={52} weight="regular" className="text-[#2E6F40]" />
                   <span className="text-xs font-bold text-[#006A38] bg-white/70 px-3 py-0.5 rounded-full">{r.tag}</span>
                 </div>
                 )}
@@ -169,7 +161,7 @@ export default async function RecipesPage() {
                   <p className="text-sm text-[#757575] line-clamp-2 mb-3">{r.excerpt}</p>
                   <p className="text-xs text-gray-600 leading-relaxed mb-3">{r.desc}</p>
                   <div className="text-xs font-semibold text-[#006A38] bg-[#E8F5E9] px-3 py-2 rounded-lg">
-                    👍 Best with: {r.best}
+                    <ThumbsUp size={12} weight="regular" className="inline-block mr-1" />Best with: {r.best}
                   </div>
                 </div>
               </div>
@@ -190,7 +182,7 @@ export default async function RecipesPage() {
                   </div>
                 ) : (
                   <div className="h-44 bg-gradient-to-br from-[#FDF0E8] to-[#F5D9C0] flex flex-col items-center justify-center gap-2">
-                    <span className="text-5xl">{r.emoji}</span>
+                    <BowlFood size={52} weight="regular" className="text-[#5C3A21]" />
                     <span className="text-xs font-bold text-[#5C3A21] bg-white/70 px-3 py-0.5 rounded-full">{r.tag}</span>
                   </div>
                 )}
@@ -203,7 +195,7 @@ export default async function RecipesPage() {
                   <p className="text-sm text-[#757575] line-clamp-2 mb-3">{r.excerpt}</p>
                   <p className="text-xs text-gray-600 leading-relaxed mb-3">{r.desc}</p>
                   <div className="text-xs font-semibold text-[#5C3A21] bg-[#FDF0E8] px-3 py-2 rounded-lg">
-                    👍 Best with: {r.best}
+                    <ThumbsUp size={12} weight="regular" className="inline-block mr-1" />Best with: {r.best}
                   </div>
                 </div>
               </div>
@@ -230,7 +222,7 @@ export default async function RecipesPage() {
                   </div>
                 ) : (
                   <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#A5D6A7] flex items-center justify-center">
-                    <span className="text-5xl">🍱</span>
+                    <BowlFood size={52} weight="regular" className="text-[#2E6F40]" />
                   </div>
                 )}
                 <div className="p-5">

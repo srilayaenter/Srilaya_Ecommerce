@@ -6,6 +6,8 @@ import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 import ReturnRequestButton from "@/components/ReturnRequestButton";
+import { ClipboardText, Truck, CheckCircle, XCircle, ArrowCounterClockwise, Receipt, MagnifyingGlass, Clock } from "@phosphor-icons/react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 interface ShipmentData {
   courier: string;
@@ -41,10 +43,10 @@ interface OrderData {
 
 const FULFILLMENT_STEPS = ['pending', 'processing', 'completed'];
 
-const STEP_LABELS: Record<string, { label: string; desc: string; icon: string }> = {
-  pending:    { label: 'Order Placed',   desc: 'Your order has been received.',        icon: '📋' },
-  processing: { label: 'Dispatched',     desc: 'Your order is packed and on the way.', icon: '🚚' },
-  completed:  { label: 'Delivered',      desc: 'Your order has been delivered. Enjoy!', icon: '✅' },
+const STEP_LABELS: Record<string, { label: string; desc: string; icon: PhosphorIcon }> = {
+  pending:    { label: 'Order Placed',   desc: 'Your order has been received.',         icon: ClipboardText },
+  processing: { label: 'Dispatched',     desc: 'Your order is packed and on the way.',  icon: Truck },
+  completed:  { label: 'Delivered',      desc: 'Your order has been delivered. Enjoy!', icon: CheckCircle },
 };
 
 const PAYMENT_LABEL: Record<string, string> = {
@@ -76,7 +78,7 @@ function ReorderButton({ orderId, contact }: { orderId: string; contact: string 
       disabled={loading || done}
       className="inline-flex items-center gap-2 bg-[#006A38] text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors disabled:opacity-60"
     >
-      {done ? '✓ Added to cart! Redirecting…' : loading ? 'Adding to cart…' : '🔁 Reorder'}
+      {done ? '✓ Added to cart! Redirecting…' : loading ? 'Adding to cart…' : <><ArrowCounterClockwise size={15} weight="bold" /> Reorder</>}
     </button>
   );
 }
@@ -196,7 +198,7 @@ function TrackOrderContent() {
                   <p className="text-xs font-bold text-[#9E9E9E] uppercase tracking-wider">Total Paid</p>
                   <p className="text-2xl font-black text-[#212121] mt-0.5">₹{order.total.toFixed(2)}</p>
                   <span className={`inline-block mt-1 text-xs font-bold px-2.5 py-1 rounded-full ${order.status === 'paid' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}>
-                    {order.status === 'paid' ? '✓ Payment Confirmed' : '⏳ Payment Pending'}
+                    {order.status === 'paid' ? <><CheckCircle size={12} weight="regular" className="inline-block mr-1" />Payment Confirmed</> : <><Clock size={12} weight="regular" className="inline-block mr-1" />Payment Pending</>}
                   </span>
                 </div>
               </div>
@@ -209,7 +211,7 @@ function TrackOrderContent() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 border border-[#006A38] text-[#006A38] text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#006A38] hover:text-white transition-colors"
                 >
-                  🧾 Download Invoice
+                  <Receipt size={16} weight="regular" /> Download Invoice
                 </a>
                 {order.fulfillmentStatus === 'completed' && (
                   <ReorderButton orderId={order.id} contact={contact} />
@@ -246,10 +248,10 @@ function TrackOrderContent() {
                       const info   = STEP_LABELS[step];
                       return (
                         <div key={step} className="flex flex-col items-center text-center w-1/3 px-2">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all ${
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                             done ? 'bg-[#006A38] border-[#006A38] shadow-md' : 'bg-white border-[#E0E0E0]'
                           }`}>
-                            {done ? <span>{info.icon}</span> : <span className="text-[#9E9E9E] text-sm font-bold">{idx + 1}</span>}
+                            {done ? <info.icon size={18} weight="regular" className="text-white" /> : <span className="text-[#9E9E9E] text-sm font-bold">{idx + 1}</span>}
                           </div>
                           <p className={`text-xs font-bold mt-2 ${active ? 'text-[#006A38]' : done ? 'text-[#424242]' : 'text-[#9E9E9E]'}`}>
                             {info.label}
@@ -267,7 +269,7 @@ function TrackOrderContent() {
 
             {order.fulfillmentStatus === 'cancelled' && (
               <div className="bg-red-50 border border-red-200 rounded-2xl p-5 text-center">
-                <p className="text-2xl mb-1">❌</p>
+                <XCircle size={32} weight="regular" className="text-red-500 mx-auto mb-1" />
                 <p className="font-bold text-red-700">Order Cancelled</p>
                 <p className="text-sm text-red-600 mt-1">Please contact us if you have questions.</p>
               </div>
@@ -306,7 +308,7 @@ function TrackOrderContent() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 mt-4 bg-[#006A38] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#00522B] transition-colors"
                   >
-                    🔍 Track on Courier Website
+                    <MagnifyingGlass size={14} weight="bold" /> Track on Courier Website
                   </a>
                 )}
               </div>

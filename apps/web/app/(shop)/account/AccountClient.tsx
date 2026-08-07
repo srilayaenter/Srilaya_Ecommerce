@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { DeviceMobile, ShoppingCart, User } from "@phosphor-icons/react";
 
 interface OrderSummary {
   id: string; shortId: string; status: string; fulfillmentStatus: string;
@@ -91,7 +92,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
       <div className="min-h-screen bg-[#F9F6F0]">
         <div className="bg-[#006A38] py-10 px-4 text-center">
           <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl mx-auto mb-3">
-            {user.email ? user.email[0].toUpperCase() : "📱"}
+            {user.email ? user.email[0].toUpperCase() : <DeviceMobile size={28} weight="regular" className="text-white/70" />}
           </div>
           <h1 className="text-2xl font-black text-white">{identifier}</h1>
           <p className="text-green-200 text-sm mt-1">Member since {memberSince}</p>
@@ -163,7 +164,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
             </h2>
             {orders.length === 0 ? (
               <div className="bg-white rounded-2xl border border-[#E8E0D5] p-10 text-center">
-                <p className="text-3xl mb-3">🛒</p>
+                <ShoppingCart size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-3" />
                 <p className="font-bold text-[#212121]">No orders yet</p>
                 <Link href="/product" className="inline-block mt-4 text-[#006A38] font-bold text-sm hover:underline">
                   Start shopping →
@@ -196,7 +197,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
 
         {/* Primary CTA — sign in */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#E8E0D5] p-6 text-center">
-          <div className="text-4xl mb-3">👤</div>
+          <User size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-3" />
           <h2 className="font-bold text-[#212121] text-lg mb-1">Sign in to your account</h2>
           <p className="text-sm text-[#757575] mb-5">See all your orders, track deliveries, manage your profile, and view your loyalty points — all in one place.</p>
           <a
@@ -240,7 +241,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
         {guestOrders !== null && (
           guestOrders.length === 0 ? (
             <div className="bg-white rounded-2xl border border-[#E8E0D5] p-10 text-center">
-              <p className="text-3xl mb-3">🛒</p>
+              <ShoppingCart size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-3" />
               <p className="font-bold text-[#212121]">No orders found</p>
               <Link href="/product" className="inline-block mt-4 text-[#006A38] font-bold text-sm hover:underline">Start shopping →</Link>
             </div>

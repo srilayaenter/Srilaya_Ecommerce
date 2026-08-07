@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import { Camera } from "@phosphor-icons/react";
 
 interface Props {
   productId: string;
@@ -83,7 +84,7 @@ export default function MainImageUploader({ productId, slug, currentImage }: Pro
           </div>
         ) : (
           <>
-            <p className="text-2xl mb-1">📷</p>
+            <Camera size={28} weight="regular" className="text-[#9E9E9E] mx-auto mb-1" />
             <p className="text-sm font-semibold text-[#424242]">{imgSrc ? "Click to replace image" : "Click to select image"}</p>
             <p className="text-xs text-[#9E9E9E] mt-1">JPEG, PNG, WebP · max 5 MB</p>
           </>

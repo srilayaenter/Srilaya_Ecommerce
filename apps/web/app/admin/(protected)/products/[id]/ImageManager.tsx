@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { ArrowUp, Link as LinkIcon, Camera } from "@phosphor-icons/react";
 
 interface ProductImage {
   id: string;
@@ -124,7 +125,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
                 : "text-[#757575] hover:text-[#212121]"
             }`}
           >
-            {m === "upload" ? "⬆ Upload File" : "🔗 Paste URL"}
+            {m === "upload" ? <><ArrowUp size={13} weight="regular" className="inline-block mr-1" />Upload File</> : <><LinkIcon size={13} weight="regular" className="inline-block mr-1" />Paste URL</>}
           </button>
         ))}
       </div>
@@ -147,7 +148,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
                 </div>
               ) : (
                 <>
-                  <p className="text-3xl mb-2">📷</p>
+                  <Camera size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-2" />
                   <p className="text-sm font-semibold text-[#424242]">Click to select image</p>
                   <p className="text-xs text-[#9E9E9E] mt-1">JPEG, PNG, WebP · max 5 MB</p>
                 </>

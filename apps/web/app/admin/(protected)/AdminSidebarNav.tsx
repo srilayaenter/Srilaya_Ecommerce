@@ -3,18 +3,55 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import {
+  ChartLine, Package, Grains, Tag, ArrowCircleDown, ClipboardText,
+  FolderSimple, Truck, ShoppingCart, UsersThree, Star, ArrowUDownLeft,
+  Ticket, ChartBar, Receipt, CurrencyCircleDollar, Plant, Factory,
+  Archive, Gift, Article, Envelope, Lock, Gear, Desktop, Globe,
+} from '@phosphor-icons/react';
+import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
 
-type MenuItem = { name: string; href: string; icon: string };
+type MenuItem = { name: string; href: string };
 
-const GROUPS: { label: string; icon: string; hrefs: string[] }[] = [
+const MENU_ICONS: Record<string, PhosphorIcon> = {
+  '/admin':                    ChartLine,
+  '/admin/orders':             Package,
+  '/admin/products':           Grains,
+  '/admin/bulk-pricing':       Tag,
+  '/admin/inventory-import':   ArrowCircleDown,
+  '/admin/stock-log':          ClipboardText,
+  '/admin/categories':         FolderSimple,
+  '/admin/suppliers':          Truck,
+  '/admin/purchase-orders':    ShoppingCart,
+  '/admin/users':              UsersThree,
+  '/admin/reviews':            Star,
+  '/admin/returns':            ArrowUDownLeft,
+  '/admin/coupons':            Ticket,
+  '/admin/bundles':            Package,
+  '/admin/analytics':          ChartBar,
+  '/admin/gst-report':         Receipt,
+  '/admin/reports/pl':         CurrencyCircleDollar,
+  '/admin/raw-materials':      Plant,
+  '/admin/production':         Factory,
+  '/admin/packaging':          Archive,
+  '/admin/loyalty':            Gift,
+  '/admin/customers':          UsersThree,
+  '/admin/blog':               Article,
+  '/admin/failed-emails':      Envelope,
+  '/admin/mfa-setup':          Lock,
+  '/admin/settings':           Gear,
+  '/admin/ops-app':            Desktop,
+};
+
+const GROUPS: { label: string; icon: PhosphorIcon; hrefs: string[] }[] = [
   {
     label: 'Orders & Sales',
-    icon: '📦',
+    icon: Package,
     hrefs: ['/admin/orders', '/admin/returns', '/admin/coupons', '/admin/bundles'],
   },
   {
     label: 'Inventory',
-    icon: '🌾',
+    icon: Grains,
     hrefs: [
       '/admin/products', '/admin/bulk-pricing', '/admin/inventory-import',
       '/admin/stock-log', '/admin/categories', '/admin/suppliers', '/admin/purchase-orders',
@@ -22,27 +59,27 @@ const GROUPS: { label: string; icon: string; hrefs: string[] }[] = [
   },
   {
     label: 'Production',
-    icon: '🏭',
+    icon: Factory,
     hrefs: ['/admin/raw-materials', '/admin/production', '/admin/packaging'],
   },
   {
     label: 'Customers',
-    icon: '👥',
+    icon: UsersThree,
     hrefs: ['/admin/customers', '/admin/loyalty', '/admin/reviews'],
   },
   {
     label: 'Finance',
-    icon: '💰',
+    icon: ChartBar,
     hrefs: ['/admin/analytics', '/admin/gst-report', '/admin/reports/pl'],
   },
   {
     label: 'Content',
-    icon: '📝',
+    icon: Article,
     hrefs: ['/admin/blog'],
   },
   {
     label: 'Admin',
-    icon: '⚙️',
+    icon: Gear,
     hrefs: ['/admin/users', '/admin/failed-emails', '/admin/mfa-setup', '/admin/settings', '/admin/ops-app'],
   },
 ];
@@ -50,10 +87,8 @@ const GROUPS: { label: string; icon: string; hrefs: string[] }[] = [
 export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
   const pathname = usePathname();
 
-  // Build a lookup: href → item
   const itemMap = new Map(items.map(i => [i.href, i]));
 
-  // Find which group the current path belongs to
   const activeGroup = GROUPS.find(g =>
     g.hrefs.some(h => pathname === h || pathname.startsWith(h + '/'))
   )?.label ?? null;
@@ -62,7 +97,6 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
     () => new Set(activeGroup ? [activeGroup] : [])
   );
 
-  // When route changes, ensure the active group is open
   useEffect(() => {
     if (activeGroup) {
       setOpenGroups(prev => {
@@ -96,12 +130,15 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
     <nav className="px-3 flex flex-col gap-1">
 
       {/* Standalone: Overview Dashboard */}
-      {itemMap.has('/admin') && (
-        <Link href="/admin" className={linkClass('/admin')}>
-          <span className="text-lg">{itemMap.get('/admin')!.icon}</span>
-          <span className="tracking-wide">{itemMap.get('/admin')!.name}</span>
-        </Link>
-      )}
+      {itemMap.has('/admin') && (() => {
+        const DashIcon = MENU_ICONS['/admin'] ?? ChartLine;
+        return (
+          <Link href="/admin" className={linkClass('/admin')}>
+            <DashIcon size={18} weight="regular" />
+            <span className="tracking-wide">{itemMap.get('/admin')!.name}</span>
+          </Link>
+        );
+      })()}
 
       {/* Collapsible groups */}
       {GROUPS.map(group => {
@@ -113,6 +150,7 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
 
         const isOpen    = openGroups.has(group.label);
         const hasActive = groupItems.some(i => isActive(i.href));
+        const GroupIcon = group.icon;
 
         return (
           <div key={group.label}>
@@ -125,7 +163,7 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
               }`}
             >
               <span className="flex items-center gap-3">
-                <span className="text-lg">{group.icon}</span>
+                <GroupIcon size={18} weight="regular" />
                 <span className="tracking-wide">{group.label}</span>
               </span>
               <span
@@ -138,12 +176,15 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
 
             {isOpen && (
               <div className="mt-0.5 ml-4 flex flex-col gap-0.5 border-l border-white/10 pl-3">
-                {groupItems.map(item => (
-                  <Link key={item.href} href={item.href} className={linkClass(item.href)}>
-                    <span className="text-base">{item.icon}</span>
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
+                {groupItems.map(item => {
+                  const ItemIcon = MENU_ICONS[item.href] ?? Gear;
+                  return (
+                    <Link key={item.href} href={item.href} className={linkClass(item.href)}>
+                      <ItemIcon size={16} weight="regular" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>

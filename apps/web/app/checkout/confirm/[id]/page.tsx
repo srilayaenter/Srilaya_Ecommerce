@@ -4,6 +4,7 @@ import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import CartRefresher from "./CartRefresher";
+import { Scooter } from "@phosphor-icons/react/dist/ssr";
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -26,7 +27,7 @@ export default async function CodConfirmPage({ params }: Props) {
         {/* Success card */}
         <div className="bg-white rounded-2xl border border-[#E8E0D5] shadow-sm p-8 text-center">
           <div className="w-16 h-16 bg-[#006A38]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">🛵</span>
+            <Scooter size={32} weight="regular" className="text-[#006A38]" />
           </div>
           <h1 className="text-2xl font-black text-[#212121]">Order Confirmed!</h1>
           <p className="text-[#8D6E63] text-sm mt-2">

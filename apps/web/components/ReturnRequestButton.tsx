@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle, ArrowCounterClockwise } from "@phosphor-icons/react";
 
 interface OrderItem {
   title: string;
@@ -71,7 +72,7 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
   if (done) {
     return (
       <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-700 font-medium">
-        ✅ Return request submitted. We'll review it within 1–2 business days.
+        <CheckCircle size={14} weight="regular" className="inline-block mr-1.5" />Return request submitted. We'll review it within 1–2 business days.
       </div>
     );
   }
@@ -82,7 +83,7 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-2 border border-[#9E9E9E] text-[#616161] text-sm font-bold px-4 py-2.5 rounded-xl hover:border-[#006A38] hover:text-[#006A38] transition-colors"
       >
-        ↩️ Request Return
+        <ArrowCounterClockwise size={14} weight="regular" /> Request Return
       </button>
 
       {open && (

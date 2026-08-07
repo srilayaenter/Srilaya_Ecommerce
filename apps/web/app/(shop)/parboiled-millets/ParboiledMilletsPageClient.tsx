@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, Drop, Fire, Sun, Gear , WhatsappLogo } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -11,7 +12,6 @@ const PRODUCTS = [
     id: "foxtail",
     name: "Parboiled Foxtail",
     keyword: "parboiled foxtail",
-    emoji: "🌾",
     local: "Parboiled Navane / Thinai",
     badge: "Energy Booster",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -28,7 +28,6 @@ const PRODUCTS = [
     id: "finger",
     name: "Parboiled Finger Millets (Ragi)",
     keyword: "parboiled finger",
-    emoji: "🌿",
     local: "Parboiled Ragi / Kezhvaragu",
     badge: "Calcium Rich",
     badgeColor: "bg-red-50 text-red-700 border-red-200",
@@ -45,7 +44,6 @@ const PRODUCTS = [
     id: "little",
     name: "Parboiled Little Millet",
     keyword: "parboiled little",
-    emoji: "🌱",
     local: "Parboiled Samai / Kutki",
     badge: "Antioxidant Rich",
     badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -62,7 +60,6 @@ const PRODUCTS = [
     id: "barnyard",
     name: "Parboiled Barnyard Grains",
     keyword: "parboiled barnyard",
-    emoji: "🍃",
     local: "Parboiled Kuthiraivali / Sanwa",
     badge: "Immune Boost",
     badgeColor: "bg-orange-50 text-orange-800 border-orange-200",
@@ -79,7 +76,6 @@ const PRODUCTS = [
     id: "kodo",
     name: "Parboiled Kodo",
     keyword: "parboiled kodo",
-    emoji: "🟤",
     local: "Parboiled Varagu / Kodra",
     badge: "Diabetic Care",
     badgeColor: "bg-purple-50 text-purple-800 border-purple-200",
@@ -96,7 +92,6 @@ const PRODUCTS = [
     id: "pearl",
     name: "Parboiled Pearl",
     keyword: "parboiled pearl",
-    emoji: "✨",
     local: "Parboiled Bajra / Kambu",
     badge: "Brain Health",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -113,7 +108,6 @@ const PRODUCTS = [
     id: "red-sorghum",
     name: "Parboiled Red Sorghum",
     keyword: "parboiled red sorghum",
-    emoji: "🔴",
     local: "Parboiled Jowar / Cholam",
     badge: "Gut Health",
     badgeColor: "bg-rose-50 text-rose-800 border-rose-200",
@@ -130,7 +124,6 @@ const PRODUCTS = [
     id: "white-sorghum",
     name: "Parboiled White Sorghum",
     keyword: "parboiled white sorghum",
-    emoji: "🌻",
     local: "Parboiled White Jowar / Cholam",
     badge: "Complete Protein",
     badgeColor: "bg-yellow-50 text-yellow-800 border-yellow-200",
@@ -196,7 +189,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/10 text-blue-900 font-bold text-xs uppercase tracking-wider mb-6 border border-blue-900/20">
-            💧 Parboiled Millet Collection
+            <Drop size={15} weight="regular" className="inline-block" /> Parboiled Millet Collection
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-950 leading-tight max-w-4xl mx-auto mb-4">
             The Parboiled<br className="hidden sm:block" />
@@ -211,13 +204,13 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             <a href="#collection" className="bg-blue-900 hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
@@ -279,7 +272,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
                     </div>
                   ) : (
                     <div className="h-44 flex items-center justify-center relative" style={{ backgroundColor: p.accentLight }}>
-                      <span className="text-6xl">{p.emoji}</span>
+                      <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>{p.badge}</span>
                     </div>
                   )}
@@ -311,7 +304,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
                       onClick={() => openWhatsApp(p)}
                       className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-2"
                     >
-                      💬 Enquire on WhatsApp
+                      <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                     </button>
                   </div>
                 </div>
@@ -329,14 +322,14 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "💧", step: "Step 1", title: "Soak", desc: "Raw millet soaked in water to begin hydration and activate natural enzymes." },
-              { icon: "♨️", step: "Step 2", title: "Steam", desc: "Steam-pressure drives water-soluble nutrients from the bran deep into the grain." },
-              { icon: "☀️", step: "Step 3", title: "Dry", desc: "Sun-dried or hot-air dried until moisture drops to safe storage levels." },
-              { icon: "⚙️", step: "Step 4", title: "Mill", desc: "Lightly dehusked — bran layer mostly intact, nutrients locked in place." },
+              { icon: Drop, step: "Step 1", title: "Soak", desc: "Raw millet soaked in water to begin hydration and activate natural enzymes." },
+              { icon: Fire, step: "Step 2", title: "Steam", desc: "Steam-pressure drives water-soluble nutrients from the bran deep into the grain." },
+              { icon: Sun, step: "Step 3", title: "Dry", desc: "Sun-dried or hot-air dried until moisture drops to safe storage levels." },
+              { icon: Gear, step: "Step 4", title: "Mill", desc: "Lightly dehusked — bran layer mostly intact, nutrients locked in place." },
             ].map((b) => (
               <div key={b.title} className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300">
                 <div className="text-xs font-bold text-[#D99B26] uppercase tracking-widest mb-2">{b.step}</div>
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3 shadow">{b.icon}</div>
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-blue-100">{b.desc}</p>
               </div>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { Note, PaperPlaneTilt, Package, CheckCircle, XCircle, ClipboardText, ArrowCircleDown } from "@phosphor-icons/react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 interface POItem {
   id: string;
@@ -33,8 +35,8 @@ const STATUS_STYLES: Record<string, string> = {
   cancelled: "bg-red-50 text-red-500",
 };
 
-const STATUS_ICONS: Record<string, string> = {
-  draft: "📝", sent: "📤", partial: "📦", received: "✅", cancelled: "❌",
+const STATUS_ICONS: Record<string, PhosphorIcon> = {
+  draft: Note, sent: PaperPlaneTilt, partial: Package, received: CheckCircle, cancelled: XCircle,
 };
 
 export default function PurchaseOrdersPage() {
@@ -145,7 +147,7 @@ export default function PurchaseOrdersPage() {
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg border capitalize transition-colors ${
               filter === s ? "bg-[#006A38] text-white border-[#006A38]" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
             }`}>
-            {STATUS_ICONS[s] ?? ""} {s} {s !== "all" && `(${pos.filter(p => p.status === s).length})`}
+            {(() => { const I = STATUS_ICONS[s]; return I ? <I size={12} weight="regular" className="inline-block mr-1" /> : null; })()}{s} {s !== "all" && `(${pos.filter(p => p.status === s).length})`}
           </button>
         ))}
       </div>
@@ -240,7 +242,7 @@ export default function PurchaseOrdersPage() {
         <div className="text-center py-16 text-[#9E9E9E] text-sm">Loading…</div>
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-xl border border-[#E0E0E0] py-16 text-center">
-          <p className="text-3xl mb-2">📋</p>
+          <ClipboardText size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-2" />
           <p className="font-bold text-[#212121]">No {filter !== "all" ? filter : ""} purchase orders yet.</p>
           <p className="text-sm text-[#9E9E9E] mt-1">Create a PO to order stock from a supplier.</p>
         </div>
@@ -260,7 +262,7 @@ export default function PurchaseOrdersPage() {
                     </p>
                   </div>
                   <span className={`text-xs font-bold px-2.5 py-1 rounded-full capitalize ${STATUS_STYLES[po.status] ?? "bg-gray-100 text-gray-500"}`}>
-                    {STATUS_ICONS[po.status]} {po.status}
+                    {(() => { const I = STATUS_ICONS[po.status]; return I ? <I size={12} weight="regular" className="inline-block mr-1" /> : null; })()}{po.status}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -329,13 +331,13 @@ export default function PurchaseOrdersPage() {
                         disabled={receiving === po.id || !Object.values(receiveMap[po.id] ?? {}).some(v => parseInt(v, 10) > 0)}
                         className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-50"
                       >
-                        {receiving === po.id ? "Updating stock…" : "📥 Receive & Update Stock"}
+                        {receiving === po.id ? "Updating stock…" : <><ArrowCircleDown size={14} weight="regular" className="inline-block mr-1" />Receive & Update Stock</>}
                       </button>
                     )}
                     {po.status === "draft" && (
                       <button onClick={() => updateStatus(po.id, "sent")}
                         className="border border-[#006A38] text-[#006A38] font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#F0FAF4] transition-colors">
-                        📤 Mark Sent
+                        <PaperPlaneTilt size={14} weight="regular" className="inline-block mr-1" />Mark Sent
                       </button>
                     )}
                     {po.status !== "cancelled" && po.status !== "received" && (

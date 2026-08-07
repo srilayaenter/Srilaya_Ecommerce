@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
 
 interface PincodeResult {
   serviceable: boolean;
@@ -54,11 +55,11 @@ export default function PincodeCheck() {
         <div className={`mt-3 rounded-xl px-3 py-2.5 text-sm ${result.serviceable ? "bg-[#E8F5E9] text-[#006A38]" : "bg-red-50 text-red-600"}`}>
           {result.serviceable ? (
             <div>
-              <p className="font-bold">✅ Delivery available to {result.state}</p>
+              <p className="font-bold inline-flex items-center gap-1"><CheckCircle size={14} weight="regular" />Delivery available to {result.state}</p>
               <p className="text-xs mt-0.5 opacity-80">Estimated delivery: {result.etaDays} · {result.zoneLabel}</p>
             </div>
           ) : (
-            <p className="font-medium">❌ {result.message ?? "Not serviceable"}</p>
+            <p className="font-medium inline-flex items-center gap-1"><XCircle size={14} weight="regular" />{result.message ?? "Not serviceable"}</p>
           )}
         </div>
       )}

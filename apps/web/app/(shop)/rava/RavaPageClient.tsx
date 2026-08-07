@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, TrendDown, Microscope, Lightning, Leaf, Clock , WhatsappLogo } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -13,7 +14,6 @@ const PRODUCTS = [
     id: "foxtail",
     name: "Foxtail Rava",
     keyword: "foxtail",
-    emoji: "🌾",
     local: "Navane / Thinai / Kangni",
     badge: "Top Seller",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -29,7 +29,6 @@ const PRODUCTS = [
     id: "finger",
     name: "Finger Rava",
     keyword: "finger",
-    emoji: "🌿",
     local: "Ragi Rava / Kezhvaragu",
     badge: "Calcium Rich",
     badgeColor: "bg-red-50 text-red-700 border-red-200",
@@ -45,7 +44,6 @@ const PRODUCTS = [
     id: "little",
     name: "Little Rava",
     keyword: "little",
-    emoji: "🌱",
     local: "Same Rava / Samai / Kutki",
     badge: "Digestive Care",
     badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -61,7 +59,6 @@ const PRODUCTS = [
     id: "barnyard",
     name: "Barnyard Rava",
     keyword: "barnyard",
-    emoji: "🌾",
     local: "Oudalu / Sanwa / Kuthiraivali",
     badge: "Quick Meal",
     badgeColor: "bg-orange-50 text-orange-800 border-orange-200",
@@ -77,7 +74,6 @@ const PRODUCTS = [
     id: "sorghum",
     name: "White Sorghum Rava",
     keyword: "sorghum",
-    emoji: "🌻",
     local: "Jowar Rava / Cholam",
     badge: "Energy Boost",
     badgeColor: "bg-amber-50 text-amber-900 border-amber-300",
@@ -93,7 +89,6 @@ const PRODUCTS = [
     id: "pearl",
     name: "Pearl Rava",
     keyword: "pearl",
-    emoji: "✨",
     local: "Bajra Rava / Sajje / Kambu",
     badge: "Vitality",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -109,7 +104,6 @@ const PRODUCTS = [
     id: "mapillai",
     name: "Mapillai Samba Rava",
     keyword: "mapillai",
-    emoji: "🏺",
     local: "Traditional Heritage Red Rice Rava",
     badge: "Heritage Grain",
     badgeColor: "bg-red-100 text-red-800 border-red-300",
@@ -181,7 +175,7 @@ export default function RavaPageClient({ productImageMap = {} }: RavaPageClientP
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D99B26]/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#D99B26]/30">
-            🌾 Premium Healthy Grains
+            <Grains className="w-4 h-4" weight="regular" /> Premium Healthy Grains
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
@@ -201,13 +195,13 @@ export default function RavaPageClient({ productImageMap = {} }: RavaPageClientP
               href="#collection"
               className="bg-[#5C3A21] hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
 
@@ -277,7 +271,7 @@ export default function RavaPageClient({ productImageMap = {} }: RavaPageClientP
                   </div>
                 ) : (
                   <div className="h-44 bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center relative">
-                    <span className="text-5xl">{p.emoji}</span>
+                    <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                     <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>
                       {p.badge}
                     </span>
@@ -313,7 +307,7 @@ export default function RavaPageClient({ productImageMap = {} }: RavaPageClientP
                     onClick={() => openWhatsApp(p)}
                     className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-2"
                   >
-                    💬 Enquire on WhatsApp
+                    <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                   </button>
                 </div>
               </div>
@@ -340,18 +334,18 @@ export default function RavaPageClient({ productImageMap = {} }: RavaPageClientP
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {[
-              { icon: "📉", title: "Low GI Index", desc: "Sustained blood sugar regulation with zero sudden spikes." },
-              { icon: "🦠", title: "Gut Health", desc: "Abundant prebiotic dietary fiber that improves digestion." },
-              { icon: "🔋", title: "Satiety Booster", desc: "Keeps you full longer, reducing cravings and overeating." },
-              { icon: "🌿", title: "Traditional Purity", desc: "100% unpolished whole grains carefully granulated." },
-              { icon: "⏱️", title: "Fast Cooking", desc: "Cooks easily in under 10–12 minutes without clumping." },
+              { icon: TrendDown, title: "Low GI Index", desc: "Sustained blood sugar regulation with zero sudden spikes." },
+              { icon: Microscope, title: "Gut Health", desc: "Abundant prebiotic dietary fiber that improves digestion." },
+              { icon: Lightning, title: "Satiety Booster", desc: "Keeps you full longer, reducing cravings and overeating." },
+              { icon: Leaf, title: "Traditional Purity", desc: "100% unpolished whole grains carefully granulated." },
+              { icon: Clock, title: "Fast Cooking", desc: "Cooks easily in under 10–12 minutes without clumping." },
             ].map((b) => (
               <div
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow">
-                  {b.icon}
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                  <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-amber-100">{b.desc}</p>

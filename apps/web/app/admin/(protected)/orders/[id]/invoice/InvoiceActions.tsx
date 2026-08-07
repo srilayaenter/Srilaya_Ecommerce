@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { Printer, Lightbulb } from "@phosphor-icons/react";
 
 interface InvoiceActionsProps {
   orderId: string;
@@ -85,10 +86,10 @@ export default function InvoiceActions({ orderId, defaultEmail, whatsappUrl }: I
           onClick={() => window.print()}
           className="inline-flex items-center gap-2 bg-[#F5F5F5] text-[#424242] font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#E0E0E0] transition-colors border border-[#E0E0E0]"
         >
-          🖨️ Print / Save as PDF
+          <Printer size={15} weight="regular" /> Print / Save as PDF
         </button>
         <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
-          💡 To hide the URL in the printout: in the print dialog click <strong>More settings</strong> → uncheck <strong>Headers and footers</strong>.
+          <Lightbulb size={13} weight="regular" className="inline-block mr-1" />To hide the URL in the printout: in the print dialog click <strong>More settings</strong> → uncheck <strong>Headers and footers</strong>.
         </p>
       </div>
     </div>

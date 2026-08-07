@@ -6,6 +6,11 @@ import Image from "next/image";
 import dynamicImport from "next/dynamic";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
+import {
+  Leaf, ShieldCheck, Star, Truck,
+  Plant, Flask, Recycle,
+  Grains, ChatCircle,
+} from "@phosphor-icons/react/dist/ssr";
 
 const Testimonials   = dynamicImport(() => import("@/components/Testimonials"),   { ssr: false });
 const RecentlyViewed = dynamicImport(() => import("@/components/RecentlyViewed"), { ssr: false });
@@ -39,80 +44,73 @@ const COLLECTIONS = [
     name: "Millet Rava",
     tagline: "7 varieties. Low GI. Ready in minutes.",
     href: "/rava",
-    emoji: "🌾",
-    bg: "#D99B26",
-    text: "#2D1A00",
+    image: "/categories/rava.jpg",
+    overlay: "from-amber-900/80 to-amber-700/60",
   },
   {
     name: "Millet Flour",
     tagline: "Stone-ground. 8 varieties. No maida.",
     href: "/flour",
-    emoji: "🫓",
-    bg: "#5C3A21",
-    text: "#FFF8F0",
+    image: "/categories/flour.jpg",
+    overlay: "from-stone-900/80 to-stone-700/60",
   },
   {
     name: "Natural Sweeteners",
     tagline: "Jaggery powder. 3 types. Zero chemicals.",
     href: "/sweeteners",
-    emoji: "🍯",
-    bg: "#b45309",
-    text: "#FFF8E1",
+    image: "/categories/sweeteners.jpg",
+    overlay: "from-orange-900/80 to-orange-700/60",
   },
   {
     name: "Traditional Rice",
     tagline: "4 heritage varieties. Antioxidant rich.",
     href: "/traditional-rice",
-    emoji: "🍚",
-    bg: "#9f1239",
-    text: "#FFF1F2",
+    image: "/categories/traditional-rice.jpg",
+    overlay: "from-rose-900/80 to-rose-700/60",
   },
   {
     name: "Muesli & Granola",
     tagline: "8 varieties. Whole grain. No preservatives.",
     href: "/muesli",
-    emoji: "🥣",
-    bg: "#92400e",
-    text: "#FFFBEB",
+    image: "/categories/muesli.jpg",
+    overlay: "from-amber-950/80 to-amber-800/60",
   },
   {
     name: "Whole Millet Grains",
     tagline: "8 unpolished varieties. Cook like rice.",
     href: "/raw-millets",
-    emoji: "🌱",
-    bg: "#2E6F40",
-    text: "#F0FDF4",
+    image: "/categories/raw-millets.jpg",
+    overlay: "from-emerald-900/80 to-emerald-700/60",
   },
   {
     name: "Parboiled Millets",
     tagline: "Enhanced nutrition. Better digestibility.",
     href: "/parboiled-millets",
-    emoji: "💧",
-    bg: "#1e40af",
-    text: "#EFF6FF",
+    image: "/categories/parboiled-millets.jpg",
+    overlay: "from-blue-900/80 to-blue-700/60",
   },
 ];
 
 const usps = [
-  { icon: "🌿", label: "100% Organic", sub: "No chemicals or pesticides" },
-  { icon: "🚫", label: "No Preservatives", sub: "Minimally processed grains" },
-  { icon: "⭐", label: "5-Star Rated", sub: "By our customers" },
-  { icon: "🚚", label: "Pan-India Delivery", sub: "Delhivery, Blue Dart & more" },
+  { icon: Leaf,         label: "100% Organic",      sub: "No chemicals or pesticides" },
+  { icon: ShieldCheck,  label: "No Preservatives",   sub: "Minimally processed grains" },
+  { icon: Star,         label: "5-Star Rated",        sub: "By our customers" },
+  { icon: Truck,        label: "Pan-India Delivery",  sub: "Delhivery, Blue Dart & more" },
 ];
 
 const whyUs = [
   {
-    icon: "🌾",
+    icon: Plant,
     title: "Farm-Direct Sourcing",
     desc: "We partner directly with natural-farming producers across India — no middlemen, fair prices, maximum freshness.",
   },
   {
-    icon: "🔬",
+    icon: Flask,
     title: "Quality Tested",
     desc: "Every batch is checked for purity and nutritional integrity before it reaches your doorstep.",
   },
   {
-    icon: "♻️",
+    icon: Recycle,
     title: "Sustainable Packaging",
     desc: "Our packaging is designed to minimise waste while keeping your grains fresh for longer.",
   },
@@ -213,7 +211,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[#F0F0F0]">
             {usps.map((usp) => (
               <div key={usp.label} className="flex items-center gap-3 px-4 md:px-6 py-4 md:py-5">
-                <span className="text-2xl flex-shrink-0">{usp.icon}</span>
+                <usp.icon className="w-6 h-6 text-emerald-700 flex-shrink-0" weight="regular" />
                 <div>
                   <p className="font-bold text-sm text-[#212121]">{usp.label}</p>
                   <p className="text-xs text-[#9E9E9E] font-medium mt-0.5">{usp.sub}</p>
@@ -244,39 +242,38 @@ export default async function HomePage() {
               <Link
                 key={c.href}
                 href={c.href}
-                className="group flex flex-col items-center text-center rounded-2xl p-6 md:p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-black/5"
-                style={{ backgroundColor: c.bg }}
+                className="group relative flex flex-col items-center text-center rounded-2xl overflow-hidden min-h-[200px] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
-                <span className="text-4xl md:text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {c.emoji}
-                </span>
-                <h3
-                  className="font-black text-sm md:text-base leading-snug mb-1"
-                  style={{ color: c.text }}
-                >
-                  {c.name}
-                </h3>
-                <p
-                  className="text-[11px] md:text-xs leading-relaxed opacity-80"
-                  style={{ color: c.text }}
-                >
-                  {c.tagline}
-                </p>
-                <span
-                  className="mt-4 text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity"
-                  style={{ color: c.text }}
-                >
-                  Explore →
-                </span>
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${c.overlay}`} />
+                <div className="relative z-10 flex flex-col items-center justify-end text-center p-5 md:p-6 h-full w-full">
+                  <h3 className="font-black text-sm md:text-base text-white leading-snug mb-1 drop-shadow">
+                    {c.name}
+                  </h3>
+                  <p className="text-[11px] md:text-xs text-white/80 leading-relaxed">
+                    {c.tagline}
+                  </p>
+                  <span className="mt-3 text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors duration-200">
+                    Explore →
+                  </span>
+                </div>
               </Link>
             ))}
 
             {/* View all collections tile */}
             <Link
               href="/collections"
-              className="group flex flex-col items-center justify-center text-center rounded-2xl p-6 md:p-7 border-2 border-dashed border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300"
+              className="group flex flex-col items-center justify-center text-center rounded-2xl min-h-[200px] p-6 md:p-7 border-2 border-dashed border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300"
             >
-              <span className="text-4xl md:text-5xl mb-4">🗂️</span>
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4 group-hover:bg-emerald-200 transition-colors">
+                <Grains className="w-6 h-6 text-emerald-700" weight="regular" />
+              </div>
               <h3 className="font-black text-sm md:text-base text-emerald-800 leading-snug mb-1">
                 All Collections
               </h3>
@@ -394,8 +391,8 @@ export default async function HomePage() {
               <div className="space-y-6">
                 {whyUs.map((item) => (
                   <div key={item.title} className="flex gap-4 items-start">
-                    <div className="w-11 h-11 rounded-xl bg-emerald-800 flex items-center justify-center text-xl flex-shrink-0 border border-emerald-700">
-                      {item.icon}
+                    <div className="w-11 h-11 rounded-xl bg-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-700">
+                      <item.icon className="w-5 h-5 text-amber-400" weight="regular" />
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm mb-1">{item.title}</h4>
@@ -416,16 +413,16 @@ export default async function HomePage() {
             {/* Right: stats grid */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { value: "22+", label: "Millet Varieties", icon: "🌾" },
-                { value: "5★", label: "Top Rated", icon: "⭐" },
-                { value: "100%", label: "Natural & Unprocessed", icon: "🌿" },
-                { value: "0", label: "Preservatives Added", icon: "🚫" },
+                { value: "22+", label: "Millet Varieties",     icon: Grains},
+                { value: "5★",  label: "Top Rated",             icon: Star },
+                { value: "100%",label: "Natural & Unprocessed", icon: Leaf },
+                { value: "0",   label: "Preservatives Added",   icon: ShieldCheck },
               ].map((stat) => (
                 <div
                   key={stat.label}
                   className="bg-emerald-800/50 border border-emerald-700/50 rounded-2xl p-4 md:p-6 flex flex-col items-center text-center hover:bg-[#00522B] transition-colors"
                 >
-                  <span className="text-3xl mb-2">{stat.icon}</span>
+                  <stat.icon className="w-8 h-8 text-amber-400 mb-2" weight="regular" />
                   <span className="text-3xl font-black text-amber-400 leading-none">{stat.value}</span>
                   <span className="text-emerald-300 text-xs font-medium mt-2 leading-snug">{stat.label}</span>
                 </div>
@@ -449,7 +446,9 @@ export default async function HomePage() {
       {/* -- WHATSAPP / CONTACT CTA ----------------------------- */}
       <section className="py-16 bg-amber-50 border-t border-amber-100">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <span className="text-3xl block mb-4">💬</span>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-100 mb-4">
+            <ChatCircle className="w-7 h-7 text-emerald-700" weight="regular" />
+          </div>
           <h2 className="text-2xl md:text-3xl font-black text-[#212121] mb-3 tracking-tight">
             Questions? We&apos;re Here to Help.
           </h2>

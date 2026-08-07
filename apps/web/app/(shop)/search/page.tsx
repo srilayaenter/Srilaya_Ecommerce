@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Grains } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -185,7 +186,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         {/* No results */}
         {(query || selectedCat) && products.length === 0 && bundles.length === 0 && (
           <div className="text-center py-16 bg-white rounded-2xl border border-[#E8E0D5]">
-            <p className="text-5xl mb-4">🌾</p>
+            <Grains className="w-14 h-14 text-[#9E9E9E] mx-auto mb-4" weight="regular" />
             <h2 className="text-lg font-bold text-[#212121] mb-2">No results found</h2>
             <p className="text-sm text-[#424242] mb-6">Try a different keyword or browse our categories.</p>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -213,9 +214,9 @@ export default async function SearchPage({ searchParams }: PageProps) {
               {bundles.map((b: any) => (
                 <Link key={b.id} href={`/bundles/${b.slug}`}
                   className="bg-white border border-[#E0E0E0] rounded-2xl p-4 hover:border-[#006A38] transition-colors flex gap-4 items-center">
-                  {b.imageUrl && (
+                  {b.image && (
                     <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-[#F9F6F0]">
-                      <Image src={b.imageUrl} alt={b.title} fill sizes="64px" className="object-contain p-1" />
+                      <Image src={b.image} alt={b.title} fill sizes="64px" className="object-contain p-1" />
                     </div>
                   )}
                   <div>

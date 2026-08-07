@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CheckCircle, FileText, PencilSimple, XCircle, Receipt } from "@phosphor-icons/react";
 
 type Material = { id: string; name: string; unit: string };
 
@@ -139,7 +140,7 @@ export default function ImportClient({
 
   if (done) return (
     <div className="bg-green-50 border border-green-200 text-green-800 rounded-xl px-8 py-16 text-center">
-      <p className="text-4xl mb-3">✅</p>
+      <CheckCircle size={40} weight="regular" className="text-[#4CAF50] mx-auto mb-3" />
       <p className="font-bold text-lg">Stock updated successfully!</p>
       <p className="text-sm mt-1 opacity-70">Redirecting to Raw Materials...</p>
     </div>
@@ -156,7 +157,7 @@ export default function ImportClient({
               className={`px-5 py-2 rounded-lg text-sm font-bold transition-colors ${
                 mode === m ? 'bg-white shadow text-[#212121]' : 'text-[#9E9E9E] hover:text-[#424242]'
               }`}>
-              {m === 'upload' ? '📄 Scan Bill (AI)' : '✏️ Enter Manually'}
+              {m === 'upload' ? <><FileText size={14} weight="regular" className="inline-block mr-1" />Scan Bill (AI)</> : <><PencilSimple size={14} weight="regular" className="inline-block mr-1" />Enter Manually</>}
             </button>
           ))}
         </div>
@@ -164,7 +165,7 @@ export default function ImportClient({
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-          ❌ {error}
+          <XCircle size={14} weight="regular" className="inline-block mr-1" />{error}
         </div>
       )}
 
@@ -180,7 +181,7 @@ export default function ImportClient({
         >
           <input ref={inputRef} type="file" accept=".pdf,image/*" className="hidden"
             onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-          <p className="text-5xl mb-4">🧾</p>
+          <Receipt size={52} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           {loading ? (
             <div className="space-y-2">
               <p className="text-sm font-bold text-[#006A38] animate-pulse">AI is reading your bill...</p>
@@ -224,7 +225,7 @@ export default function ImportClient({
           {/* Matched */}
           <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
             <div className="px-6 py-4 bg-green-50 border-b border-green-100">
-              <h2 className="font-bold text-green-800">✅ Recognised — {result.matched.length} items</h2>
+              <h2 className="font-bold text-green-800 inline-flex items-center gap-1"><CheckCircle size={15} weight="regular" />Recognised — {result.matched.length} items</h2>
             </div>
             {result.matched.length === 0
               ? <p className="text-sm text-[#9E9E9E] px-6 py-8 text-center">No items matched existing raw materials.</p>

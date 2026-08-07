@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, Gear, Heartbeat, Bone, ForkKnife , WhatsappLogo } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -11,7 +12,6 @@ const PRODUCTS = [
     id: "foxtail",
     name: "Foxtail Flour",
     keyword: "foxtail flour",
-    emoji: "🌾",
     local: "Navane Hittu / Thinai Maavu / Kangni Atta",
     badge: "Heart Healthy",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -27,7 +27,6 @@ const PRODUCTS = [
     id: "finger",
     name: "Finger Flour (Ragi)",
     keyword: "finger flour",
-    emoji: "🌿",
     local: "Ragi Hittu / Kezhvaragu Maavu",
     badge: "Calcium Rich",
     badgeColor: "bg-red-50 text-red-700 border-red-200",
@@ -43,7 +42,6 @@ const PRODUCTS = [
     id: "red-sorghum",
     name: "Red Sorghum Flour",
     keyword: "red sorghum flour",
-    emoji: "🔴",
     local: "Jowar Maavu / Cholam Hittu",
     badge: "Gut Health",
     badgeColor: "bg-rose-50 text-rose-800 border-rose-200",
@@ -59,7 +57,6 @@ const PRODUCTS = [
     id: "barnyard",
     name: "Barnyard Flour",
     keyword: "barnyard flour",
-    emoji: "🌱",
     local: "Kuthiraivali Maavu / Sanwa Atta",
     badge: "Low GI",
     badgeColor: "bg-orange-50 text-orange-800 border-orange-200",
@@ -75,7 +72,6 @@ const PRODUCTS = [
     id: "pearl",
     name: "Pearl Flour (Bajra)",
     keyword: "pearl flour",
-    emoji: "✨",
     local: "Kambu Maavu / Bajra Atta / Sajje Hittu",
     badge: "High Protein",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -91,7 +87,6 @@ const PRODUCTS = [
     id: "sprouted-ragi",
     name: "Sprouted Ragi Flour",
     keyword: "sprouted ragi",
-    emoji: "🌿",
     local: "Molakattu Kezhvaragu Maavu",
     badge: "Enhanced Nutrition",
     badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -107,7 +102,6 @@ const PRODUCTS = [
     id: "kodo",
     name: "Kodo Flour",
     keyword: "kodo flour",
-    emoji: "🟤",
     local: "Varagu Maavu / Kodra Atta",
     badge: "Diabetic Friendly",
     badgeColor: "bg-purple-50 text-purple-800 border-purple-200",
@@ -123,7 +117,6 @@ const PRODUCTS = [
     id: "wheat",
     name: "Wheat Flour",
     keyword: "wheat flour",
-    emoji: "🫓",
     local: "Gehun Atta / Godhi Hittu",
     badge: "Whole Grain",
     badgeColor: "bg-yellow-50 text-yellow-800 border-yellow-200",
@@ -192,7 +185,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#5C3A21]/10 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#5C3A21]/20">
-            🫓 Stone-Ground Millet Flours
+            <Grains className="w-4 h-4" weight="regular" /> Stone-Ground Millet Flours
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
@@ -213,13 +206,13 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
               href="#collection"
               className="bg-[#5C3A21] hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
 
@@ -288,7 +281,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
                     </div>
                   ) : (
                     <div className="h-44 bg-gradient-to-br from-[#FDF0E8] to-amber-100 flex items-center justify-center relative">
-                      <span className="text-5xl">{p.emoji}</span>
+                      <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>
                         {p.badge}
                       </span>
@@ -325,7 +318,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
                       onClick={() => openWhatsApp(p)}
                       className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-2"
                     >
-                      💬 Enquire on WhatsApp
+                      <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                     </button>
                   </div>
                 </div>
@@ -350,18 +343,18 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {[
-              { icon: "🪨", title: "Stone-Ground", desc: "Traditional cold milling preserves all vitamins, minerals & fibre." },
-              { icon: "🌾", title: "Full Bran Intact", desc: "Zero refining — all the goodness of the whole grain in every cup." },
-              { icon: "🩺", title: "Diabetic Friendly", desc: "Low GI flours that help regulate blood sugar without spikes." },
-              { icon: "🦴", title: "Bone & Calcium", desc: "Ragi flour leads with the highest plant-based calcium content." },
-              { icon: "🍞", title: "Kitchen Versatile", desc: "Rotis, dosas, puttu, kheer, ladoos — endless healthy possibilities." },
+              { icon: Gear, title: "Stone-Ground", desc: "Traditional cold milling preserves all vitamins, minerals & fibre." },
+              { icon: Grains, title: "Full Bran Intact", desc: "Zero refining — all the goodness of the whole grain in every cup." },
+              { icon: Heartbeat, title: "Diabetic Friendly", desc: "Low GI flours that help regulate blood sugar without spikes." },
+              { icon: Bone, title: "Bone & Calcium", desc: "Ragi flour leads with the highest plant-based calcium content." },
+              { icon: ForkKnife, title: "Kitchen Versatile", desc: "Rotis, dosas, puttu, kheer, ladoos — endless healthy possibilities." },
             ].map((b) => (
               <div
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow">
-                  {b.icon}
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                  <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-amber-100">{b.desc}</p>

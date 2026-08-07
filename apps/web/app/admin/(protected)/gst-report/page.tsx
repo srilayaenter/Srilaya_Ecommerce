@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChartBar } from "@phosphor-icons/react";
 
 interface GstSlab {
   rate: number;
@@ -234,7 +235,7 @@ export default function GstReportPage() {
 
       {!report && !loading && !error && (
         <div className="bg-white rounded-2xl border border-[#E0E0E0] p-16 text-center">
-          <div className="text-5xl mb-4">📊</div>
+          <ChartBar size={48} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           <p className="text-[#424242] font-semibold">Select a month and year, then click Generate Report.</p>
           <p className="text-sm text-[#9E9E9E] mt-1">Only paid & COD-collected orders are included.</p>
         </div>

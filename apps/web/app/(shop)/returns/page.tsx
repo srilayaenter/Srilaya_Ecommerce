@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CheckCircle } from "@phosphor-icons/react";
 
 type OrderItem = { variantId: string; title: string; size: string; quantity: number };
 type OrderData  = { id: string; items: OrderItem[] };
@@ -80,7 +81,7 @@ export default function ReturnsPage() {
 
         {step === "done" && (
           <div className="bg-white rounded-2xl border border-[#E0E0E0] p-8 text-center">
-            <div className="text-4xl mb-3">✅</div>
+            <CheckCircle size={40} weight="regular" className="text-[#4CAF50] mx-auto mb-3" />
             <h2 className="text-lg font-bold text-[#212121] mb-2">Return request submitted</h2>
             <p className="text-sm text-[#616161] mb-6">
               Our team will review your request and respond within 2 business days. You'll receive an update at your email.

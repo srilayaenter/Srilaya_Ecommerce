@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { CheckCircle } from "@phosphor-icons/react";
 
 export default function ChangePasswordForm() {
   const [email,           setEmail]           = useState('');
@@ -60,7 +61,7 @@ export default function ChangePasswordForm() {
       </button>
       {message === 'success' ? (
         <div className="bg-green-50 border border-green-200 text-green-700 text-sm font-medium px-4 py-3 rounded-lg">
-          ✅ Password updated successfully.
+          <CheckCircle size={14} weight="regular" className="inline-block mr-1.5" />Password updated successfully.
         </div>
       ) : message ? (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-lg">

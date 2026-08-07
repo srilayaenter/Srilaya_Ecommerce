@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Grains, BowlSteam, Bread, Drop, Jar, Coffee, Leaf } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "Specialty Collections | SriLaYa Naturals",
@@ -7,7 +9,10 @@ export const metadata: Metadata = {
     "Explore SriLaYa Naturals' curated grain collections — from 7 Millet Rava varieties to heritage flours, flakes, and more. Every grain, every benefit, one place.",
 };
 
-const COLLECTIONS = [
+const COLLECTIONS: Array<{
+  id: string; name: string; tagline: string; description: string; href: string;
+  icon: PhosphorIcon; accent: string; accentLight: string; badge: string; badgeBg: string; highlights: string[];
+}> = [
   {
     id: "rava",
     name: "Millet Rava",
@@ -15,7 +20,7 @@ const COLLECTIONS = [
     description:
       "From Foxtail to Mapillai Samba — discover India's most nutrient-dense granular grains. Low GI, high fibre, ready in minutes.",
     href: "/rava",
-    emoji: "🌾",
+    icon: Grains,
     accent: "#D99B26",
     accentLight: "#FFF8E1",
     badge: "Live",
@@ -29,7 +34,7 @@ const COLLECTIONS = [
     description:
       "Quick-cooking millet flakes for breakfast, snacks, and healthy meal prep. Whole grain goodness in minutes.",
     href: "/category/millet-flakes",
-    emoji: "🥣",
+    icon: BowlSteam,
     accent: "#2E6F40",
     accentLight: "#E8F5EE",
     badge: "Coming Soon",
@@ -43,7 +48,7 @@ const COLLECTIONS = [
     description:
       "Stone-ground millet flours for rotis, dosas, and bakes. Pure, unadulterated, with the full bran intact.",
     href: "/flour",
-    emoji: "🫓",
+    icon: Bread,
     accent: "#5C3A21",
     accentLight: "#FDF0E8",
     badge: "Live",
@@ -57,7 +62,7 @@ const COLLECTIONS = [
     description:
       "8 unpolished whole millet varieties — Foxtail, Finger (Ragi), Little, Barnyard, Kodo, Pearl, Red & White Sorghum. Cook as rice, make porridge, or grind fresh.",
     href: "/raw-millets",
-    emoji: "🌾",
+    icon: Grains,
     accent: "#2E6F40",
     accentLight: "#ECFDF5",
     badge: "Live",
@@ -71,7 +76,7 @@ const COLLECTIONS = [
     description:
       "8 parboiled millet varieties — same grains, enhanced nutrition. Traditional Soak → Steam → Dry → Mill process locks in more nutrients than raw millet.",
     href: "/parboiled-millets",
-    emoji: "💧",
+    icon: Drop,
     accent: "#1e40af",
     accentLight: "#EFF6FF",
     badge: "Live",
@@ -85,7 +90,7 @@ const COLLECTIONS = [
     description:
       "Handcrafted laddus made with millets and natural sweeteners. No refined sugar, no compromise on flavour.",
     href: "/category/laddu",
-    emoji: "🍬",
+    icon: Jar,
     accent: "#b45309",
     accentLight: "#FEF3C7",
     badge: "Coming Soon",
@@ -99,7 +104,7 @@ const COLLECTIONS = [
     description:
       "Sprouted millet malts and health drink mixes for kids and adults. Energy, immunity, and taste in every spoon.",
     href: "/category/malt-and-health-mixes",
-    emoji: "🥛",
+    icon: Coffee,
     accent: "#0369a1",
     accentLight: "#E0F2FE",
     badge: "Coming Soon",
@@ -113,7 +118,7 @@ const COLLECTIONS = [
     description:
       "8 varieties — Honey, Chocolate, Strawberry, Nutty, Fruits, Sugar Free & Stevia. Whole grain toasted, real fruit, no preservatives.",
     href: "/muesli",
-    emoji: "🥣",
+    icon: BowlSteam,
     accent: "#92400e",
     accentLight: "#FEF3C7",
     badge: "Live",
@@ -127,7 +132,7 @@ const COLLECTIONS = [
     description:
       "Mapillai Samba, Karupu Kavuni, Poongar & Seeraga Samba — heritage varieties with centuries of tradition and proven wellness benefits.",
     href: "/traditional-rice",
-    emoji: "🍚",
+    icon: Grains,
     accent: "#9f1239",
     accentLight: "#FFF1F2",
     badge: "Live",
@@ -141,7 +146,7 @@ const COLLECTIONS = [
     description:
       "Sugarcane, Palm & Coconut Jaggery Powder — unrefined, mineral-rich, low GI alternatives to refined sugar.",
     href: "/sweeteners",
-    emoji: "🍯",
+    icon: Jar,
     accent: "#b45309",
     accentLight: "#FEF3C7",
     badge: "Live",
@@ -169,7 +174,7 @@ export default function CollectionsPage() {
         />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-amber-200 font-bold text-xs uppercase tracking-wider mb-5 border border-white/20">
-            🌿 SriLaYa Specialty Collections
+            <Leaf size={14} weight="regular" /> SriLaYa Specialty Collections
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-4">
             Every Grain.<br className="hidden sm:block" />
@@ -201,6 +206,7 @@ export default function CollectionsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {COLLECTIONS.map((c) => {
             const isLive = c.badge === "Live";
+            const Icon = c.icon;
             const Card = (
               <div
                 className={`group relative bg-white rounded-2xl border overflow-hidden shadow-sm flex flex-col transition-all duration-300 ${
@@ -210,12 +216,12 @@ export default function CollectionsPage() {
                 }`}
                 style={{ borderTop: `4px solid ${c.accent}` }}
               >
-                {/* Emoji area */}
+                {/* Icon area */}
                 <div
-                  className="h-32 flex items-center justify-center text-6xl"
+                  className="h-32 flex items-center justify-center"
                   style={{ backgroundColor: c.accentLight }}
                 >
-                  {c.emoji}
+                  <Icon size={52} weight="regular" style={{ color: c.accent }} />
                 </div>
 
                 <div className="p-5 flex flex-col flex-1">

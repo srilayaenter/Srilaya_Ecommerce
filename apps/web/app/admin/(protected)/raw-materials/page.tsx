@@ -5,6 +5,7 @@ import { isOwner } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { addRawMaterial, addStock } from "./actions";
+import { FileText, ClipboardText, Factory } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = 'force-dynamic';
 
@@ -30,15 +31,15 @@ export default async function RawMaterialsPage() {
         <div className="flex gap-3">
           <Link href="/admin/raw-materials/import"
             className="px-4 py-2 rounded-lg bg-[#006A38] text-white text-sm font-bold hover:bg-[#00522B]">
-            📄 Import Purchase Bill
+            <FileText size={14} weight="regular" className="inline-block mr-1" />Import Purchase Bill
           </Link>
           <Link href="/admin/raw-materials/recipes"
             className="px-4 py-2 rounded-lg border border-[#006A38] text-[#006A38] text-sm font-bold hover:bg-[#F5F5F5]">
-            📋 Recipes
+            <ClipboardText size={14} weight="regular" className="inline-block mr-1" />Recipes
           </Link>
           <Link href="/admin/production"
             className="px-4 py-2 rounded-lg border border-[#006A38] text-[#006A38] text-sm font-bold hover:bg-[#F5F5F5]">
-            🏭 Log Production
+            <Factory size={14} weight="regular" className="inline-block mr-1" />Log Production
           </Link>
         </div>
       </div>

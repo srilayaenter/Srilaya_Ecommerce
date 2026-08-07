@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import { Heart } from "@phosphor-icons/react";
 
 interface Product {
   id: string;
@@ -75,7 +76,7 @@ export default function WishlistClient() {
         <p className="text-center text-[#9E9E9E] py-16">Loading…</p>
       ) : products.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-4xl mb-4">🤍</p>
+          <Heart size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           <h2 className="text-lg font-bold text-[#212121] mb-2">Your wishlist is empty</h2>
           <p className="text-sm text-[#424242] mb-6">Browse products and tap the heart icon to save them here.</p>
           <Link href="/product" className="inline-block bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors">

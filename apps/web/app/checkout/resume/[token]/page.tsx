@@ -3,6 +3,7 @@ import { verifyResumeToken } from "../../../../lib/emails/orderExpired";
 import { cookies } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
+import { CheckCircle, XCircle } from "@phosphor-icons/react/dist/ssr";
 
 interface PageProps {
   params: Promise<{ token: string }>
@@ -127,7 +128,7 @@ export default async function ResumeOrderPage({ params }: PageProps) {
         </p>
         <ul className="text-left mb-4 text-sm">
           {fullyAvailable.map(({ item }) => (
-            <li key={item.id}>✅ {item.variant.product.title} ({item.variant.size}) × {item.quantity}</li>
+            <li key={item.id} className="inline-flex items-center gap-1"><CheckCircle size={13} weight="regular" className="text-green-600 shrink-0" />{item.variant.product.title} ({item.variant.size}) × {item.quantity}</li>
           ))}
         </ul>
         <p className="text-gray-600 mb-2">
@@ -135,7 +136,7 @@ export default async function ResumeOrderPage({ params }: PageProps) {
         </p>
         <ul className="text-left mb-6 text-sm text-red-600">
           {unavailable.map(({ item }) => (
-            <li key={item.id}>❌ {item.variant.product.title} ({item.variant.size})</li>
+            <li key={item.id} className="inline-flex items-center gap-1"><XCircle size={13} weight="regular" className="text-red-500 shrink-0" />{item.variant.product.title} ({item.variant.size})</li>
           ))}
         </ul>
         <Link href="/cart">

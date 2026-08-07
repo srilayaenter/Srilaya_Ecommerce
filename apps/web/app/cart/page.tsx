@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 import CouponInput from "@/components/CouponInput";
+import { ShoppingCart } from "@phosphor-icons/react/dist/ssr";
 
 async function deleteCartItem(formData: FormData) {
   'use server';
@@ -63,7 +64,7 @@ export default async function CartPage() {
 
         {cartItems.length === 0 ? (
           <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm p-12 text-center max-w-lg mx-auto">
-            <span className="text-4xl block mb-4">🛒</span>
+            <ShoppingCart className="w-12 h-12 text-[#9E9E9E] mx-auto mb-4" weight="regular" />
             <p className="text-[#757575] font-medium text-lg mb-6">Your cart is empty</p>
             <Link href="/product" className="block w-full bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm text-center">
               Continue Shopping

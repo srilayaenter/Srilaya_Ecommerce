@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Bell } from "@phosphor-icons/react";
 
 export default function NotifyMeButton({ variantId }: { variantId: string }) {
   const [email,   setEmail]   = useState("");
@@ -30,7 +31,7 @@ export default function NotifyMeButton({ variantId }: { variantId: string }) {
   if (done) {
     return (
       <div className="w-full bg-[#FFF8E1] border border-[#FFE082] text-[#424242] text-sm font-medium px-4 py-3 rounded-xl text-center">
-        🔔 We'll email you when this is back in stock!
+        <Bell size={15} weight="regular" className="inline-block mr-1.5" />We'll email you when this is back in stock!
       </div>
     );
   }
@@ -41,7 +42,7 @@ export default function NotifyMeButton({ variantId }: { variantId: string }) {
         onClick={() => setOpen(true)}
         className="w-full border-2 border-dashed border-[#E0E0E0] text-[#9E9E9E] font-bold py-3 rounded-xl text-sm hover:border-[#006A38] hover:text-[#006A38] transition-colors"
       >
-        🔔 Notify Me When In Stock
+        <Bell size={15} weight="regular" className="inline-block mr-1.5" />Notify Me When In Stock
       </button>
     );
   }

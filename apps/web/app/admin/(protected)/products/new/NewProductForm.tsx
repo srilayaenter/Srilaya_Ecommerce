@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Sparkle } from "@phosphor-icons/react";
 import { deriveWeightGramsFromSize } from "@/lib/weight";
 
 interface Category {
@@ -204,7 +205,7 @@ export default function NewProductForm({
             <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium">Product SKU *</label>
               {!skuTouched && sku && (
-                <span className="text-[10px] text-[#006A38] font-bold bg-green-50 px-2 py-0.5 rounded-full">✨ Auto-generated</span>
+                <span className="text-[10px] text-[#006A38] font-bold bg-green-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1"><Sparkle size={10} weight="regular" />Auto-generated</span>
               )}
               {skuTouched && (
                 <button

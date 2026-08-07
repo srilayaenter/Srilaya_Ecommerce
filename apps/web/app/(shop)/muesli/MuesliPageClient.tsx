@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, Plant, Leaf, Package, WhatsappLogo, BowlFood } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -11,7 +12,6 @@ const PRODUCTS = [
     id: "honey",
     name: "Honey Muesli & Granola",
     keyword: "honey muesli",
-    emoji: "🍯",
     local: "Whole Grain Oats · Honey · Mixed Nuts",
     badge: "Classic Favourite",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -28,7 +28,6 @@ const PRODUCTS = [
     id: "chocolate",
     name: "Chocolate Muesli",
     keyword: "chocolate muesli",
-    emoji: "🍫",
     local: "Whole Grain · Dark Cocoa · Antioxidants",
     badge: "Indulgent & Healthy",
     badgeColor: "bg-stone-100 text-stone-900 border-stone-300",
@@ -45,7 +44,6 @@ const PRODUCTS = [
     id: "strawberry",
     name: "Strawberry Muesli",
     keyword: "strawberry muesli",
-    emoji: "🍓",
     local: "Whole Grain · Dehydrated Strawberry · Oats",
     badge: "Heart Friendly",
     badgeColor: "bg-rose-100 text-rose-900 border-rose-200",
@@ -62,7 +60,6 @@ const PRODUCTS = [
     id: "nutty",
     name: "Nutty Granola",
     keyword: "nutty granola",
-    emoji: "🥜",
     local: "Mixed Nuts · Seeds · Whole Grain Clusters",
     badge: "High Protein",
     badgeColor: "bg-orange-100 text-orange-900 border-orange-200",
@@ -79,7 +76,6 @@ const PRODUCTS = [
     id: "fruits",
     name: "Fruits Granola",
     keyword: "fruits granola",
-    emoji: "🍇",
     local: "Whole Grain · Mixed Dried Fruits · Oats",
     badge: "Nutrient Dense",
     badgeColor: "bg-violet-100 text-violet-900 border-violet-200",
@@ -96,7 +92,6 @@ const PRODUCTS = [
     id: "mixed-fruits-nuts",
     name: "Mixed Fruits & Nuts",
     keyword: "mixed fruits",
-    emoji: "🌰",
     local: "Dried Fruits · Premium Nuts · Seeds",
     badge: "Complete Meal",
     badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-200",
@@ -113,7 +108,6 @@ const PRODUCTS = [
     id: "sugar-free",
     name: "Sugar Free Muesli",
     keyword: "sugar free muesli",
-    emoji: "🩺",
     local: "Whole Grain · No Sugar · Diabetic Safe",
     badge: "Diabetic Friendly",
     badgeColor: "bg-blue-100 text-blue-900 border-blue-200",
@@ -130,7 +124,6 @@ const PRODUCTS = [
     id: "stevia",
     name: "Sugar Free Stevia Muesli",
     keyword: "stevia muesli",
-    emoji: "🌿",
     local: "Whole Grain · Stevia Leaf · Zero Sugar",
     badge: "Zero Calories",
     badgeColor: "bg-teal-100 text-teal-900 border-teal-200",
@@ -200,7 +193,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 text-amber-900 font-bold text-xs uppercase tracking-wider mb-6 border border-amber-400/30">
-            🥣 Ready-to-Eat Muesli & Granola
+            <BowlFood size={15} weight="regular" className="inline-block" /> Ready-to-Eat Muesli &amp; Granola
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
@@ -221,13 +214,13 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
               href="#collection"
               className="bg-[#5C3A21] hover:bg-[#2E6F40] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
 
@@ -299,7 +292,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
                       className="h-44 flex items-center justify-center relative"
                       style={{ backgroundColor: p.accentLight }}
                     >
-                      <span className="text-6xl">{p.emoji}</span>
+                      <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>
                         {p.badge}
                       </span>
@@ -338,7 +331,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
                       onClick={() => openWhatsApp(p)}
                       className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-2"
                     >
-                      💬 Enquire on WhatsApp
+                      <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                     </button>
                   </div>
                 </div>
@@ -363,17 +356,17 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🌾", title: "Whole Grain Toasted", desc: "Each batch slow-toasted to preserve nutrients and develop natural flavour." },
-              { icon: "🍑", title: "Real Fruit Dehydration", desc: "Actual fruit pieces, gently dehydrated — not artificial flavour or colour." },
-              { icon: "🍃", title: "Natural Sweetening", desc: "Honey, stevia, or unsweetened — never refined sugar or corn syrup." },
-              { icon: "📦", title: "Extended Shelf Life", desc: "Naturally preserved through toasting — no artificial preservatives needed." },
+              { icon: Grains, title: "Whole Grain Toasted", desc: "Each batch slow-toasted to preserve nutrients and develop natural flavour." },
+              { icon: Plant, title: "Real Fruit Dehydration", desc: "Actual fruit pieces, gently dehydrated — not artificial flavour or colour." },
+              { icon: Leaf, title: "Natural Sweetening", desc: "Honey, stevia, or unsweetened — never refined sugar or corn syrup." },
+              { icon: Package, title: "Extended Shelf Life", desc: "Naturally preserved through toasting — no artificial preservatives needed." },
             ].map((b) => (
               <div
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow">
-                  {b.icon}
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                  <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-amber-100">{b.desc}</p>

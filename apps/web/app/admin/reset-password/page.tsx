@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { CheckCircle } from "@phosphor-icons/react";
 
 function ResetPasswordForm() {
   const searchParams  = useSearchParams();
@@ -62,7 +63,7 @@ function ResetPasswordForm() {
     <>
       {success ? (
         <div className="text-center py-4">
-          <div className="text-4xl mb-4">✅</div>
+          <CheckCircle size={40} weight="regular" className="text-[#4CAF50] mx-auto mb-4" />
           <h2 className="text-lg font-bold text-[#212121] mb-2">Password updated!</h2>
           <p className="text-sm text-[#616161]">Redirecting you to login…</p>
         </div>

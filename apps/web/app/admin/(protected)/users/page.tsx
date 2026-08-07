@@ -27,6 +27,14 @@ async function updateUserRole(formData: FormData) {
   redirect('/admin/users?saved=true');
 }
 
+async function toggleUserActive(formData: FormData) {
+  'use server';
+  const userId = formData.get('userId') as string;
+  const active = formData.get('active') === 'true';
+  await prisma.user.update({ where: { id: userId }, data: { active } });
+  redirect('/admin/users?saved=true');
+}
+
 async function resetPassword(formData: FormData) {
   'use server';
   const userId   = formData.get('userId') as string;
@@ -58,7 +66,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
 
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'asc' },
-    select: { id: true, email: true, role: true, createdAt: true },
+    select: { id: true, email: true, role: true, active: true, createdAt: true },
   });
 
   // Slot accounts first, then others
@@ -106,20 +114,39 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
               <th className="px-6 py-3">Slot</th>
               <th className="px-6 py-3">Email</th>
               <th className="px-6 py-3">Role</th>
+              <th className="px-6 py-3 text-center">Active</th>
               <th className="px-6 py-3 text-right">Reset Password</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#F5F5F5]">
             {slotUsers.map(user => (
-              <tr key={user.id} className="hover:bg-[#FFF8E1]/20 transition-colors">
+              <tr key={user.id} className={`transition-colors ${user.active ? 'hover:bg-[#FFF8E1]/20' : 'bg-red-50/40 hover:bg-red-50/60'}`}>
                 <td className="px-6 py-4 text-sm font-bold text-[#212121]">
                   {SLOT_LABELS[user.email ?? ''] ?? user.email}
+                  {!user.active && <span className="ml-2 text-[10px] font-bold bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full">Inactive</span>}
                 </td>
                 <td className="px-6 py-4 text-xs text-[#9E9E9E] font-mono">{user.email}</td>
                 <td className="px-6 py-4">
                   <span className={`text-xs font-bold px-2 py-1 rounded-full ${roleBadgeClass(user.role)}`}>
                     {ROLE_LABELS[user.role as AppRole] ?? user.role}
                   </span>
+                </td>
+                <td className="px-6 py-4 text-center">
+                  <form action={toggleUserActive}>
+                    <input type="hidden" name="userId" value={user.id} />
+                    <input type="hidden" name="active" value={user.active ? 'false' : 'true'} />
+                    <button
+                      type="submit"
+                      title={user.active ? 'Deactivate account' : 'Activate account'}
+                      className={`w-10 h-6 rounded-full relative transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                        user.active
+                          ? 'bg-[#006A38] focus:ring-[#006A38]'
+                          : 'bg-[#E0E0E0] focus:ring-[#9E9E9E]'
+                      }`}
+                    >
+                      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${user.active ? 'translate-x-5' : 'translate-x-1'}`} />
+                    </button>
+                  </form>
                 </td>
                 <td className="px-6 py-4 text-right">
                   <form action={resetPassword} className="flex items-center gap-2 justify-end">
@@ -144,7 +171,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
             ))}
             {slotUsers.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-sm text-[#9E9E9E]">
+                <td colSpan={5} className="px-6 py-8 text-center text-sm text-[#9E9E9E]">
                   No staff slot accounts found. Run the seed script to create them.
                 </td>
               </tr>

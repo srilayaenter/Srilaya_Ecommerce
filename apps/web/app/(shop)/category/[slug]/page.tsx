@@ -4,6 +4,7 @@ import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { Grains } from "@phosphor-icons/react/dist/ssr";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -77,7 +78,7 @@ export default async function CategoryPage({ params }: PageProps) {
         >
           <div>
             <p className="font-bold text-[#5C3A21] text-sm">
-              🌾 Explore our Millet Rava collection
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Millet Rava collection
             </p>
             <p className="text-xs text-gray-500 mt-0.5">
               Compare all 7 varieties, health benefits, and get personalised recommendations

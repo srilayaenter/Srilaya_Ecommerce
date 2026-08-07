@@ -6,6 +6,7 @@ import { toNum } from "@/lib/decimal";
 import { redirect } from "next/navigation";
 import { sendEmail } from "@/lib/email";
 import { buildDispatchEmail, buildDeliveredEmail } from "@/lib/emails/orderStatusUpdate";
+import { Receipt, Phone, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -147,7 +148,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
               href={`/admin/orders/${order.id}/invoice`}
               className="bg-[#FFF8E1] border border-[#FF9800]/30 text-[#E65100] px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#FF9800]/10 transition-colors"
             >
-              🧾 Invoice / Send
+              <Receipt size={14} weight="regular" className="inline-block mr-1.5" />Invoice / Send
             </Link>
           )}
         </div>
@@ -333,8 +334,8 @@ export default async function OrderDetailPage({ params }: PageProps) {
             <h2 className="font-bold text-[#212121] mb-3 text-sm">Customer</h2>
             <div className="space-y-2 text-sm">
               <p className="font-semibold text-[#212121]">{order.customerName ?? 'Guest'}</p>
-              {order.phone && <p className="text-[#616161]">📞 {order.phone}</p>}
-              {order.email && <p className="text-[#616161]">✉️ {order.email}</p>}
+              {order.phone && <p className="text-[#616161] inline-flex items-center gap-1"><Phone size={13} weight="regular" /> {order.phone}</p>}
+              {order.email && <p className="text-[#616161] inline-flex items-center gap-1"><EnvelopeSimple size={13} weight="regular" /> {order.email}</p>}
             </div>
           </div>
 

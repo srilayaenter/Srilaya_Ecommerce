@@ -3,6 +3,7 @@ import { prisma } from "../../lib/db";
 import Link from "next/link";
 import { toNum } from "../../lib/decimal";
 import CheckoutForm from "@/components/CheckoutForm";
+import { ShoppingCart } from "@phosphor-icons/react/dist/ssr";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -37,7 +38,7 @@ export default async function CheckoutPage({
   if (cartItems.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 text-center text-[#212121]">
-        <span className="text-4xl block mb-4">🛒</span>
+        <ShoppingCart size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
         <Link href="/product">
           <button className="bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm">

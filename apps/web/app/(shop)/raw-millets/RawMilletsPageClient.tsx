@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Grains, ShoppingCart, TrendDown, Microscope, Leaf , WhatsappLogo } from "@phosphor-icons/react";
 
 const PHONE = "918660321315";
 
@@ -11,7 +12,6 @@ const PRODUCTS = [
     id: "foxtail",
     name: "Foxtail Millet Grains",
     keyword: "foxtail millet grain",
-    emoji: "🌾",
     local: "Navane / Thinai / Kangni",
     badge: "Heart Healthy",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -28,7 +28,6 @@ const PRODUCTS = [
     id: "finger",
     name: "Finger Millet Grains (Ragi)",
     keyword: "finger millet grain",
-    emoji: "🌿",
     local: "Ragi / Kezhvaragu / Nachni",
     badge: "Calcium Rich",
     badgeColor: "bg-red-50 text-red-700 border-red-200",
@@ -45,7 +44,6 @@ const PRODUCTS = [
     id: "little",
     name: "Little Millet Grains",
     keyword: "little millet grain",
-    emoji: "🌱",
     local: "Samai / Same / Kutki",
     badge: "Digestive Care",
     badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -62,7 +60,6 @@ const PRODUCTS = [
     id: "barnyard",
     name: "Barnyard Millet Grains",
     keyword: "barnyard millet grain",
-    emoji: "🍃",
     local: "Kuthiraivali / Sanwa / Oudalu",
     badge: "Low GI",
     badgeColor: "bg-orange-50 text-orange-800 border-orange-200",
@@ -79,7 +76,6 @@ const PRODUCTS = [
     id: "kodo",
     name: "Kodo Millet Grains",
     keyword: "kodo millet grain",
-    emoji: "🟤",
     local: "Varagu / Kodra / Arikelu",
     badge: "Diabetic Friendly",
     badgeColor: "bg-purple-50 text-purple-800 border-purple-200",
@@ -96,7 +92,6 @@ const PRODUCTS = [
     id: "pearl",
     name: "Pearl Millet Grains (Bajra)",
     keyword: "pearl millet grain",
-    emoji: "✨",
     local: "Bajra / Kambu / Sajje",
     badge: "High Protein",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -113,7 +108,6 @@ const PRODUCTS = [
     id: "red-sorghum",
     name: "Red Sorghum Grains (Jowar)",
     keyword: "red sorghum grain",
-    emoji: "🔴",
     local: "Jonna / Cholam / Jowar",
     badge: "Gut Health",
     badgeColor: "bg-rose-50 text-rose-800 border-rose-200",
@@ -130,7 +124,6 @@ const PRODUCTS = [
     id: "white-sorghum",
     name: "White Sorghum Grains (Jowar)",
     keyword: "white sorghum grain",
-    emoji: "🌻",
     local: "White Jowar / Cholam / Jonnalu",
     badge: "Gluten-Free",
     badgeColor: "bg-yellow-50 text-yellow-800 border-yellow-200",
@@ -196,7 +189,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900/10 text-emerald-900 font-bold text-xs uppercase tracking-wider mb-6 border border-emerald-900/20">
-            🌾 Whole Millet Grains
+            <Grains className="w-4 h-4" weight="regular" /> Whole Millet Grains
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#2E6F40] leading-tight max-w-4xl mx-auto mb-4">
             Nature&apos;s Supergrains:<br className="hidden sm:block" />
@@ -211,13 +204,13 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             <a href="#collection" className="bg-[#2E6F40] hover:bg-[#5C3A21] text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
-              🛒 Explore Collection
+              <ShoppingCart className="w-4 h-4" weight="regular" /> Explore Collection
             </a>
             <button
               onClick={() => openWhatsApp()}
               className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-3.5 rounded-xl text-base shadow-md transition-all duration-300 flex items-center gap-2"
             >
-              💬 Chat on WhatsApp
+              <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Chat on WhatsApp
             </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
@@ -279,7 +272,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
                     </div>
                   ) : (
                     <div className="h-44 flex items-center justify-center relative" style={{ backgroundColor: p.accentLight }}>
-                      <span className="text-6xl">{p.emoji}</span>
+                      <Grains className="w-14 h-14" weight="regular" style={{ color: p.accent }} />
                       <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full border ${p.badgeColor}`}>{p.badge}</span>
                     </div>
                   )}
@@ -311,7 +304,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
                       onClick={() => openWhatsApp(p)}
                       className="w-full py-2.5 bg-[#25D366]/10 hover:bg-[#25D366] hover:text-white text-[#1a9e4a] font-bold rounded-lg text-sm transition-colors flex items-center justify-center gap-2 border border-[#25D366]/40 mt-2"
                     >
-                      💬 Enquire on WhatsApp
+                      <WhatsappLogo size={15} weight="fill" className="inline-block mr-1" />Enquire on WhatsApp
                     </button>
                   </div>
                 </div>
@@ -329,13 +322,13 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🌾", title: "100% Unpolished", desc: "Full bran and germ retained — all fibre, vitamins, and minerals stay intact." },
-              { icon: "📉", title: "Low Glycemic Index", desc: "Whole grain structure slows glucose absorption — steady energy, no spikes." },
-              { icon: "🦠", title: "Gut Microbiome", desc: "Natural resistant starch and fibre feed your beneficial gut bacteria." },
-              { icon: "🌿", title: "Truly Gluten-Free", desc: "All 8 varieties are naturally gluten-free — safe for wheat-sensitive diets." },
+              { icon: Grains, title: "100% Unpolished", desc: "Full bran and germ retained — all fibre, vitamins, and minerals stay intact." },
+              { icon: TrendDown, title: "Low Glycemic Index", desc: "Whole grain structure slows glucose absorption — steady energy, no spikes." },
+              { icon: Microscope, title: "Gut Microbiome", desc: "Natural resistant starch and fibre feed your beneficial gut bacteria." },
+              { icon: Leaf, title: "Truly Gluten-Free", desc: "All 8 varieties are naturally gluten-free — safe for wheat-sensitive diets." },
             ].map((b) => (
               <div key={b.title} className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300">
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow">{b.icon}</div>
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-emerald-100">{b.desc}</p>
               </div>

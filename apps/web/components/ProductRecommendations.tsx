@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Grains } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -42,7 +43,7 @@ export default function ProductRecommendations({ slug }: { slug: string }) {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-4xl">🌾</div>
+                <div className="w-full h-full flex items-center justify-center"><Grains size={40} weight="regular" className="text-[#BDBDBD]" /></div>
               )}
             </div>
             <div className="p-3">
