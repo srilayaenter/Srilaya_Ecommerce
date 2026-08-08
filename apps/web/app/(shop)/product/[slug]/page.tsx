@@ -13,7 +13,7 @@ import ProductPurchaseSection from "@/components/ProductPurchaseSection";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 import { Leaf, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
-import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 type Params = Promise<{ slug: string }>;
 

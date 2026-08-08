@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Grains, BowlSteam, Bread, Drop, Jar, Coffee, Leaf } from "@phosphor-icons/react/dist/ssr";
-import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 export const metadata: Metadata = {
   title: "Specialty Collections | SriLaYa Naturals",

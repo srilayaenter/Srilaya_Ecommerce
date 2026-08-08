@@ -5,7 +5,7 @@ import { isAdminRole } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import { addPackagingItem, addPackagingStock, usePackagingStock } from "./actions";
 import { Bag, Package, Scissors, Tag, ShieldCheck, Paperclip, Lightbulb } from "@phosphor-icons/react/dist/ssr";
-import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 export const dynamic = "force-dynamic";
 

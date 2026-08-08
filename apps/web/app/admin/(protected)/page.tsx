@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
 import Link from "next/link";
 import { CurrencyDollar, Package, Hourglass, Warning, Plant, ShoppingCart, MagnifyingGlass, Grains } from "@phosphor-icons/react/dist/ssr";
-import type { Icon as PhosphorIcon } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 export default async function AdminOverviewPage() {
   const session = await getServerSession(authOptions);

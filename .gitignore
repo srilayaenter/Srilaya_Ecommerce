@@ -36,6 +36,7 @@ nul
 
 # Business documents
 *.docx
+/packaging/
 packages/db/seed-missing-products.ts
 .vercel
 .env*
