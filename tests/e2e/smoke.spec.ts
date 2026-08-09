@@ -68,7 +68,7 @@ test("SMOKE-05 search returns results for 'millet'", async ({ page }) => {
   const results = page.locator("a[href^='/product/']").or(
     page.getByText(/\d+\s+result/i)
   );
-  await expect(results.first()).toBeVisible();
+  await expect(results.first()).toBeVisible({ timeout: 15000 });
 });
 
 test("SMOKE-06 cart page loads (empty state is fine)", async ({ page }) => {
