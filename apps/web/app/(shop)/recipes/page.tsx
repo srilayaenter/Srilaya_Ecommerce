@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import Image from "next/image";
 import { ThumbsUp, BowlFood } from "@phosphor-icons/react/dist/ssr";
+import RecipeCardImage from "@/components/RecipeCardImage";
 
 // Recipe images are served from Supabase Storage (production bucket, public).
 // To add or update a photo — NO code change needed:
@@ -138,17 +138,7 @@ export default async function RecipesPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURED_RECIPES.map((r) => (
               <div key={r.title} className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
-                {r.image ? (
-                  <div className="relative h-44 bg-[#F5F5F5]">
-                    <Image src={r.image} alt={r.title} fill className="object-cover" unoptimized />
-                    <span className="absolute top-3 left-3 text-xs font-bold text-[#006A38] bg-white/90 px-3 py-0.5 rounded-full">{r.tag}</span>
-                  </div>
-                ) : (
-                <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#A5D6A7] flex flex-col items-center justify-center gap-2">
-                  <BowlFood size={52} weight="regular" className="text-[#2E6F40]" />
-                  <span className="text-xs font-bold text-[#006A38] bg-white/70 px-3 py-0.5 rounded-full">{r.tag}</span>
-                </div>
-                )}
+                <RecipeCardImage src={r.image} alt={r.title} tag={r.tag} />
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-bold text-[#006A38] bg-[#E8F5E9] px-2 py-0.5 rounded-full">Recipe</span>
@@ -172,17 +162,7 @@ export default async function RecipesPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURED_FLOUR_RECIPES.map((r) => (
               <div key={r.title} className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
-                {r.image ? (
-                  <div className="relative h-44 bg-[#F5F5F5]">
-                    <Image src={r.image} alt={r.title} fill className="object-cover" unoptimized />
-                    <span className="absolute top-3 left-3 text-xs font-bold text-[#006A38] bg-white/90 px-3 py-0.5 rounded-full">{r.tag}</span>
-                  </div>
-                ) : (
-                  <div className="h-44 bg-gradient-to-br from-[#FDF0E8] to-[#F5D9C0] flex flex-col items-center justify-center gap-2">
-                    <BowlFood size={52} weight="regular" className="text-[#5C3A21]" />
-                    <span className="text-xs font-bold text-[#5C3A21] bg-white/70 px-3 py-0.5 rounded-full">{r.tag}</span>
-                  </div>
-                )}
+                <RecipeCardImage src={r.image} alt={r.title} tag={r.tag} />
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-bold text-[#5C3A21] bg-[#FDF0E8] px-2 py-0.5 rounded-full">Recipe</span>
