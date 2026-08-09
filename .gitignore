@@ -41,3 +41,4 @@ packages/db/seed-missing-products.ts
 .vercel
 .env*
 tests/e2e/.auth/
+package-lock.json
