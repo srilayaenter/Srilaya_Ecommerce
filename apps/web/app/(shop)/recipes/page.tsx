@@ -3,9 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ThumbsUp, BowlFood } from "@phosphor-icons/react/dist/ssr";
 
-// Recipe images are served from Supabase Storage (bucket: "recipe-images", public).
+// Recipe images are served from Supabase Storage (production bucket, public).
 // To add or update a photo — NO code change needed:
-//   1. Go to Supabase Dashboard → Storage → recipe-images bucket
+//   1. Go to Supabase Dashboard → Storage → recipe-images bucket (project szsrdtiphbdpdfggxwpw)
 //   2. Upload (or overwrite) the file with the exact filename listed below
 //   3. The image appears on this page immediately — no deploy required
 //
@@ -13,14 +13,8 @@ import { ThumbsUp, BowlFood } from "@phosphor-icons/react/dist/ssr";
 //   millet-upma.jpg   → Millet Upma card
 //   rava-kheer.jpg    → Rava Kheer card
 //   millet-pongal.jpg → Millet Pongal card
-//
-// Requires NEXT_PUBLIC_SUPABASE_URL in Vercel env vars (and local .env):
-//   NEXT_PUBLIC_SUPABASE_URL=https://szsrdtiphbdpdfggxwpw.supabase.co
 
-const _base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const RECIPE_IMG = _base
-  ? `${_base}/storage/v1/object/public/recipe-images`
-  : null;
+const RECIPE_IMG = "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/recipe-images";
 
 const FEATURED_FLOUR_RECIPES = [
   {
