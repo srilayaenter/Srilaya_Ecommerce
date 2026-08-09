@@ -17,7 +17,6 @@ jobs:
     name: smoke / smoke-test
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    retention-days: 1
 
     steps:
       # ── 1. Checkout ──────────────────────────────────────────────────────────
