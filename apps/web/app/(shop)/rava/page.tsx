@@ -15,14 +15,17 @@ export const metadata: Metadata = {
 // Invalidated automatically when products are updated (tags: ["products"]).
 const fetchRavaImages = unstable_cache(
   async () => {
-    const products = await prisma.product.findMany({
-      where: { category: { slug: "millet-rava" }, active: true },
-      select: {
-        title: true,
-        image: true,
-        images: { select: { url: true }, orderBy: { position: "asc" }, take: 1 },
-      },
-    });
+    let products: { title: string; image: string | null; images: { url: string }[] }[] = [];
+    try {
+      products = await prisma.product.findMany({
+        where: { category: { slug: "millet-rava" }, active: true },
+        select: {
+          title: true,
+          image: true,
+          images: { select: { url: true }, orderBy: { position: "asc" }, take: 1 },
+        },
+      });
+    } catch {}
 
     // Build map: lowercased title â†’ best available image URL
     const map: Record<string, string> = {};
