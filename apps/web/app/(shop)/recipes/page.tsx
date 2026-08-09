@@ -118,11 +118,14 @@ export const metadata: Metadata = {
 };
 
 export default async function RecipesPage() {
-  const recipes = await prisma.blogPost.findMany({
-    where:   { published: true, category: "recipe" },
-    orderBy: { publishedAt: "desc" },
-    select:  { id: true, slug: true, title: true, excerpt: true, image: true, readMins: true, publishedAt: true },
-  });
+  let recipes: { id: string; slug: string; title: string; excerpt: string | null; image: string | null; readMins: number | null; publishedAt: Date | null }[] = [];
+  try {
+    recipes = await prisma.blogPost.findMany({
+      where:   { published: true, category: "recipe" },
+      orderBy: { publishedAt: "desc" },
+      select:  { id: true, slug: true, title: true, excerpt: true, image: true, readMins: true, publishedAt: true },
+    });
+  } catch {}
 
   return (
     <main className="min-h-screen bg-[#F9F6F0]">
