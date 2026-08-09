@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import Image from "next/image";
 import { ThumbsUp, BowlFood } from "@phosphor-icons/react/dist/ssr";
 import RecipeCardImage from "@/components/RecipeCardImage";
 
