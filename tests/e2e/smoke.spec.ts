@@ -24,7 +24,13 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("SMOKE-01 health endpoint returns 200", async ({ request }) => {
-  const res = await request.get("/api/healthz");
+  // Poll until healthy — globalSetup warms the DB but a cold Supabase
+  // connection can still take a few seconds to become ready.
+  let res = await request.get("/api/healthz");
+  for (let i = 0; i < 6 && res.status() !== 200; i++) {
+    await new Promise((r) => setTimeout(r, 5000));
+    res = await request.get("/api/healthz");
+  }
   const body = await res.json().catch(() => ({}));
   expect(res.status(), `healthz body: ${JSON.stringify(body)}`).toBe(200);
   expect(body.status).toBe("ok");

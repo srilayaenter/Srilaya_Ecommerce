@@ -10,9 +10,7 @@ try {
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  globalSetup: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-    ? "./tests/e2e/globalSetup"
-    : undefined,
+  globalSetup: "./tests/e2e/globalSetup",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
