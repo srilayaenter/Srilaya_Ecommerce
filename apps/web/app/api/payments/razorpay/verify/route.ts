@@ -43,7 +43,11 @@ export async function POST(request: Request) {
       .update(bodyString)
       .digest("hex");
 
-    const isValid = expectedSignature === razorpay_signature;
+    const expectedBuf = Buffer.from(expectedSignature, "hex");
+    const providedBuf = Buffer.from(String(razorpay_signature), "hex");
+    const isValid =
+      expectedBuf.length === providedBuf.length &&
+      crypto.timingSafeEqual(expectedBuf, providedBuf);
 
     if (!isValid) {
       logPaymentFailed({ razorpayOrderId: razorpay_order_id, reason: "invalid_signature" });

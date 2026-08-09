@@ -2,8 +2,9 @@ export const BRAND = {
   name: "SriLaYa Naturals",
   tagline: "Pure & Organic Foods",
   domain: "srilaya.com",
-  gstin: process.env.BRAND_GSTIN || "29XXXXX1234X1ZX",
+  gstin: process.env.BRAND_GSTIN || "29AYOPD6369H1ZV",
   address: "Bengaluru, Karnataka, India",
+  addressFull: "White Field Hoskote Main Road, Seegehalli, Bengaluru, Karnataka - 560067",
   email: "info@srilaya.com",
   phone: "+91 86603 21315",
 
@@ -18,7 +19,7 @@ export const BRAND = {
 
   social: {
     facebook: "",
-    instagram: "",
+    instagram: "https://www.instagram.com/srilayaenterprises",
     twitter: "",
   },
 

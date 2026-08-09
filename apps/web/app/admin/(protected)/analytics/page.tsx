@@ -3,6 +3,7 @@ import { toNum } from "@/lib/decimal";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
+import { ChartBar, Storefront, ShoppingCart } from "@phosphor-icons/react/dist/ssr";
 
 export default async function AnalyticsPage() {
   const session = await getServerSession(authOptions);
@@ -113,10 +114,10 @@ export default async function AnalyticsPage() {
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Revenue (30d)",   value: `₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, icon: "💰" },
-          { label: "Paid Orders",     value: (statusMap["paid"] ?? 0).toString(),         icon: "✅" },
-          { label: "COD Pending",     value: (statusMap["cod_pending"] ?? 0).toString(),  icon: "🛵" },
-          ...(showMargin ? [{ label: "Gross Margin", value: grossMargin !== null ? `${grossMargin.toFixed(1)}%` : "—", icon: "📈",
+          { label: "Revenue (30d)",   value: `₹${totalRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` },
+          { label: "Paid Orders",     value: (statusMap["paid"] ?? 0).toString() },
+          { label: "COD Pending",     value: (statusMap["cod_pending"] ?? 0).toString() },
+          ...(showMargin ? [{ label: "Gross Margin", value: grossMargin !== null ? `${grossMargin.toFixed(1)}%` : "—",
             sub: grossMargin === null ? "Add cost prices to variants" : undefined }] : []),
         ].map(m => (
           <div key={m.label} className="bg-white rounded-xl border border-[#E0E0E0] p-5 shadow-sm">
@@ -132,7 +133,7 @@ export default async function AnalyticsPage() {
         <h2 className="text-sm font-bold text-[#212121] mb-6">Daily Revenue — Last 30 Days</h2>
         {totalRevenue === 0 ? (
           <div className="flex flex-col items-center justify-center h-40 gap-3">
-            <span className="text-4xl">📊</span>
+            <ChartBar size={40} weight="regular" className="text-[#9E9E9E]" />
             <p className="text-sm font-semibold text-[#9E9E9E]">No paid orders in the last 30 days.</p>
           </div>
         ) : (
@@ -240,12 +241,12 @@ export default async function AnalyticsPage() {
               {channels.map(c => {
                 const totalCount = channels.reduce((s, ch) => s + ch.count, 0);
                 const pct = totalCount > 0 ? (c.count / totalCount) * 100 : 0;
-                const icon = c.channel === "in_store" ? "🏪" : "🛒";
+                const ChannelIcon = c.channel === "in_store" ? Storefront : ShoppingCart;
                 const label = c.channel === "in_store" ? "In-Store" : "Online";
                 return (
                   <div key={c.channel}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="font-semibold text-[#212121]">{icon} {label}</span>
+                      <span className="font-semibold text-[#212121] inline-flex items-center gap-1"><ChannelIcon size={14} weight="regular" /> {label}</span>
                       <span className="text-[#9E9E9E] text-xs">{c.count} orders · ₹{c.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
                     </div>
                     <div className="w-full bg-[#F5F5F5] rounded-full h-3">

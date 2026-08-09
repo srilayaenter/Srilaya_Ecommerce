@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { CheckCircle, Package, CurrencyDollar } from "@phosphor-icons/react";
 
 interface ReturnRequest {
   id: string;
@@ -70,7 +71,7 @@ export default function ReturnsAdminPage() {
 
       {filtered.length === 0 ? (
         <div className="bg-white rounded-xl border border-[#E0E0E0] py-16 text-center">
-          <p className="text-3xl mb-2">✅</p>
+          <CheckCircle size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-2" />
           <p className="font-bold text-[#212121]">No {filter} returns</p>
         </div>
       ) : (
@@ -133,11 +134,11 @@ export default function ReturnsAdminPage() {
                 <div className="border-t border-[#F5F5F5] pt-4 flex gap-2">
                   <button onClick={() => updateStatus(r.id, "received")} disabled={saving === r.id}
                     className="bg-purple-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-colors disabled:opacity-60">
-                    📦 Mark Received & Restock
+                    <Package size={14} weight="regular" className="inline-block mr-1" />Mark Received & Restock
                   </button>
                   <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
                     className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
-                    💰 Mark as Refunded
+                    <CurrencyDollar size={14} weight="regular" className="inline-block mr-1" />Mark as Refunded
                   </button>
                 </div>
               )}
@@ -146,7 +147,7 @@ export default function ReturnsAdminPage() {
                 <div className="border-t border-[#F5F5F5] pt-4">
                   <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
                     className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
-                    💰 Mark as Refunded
+                    <CurrencyDollar size={14} weight="regular" className="inline-block mr-1" />Mark as Refunded
                   </button>
                 </div>
               )}

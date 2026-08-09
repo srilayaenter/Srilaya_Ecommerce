@@ -1,4 +1,5 @@
 import { BRAND } from "@/lib/brand";
+import { DeviceMobile, CreditCard, ShieldCheck, Bank, Warning, Lock, Package } from "@phosphor-icons/react/dist/ssr";
 
 const BANK = {
   accountName:   process.env.BANK_ACCOUNT_NAME   || BRAND.name,
@@ -29,7 +30,7 @@ export default function PaymentDetailsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <div className="bg-[#F9F9F9] p-6 rounded-2xl border border-[#E0E0E0] text-center flex flex-col items-center">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">
-              📱
+              <DeviceMobile size={22} weight="regular" />
             </div>
             <h3 className="font-bold text-[#212121] text-base mb-2">
               UPI &amp; Wallet
@@ -41,7 +42,7 @@ export default function PaymentDetailsPage() {
 
           <div className="bg-[#F9F9F9] p-6 rounded-2xl border border-[#E0E0E0] text-center flex flex-col items-center">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">
-              💳
+              <CreditCard size={22} weight="regular" />
             </div>
             <h3 className="font-bold text-[#212121] text-base mb-2">
               Cards &amp; Banking
@@ -53,7 +54,7 @@ export default function PaymentDetailsPage() {
 
           <div className="bg-[#F9F9F9] p-6 rounded-2xl border border-[#E0E0E0] text-center flex flex-col items-center">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-xl font-bold mb-4">
-              🛡️
+              <ShieldCheck size={22} weight="regular" />
             </div>
             <h3 className="font-bold text-[#212121] text-base mb-2">
               Secure Gateway
@@ -67,7 +68,7 @@ export default function PaymentDetailsPage() {
         <div className="bg-white border border-[#E0E0E0] rounded-2xl overflow-hidden shadow-sm">
           <div className="bg-[#F9F9F9] px-6 py-4 border-b border-[#E0E0E0]">
             <h2 className="text-lg font-bold text-[#212121] flex items-center gap-2">
-              <span>🏦</span> Offline / Direct Bank Transfer Details
+              <Bank size={18} weight="regular" /> Offline / Direct Bank Transfer Details
             </h2>
             <p className="text-[#757575] text-xs mt-0.5">
               If you prefer making a manual IMPS / NEFT / RTGS transfer, you can deposit directly to our bank account:
@@ -103,7 +104,7 @@ export default function PaymentDetailsPage() {
             </div>
 
             <div className="mt-6 bg-amber-50 border border-amber-200/70 p-4 rounded-xl text-xs text-amber-900 leading-relaxed">
-              <strong>⚠️ Order Verification Note:</strong> Once you make a direct manual bank deposit, please take a snapshot of the transaction receipt or reference ID and share it with our customer support team over email or WhatsApp along with your Order ID to expedite dispatch approval.
+              <strong><Warning size={13} weight="regular" className="inline-block mr-0.5" />Order Verification Note:</strong> Once you make a direct manual bank deposit, please take a snapshot of the transaction receipt or reference ID and share it with our customer support team over email or WhatsApp along with your Order ID to expedite dispatch approval.
             </div>
           </div>
         </div>
@@ -111,7 +112,7 @@ export default function PaymentDetailsPage() {
 
       <section className="pb-16 text-center text-[#9E9E9E] text-xs">
         <p className="flex items-center justify-center gap-1.5 font-medium">
-          <span>🔒</span> 256-Bit SSL Secured Encryption | <span>📦</span> Safe Delivery Assured
+          <Lock size={13} weight="regular" /> 256-Bit SSL Secured Encryption | <Package size={13} weight="regular" /> Safe Delivery Assured
         </p>
       </section>
     </div>

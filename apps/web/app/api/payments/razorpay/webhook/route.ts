@@ -9,8 +9,9 @@ import { revalidatePath } from "next/cache";
 import { log, logPaymentFailed, logError } from "@/lib/logger";
 
 export async function POST(request: Request) {
+  let rawBody = "";
   try {
-    const rawBody = await request.text();
+    rawBody = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
 
     if (!process.env.RAZORPAY_WEBHOOK_SECRET) {
@@ -27,20 +28,26 @@ export async function POST(request: Request) {
       .update(rawBody)
       .digest('hex');
 
-    if (expectedSignature !== signature) {
+    const expectedBuf = Buffer.from(expectedSignature, 'hex');
+    const signatureBuf = Buffer.from(signature, 'hex');
+    if (
+      expectedBuf.length !== signatureBuf.length ||
+      !crypto.timingSafeEqual(expectedBuf, signatureBuf)
+    ) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
     const event = JSON.parse(rawBody);
     const eventId = event.id || `${event.event}_${Date.now()}`;
 
-    const existing = await prisma.webhookEvent.findUnique({
-      where: { eventId }
-    });
-
-    if (existing) {
-      return NextResponse.json({ success: true, message: "Already processed" });
-    }
+    // The WebhookEvent insert is committed in the SAME transaction as the
+    // state change it's guarding, not claimed upfront — that keeps a
+    // concurrent duplicate delivery from double-running the side effects
+    // below (the unique constraint on eventId makes the second transaction
+    // fail atomically), while still letting a genuinely failed attempt be
+    // retried later (by Razorpay or the admin "replay" button) instead of
+    // being silently marked "processed" before it actually succeeded.
+    let eventClaimed = false;
 
     if (event.event === 'payment.captured') {
       const payment = event.payload.payment.entity;
@@ -52,14 +59,25 @@ export async function POST(request: Request) {
       });
 
       if (order && order.status !== 'paid') {
-        await prisma.order.update({
-          where: { id: order.id },
-          data: {
-            status: 'paid',
-            paymentId: paymentId,
-            invoiceNo: order.invoiceNo || `INV-${Date.now()}`,
+        try {
+          await prisma.$transaction([
+            prisma.order.update({
+              where: { id: order.id },
+              data: {
+                status: 'paid',
+                paymentId: paymentId,
+                invoiceNo: order.invoiceNo || `INV-${Date.now()}`,
+              }
+            }),
+            prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } }),
+          ]);
+          eventClaimed = true;
+        } catch (e: any) {
+          if (e.code === "P2002") {
+            return NextResponse.json({ success: true, message: "Already processed" });
           }
-        });
+          throw e;
+        }
       }
     }
 
@@ -84,20 +102,29 @@ export async function POST(request: Request) {
           where: { orderId: order.id }
         });
 
-        await prisma.$transaction(async (tx) => {
-          for (const item of orderItems) {
-            await tx.productVariant.update({
-              where: { id: item.variantId },
-              data: { stock: { increment: item.quantity } }
-            });
+        try {
+          await prisma.$transaction([
+            ...orderItems.map(item =>
+              prisma.productVariant.update({
+                where: { id: item.variantId },
+                data: { stock: { increment: item.quantity } }
+              })
+            ),
+            prisma.order.update({
+              where: { id: order.id },
+              data: { status: 'failed' }
+            }),
+            prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } }),
+          ]);
+          eventClaimed = true;
+        } catch (e: any) {
+          if (e.code === "P2002") {
+            return NextResponse.json({ success: true, message: "Already processed" });
           }
-          await tx.order.update({
-            where: { id: order.id },
-            data: { status: 'failed' }
-          });
-        });
+          throw e;
+        }
 
-        // Fire stock notifications asynchronously after stock is restored
+        // Fire stock notifications asynchronously now that stock is restored
         orderItems.forEach(item => sendStockNotifications(item.variantId).catch(() => {}));
 
         if (process.env.ADMIN_ALERT_EMAIL) {
@@ -116,9 +143,16 @@ export async function POST(request: Request) {
       }
     }
 
-    await prisma.webhookEvent.create({
-      data: { provider: 'razorpay', eventId }
-    });
+    // Event types we don't act on, or cases where the state guard above
+    // already skipped processing (e.g. already paid) — still record the
+    // eventId once so repeated deliveries short-circuit cheaply next time.
+    if (!eventClaimed) {
+      try {
+        await prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } });
+      } catch (e: any) {
+        if (e.code !== "P2002") throw e;
+      }
+    }
 
     await log.flush();
     return NextResponse.json({ success: true });
@@ -126,7 +160,17 @@ export async function POST(request: Request) {
   } catch (error: any) {
     logError("payment.webhook", error);
     await log.flush();
-    console.error("Webhook processing error:", error);
+    // Save to FailedWebhook so it can be reviewed and retried from the admin panel
+    try {
+      await prisma.failedWebhook.create({
+        data: {
+          provider:     "razorpay",
+          eventId:      (error as any)?._eventId ?? null,
+          rawBody:      rawBody ?? "",
+          errorMessage: error?.message ?? String(error),
+        },
+      });
+    } catch { /* don't mask the original error */ }
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }

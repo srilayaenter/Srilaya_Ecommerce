@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { CheckCircle } from "@phosphor-icons/react";
 
 export default function MfaSetupPage() {
   const [qrDataUrl, setQrDataUrl]   = useState("");
@@ -49,7 +50,7 @@ export default function MfaSetupPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] font-sans">
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-10 text-center max-w-sm shadow-sm">
-          <div className="text-5xl mb-4">✅</div>
+          <CheckCircle size={48} weight="regular" className="text-[#4CAF50] mx-auto mb-4" />
           <h2 className="text-xl font-black text-[#212121] mb-2">MFA Enabled!</h2>
           <p className="text-sm text-[#616161] mb-6">
             Two-factor authentication is now active. You'll be asked for a code each time you log in.

@@ -3,7 +3,9 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
-  const { email } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { email } = body;
   if (!email || typeof email !== "string") {
     return NextResponse.json({ error: "Email required" }, { status: 400 });
   }

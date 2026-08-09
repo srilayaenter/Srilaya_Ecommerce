@@ -71,10 +71,11 @@ export default async function OrderInvoicePage({ params }: PageProps) {
           body { background: white !important; }
           .print\\:hidden { display: none !important; }
           #invoice-doc { border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+          @page { margin: 10mm; size: A4; }
         }
       `}</style>
 
-      {/* Toolbar — hidden on print */}
+{/* Toolbar — hidden on print */}
       <div className="print:hidden flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Link href="/admin/orders" className="text-sm text-[#006A38] font-bold hover:underline">← Orders</Link>

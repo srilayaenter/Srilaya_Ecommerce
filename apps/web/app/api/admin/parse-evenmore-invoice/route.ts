@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { isOwner } from '@/lib/permissions';
 import { prisma } from '@/lib/db';
+import { checkRateLimit, getIp } from '@/lib/rateLimit';
 
 // Evenmore product name → normalised key (same as EB dict keys)
 const EVENMORE_ALIASES: Record<string, string> = {
@@ -75,6 +76,9 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!isOwner(session?.user?.role ?? '')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  if (!checkRateLimit(`admin-parse:${getIp(req)}`, 10, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
   const formData = await req.formData();

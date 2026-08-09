@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Grains } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -11,15 +12,27 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; cat?: string }>;
 }
 
-const fetchSearchResults = unstable_cache(
-  async (query: string, tokens: string[]) => {
-    return Promise.all([
-      prisma.product.findMany({
-        where: {
-          active: true,
+const fetchCategories = unstable_cache(
+  () => prisma.category.findMany({
+    where:   { parentId: null, products: { some: { active: true } } },
+    orderBy: { name: "asc" },
+    select:  { name: true, slug: true },
+  }),
+  ["search-categories"],
+  { revalidate: 3600, tags: ["categories"] }
+);
+
+async function fetchSearchResults(query: string, tokens: string[], cat: string) {
+  const categoryFilter = cat ? { category: { slug: cat } } : {};
+  return Promise.all([
+    prisma.product.findMany({
+      where: {
+        active: true,
+        ...categoryFilter,
+        ...(tokens.length > 0 ? {
           AND: tokens.map(t => ({
             OR: [
               { title:       { contains: t, mode: "insensitive" } },
@@ -28,47 +41,53 @@ const fetchSearchResults = unstable_cache(
               { sku:       { contains: t, mode: "insensitive" } },
             ],
           })),
-        },
-        include: {
-          category: true,
-          variants: { where: { active: true }, orderBy: { price: "asc" } },
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.bundle.findMany({
-        where: {
-          active: true,
-          AND: tokens.map(t => ({
-            OR: [
-              { title:       { contains: t, mode: "insensitive" } },
-              { description: { contains: t, mode: "insensitive" } },
-            ],
-          })),
-        },
-        take: 6,
-      }),
-    ]);
-  },
-  ["search"],
-  { revalidate: 300 }
-);
+        } : {}),
+      },
+      include: {
+        category: true,
+        variants: { where: { active: true }, orderBy: { price: "asc" } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.bundle.findMany({
+      where: {
+        active: true,
+        AND: tokens.map(t => ({
+          OR: [
+            { title:       { contains: t, mode: "insensitive" } },
+            { description: { contains: t, mode: "insensitive" } },
+          ],
+        })),
+      },
+      take: 6,
+    }),
+  ]);
+}
 
 export default async function SearchPage({ searchParams }: PageProps) {
-  const { q } = await searchParams;
+  const { q, cat } = await searchParams;
   const query = q?.trim() || "";
+  const selectedCat = cat?.trim() || "";
 
   const tokens = query.split(/\s+/).filter(Boolean);
 
   let products: any[] = [];
   let bundles: any[] = [];
+  let categories: { name: string; slug: string }[] = [];
 
-  if (query) {
+  try {
+    categories = await fetchCategories();
+  } catch {
+    // non-critical — filter just won't show
+  }
+
+  if (query || selectedCat) {
     try {
       const timeout = new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error("search-timeout")), 8000)
       );
       [products, bundles] = await Promise.race([
-        fetchSearchResults(query, tokens),
+        fetchSearchResults(query, tokens, selectedCat),
         timeout,
       ]);
     } catch {
@@ -108,8 +127,37 @@ export default async function SearchPage({ searchParams }: PageProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-10">
 
+        {/* Category filter pills */}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Link
+              href={query ? `/search?q=${encodeURIComponent(query)}` : "/search"}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                !selectedCat
+                  ? "bg-[#006A38] text-white border-[#006A38]"
+                  : "bg-white text-[#424242] border-[#E0E0E0] hover:border-[#006A38] hover:text-[#006A38]"
+              }`}
+            >
+              All
+            </Link>
+            {categories.map(c => (
+              <Link
+                key={c.slug}
+                href={query ? `/search?q=${encodeURIComponent(query)}&cat=${c.slug}` : `/search?cat=${c.slug}`}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                  selectedCat === c.slug
+                    ? "bg-[#006A38] text-white border-[#006A38]"
+                    : "bg-white text-[#424242] border-[#E0E0E0] hover:border-[#006A38] hover:text-[#006A38]"
+                }`}
+              >
+                {c.name}
+              </Link>
+            ))}
+          </div>
+        )}
+
         {/* No query state */}
-        {!query && (
+        {!query && !selectedCat && (
           <div className="text-center py-12">
             <p className="text-[#424242] text-sm mb-4">Try searching for:</p>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -127,18 +175,18 @@ export default async function SearchPage({ searchParams }: PageProps) {
         )}
 
         {/* Results count */}
-        {query && (
+        {(query || selectedCat) && (
           <p className="text-sm text-[#424242] mb-6 font-medium">
             {products.length === 0 && bundles.length === 0
-              ? `No results found for "${query}"`
-              : `${products.length + bundles.length} result${products.length + bundles.length !== 1 ? "s" : ""} for "${query}"`}
+              ? query ? `No results found for "${query}"` : "No products in this category"
+              : `${products.length + bundles.length} result${products.length + bundles.length !== 1 ? "s" : ""}${query ? ` for "${query}"` : ""}`}
           </p>
         )}
 
         {/* No results */}
-        {query && products.length === 0 && bundles.length === 0 && (
+        {(query || selectedCat) && products.length === 0 && bundles.length === 0 && (
           <div className="text-center py-16 bg-white rounded-2xl border border-[#E8E0D5]">
-            <p className="text-5xl mb-4">🌾</p>
+            <Grains className="w-14 h-14 text-[#9E9E9E] mx-auto mb-4" weight="regular" />
             <h2 className="text-lg font-bold text-[#212121] mb-2">No results found</h2>
             <p className="text-sm text-[#424242] mb-6">Try a different keyword or browse our categories.</p>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -166,9 +214,9 @@ export default async function SearchPage({ searchParams }: PageProps) {
               {bundles.map((b: any) => (
                 <Link key={b.id} href={`/bundles/${b.slug}`}
                   className="bg-white border border-[#E0E0E0] rounded-2xl p-4 hover:border-[#006A38] transition-colors flex gap-4 items-center">
-                  {b.imageUrl && (
+                  {b.image && (
                     <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-[#F9F6F0]">
-                      <Image src={b.imageUrl} alt={b.title} fill sizes="64px" className="object-contain p-1" />
+                      <Image src={b.image} alt={b.title} fill sizes="64px" className="object-contain p-1" />
                     </div>
                   )}
                   <div>

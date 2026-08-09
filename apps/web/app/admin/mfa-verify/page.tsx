@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LockKey } from "@phosphor-icons/react";
 
 export default function MfaVerifyPage() {
   const [code,    setCode]    = useState("");
@@ -42,7 +43,7 @@ export default function MfaVerifyPage() {
 
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-sm p-8">
         <div className="text-center mb-6">
-          <span className="text-4xl">🔐</span>
+          <LockKey size={40} weight="regular" className="text-[#006A38] mx-auto" />
           <p className="text-sm text-[#616161] mt-3">
             Open your authenticator app and enter the 6-digit code for <strong>SriLaYa Admin</strong>.
           </p>

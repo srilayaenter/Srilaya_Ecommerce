@@ -12,6 +12,18 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "D:\\CompanyWebsite\\srilaya-green"],
       "port": 3001
+    },
+    {
+      "name": "srilaya-ops",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8090", "--directory", "D:\\CompanyWebsite\\srilaya-ops\\www"],
+      "port": 8090
+    },
+    {
+      "name": "srilaya-green-ops",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8091", "--directory", "D:\\CompanyWebsite\\srilaya-ecommerce\\apps\\green-ops\\www"],
+      "port": 8091
     }
   ]
 }

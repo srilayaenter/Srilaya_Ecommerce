@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
+import { BowlFood, Leaf, Article } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +58,7 @@ export default async function BlogPage() {
                 </div>
               ) : (
                 <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#C8E6C9] flex items-center justify-center">
-                  <span className="text-4xl">{post.category === "recipe" ? "🍱" : post.category === "health" ? "🌿" : "📝"}</span>
+                  {post.category === "recipe" ? <BowlFood size={40} weight="regular" className="text-[#006A38]" /> : post.category === "health" ? <Leaf size={40} weight="regular" className="text-[#006A38]" /> : <Article size={40} weight="regular" className="text-[#006A38]" />}
                 </div>
               )}
               <div className="p-5">

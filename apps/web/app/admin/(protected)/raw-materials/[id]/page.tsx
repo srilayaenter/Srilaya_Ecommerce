@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updateRawMaterial, adjustStock } from "../actions";
 import DeleteMaterialButton from "./DeleteMaterialButton";
+import { Package, Factory, PencilSimple, Warning, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +34,13 @@ export default async function RawMaterialDetailPage({ params }: Props) {
   const usedInRecipes = material.recipeLines.length;
 
   function typeLabel(type: string) {
-    return { purchase: '📦 Purchase', production: '🏭 Production', adjustment: '✏️ Adjustment' }[type] ?? type;
+    const icons: Record<string, React.ReactNode> = {
+      purchase:   <Package size={12} weight="regular" className="inline-block mr-1" />,
+      production: <Factory size={12} weight="regular" className="inline-block mr-1" />,
+      adjustment: <PencilSimple size={12} weight="regular" className="inline-block mr-1" />,
+    };
+    const labels: Record<string, string> = { purchase: 'Purchase', production: 'Production', adjustment: 'Adjustment' };
+    return <>{icons[type]}{labels[type] ?? type}</>;
   }
 
   function typeColor(type: string) {
@@ -55,7 +62,7 @@ export default async function RawMaterialDetailPage({ params }: Props) {
         <div className={`px-4 py-2 rounded-xl text-sm font-bold ${
           isLow ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'
         }`}>
-          {isLow ? '⚠ Low Stock' : '✅ In Stock'}
+          <span className="inline-flex items-center gap-1">{isLow ? <Warning size={14} weight="regular" /> : <CheckCircle size={14} weight="regular" />}{isLow ? 'Low Stock' : 'In Stock'}</span>
         </div>
       </div>
 

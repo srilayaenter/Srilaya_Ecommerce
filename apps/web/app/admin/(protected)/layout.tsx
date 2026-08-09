@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { ROLE_LABELS, AppRole } from "@/lib/permissions";
 import { isOwner } from "@/lib/permissions";
 import LogoutButton from "./LogoutButton";
+import AdminSidebarNav from "./AdminSidebarNav";
+import { Globe } from "@phosphor-icons/react/dist/ssr";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -17,32 +19,33 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const userInitials = session?.user?.email?.slice(0, 2).toUpperCase() ?? 'SM';
 
   const allMenuItems = [
-    { name: "Overview Dashboard", href: "/admin",               icon: "📊", roles: ['owner','admin','manager'] },
-    { name: "Manage Orders",      href: "/admin/orders",        icon: "📦", roles: ['owner','admin','manager','billing_staff'] },
-    { name: "Inventory Matrix",   href: "/admin/products",         icon: "🌾", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Bulk Pricing",       href: "/admin/bulk-pricing",     icon: "💲", roles: ['owner','admin','manager'] },
-    { name: "Bulk Stock Import",  href: "/admin/inventory-import", icon: "📥", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Stock Log",          href: "/admin/stock-log",        icon: "📋", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Categories",         href: "/admin/categories",    icon: "🗂️", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Suppliers",          href: "/admin/suppliers",        icon: "🚚", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Purchase Orders",    href: "/admin/purchase-orders",  icon: "🛒", roles: ['owner','admin','manager','inventory_staff'] },
-    { name: "Users & Roles",      href: "/admin/users",         icon: "👥", roles: ['owner','admin'] },
-    { name: "Reviews",            href: "/admin/reviews",       icon: "⭐", roles: ['owner','admin','manager'] },
-    { name: "Returns",            href: "/admin/returns",       icon: "↩️", roles: ['owner','admin','manager'] },
-    { name: "Coupons",            href: "/admin/coupons",       icon: "🎟️", roles: ['owner','admin','manager'] },
-    { name: "Bundles",            href: "/admin/bundles",       icon: "📦", roles: ['owner','admin','manager'] },
-    { name: "Analytics",          href: "/admin/analytics",     icon: "📈", roles: ['owner','admin','manager'] },
-    { name: "GST Report",         href: "/admin/gst-report",    icon: "🧾", roles: ['owner','admin','manager'] },
-    { name: "Profit & Loss",      href: "/admin/reports/pl",    icon: "💰", roles: ['owner'] },
-    { name: "Raw Materials",      href: "/admin/raw-materials", icon: "🌱", roles: ['owner'] },
-    { name: "Production Log",     href: "/admin/production",    icon: "🏭", roles: ['owner'] },
-    { name: "Packaging Stock",    href: "/admin/packaging",     icon: "📦", roles: ['owner','admin'] },
-    { name: "Loyalty Points",     href: "/admin/loyalty",       icon: "🎁", roles: ['owner','admin','manager'] },
-    { name: "Customers",          href: "/admin/customers",     icon: "👥", roles: ['owner','admin','manager'] },
-    { name: "Blog & Recipes",     href: "/admin/blog",          icon: "📝", roles: ['owner','admin','manager'] },
-    { name: "Failed Emails",      href: "/admin/failed-emails", icon: "✉️", roles: ['owner','admin','manager'] },
-    { name: "MFA Setup",          href: "/admin/mfa-setup",     icon: "🔐", roles: ['owner','admin','manager','inventory_staff','billing_staff'] },
-    { name: "Store Settings",     href: "/admin/settings",      icon: "⚙️", roles: ['owner','admin'] },
+    { name: "Overview Dashboard", href: "/admin",               roles: ['owner','admin','manager'] },
+    { name: "Manage Orders",      href: "/admin/orders",        roles: ['owner','admin','manager','billing_staff'] },
+    { name: "Inventory Matrix",   href: "/admin/products",      roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Bulk Pricing",       href: "/admin/bulk-pricing",  roles: ['owner','admin','manager'] },
+    { name: "Bulk Stock Import",  href: "/admin/inventory-import", roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Stock Log",          href: "/admin/stock-log",     roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Categories",         href: "/admin/categories",    roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Suppliers",          href: "/admin/suppliers",     roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Purchase Orders",    href: "/admin/purchase-orders", roles: ['owner','admin','manager','inventory_staff'] },
+    { name: "Users & Roles",      href: "/admin/users",         roles: ['owner','admin'] },
+    { name: "Reviews",            href: "/admin/reviews",       roles: ['owner','admin','manager'] },
+    { name: "Returns",            href: "/admin/returns",       roles: ['owner','admin','manager'] },
+    { name: "Coupons",            href: "/admin/coupons",       roles: ['owner','admin','manager'] },
+    { name: "Bundles",            href: "/admin/bundles",       roles: ['owner','admin','manager'] },
+    { name: "Analytics",          href: "/admin/analytics",     roles: ['owner','admin','manager'] },
+    { name: "GST Report",         href: "/admin/gst-report",    roles: ['owner','admin','manager'] },
+    { name: "Profit & Loss",      href: "/admin/reports/pl",    roles: ['owner'] },
+    { name: "Raw Materials",      href: "/admin/raw-materials", roles: ['owner'] },
+    { name: "Production Log",     href: "/admin/production",    roles: ['owner'] },
+    { name: "Packaging Stock",    href: "/admin/packaging",     roles: ['owner','admin'] },
+    { name: "Loyalty Points",     href: "/admin/loyalty",       roles: ['owner','admin','manager'] },
+    { name: "Customers",          href: "/admin/customers",     roles: ['owner','admin','manager'] },
+    { name: "Blog & Recipes",     href: "/admin/blog",          roles: ['owner','admin','manager'] },
+    { name: "Failed Emails",      href: "/admin/failed-emails", roles: ['owner','admin','manager'] },
+    { name: "MFA Setup",          href: "/admin/mfa-setup",     roles: ['owner','admin','manager','inventory_staff','billing_staff'] },
+    { name: "Store Settings",     href: "/admin/settings",      roles: ['owner','admin'] },
+    { name: "Ops App",            href: "/admin/ops-app",       roles: ['owner','admin','manager'] },
   ];
 
   const menuItems = allMenuItems.filter(item => item.roles.includes(role));
@@ -80,19 +83,8 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Navigation Menu */}
-        <div className="flex-grow overflow-y-auto py-6 custom-scrollbar">
-          <nav className="px-4 flex flex-col gap-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-[8px] text-white/90 hover:text-white hover:bg-[#00522B] transition-colors"
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span className="tracking-wide">{item.name}</span>
-              </Link>
-            ))}
-          </nav>
+        <div className="flex-grow overflow-y-auto py-4 custom-scrollbar">
+          <AdminSidebarNav items={menuItems} />
         </div>
 
         {/* Sidebar Footer Link */}
@@ -101,7 +93,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             href="/"
             className="flex items-center justify-center gap-2 w-full bg-white text-[#006A38] hover:bg-[#FFF8E1] font-bold text-[13px] py-2.5 px-4 rounded-[8px] transition-all shadow-sm"
           >
-            <span>🌐</span> View Storefront
+            <Globe size={16} weight="regular" /> View Storefront
           </Link>
           <div className="text-center">
             <span className="text-[10px] text-white/40 font-mono tracking-wider">

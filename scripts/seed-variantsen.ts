@@ -1,4 +1,4 @@
-import { PrismaClient } from '../packages/db';
+import { PrismaClient, deriveWeightGramsFromSize } from '../packages/db';
 import * as bcrypt from 'bcryptjs';
 
 // Unique client pointer to avoid global namespace conflicts inside the monorepo workspace
@@ -177,8 +177,8 @@ async function main() {
       image: 'https://images.unsplash.com/photo-1582169296194-e4d644c48063?w=400'
     }
   });
-  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '1kg', price: 73, stock: 200, sku: 'BS-1KG' } });
-  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '500g', price: 41, stock: 200, sku: 'BS-500G' } });
+  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '1kg', price: 73, stock: 200, weightGrams: deriveWeightGramsFromSize('1kg') ?? 500, sku: 'BS-1KG' } });
+  await seedPrisma.productVariant.create({ data: { productId: sugarProduct.id, size: '500g', price: 41, stock: 200, weightGrams: deriveWeightGramsFromSize('500g') ?? 500, sku: 'BS-500G' } });
   console.log('✅ Sweeteners products seeded');
 
   // ==========================================
@@ -224,6 +224,7 @@ async function createProductWithVariants(item: any, catId: string, description: 
         size: size,
         price: price as number,
         stock: baseStock,
+        weightGrams: deriveWeightGramsFromSize(size) ?? 500,
         sku: `${item.sku}-${size.toUpperCase()}`
       }
     });

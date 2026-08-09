@@ -3,6 +3,7 @@ import { prisma } from "../../lib/db";
 import Link from "next/link";
 import { toNum } from "../../lib/decimal";
 import CheckoutForm from "@/components/CheckoutForm";
+import { ShoppingCart } from "@phosphor-icons/react/dist/ssr";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -37,7 +38,7 @@ export default async function CheckoutPage({
   if (cartItems.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 text-center text-[#212121]">
-        <span className="text-4xl block mb-4">🛒</span>
+        <ShoppingCart size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
         <Link href="/product">
           <button className="bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm">
@@ -58,11 +59,16 @@ export default async function CheckoutPage({
     weightGrams: item.variant.weightGrams ?? 500,
   }));
 
-  // Pre-fill checkout fields from session
+  // Pre-fill checkout fields from session + last order
   const session = await getServerSession(authOptions);
   let defaultEmail = "";
   let defaultPhone = "";
-  let emailRequired = true;
+  let defaultName  = "";
+  let defaultAddress = "";
+  let defaultCity    = "";
+  let defaultState   = "";
+  let defaultZip     = "";
+  let emailRequired  = true;
 
   if (session?.user?.id) {
     const dbUser = await prisma.user.findUnique({
@@ -71,8 +77,34 @@ export default async function CheckoutPage({
     });
     defaultEmail = dbUser?.email ?? "";
     defaultPhone = dbUser?.phone ?? "";
-    // Phone-only users have no email — make email optional
     if (!defaultEmail && defaultPhone) emailRequired = false;
+
+    // Pre-fill shipping details from the most recent completed order
+    const lastOrder = await prisma.order.findFirst({
+      where: {
+        OR: [
+          { userId: session.user.id },
+          ...(dbUser?.email ? [{ email: dbUser.email }] : []),
+        ],
+        customerName: { not: null },
+      },
+      orderBy: { createdAt: "desc" },
+      select: {
+        customerName: true,
+        address:      true,
+        city:         true,
+        state:        true,
+        zipCode:      true,
+      },
+    });
+
+    if (lastOrder) {
+      defaultName    = lastOrder.customerName ?? "";
+      defaultAddress = lastOrder.address      ?? "";
+      defaultCity    = lastOrder.city         ?? "";
+      defaultState   = lastOrder.state        ?? "";
+      defaultZip     = lastOrder.zipCode      ?? "";
+    }
   }
 
   return (
@@ -91,6 +123,11 @@ export default async function CheckoutPage({
         taxTotal={taxTotal}
         defaultEmail={defaultEmail}
         defaultPhone={defaultPhone}
+        defaultName={defaultName}
+        defaultAddress={defaultAddress}
+        defaultCity={defaultCity}
+        defaultState={defaultState}
+        defaultZip={defaultZip}
         emailRequired={emailRequired}
       />
     </div>

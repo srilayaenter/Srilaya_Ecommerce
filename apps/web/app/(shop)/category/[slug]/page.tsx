@@ -4,6 +4,7 @@ import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { Grains } from "@phosphor-icons/react/dist/ssr";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -69,6 +70,25 @@ export default async function CategoryPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-2">{category.name}</h1>
+
+      {slug === "millet-rava" && (
+        <Link
+          href="/rava"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-50 to-[#f0faf3] border border-amber-200 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Millet Rava collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare all 7 varieties, health benefits, and get personalised recommendations
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
 
       {siblingChips.length > 0 && (
         <div className="flex gap-3 flex-wrap mb-8">

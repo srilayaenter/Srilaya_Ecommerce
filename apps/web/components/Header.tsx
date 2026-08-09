@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import HeaderClient from "./HeaderClient";
 
 // Static fallback used when the DB is unavailable or slow on cold Lambda starts.
@@ -35,14 +37,20 @@ async function getCategories() {
 }
 
 export default async function Header() {
-  const dbCategories = await getCategories();
+  const [dbCategories, session] = await Promise.all([
+    getCategories(),
+    getServerSession(authOptions),
+  ]);
 
-  // Build category links from DB, then append static "Recipes" blog link
   const categoryLinks = [
     ...dbCategories.map(c => ({ name: c.name, href: `/category/${c.slug}` })),
     { name: "Recipes", href: "/recipes" },
     { name: "Blog", href: "/blog" },
   ];
 
-  return <HeaderClient categoryLinks={categoryLinks} />;
+  const sessionUser = session?.user
+    ? { name: session.user.name ?? null, email: session.user.email ?? null }
+    : null;
+
+  return <HeaderClient categoryLinks={categoryLinks} sessionUser={sessionUser} />;
 }

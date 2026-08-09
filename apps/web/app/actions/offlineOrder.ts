@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
+import { calcOrderSubtotals } from "@/lib/pricing";
 import { logStockChanges } from "@/lib/stockLog";
 
 export async function createOfflineOrder(formData: FormData): Promise<void> {
@@ -33,19 +34,13 @@ export async function createOfflineOrder(formData: FormData): Promise<void> {
     include: { product: true },
   });
 
-  let subtotal = 0;
-  let taxTotal = 0;
-
-  for (const item of items) {
-    const v = variants.find(v => v.id === item.variantId);
-    if (!v) continue;
-    const price = toNum(v.price);
-    const gst   = toNum(v.product.gstRate);
-    subtotal += price * item.quantity;
-    taxTotal += (price * item.quantity * gst) / 100;
-  }
-
-  const total = subtotal + taxTotal;
+  const { subtotal, taxTotal, grandTotal: total } = calcOrderSubtotals(
+    items.flatMap((item) => {
+      const v = variants.find(v => v.id === item.variantId);
+      if (!v) return [];
+      return [{ price: toNum(v.price), quantity: item.quantity, gstRate: toNum(v.product.gstRate) }];
+    })
+  );
 
   let orderId: string;
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { Warning } from "@phosphor-icons/react";
 
 export default function GlobalError({
   error,
@@ -17,7 +18,7 @@ export default function GlobalError({
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">
       <div className="text-center max-w-md">
-        <div className="text-5xl mb-4">⚠️</div>
+        <Warning size={52} weight="regular" className="text-[#FF9800] mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-[#212121] mb-3">Something went wrong</h1>
         <p className="text-[#9E9E9E] mb-8 text-sm leading-relaxed">
           An unexpected error occurred. Please try again, or return to the homepage.

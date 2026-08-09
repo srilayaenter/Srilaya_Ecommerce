@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Grains, Leaf, Cookie, Jar, Package, Lightning } from "@phosphor-icons/react";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
 import { addToCart } from "@/app/actions/cart";
@@ -36,13 +38,13 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const ratingDisplay = product.rating ? parseFloat(product.rating).toFixed(1) : '4.5';
 
-  const getCategoryEmoji = (categoryName: string) => {
+  const getCategoryIcon = (categoryName: string): PhosphorIcon => {
     const name = categoryName.toLowerCase();
-    if (name.includes('flake')) return '🌾';
-    if (name.includes('millet')) return '🌱';
-    if (name.includes('laddu')) return '🍬';
-    if (name.includes('sugar') || name.includes('sweet')) return '🍯';
-    return '📦';
+    if (name.includes('flake')) return Grains;
+    if (name.includes('millet')) return Leaf;
+    if (name.includes('laddu')) return Cookie;
+    if (name.includes('sugar') || name.includes('sweet')) return Jar;
+    return Package;
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -81,9 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         ) : (
           <div className="flex flex-col items-center justify-center text-[#BDBDBD] gap-2">
-            <span className="text-5xl transform group-hover:scale-110 transition duration-300">
-              {getCategoryEmoji(product.category.name)}
-            </span>
+            {(() => { const CatIcon = getCategoryIcon(product.category.name); return <CatIcon size={52} weight="regular" className="transform group-hover:scale-110 transition duration-300 text-[#BDBDBD]" />; })()}
             <span className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-wider">
               {product.category.name} Pack
             </span>
@@ -105,7 +105,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               : "bg-[#F9F9F9] border-[#E0E0E0] text-[#424242] hover:bg-emerald-50 hover:text-emerald-700"
           }`}
         >
-          <span>{showQuickAdd ? "✕ Hide Options" : "⚡ Quick Add"}</span>
+          <span>{showQuickAdd ? "✕ Hide Options" : <><Lightning size={12} weight="regular" className="inline-block mr-0.5" />Quick Add</>}</span>
         </button>
 
         {showQuickAdd && (

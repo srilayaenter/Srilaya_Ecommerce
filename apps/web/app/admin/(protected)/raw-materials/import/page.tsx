@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
 import ImportClient from './ImportClient';
+import { Lightbulb } from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,7 @@ export default async function ImportPage() {
 
       {!aiEnabled && (
         <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
-          💡 <strong>AI bill scanning is available</strong> — get an Anthropic API key at{' '}
+          <Lightbulb size={14} weight="regular" className="inline-block mr-1" /><strong>AI bill scanning is available</strong> — get an Anthropic API key at{' '}
           <span className="font-mono bg-blue-100 px-1 rounded">console.anthropic.com</span> and add{' '}
           <span className="font-mono bg-blue-100 px-1 rounded">ANTHROPIC_API_KEY=sk-ant-...</span> to{' '}
           <span className="font-mono bg-blue-100 px-1 rounded">apps/web/.env</span> to enable photo/PDF scanning.

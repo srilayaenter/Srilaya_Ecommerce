@@ -6,6 +6,7 @@ import { sendWhatsApp, orderDispatchedMessage, orderDeliveredMessage } from "@/l
 import { sendEmail } from "@/lib/email";
 import { buildDispatchEmail, buildDeliveredEmail } from "@/lib/emails/orderStatusUpdate";
 import ExportButton from "./ExportButton";
+import { Tray, Scooter, CurrencyDollar, Receipt, DeviceMobile } from "@phosphor-icons/react/dist/ssr";
 
 async function updateFulfillmentStatus(formData: FormData) {
   "use server";
@@ -158,7 +159,7 @@ export default async function OrdersPage({
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_2px_8px_rgba(0,0,0,0.05)] overflow-hidden">
         {orders.length === 0 ? (
            <div className="py-16 text-center">
-             <span className="text-4xl block mb-3">📭</span>
+             <Tray size={40} weight="regular" className="mx-auto mb-3 text-[#9E9E9E]" />
              <h3 className="text-lg font-bold text-[#212121]">No Orders Found</h3>
              <p className="text-[#8D6E63] text-sm mt-1">There are currently no orders matching this filter.</p>
            </div>
@@ -209,9 +210,9 @@ export default async function OrdersPage({
                         </span>
                         <span className={`text-[9px] font-semibold ${order.status === 'paid' ? 'text-green-600' : order.status === 'cod_pending' ? 'text-blue-600' : 'text-orange-500'}`}>
                           {order.status === 'cod_pending'
-                            ? '🛵 COD Pending'
+                            ? <span className="inline-flex items-center gap-1"><Scooter size={11} weight="regular" /> COD Pending</span>
                             : order.paymentMethod === 'cod' && order.codPaymentMethod
-                              ? `💰 COD · ${order.codPaymentMethod.toUpperCase()}`
+                              ? <span className="inline-flex items-center gap-1"><CurrencyDollar size={11} weight="regular" /> COD · {order.codPaymentMethod.toUpperCase()}</span>
                               : `Payment: ${order.status}`}
                         </span>
                         {order.codUpiRef && (
@@ -227,7 +228,7 @@ export default async function OrdersPage({
                             href={`/admin/orders/${order.id}/invoice`}
                             className="bg-[#FFF8E1] border border-[#FF9800]/30 text-[#E65100] px-3 py-1.5 rounded-[6px] text-[11px] font-bold hover:bg-[#FF9800]/10 transition-colors"
                           >
-                            🧾 Invoice
+                            <Receipt size={13} weight="regular" className="inline-block" /> Invoice
                           </Link>
                         ) : (
                           <Link
@@ -272,12 +273,12 @@ export default async function OrdersPage({
                               <label className="flex items-center gap-1 cursor-pointer">
                                 <input type="radio" name="codPaymentMethod" value="cash" defaultChecked
                                   className="accent-[#006A38]" />
-                                <span className="text-[11px] font-semibold">💵 Cash</span>
+                                <span className="text-[11px] font-semibold inline-flex items-center gap-1"><CurrencyDollar size={13} weight="regular" /> Cash</span>
                               </label>
                               <label className="flex items-center gap-1 cursor-pointer">
                                 <input type="radio" name="codPaymentMethod" value="upi"
                                   className="accent-[#006A38]" />
-                                <span className="text-[11px] font-semibold">📱 UPI</span>
+                                <span className="text-[11px] font-semibold inline-flex items-center gap-1"><DeviceMobile size={13} weight="regular" /> UPI</span>
                               </label>
                             </div>
                             <input

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BRAND } from "@/lib/brand";
+import { MapPin, Phone, Envelope, CheckCircle } from "@phosphor-icons/react";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -64,28 +65,40 @@ export default function ContactUsPage() {
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
+              {/* Map link */}
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Seegehalli+White+Field+Hoskote+Main+Road+Bengaluru+Karnataka+560067"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-2xl overflow-hidden border border-[#E0E0E0] shadow-sm bg-[#F0F4F0] hover:border-[#006A38] transition-colors group"
+                style={{ height: 180 }}
+              >
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                  <MapPin size={32} weight="regular" className="text-[#006A38] group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-[#006A38] group-hover:underline">View on Google Maps</span>
+                  <span className="text-[11px] text-[#9E9E9E] text-center px-4">Seegehalli, Bengaluru, Karnataka 560067</span>
+                </div>
+              </a>
+
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  📍
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
                     Our Processing Unit Address
                   </h4>
                   <p className="text-[#616161] text-xs mt-1 leading-relaxed">
-                    SriLaYa Naturals,
-                    <br />
-                    White Field Hoskote Main Road, Seegehalli,
-                    <br />
-                    Bengaluru, Karnataka - 560067
+                    {BRAND.name},<br />
+                    {BRAND.addressFull}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  📞
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
@@ -98,8 +111,8 @@ export default function ContactUsPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0">
-                  ✉️
+                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Envelope className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#212121] text-sm">
@@ -116,7 +129,7 @@ export default function ContactUsPage() {
           <div className="md:col-span-3 bg-[#F9F9F9] border border-[#E0E0E0]/60 p-6 md:p-8 rounded-2xl shadow-sm">
             {submitted ? (
               <div className="text-center py-12 bg-white rounded-xl border border-emerald-100 shadow-inner p-6">
-                <span className="text-3xl">✅</span>
+                <CheckCircle className="w-10 h-10 text-emerald-600 mx-auto" weight="regular" />
                 <h3 className="text-lg font-bold text-[#212121] mt-3">
                   Message Sent Successfully!
                 </h3>

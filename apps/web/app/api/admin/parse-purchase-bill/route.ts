@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { isOwner } from '@/lib/permissions';
 import { prisma } from '@/lib/db';
 import Anthropic from '@anthropic-ai/sdk';
+import { checkRateLimit, getIp } from '@/lib/rateLimit';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -27,6 +28,9 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!isOwner(session?.user?.role ?? '')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  if (!checkRateLimit(`admin-parse:${getIp(req)}`, 10, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
   if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === 'your_anthropic_api_key_here') {

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { isOwner } from '@/lib/permissions';
 import { prisma } from '@/lib/db';
+import { checkRateLimit, getIp } from '@/lib/rateLimit';
 
 type ImportLine = { rawMaterialId: string; qty: number; note?: string };
 
@@ -10,6 +11,9 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!isOwner(session?.user?.role ?? '')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  if (!checkRateLimit(`admin-import:${getIp(req)}`, 5, 60 * 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
   const { lines, invoiceRef } = await req.json() as { lines: ImportLine[]; invoiceRef?: string };

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { CheckCircle } from "@phosphor-icons/react";
 
 export default function ChangePasswordForm() {
   const [email,           setEmail]           = useState('');
@@ -40,15 +41,15 @@ export default function ChangePasswordForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="your@email.com" className={inputClass} />
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="your@email.com" autoComplete="email" className={inputClass} />
       </div>
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Current Password</label>
-        <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required className={inputClass} />
+        <input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required autoComplete="current-password" className={inputClass} />
       </div>
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">New Password</label>
-        <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} required minLength={8} className={inputClass} />
+        <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} required minLength={8} autoComplete="new-password" className={inputClass} />
         <p className="text-[11px] text-[#9E9E9E] mt-1">Minimum 8 characters.</p>
       </div>
       <button
@@ -60,7 +61,7 @@ export default function ChangePasswordForm() {
       </button>
       {message === 'success' ? (
         <div className="bg-green-50 border border-green-200 text-green-700 text-sm font-medium px-4 py-3 rounded-lg">
-          ✅ Password updated successfully.
+          <CheckCircle size={14} weight="regular" className="inline-block mr-1.5" />Password updated successfully.
         </div>
       ) : message ? (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-lg">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { CheckCircle, Info, ShoppingCart, Gift, Star } from "@phosphor-icons/react";
 
 const POINTS_PER_RUPEE = 0.1;
 const RUPEES_PER_POINT = 0.1;
@@ -48,7 +49,7 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
 
       {/* Header */}
       <div className="text-center mb-10">
-        <div className="text-5xl mb-4">⭐</div>
+        <Star size={48} weight="fill" className="text-[#FF9800] mx-auto mb-4" />
         <h1 className="text-3xl font-bold text-[#212121] mb-2">SriLaYa Rewards</h1>
         <p className="text-gray-500">Earn points on every order. Redeem for discounts at checkout.</p>
       </div>
@@ -69,7 +70,7 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
               </p>
               {canRedeem ? (
                 <div className="flex items-center gap-2 text-sm text-[#065F46] font-medium">
-                  <span className="text-base">✅</span>
+                  <CheckCircle size={16} weight="regular" className="text-[#065F46]" />
                   Ready to redeem — your points will be applied automatically at checkout.
                 </div>
               ) : balance === 0 ? (
@@ -90,7 +91,7 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
             )}
             {!isLoggedIn && (
               <div className="flex items-start gap-3 bg-[#e8f5ee] rounded-xl p-4 mb-5">
-                <span className="text-lg">💡</span>
+                <Info size={18} weight="regular" className="text-[#065F46] shrink-0 mt-0.5" />
                 <p className="text-sm text-[#065F46]">
                   <Link href="/login" className="font-bold underline">Sign in</Link> to see your balance instantly — no email lookup needed.
                 </p>
@@ -129,7 +130,7 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
                 </p>
                 {canRedeem ? (
                   <div className="flex items-center gap-2 text-sm text-[#065F46] font-medium">
-                    <span className="text-base">✅</span>
+                    <CheckCircle size={16} weight="regular" className="text-[#065F46]" />
                     Ready to redeem — enter your email at checkout to apply your points.
                   </div>
                 ) : balance === 0 ? (
@@ -170,13 +171,13 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
         <h2 className="font-bold text-lg text-[#212121] mb-5">Ways to Earn</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-[#f0fdf4] rounded-xl p-4">
-            <p className="text-2xl mb-1">🛒</p>
+            <ShoppingCart size={24} weight="regular" className="text-[#006A38] mb-1" />
             <p className="font-semibold text-[#212121] text-sm">Every purchase</p>
             <p className="text-[#006A38] font-black text-lg">1 pt / ₹10</p>
             <p className="text-xs text-gray-500 mt-1">Automatic on every confirmed order</p>
           </div>
           <div className="bg-[#f0fdf4] rounded-xl p-4">
-            <p className="text-2xl mb-1">🎁</p>
+            <Gift size={24} weight="regular" className="text-[#006A38] mb-1" />
             <p className="font-semibold text-[#212121] text-sm">Refer a friend</p>
             <p className="text-[#006A38] font-black text-lg">{REFERRAL_BONUS} pts</p>
             <p className="text-xs text-gray-500 mt-1">You and your friend both get 50 points when they place their first order</p>

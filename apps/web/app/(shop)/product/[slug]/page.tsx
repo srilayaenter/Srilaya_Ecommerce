@@ -12,6 +12,8 @@ import PincodeCheck from "@/components/PincodeCheck";
 import ProductPurchaseSection from "@/components/ProductPurchaseSection";
 import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
+import { Leaf, Truck, ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 type Params = Promise<{ slug: string }>;
 
@@ -169,13 +171,13 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
         <div className="mt-6 space-y-4">
           <PincodeCheck />
           <div className="grid grid-cols-3 gap-3">
-            {[
-              { icon: "🌱", label: "100% Organic" },
-              { icon: "🚚", label: "Pan-India Delivery" },
-              { icon: "↩️", label: "7-Day Returns" },
-            ].map(b => (
+            {([
+              { icon: Leaf, label: "100% Organic" },
+              { icon: Truck, label: "Pan-India Delivery" },
+              { icon: ArrowCounterClockwise, label: "7-Day Returns" },
+            ] as Array<{ icon: PhosphorIcon; label: string }>).map(b => (
               <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
-                <span className="text-xl">{b.icon}</span>
+                <b.icon size={20} weight="regular" className="text-[#006A38]" />
                 <span className="text-[11px] font-semibold text-[#424242]">{b.label}</span>
               </div>
             ))}

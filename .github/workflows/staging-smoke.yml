@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
+
       # ── 3. Playwright browsers (chromium only for speed) ────────────────────
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -51,7 +54,11 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: pnpm exec playwright install-deps chromium
 
-      # ── 4. Wait for Vercel preview deployment ───────────────────────────────
+      # ── 4. Unit tests (fast, no network) ────────────────────────────────────
+      - name: Run unit tests
+        run: pnpm test:unit
+
+      # ── 5. Wait for Vercel preview deployment ───────────────────────────────
       #
       # Vercel registers a GitHub Deployment for every push/PR. We poll the
       # GitHub Deployments API (no extra secrets needed — GITHUB_TOKEN is built-in)
@@ -128,7 +135,7 @@ jobs:
 
           echo "url=$STABLE_URL" >> "$GITHUB_OUTPUT"
 
-      # ── 5. Run smoke tests ───────────────────────────────────────────────────
+      # ── 6. Run smoke tests ───────────────────────────────────────────────────
       - name: Run smoke tests
         env:
           TEST_BASE_URL: ${{ steps.preview.outputs.url }}
@@ -141,7 +148,7 @@ jobs:
             --project=chromium \
             --reporter=list
 
-      # ── 6. Upload Playwright report on failure ───────────────────────────────
+      # ── 7. Upload Playwright report on failure ───────────────────────────────
       - name: Upload test report
         if: failure()
         uses: actions/upload-artifact@v4

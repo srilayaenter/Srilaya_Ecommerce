@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { CreditCard, Motorcycle, Gift } from "@phosphor-icons/react";
 import { createOrder } from "@/app/actions/orders";
 import {
   getAllCourierOptions,
@@ -24,16 +25,23 @@ interface CheckoutFormProps {
   cartItems: CartSummaryItem[];
   subtotal: number;
   taxTotal: number;
-  defaultEmail?: string;
-  defaultPhone?: string;
-  emailRequired?: boolean;
+  defaultEmail?:   string;
+  defaultPhone?:   string;
+  defaultName?:    string;
+  defaultAddress?: string;
+  defaultCity?:    string;
+  defaultState?:   string;
+  defaultZip?:     string;
+  emailRequired?:  boolean;
 }
 
 export default function CheckoutForm({
   cartItems, subtotal, taxTotal,
-  defaultEmail = "", defaultPhone = "", emailRequired = true,
+  defaultEmail = "", defaultPhone = "",
+  defaultName = "", defaultAddress = "", defaultCity = "", defaultState = "", defaultZip = "",
+  emailRequired = true,
 }: CheckoutFormProps) {
-  const [state, setState] = useState("");
+  const [state, setState] = useState(defaultState);
   const [selectedCourier, setSelectedCourier] = useState<CourierKey | "">("");
   const [isPending, setIsPending] = useState(false);
 
@@ -130,6 +138,7 @@ export default function CheckoutForm({
                 </label>
                 <input
                   id="chk-name" type="text" name="name" required
+                  defaultValue={defaultName}
                   placeholder="Ravi Kumar"
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                 />
@@ -167,6 +176,7 @@ export default function CheckoutForm({
                 </label>
                 <textarea
                   id="chk-address" name="address" required rows={3}
+                  defaultValue={defaultAddress}
                   placeholder="Street address, flat/house number..."
                   className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242] resize-none"
                 />
@@ -179,6 +189,7 @@ export default function CheckoutForm({
                   </label>
                   <input
                     id="chk-city" type="text" name="city" required
+                    defaultValue={defaultCity}
                     placeholder="Mysuru"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
@@ -204,6 +215,7 @@ export default function CheckoutForm({
                   </label>
                   <input
                     id="chk-zipcode" type="text" name="zipCode" required
+                    defaultValue={defaultZip}
                     placeholder="570001"
                     className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
                   />
@@ -278,8 +290,8 @@ export default function CheckoutForm({
             <h2 className="text-xl font-bold mb-4 text-[#212121]">Payment Method</h2>
             <div className="grid grid-cols-2 gap-3">
               {([
-                { value: "online", label: "Pay Online", desc: "UPI / Card / Razorpay", icon: "💳" },
-                { value: "cod",    label: "Pay on Delivery", desc: "Cash or UPI when order arrives", icon: "🛵" },
+                { value: "online", label: "Pay Online", desc: "UPI / Card / Razorpay", Icon: CreditCard },
+                { value: "cod",    label: "Pay on Delivery", desc: "Cash or UPI when order arrives", Icon: Motorcycle },
               ] as const).map(opt => (
                 <label
                   key={opt.value}
@@ -298,7 +310,7 @@ export default function CheckoutForm({
                       onChange={() => setPaymentMethod(opt.value)}
                       className="accent-emerald-700 w-4 h-4"
                     />
-                    <span className="text-lg">{opt.icon}</span>
+                    <opt.Icon size={18} weight="regular" className="text-[#424242]" />
                     <span className="font-bold text-sm text-[#212121]">{opt.label}</span>
                   </div>
                   <p className="text-xs text-[#9E9E9E] pl-6">{opt.desc}</p>
@@ -326,7 +338,7 @@ export default function CheckoutForm({
             <div className="bg-[#FFF8E1] border border-[#FFE082] rounded-2xl p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-[#E65100] text-sm">🎁 You have {loyaltyBalance} loyalty points</p>
+                  <p className="font-bold text-[#E65100] text-sm inline-flex items-center gap-1"><Gift size={14} weight="regular" />You have {loyaltyBalance} loyalty points</p>
                   <p className="text-xs text-[#757575] mt-0.5">
                     Apply {redeemablePoints} points for ₹{(redeemablePoints * RUPEES_PER_POINT).toFixed(2)} off this order
                   </p>

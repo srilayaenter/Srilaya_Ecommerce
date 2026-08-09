@@ -37,7 +37,6 @@ export default function Footer() {
               <li><Link href="/category/laddu" className="hover:text-[#4CAF50] transition-colors">Laddu</Link></li>
               <li><Link href="/category/sweeteners" className="hover:text-[#4CAF50] transition-colors">Sweeteners</Link></li>
               <li><Link href="/bundles" className="hover:text-[#4CAF50] transition-colors">Bundle Packs</Link></li>
-              <li><Link href="/cart" className="hover:text-[#4CAF50] transition-colors">Cart</Link></li>
             </ul>
           </div>
 

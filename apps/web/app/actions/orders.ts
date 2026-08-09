@@ -10,6 +10,7 @@ import { buildOrderConfirmationEmail } from "@/lib/emails/orderConfirmation";
 import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
 import { sendWhatsApp, orderConfirmedMessage } from "@/lib/whatsapp";
 import { earnPoints, redeemPoints, getBalance, pointsToRupees, MIN_REDEEM_POINTS, maxRedeemablePoints, processReferral } from "@/lib/loyalty";
+import { calcCouponDiscount, calcOrderTotal, calcOrderSubtotals } from "@/lib/pricing";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
@@ -28,15 +29,13 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   if (cartItems.length === 0) redirect('/cart');
 
-  let subtotal = 0;
-  let taxTotal = 0;
-
-  cartItems.forEach((item) => {
-    const price = toNum(item.price);
-    const gst   = toNum(item.gstRate);
-    subtotal += price * item.quantity;
-    taxTotal += (price * item.quantity * gst) / 100;
-  });
+  const { subtotal, taxTotal } = calcOrderSubtotals(
+    cartItems.map((item) => ({
+      price: toNum(item.price),
+      quantity: item.quantity,
+      gstRate: toNum(item.gstRate),
+    }))
+  );
 
   const customerName  = formData.get('name')        as string;
   const email         = ((formData.get('email') as string) || '').trim() || '';
@@ -85,14 +84,12 @@ export async function createOrder(formData: FormData): Promise<void> {
       (!coupon.minOrder || baseTotal >= Number(coupon.minOrder));
 
     if (isValid && coupon) {
-      couponDiscount = coupon.type === "percentage"
-        ? parseFloat(((baseTotal * Number(coupon.value)) / 100).toFixed(2))
-        : Math.min(Number(coupon.value), baseTotal);
+      couponDiscount = calcCouponDiscount(baseTotal, coupon);
       validatedCouponCode = coupon.code;
     }
   }
 
-  const total = Math.max(0, baseTotal - loyaltyDiscount - couponDiscount);
+  const total = calcOrderTotal(baseTotal, loyaltyDiscount, couponDiscount);
 
   let orderId: string;
 
@@ -151,7 +148,7 @@ export async function createOrder(formData: FormData): Promise<void> {
       }
 
       return order.id;
-    });
+    }, { timeout: 15000 });
   } catch (err: any) {
     if (typeof err.message === 'string' && err.message.startsWith('INSUFFICIENT_STOCK:')) {
       const info = err.message.replace('INSUFFICIENT_STOCK:', '');
@@ -188,7 +185,7 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   // Increment coupon usage counter
   if (validatedCouponCode) {
-    prisma.coupon.update({
+    void prisma.coupon.update({
       where: { code: validatedCouponCode },
       data:  { usedCount: { increment: 1 } },
     }).catch(() => {});

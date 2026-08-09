@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
+import { checkRateLimit, getIp } from "@/lib/rateLimit";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -27,8 +28,11 @@ export async function GET() {
   return NextResponse.json({ products });
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  if (!checkRateLimit(`admin-bulk-pricing:${getIp(request)}`, 10, 60 * 60_000)) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
 
   const body = await request.json();
   const updates: { variantId: string; price: number }[] = body.updates ?? [];

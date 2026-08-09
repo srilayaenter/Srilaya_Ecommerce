@@ -1,5 +1,7 @@
 packages:
   - "apps/*"
+  - "!apps/ops-app"
+  - "!apps/green-ops"
 
 ignoredBuiltDependencies:
   - esbuild

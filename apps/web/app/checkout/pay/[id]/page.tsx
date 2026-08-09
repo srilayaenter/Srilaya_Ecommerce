@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { toNum } from "../../../../lib/decimal";
 import { BRAND } from "../../../../lib/brand";
 import PayButton from "./PayButton";
+import { DeviceMobile, Bank } from "@phosphor-icons/react/dist/ssr";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -63,7 +64,7 @@ export default async function PaymentGatewayPage({ params }: PageProps) {
             {/* UPI Option Container */}
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
               <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="p-1 bg-emerald-50 rounded-lg text-sm">📱</span> Pay Instantly via UPI App
+                <span className="p-1 bg-emerald-50 rounded-lg"><DeviceMobile size={16} weight="regular" className="text-emerald-700" /></span> Pay Instantly via UPI App
               </h3>
               
               <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50/60 p-5 rounded-xl border border-slate-100">
@@ -90,7 +91,7 @@ export default async function PaymentGatewayPage({ params }: PageProps) {
             {/* Offline Bank Transfer Frame */}
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
               <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="p-1 bg-amber-50 rounded-lg text-sm">🏦</span> Or Direct Manual Bank Transfer
+                <span className="p-1 bg-amber-50 rounded-lg"><Bank size={16} weight="regular" className="text-amber-700" /></span> Or Direct Manual Bank Transfer
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 bg-slate-50 p-4 rounded-xl text-xs font-medium border border-slate-100">
                 <div className="flex justify-between py-1 border-b border-slate-200/60">

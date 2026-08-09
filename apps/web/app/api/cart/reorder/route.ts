@@ -3,7 +3,9 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
-  const { orderId, contact } = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  const { orderId, contact } = body;
   if (!orderId || !contact) {
     return NextResponse.json({ error: "Order ID and contact required." }, { status: 400 });
   }

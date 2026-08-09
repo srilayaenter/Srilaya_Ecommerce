@@ -22,7 +22,9 @@ apps/web/tsconfig.tsbuildinfo
 
 # Test output
 test-results/
-tests/report/data/
+tests/report/
+scripts/compare-report/
+scripts/compare-admin-report/
 
 # One-off scripts and OS artifacts
 dump_products.mjs
@@ -34,7 +36,9 @@ nul
 
 # Business documents
 *.docx
+/packaging/
 packages/db/seed-missing-products.ts
 .vercel
 .env*
 tests/e2e/.auth/
+package-lock.json

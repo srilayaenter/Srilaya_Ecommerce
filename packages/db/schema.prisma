@@ -1,25 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  // output   = "../../node_modules/.prisma/client"
-}
-
 model User {
-  id           String   @id @default(cuid())
-  email        String?  @unique
-  phone        String?  @unique
-  password     String?
-  role         String   @default("customer")
-  totpSecret   String?
-  totpEnabled  Boolean  @default(false)
-  orders       Order[]
-  carts        Cart[]
-  createdAt    DateTime @default(now())
+  id            String         @id @default(cuid())
+  email         String?        @unique
+  password      String?
+  role          String         @default("customer")
+  createdAt     DateTime       @default(now())
+  active        Boolean        @default(true)
+  totpEnabled   Boolean        @default(false)
+  totpSecret    String?
+  phone         String?        @unique
+  carts         Cart[]
+  orders        Order[]
+  wishlistItems WishlistItem[]
 }
 
 model PhoneOtp {
@@ -45,82 +46,83 @@ model Category {
   id          String     @id @default(cuid())
   slug        String     @unique
   name        String
-  description String?
   image       String?
   parentId    String?
+  description String?
   parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children    Category[] @relation("CategoryHierarchy")
   products    Product[]
 }
 
-model Product {  
-  id          String           @id @default(cuid())
-  slug        String           @unique
-  title       String
-  description String?
-  imageUrl  String?
-  currency    String           @default("INR")
-  gstRate     Decimal          @db.Decimal(4,2)
-  sku         String           @unique
-  active      Boolean          @default(true)
-  image       String?
-  rating      Decimal?         @db.Decimal(3,2)
-  reviews     Int              @default(0)
-  categoryId  String
-  category    Category         @relation(fields: [categoryId], references: [id])
-  supplierId  String?
-  supplier    Supplier?        @relation(fields: [supplierId], references: [id])
-  variants    ProductVariant[]
+model Product {
+  id             String           @id @default(cuid())
+  slug           String           @unique
+  title          String
+  description    String?
+  currency       String           @default("INR")
+  gstRate        Decimal          @db.Decimal(4, 2)
+  sku            String           @unique
+  active         Boolean          @default(true)
+  image          String?
+  rating         Decimal?         @db.Decimal(3, 2)
+  reviews        Int              @default(0)
+  categoryId     String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  supplierId     String?
+  category       Category         @relation(fields: [categoryId], references: [id])
+  supplier       Supplier?        @relation(fields: [supplierId], references: [id])
+  images         ProductImage[]
   productReviews ProductReview[]
-  images      ProductImage[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  variants       ProductVariant[]
+  wishlistItems  WishlistItem[]
 }
 
 model ProductImage {
   id        String   @id @default(cuid())
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
   alt       String?
   position  Int      @default(0)
   createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model ProductReview {
   id           String   @id @default(cuid())
   productId    String
-  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   orderId      String?
   customerName String
   email        String
   rating       Int
   comment      String?
-  photoUrl     String?
   approved     Boolean  @default(false)
   createdAt    DateTime @default(now())
+  photoUrl     String?
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
+
 model ProductVariant {
-  id               String       @id @default(cuid())
-  productId        String
-  product          Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
-  size             String
-  price            Decimal      @db.Decimal(10,2)
-  costPrice        Decimal?     @db.Decimal(10,2)
-  stock            Int          @default(100)
-  reorderThreshold Int          @default(10)
-  weightGrams      Int          @default(500)
-  sku              String       @unique
-  imageUrl         String?
-  active           Boolean      @default(true)
-  cartItems          CartItem[]
-  orderItems         OrderItem[]
+  id                 String              @id @default(cuid())
+  productId          String
+  size               String
+  price              Decimal             @db.Decimal(10, 2)
+  stock              Int                 @default(100)
+  sku                String              @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  weightGrams        Int                 @default(500)
+  reorderThreshold   Int                 @default(10)
+  imageUrl           String?
+  costPrice          Decimal?            @db.Decimal(10, 2)
+  active             Boolean             @default(true)
   bundleItems        BundleItem[]
-  stockNotifications StockNotification[]
+  cartItems          CartItem[]
   ladduRecipe        LadduRecipe?
+  orderItems         OrderItem[]
+  product            Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
   productionBatches  ProductionBatch[]
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  stockNotifications StockNotification[]
 
   @@unique([productId, size])
 }
@@ -131,20 +133,20 @@ model Bundle {
   title       String
   description String?
   image       String?
-  price       Decimal      @db.Decimal(10,2)
+  price       Decimal      @db.Decimal(10, 2)
   active      Boolean      @default(true)
-  items       BundleItem[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  items       BundleItem[]
 }
 
 model BundleItem {
   id        String         @id @default(cuid())
   bundleId  String
-  bundle    Bundle         @relation(fields: [bundleId], references: [id], onDelete: Cascade)
   variantId String
-  variant   ProductVariant @relation(fields: [variantId], references: [id])
   quantity  Int            @default(1)
+  bundle    Bundle         @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
 
   @@unique([bundleId, variantId])
 }
@@ -152,23 +154,23 @@ model BundleItem {
 model Cart {
   id             String     @id @default(cuid())
   userId         String?
-  user           User?      @relation(fields: [userId], references: [id])
-  items          CartItem[]
-  email          String?
-  reminderSentAt DateTime?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  email          String?
+  reminderSentAt DateTime?
+  user           User?      @relation(fields: [userId], references: [id])
+  items          CartItem[]
 }
 
 model CartItem {
   id        String         @id @default(cuid())
   cartId    String
-  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
   variantId String
-  variant   ProductVariant @relation(fields: [variantId], references: [id])
   quantity  Int            @default(1)
-  price     Decimal        @db.Decimal(10,2)
-  gstRate   Decimal        @db.Decimal(4,2)
+  price     Decimal        @db.Decimal(10, 2)
+  gstRate   Decimal        @db.Decimal(4, 2)
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
 
   @@unique([cartId, variantId])
 }
@@ -176,43 +178,40 @@ model CartItem {
 model Order {
   id                String      @id @default(cuid())
   userId            String?
-  user              User?       @relation(fields: [userId], references: [id])
-  items             OrderItem[]
-  shipment          Shipment?
-  returns           Return[]
-  subtotal          Decimal     @db.Decimal(10,2)
-  taxTotal          Decimal     @db.Decimal(10,2)
-  shippingFee       Decimal     @db.Decimal(10,2)
-  total             Decimal     @db.Decimal(10,2)
+  subtotal          Decimal     @db.Decimal(10, 2)
+  taxTotal          Decimal     @db.Decimal(10, 2)
+  shippingFee       Decimal     @db.Decimal(10, 2)
+  total             Decimal     @db.Decimal(10, 2)
   currency          String      @default("INR")
   status            String      @default("pending")
+  paymentId         String?
+  invoiceNo         String?
+  customerName      String?
+  email             String?
+  phone             String?
+  address           String?
+  city              String?
+  state             String?
+  zipCode           String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
   fulfillmentStatus String      @default("pending")
   orderChannel      String      @default("online")
   paymentMethod     String?
-  paymentId         String?
-  codPaymentMethod  String?  // "cash" | "upi" — recorded when COD is collected
-  codUpiRef         String?  // UPI transaction ref / UTR (optional)
-  invoiceNo         String?
   couponCode        String?
-  discountAmount    Decimal?    @db.Decimal(10,2)
+  discountAmount    Decimal?    @db.Decimal(10, 2)
   referralCode      String?
-
-  customerName String?
-  email        String?
-  phone        String?
-  address      String?
-  city         String?
-  state        String?
-  zipCode      String?
-
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  codPaymentMethod  String?
+  codUpiRef         String?
+  user              User?       @relation(fields: [userId], references: [id])
+  items             OrderItem[]
+  returns           Return[]
+  shipment          Shipment?
 }
 
 model Shipment {
   id                String    @id @default(cuid())
   orderId           String    @unique
-  order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   courier           String
   trackingNumber    String
   trackingUrl       String?
@@ -221,17 +220,18 @@ model Shipment {
   estimatedDelivery DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model OrderItem {
   id        String         @id @default(cuid())
   orderId   String
-  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   variantId String
-  variant   ProductVariant @relation(fields: [variantId], references: [id])
   quantity  Int
-  price     Decimal        @db.Decimal(10,2)
-  gstRate   Decimal        @db.Decimal(4,2)
+  price     Decimal        @db.Decimal(10, 2)
+  gstRate   Decimal        @db.Decimal(4, 2)
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
 }
 
 model WebhookEvent {
@@ -239,6 +239,20 @@ model WebhookEvent {
   provider    String
   eventId     String   @unique
   processedAt DateTime @default(now())
+}
+
+model FailedWebhook {
+  id           String    @id @default(cuid())
+  provider     String
+  eventId      String?
+  rawBody      String
+  errorMessage String
+  retries      Int       @default(0)
+  resolvedAt   DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([provider])
+  @@index([resolvedAt])
 }
 
 model FailedEmail {
@@ -254,33 +268,40 @@ model FailedEmail {
 }
 
 model Supplier {
-  id            String          @id @default(cuid())
-  name          String
-  contactPerson String?
-  phone         String?
-  email         String?
-  address       String?
-  notes         String?
-  active        Boolean         @default(true)
-  products        Product[]
-  purchaseOrders  PurchaseOrder[]
-  packagingItems  PackagingItem[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id             String          @id @default(cuid())
+  name           String
+  contactPerson  String?
+  phone          String?
+  email          String?
+  address        String?
+  notes          String?
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  bankAccount    String?
+  bankIfsc       String?
+  bankName       String?
+  gstin          String?
+  leadTimeDays   Int?
+  paymentTerms   String?
+  rating         Int?
+  packagingItems PackagingItem[]
+  products       Product[]
+  purchaseOrders PurchaseOrder[]
 }
 
 model PurchaseOrder {
   id         String              @id @default(cuid())
   supplierId String
-  supplier   Supplier            @relation(fields: [supplierId], references: [id])
-  status     String              @default("draft") // draft | sent | received | partial | cancelled
+  status     String              @default("draft")
   note       String?
   expectedAt DateTime?
   receivedAt DateTime?
   createdBy  String?
-  items      PurchaseOrderItem[]
   createdAt  DateTime            @default(now())
   updatedAt  DateTime            @updatedAt
+  supplier   Supplier            @relation(fields: [supplierId], references: [id])
+  items      PurchaseOrderItem[]
 
   @@index([supplierId])
   @@index([status])
@@ -289,56 +310,56 @@ model PurchaseOrder {
 model PurchaseOrderItem {
   id               String        @id @default(cuid())
   purchaseOrderId  String
-  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
   variantId        String
   sku              String
   quantityOrdered  Int
   quantityReceived Int           @default(0)
-  unitCost         Decimal?      @db.Decimal(10,2)
+  unitCost         Decimal?      @db.Decimal(10, 2)
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
 }
 
 model Coupon {
-  id         String    @id @default(cuid())
-  code       String    @unique
-  type       String    // "percentage" | "fixed"
-  value      Decimal   @db.Decimal(10,2)
-  minOrder   Decimal?  @db.Decimal(10,2)
-  maxUses    Int?
-  usedCount  Int       @default(0)
-  expiresAt  DateTime?
-  active     Boolean   @default(true)
-  createdAt  DateTime  @default(now())
+  id        String    @id @default(cuid())
+  code      String    @unique
+  type      String
+  value     Decimal   @db.Decimal(10, 2)
+  minOrder  Decimal?  @db.Decimal(10, 2)
+  maxUses   Int?
+  usedCount Int       @default(0)
+  expiresAt DateTime?
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
 }
 
 model Return {
   id        String       @id @default(cuid())
   orderId   String
-  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
   reason    String
-  status    String       @default("requested") // requested | approved | rejected | refunded
+  status    String       @default("requested")
   adminNote String?
-  items     ReturnItem[]
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  items     ReturnItem[]
 }
 
 model ReturnItem {
   id        String @id @default(cuid())
   returnId  String
-  return    Return @relation(fields: [returnId], references: [id], onDelete: Cascade)
   variantId String
   title     String
   size      String
   quantity  Int
+  return    Return @relation(fields: [returnId], references: [id], onDelete: Cascade)
 }
 
 model StockNotification {
-  id          String         @id @default(cuid())
-  email       String
-  variantId   String
-  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  notifiedAt  DateTime?
-  createdAt   DateTime       @default(now())
+  id         String         @id @default(cuid())
+  email      String
+  variantId  String
+  notifiedAt DateTime?
+  createdAt  DateTime       @default(now())
+  variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@unique([email, variantId])
 }
@@ -348,10 +369,10 @@ model LoyaltyAccount {
   email        String               @unique
   balance      Int                  @default(0)
   totalEarned  Int                  @default(0)
-  referralCode String?              @unique
-  transactions LoyaltyTransaction[]
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
+  referralCode String?              @unique
+  transactions LoyaltyTransaction[]
 }
 
 model BlogPost {
@@ -360,7 +381,7 @@ model BlogPost {
   title       String
   excerpt     String?
   content     String
-  category    String    @default("article") // "recipe" | "article" | "health"
+  category    String    @default("article")
   image       String?
   published   Boolean   @default(false)
   publishedAt DateTime?
@@ -373,9 +394,9 @@ model StockLog {
   id        String   @id @default(cuid())
   variantId String
   sku       String
-  delta     Int      // positive = restock, negative = depletion
-  reason    String   // "order" | "offline_order" | "return_restock" | "csv_import" | "manual_edit"
-  note      String?  // orderId, returnId, "CSV batch", etc.
+  delta     Int
+  reason    String
+  note      String?
   userId    String?
   createdAt DateTime @default(now())
 
@@ -386,76 +407,72 @@ model StockLog {
 model LoyaltyTransaction {
   id        String         @id @default(cuid())
   accountId String
-  account   LoyaltyAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  type      String         // 'earned' | 'redeemed'
+  type      String
   points    Int
   orderId   String?
   note      String?
   createdAt DateTime       @default(now())
+  account   LoyaltyAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }
 
-// ── Raw Material Inventory (Laddu Production) ─────────────────────────────
-
 model RawMaterial {
-  id               String             @id @default(cuid())
-  name             String             @unique
-  unit             String             @default("kg")
-  stockQty         Float              @default(0)
+  id               String           @id @default(cuid())
+  name             String           @unique
+  unit             String           @default("kg")
+  stockQty         Float            @default(0)
   costPerUnit      Float?
-  reorderThreshold Float              @default(5)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-
-  recipeLines      RecipeLine[]
+  reorderThreshold Float            @default(5)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
   stockLogs        RawMaterialLog[]
+  recipeLines      RecipeLine[]
 }
 
 model LadduRecipe {
   id        String         @id @default(cuid())
   variantId String         @unique
-  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  yieldKg   Float          @default(1) // kg of finished product this recipe yields
-  lines     RecipeLine[]
+  yieldKg   Float          @default(1)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  lines     RecipeLine[]
 }
 
 model RecipeLine {
   id            String      @id @default(cuid())
   recipeId      String
-  recipe        LadduRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   rawMaterialId String
+  qtyPerYield   Float
   rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id])
-  qtyPerYield   Float       // qty of raw material (in its unit) per yieldKg of finished product
+  recipe        LadduRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model ProductionBatch {
-  id          String           @id @default(cuid())
-  variantId   String
-  variant     ProductVariant   @relation(fields: [variantId], references: [id])
+  id            String           @id @default(cuid())
+  variantId     String
   unitsProduced Int
-  notes       String?
-  producedAt  DateTime         @default(now())
-  createdBy   String?
-
-  logs        RawMaterialLog[]
+  notes         String?
+  producedAt    DateTime         @default(now())
+  createdBy     String?
+  variant       ProductVariant   @relation(fields: [variantId], references: [id])
+  logs          RawMaterialLog[]
 }
 
 model PackagingItem {
   id               String              @id @default(cuid())
   name             String              @unique
-  category         String              // "pouch" | "box" | "tape" | "label" | "protection" | "other"
+  category         String
   unit             String              @default("pcs")
   stockQty         Int                 @default(0)
   reorderThreshold Int                 @default(50)
-  costPerUnit      Decimal?            @db.Decimal(10,2)
+  costPerUnit      Decimal?            @db.Decimal(10, 2)
   supplierId       String?
-  supplier         Supplier?           @relation(fields: [supplierId], references: [id])
   notes            String?
   active           Boolean             @default(true)
-  stockLogs        PackagingStockLog[]
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
+  supplier         Supplier?           @relation(fields: [supplierId], references: [id])
+  stockLogs        PackagingStockLog[]
 
   @@index([category])
   @@index([supplierId])
@@ -464,27 +481,55 @@ model PackagingItem {
 model PackagingStockLog {
   id              String        @id @default(cuid())
   packagingItemId String
-  packagingItem   PackagingItem @relation(fields: [packagingItemId], references: [id], onDelete: Cascade)
-  type            String        // "purchase" | "used" | "adjustment" | "damaged"
-  qty             Int           // positive = stock in, negative = consumed/damaged
+  type            String
+  qty             Int
   note            String?
   createdAt       DateTime      @default(now())
+  packagingItem   PackagingItem @relation(fields: [packagingItemId], references: [id], onDelete: Cascade)
 
   @@index([packagingItemId])
   @@index([createdAt])
 }
 
 model RawMaterialLog {
-  id              String           @id @default(cuid())
-  rawMaterialId   String
-  rawMaterial     RawMaterial      @relation(fields: [rawMaterialId], references: [id])
-  type            String           // "purchase" | "production" | "adjustment"
-  qty             Float            // positive = stock in, negative = stock out
-  note            String?
-  batchId         String?
-  batch           ProductionBatch? @relation(fields: [batchId], references: [id])
-  createdAt       DateTime         @default(now())
+  id            String           @id @default(cuid())
+  rawMaterialId String
+  type          String
+  qty           Float
+  note          String?
+  batchId       String?
+  createdAt     DateTime         @default(now())
+  batch         ProductionBatch? @relation(fields: [batchId], references: [id])
+  rawMaterial   RawMaterial      @relation(fields: [rawMaterialId], references: [id])
 
   @@index([rawMaterialId])
   @@index([createdAt])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+// SriLaYa Ops (kitchen/workshop batch-scaling app) shared recipe catalog.
+// Read/written directly by the standalone Ops app (web + Android) via the
+// Supabase anon key + RLS policies (see migration) — not through this
+// Next.js app's own API routes.
+model OpsRecipe {
+  id         String   @id @default(cuid())
+  name       String
+  category   String
+  details    String
+  baseRatios Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([category])
 }

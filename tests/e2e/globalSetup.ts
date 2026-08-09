@@ -13,10 +13,12 @@ export default async function globalSetup() {
   const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
   const baseURL = process.env.TEST_BASE_URL;
 
-  if (!bypassSecret || !baseURL) return;
+  if (!baseURL) return;
 
   const ctx = await request.newContext({ baseURL });
-  const headers = { "x-vercel-protection-bypass": bypassSecret };
+  const headers = bypassSecret
+    ? { "x-vercel-protection-bypass": bypassSecret }
+    : {};
 
   // Sequential so "/" warms the category cache before other pages hit it.
   for (const p of WARM_PATHS) {
@@ -25,6 +27,18 @@ export default async function globalSetup() {
     } catch {
       // ignore — warm-up errors don't block tests
     }
+  }
+
+  // Poll /api/healthz until DB is ready (up to 60s) so SMOKE-01 doesn't
+  // race against a cold Supabase connection on first hit.
+  for (let i = 0; i < 12; i++) {
+    try {
+      const res = await ctx.get("/api/healthz", { headers });
+      if (res.status() === 200) break;
+    } catch {
+      // ignore
+    }
+    await new Promise((r) => setTimeout(r, 5000));
   }
 
   await ctx.dispose();

@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CartProvider } from "@/context/CartContext";
+import Providers from "@/app/providers";
 import dynamic from "next/dynamic";
 import "./globals.css";
 
@@ -49,9 +50,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-black antialiased">
-        <CartProvider>
-          <main id="main-content">{children}</main>
-        </CartProvider>
+        <Providers>
+          <CartProvider>
+            <main id="main-content">{children}</main>
+          </CartProvider>
+        </Providers>
         <PostHogProvider>
           <SpeedInsights />
           <CookieConsent />

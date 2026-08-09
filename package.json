@@ -10,7 +10,10 @@
     "prisma:migrate": "prisma migrate dev --schema=./packages/db/schema.prisma",
     "prisma:studio": "prisma studio --schema=./packages/db/schema.prisma",
     "seed": "tsx scripts/seed-variants.ts",
+    "label:pdf": "node scripts/render-label-pdf.mjs",
     "test": "playwright test",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:regression": "playwright test tests/e2e/regression.spec.ts",
@@ -21,8 +24,10 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
+    "@phosphor-icons/react": "^2.1.10",
     "@prisma/client": "6.19.3",
     "@sentry/nextjs": "^10.66.0",
+    "@supabase/supabase-js": "^2.110.7",
     "@vercel/speed-insights": "^2.0.0",
     "autoprefixer": "10.4.19",
     "bcryptjs": "2.4.3",
@@ -55,8 +60,10 @@
     "@types/qrcode": "^1.5.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "prisma": "6.19.3",
     "ts-node": "10.9.2",
-    "tsx": "^4.22.4"
+    "tsx": "^4.22.4",
+    "vitest": "^4.1.10"
   }
 }

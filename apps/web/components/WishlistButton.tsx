@@ -1,24 +1,53 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function WishlistButton({ productId }: { productId: string }) {
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const [saved, setSaved] = useState(false);
 
+  // On mount: load from DB if logged in, else localStorage
   useEffect(() => {
-    const list: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    setSaved(list.includes(productId));
-  }, [productId]);
+    if (sessionResult === undefined || sessionResult.status === "loading") return;
+    if (session?.user?.id) {
+      fetch("/api/wishlist")
+        .then(r => r.json())
+        .then(({ productIds }: { productIds: string[] }) => setSaved(productIds.includes(productId)))
+        .catch(() => {});
+    } else {
+      const list: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setSaved(list.includes(productId));
+    }
+  }, [productId, session]);
 
-  function toggle(e: React.MouseEvent) {
+  async function toggle(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    const list: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    const next = list.includes(productId)
-      ? list.filter(id => id !== productId)
-      : [...list, productId];
-    localStorage.setItem("wishlist", JSON.stringify(next));
-    setSaved(next.includes(productId));
+
+    const next = !saved;
+    setSaved(next); // optimistic
+
+    if (session?.user?.id) {
+      try {
+        if (next) {
+          await fetch("/api/wishlist", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId }),
+          });
+        } else {
+          await fetch(`/api/wishlist?productId=${productId}`, { method: "DELETE" });
+        }
+      } catch {
+        setSaved(!next); // revert on error
+      }
+    } else {
+      const list: string[] = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      const updated = next ? [...list, productId] : list.filter(id => id !== productId);
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+    }
   }
 
   return (
