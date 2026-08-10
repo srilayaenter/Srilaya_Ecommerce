@@ -9,7 +9,7 @@ const PHONE = "918660321315";
 const PRODUCTS = [
   {
     id: "sugarcane",
-    name: "Sugarcane Jaggery Powder",
+    name: "Sugarcane Jaggery",
     keyword: "sugarcane jaggery",
     local: "Karumbu Vellam / Ganna Gud",
     badge: "Rich in Iron",
@@ -25,7 +25,7 @@ const PRODUCTS = [
   },
   {
     id: "palm",
-    name: "Palm Jaggery Powder",
+    name: "Palm Jaggery",
     keyword: "palm jaggery",
     local: "Karuppatti / Thaati Bellam / Nongu Vellam",
     badge: "Immunity Booster",
@@ -41,7 +41,7 @@ const PRODUCTS = [
   },
   {
     id: "coconut",
-    name: "Coconut Jaggery Powder",
+    name: "Coconut Jaggery",
     keyword: "coconut jaggery",
     local: "Thengai Vellam / Nariyal Gud",
     badge: "Low GI",
@@ -53,6 +53,22 @@ const PRODUCTS = [
       { label: "Low Glycemic Index", desc: "Slower glucose release — gentler on blood sugar" },
       { label: "Supports Digestion", desc: "Natural inulin fibre acts as a prebiotic" },
       { label: "Mineral Rich", desc: "Packed with potassium, magnesium, and zinc" },
+    ],
+  },
+  {
+    id: "cane-sugar",
+    name: "Unrefined Cane Sugar",
+    keyword: "unrefined cane sugar",
+    local: "Nattu Sakkarai / Desi Cheeni",
+    badge: "Less Processed",
+    badgeColor: "bg-lime-50 text-lime-800 border-lime-200",
+    accent: "#65a30d",
+    accentLight: "#F7FEE7",
+    production: "Cold-pressed from sugarcane juice, sun-dried without bleaching or chemical refining",
+    benefits: [
+      { label: "Retains Molasses", desc: "Natural minerals intact — unlike white sugar" },
+      { label: "Milder GI", desc: "Gentler blood sugar response than refined sugar" },
+      { label: "Versatile Sweetener", desc: "Direct 1:1 swap for white sugar in all recipes" },
     ],
   },
 ];
@@ -106,8 +122,8 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
           </h1>
 
           <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8">
-            SriLaYa&apos;s <strong className="text-[#5C3A21]">Natural Sweeteners collection</strong> — three
-            unrefined jaggery powders crafted to sweeten your life the way nature intended.
+            SriLaYa&apos;s <strong className="text-[#5C3A21]">Natural Sweeteners collection</strong> — four
+            unrefined sweeteners crafted to sweeten your life the way nature intended.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -130,7 +146,7 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
               ["Zero Chemicals", "Pure & Natural"],
               ["Low GI Options", "Diabetic Friendly"],
               ["Mineral Rich", "Unrefined Goodness"],
-              ["3 Varieties", "One Collection"],
+              ["4 Varieties", "One Collection"],
             ].map(([title, sub]) => (
               <div key={title} className="p-3 bg-white/80 rounded-lg border border-amber-200/60 text-center shadow-sm">
                 <div className="text-[#2E6F40] font-bold text-sm">{title}</div>
@@ -147,10 +163,10 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
         <section id="collection" className="scroll-mt-24">
           <div className="text-center mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#5C3A21]">
-              Our Jaggery Powder Collection
+              Our Natural Sweeteners Collection
             </h2>
             <p className="text-gray-500 mt-2 max-w-xl mx-auto text-sm">
-              Three traditional sweeteners — each sourced and processed differently, each with its own unique health profile.
+              Four natural sweeteners — each sourced and processed differently, each with its own unique health profile.
             </p>
           </div>
 
