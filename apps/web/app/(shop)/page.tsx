@@ -323,7 +323,7 @@ export default async function HomePage() {
                   >
                     <div className="relative h-52 w-full bg-[#F9F9F9] overflow-hidden">
                       <Image
-                        src={product.image || "https://placehold.co/400x400/006A38/white?text=SriLaYa"}
+                        src={product.image || "/product-placeholder.svg"}
                         alt={product.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

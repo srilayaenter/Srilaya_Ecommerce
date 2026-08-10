@@ -302,7 +302,7 @@ export default async function CategoryPage({ params }: PageProps) {
               >
                 <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
                   <Image
-                    src={product.image || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
+                    src={product.image || "/product-placeholder.svg"}
                     alt={product.title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
