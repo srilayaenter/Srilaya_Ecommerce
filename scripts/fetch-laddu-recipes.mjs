@@ -9,7 +9,7 @@ console.log("All OpsRecipe categories:", [...new Set(all.map(r => r.category))])
 const recipes = await prisma.opsRecipe.findMany({ orderBy: { name: "asc" } });
 
 writeFileSync(
-  new URL("laddu_recipes.json", import.meta.url),
+  new URL("data/laddu_recipes.json", import.meta.url),
   JSON.stringify(recipes, null, 2)
 );
 
