@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import { checkRateLimit, getIp } from "@/lib/rateLimit";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -12,6 +13,9 @@ async function guard() {
 
 export async function GET() {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const products = await prisma.product.findMany({
     orderBy: { title: "asc" },
@@ -30,6 +34,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   if (!checkRateLimit(`admin-bulk-pricing:${getIp(request)}`, 10, 60 * 60_000)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

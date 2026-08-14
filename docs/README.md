@@ -21,7 +21,7 @@ All Word documents (.docx) are maintained in OneDrive — **do not add .docx fil
 
 **OneDrive location:**
 ```
-C:\Users\HP\OneDrive\Desktop\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
+C:\Users\HP\OneDrive\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
 ```
 
 ### Folder structure

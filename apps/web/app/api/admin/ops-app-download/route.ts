@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getSupabaseAdmin, STORAGE_BUCKET } from "@/lib/supabase";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 const ALLOWED_ROLES = ["owner", "admin", "manager"];
 // NOTE: Supabase Storage's CDN caches objects by path and does not reliably
@@ -15,6 +16,8 @@ export async function GET() {
   if (!session?.user || !ALLOWED_ROLES.includes((session.user as any).role ?? "")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   let client;
   try {
