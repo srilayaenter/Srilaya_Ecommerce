@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { logStockChanges } from "@/lib/stockLog";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 // POST — accepts CSV text body
 // Expected columns (header row required):
@@ -14,6 +15,8 @@ export async function POST(request: Request) {
   if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const text = await request.text();
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
