@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { revalidatePath } from "next/cache";
 import { log, logPaymentFailed, logError } from "@/lib/logger";
+import { logPaymentEvent } from "@/lib/paymentAudit";
 
 export async function POST(request: Request) {
   let rawBody = "";
@@ -72,6 +73,15 @@ export async function POST(request: Request) {
             prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } }),
           ]);
           eventClaimed = true;
+          await logPaymentEvent({
+            eventType: "payment.captured_webhook",
+            status: "success",
+            orderId: order.id,
+            razorpayOrderId,
+            razorpayPaymentId: paymentId,
+            amount: toNum(order.total),
+            userId: order.userId ?? undefined,
+          });
         } catch (e: any) {
           if (e.code === "P2002") {
             return NextResponse.json({ success: true, message: "Already processed" });
@@ -117,6 +127,14 @@ export async function POST(request: Request) {
             prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } }),
           ]);
           eventClaimed = true;
+          await logPaymentEvent({
+            eventType: "payment.failed_webhook",
+            status: "failed",
+            orderId: order.id,
+            razorpayOrderId,
+            amount: toNum(order.total),
+            userId: order.userId ?? undefined,
+          });
         } catch (e: any) {
           if (e.code === "P2002") {
             return NextResponse.json({ success: true, message: "Already processed" });

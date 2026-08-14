@@ -56,7 +56,7 @@ const COLLECTIONS = [
   },
   {
     name: "Natural Sweeteners",
-    tagline: "Jaggery powder. 3 types. Zero chemicals.",
+    tagline: "Jaggery powder. 4 types. Zero chemicals.",
     href: "/sweeteners",
     image: "/categories/sweeteners.jpg",
     overlay: "from-orange-900/80 to-orange-700/60",

@@ -144,14 +144,14 @@ const COLLECTIONS: Array<{
     name: "Natural Sweeteners",
     tagline: "Sweet without the guilt.",
     description:
-      "Sugarcane, Palm & Coconut Jaggery Powder — unrefined, mineral-rich, low GI alternatives to refined sugar.",
+      "Sugarcane Jaggery, Palm Jaggery, Coconut Jaggery & Unrefined Cane Sugar — mineral-rich, low GI alternatives to refined sugar.",
     href: "/sweeteners",
     icon: Jar,
     accent: "#b45309",
     accentLight: "#FEF3C7",
     badge: "Live",
     badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-300",
-    highlights: ["3 varieties", "Low GI", "Zero chemicals"],
+    highlights: ["4 varieties", "Low GI", "Zero chemicals"],
   },
 ];
 

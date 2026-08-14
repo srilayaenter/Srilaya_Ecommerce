@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Handcrafted Millet Laddus — Traditional Sweets, Natural Goodness | SriLaYa Naturals",
   description:
-    "Shop SriLaYa's handcrafted millet laddus — Foxtail, Barnyard, Till & Little Millet, and Groundnut, sweetened with coconut jaggery. No refined sugar, no preservatives.",
+    "Shop SriLaYa's handcrafted millet laddus — Foxtail, Barnyard, Till & Little Millet, Groundnut, Till Sesame, Horse Gram, Green Gram, and Moth Bean, sweetened with sugarcane jaggery. No refined sugar, no preservatives.",
 };
 
 const fetchLadduImages = unstable_cache(

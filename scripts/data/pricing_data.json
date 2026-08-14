@@ -1,0 +1,3177 @@
+[
+  {
+    "id": "cmqpkjmn9005juigkol6kxg5e",
+    "slug": "barnyard-millet-laddu",
+    "title": "Barnyard Millet Laddu",
+    "description": "Traditional healthy organic Barnyard Millet Laddu made with natural unrefined cane sugar",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BML",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/barnyard-millet-laddu.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-06-22T18:48:33.381Z",
+    "updatedAt": "2026-08-09T15:46:27.207Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "BML-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 105,
+        "stock": 50
+      },
+      {
+        "sku": "BML-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 210,
+        "stock": 48
+      },
+      {
+        "sku": "BML-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 420,
+        "stock": 45
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjmrb005ruigkbutwqfb3",
+    "slug": "foxtail-millet-laddu",
+    "title": "Foxtail Millet Laddu",
+    "description": "Traditional healthy organic Foxtail Millet Laddu made with natural unrefined cane sugar",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FML",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/foxtail-millet-laddu.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-06-22T18:48:33.527Z",
+    "updatedAt": "2026-08-09T15:46:27.025Z",
+    "supplierId": "cmqrujvon0000ui9k2q1ik82n",
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "FML-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 105,
+        "stock": 50
+      },
+      {
+        "sku": "FML-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 210,
+        "stock": 50
+      },
+      {
+        "sku": "FML-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 420,
+        "stock": 50
+      }
+    ]
+  },
+  {
+    "id": "cmsec4c5c000buiskam7ph4nd",
+    "slug": "green-gram-laddu",
+    "title": "Green Gram Laddu",
+    "description": "Traditional green gram (moong) laddu made with natural unrefined cane sugar. PLACEHOLDER: recipe, pricing, and product photo not yet finalized -- created for catalog/planning tracking only, inactive until ready.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "GGL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-08-04T07:26:39.744Z",
+    "updatedAt": "2026-08-09T15:57:08.402Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "GGL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 105,
+        "stock": 100
+      },
+      {
+        "sku": "GGL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 210,
+        "stock": 100
+      },
+      {
+        "sku": "GGL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 420,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjn080067uigkrcpu5mxw",
+    "slug": "groundnut-laddu",
+    "title": "Groundnut Laddu",
+    "description": "Traditional healthy organic Groundnut Laddu made with natural unrefined cane sugar",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "GL",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/groundnut-laddu.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-06-22T18:48:33.848Z",
+    "updatedAt": "2026-08-09T15:46:27.048Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "GL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 140,
+        "stock": 50
+      },
+      {
+        "sku": "GL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 270,
+        "stock": 75
+      },
+      {
+        "sku": "GL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 540,
+        "stock": 50
+      }
+    ]
+  },
+  {
+    "id": "cmsec4c580006uiskb9a1x1um",
+    "slug": "horse-gram-laddu",
+    "title": "Horse Gram Laddu",
+    "description": "Traditional horse gram (kollu) laddu made with natural unrefined cane sugar. PLACEHOLDER: recipe, pricing, and product photo not yet finalized -- created for catalog/planning tracking only, inactive until ready.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "HGL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-08-04T07:26:39.740Z",
+    "updatedAt": "2026-08-09T15:57:08.402Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "HGL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 110,
+        "stock": 100
+      },
+      {
+        "sku": "HGL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 220,
+        "stock": 100
+      },
+      {
+        "sku": "HGL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 440,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmsec4c5g000guisk3vl60zzf",
+    "slug": "moth-bean-laddu",
+    "title": "Moth Bean Laddu",
+    "description": "Traditional moth bean (naripayiru) laddu made with natural unrefined cane sugar. PLACEHOLDER: recipe, pricing, and product photo not yet finalized -- created for catalog/planning tracking only, inactive until ready.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MBL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-08-04T07:26:39.749Z",
+    "updatedAt": "2026-08-09T15:58:22.639Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "MBL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 115,
+        "stock": 100
+      },
+      {
+        "sku": "MBL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 230,
+        "stock": 100
+      },
+      {
+        "sku": "MBL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 460,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjmvo005zuigkjxdgbzex",
+    "slug": "till-laddu",
+    "title": "Till & Little Millet Laddu",
+    "description": "Traditional healthy organic Till and little millet Laddu made with natural unrefined cane sugar",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "TL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-06-22T18:48:33.684Z",
+    "updatedAt": "2026-08-09T15:46:25.178Z",
+    "supplierId": "cmqrujvon0000ui9k2q1ik82n",
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "TL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 110,
+        "stock": 50
+      },
+      {
+        "sku": "TL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 220,
+        "stock": 50
+      },
+      {
+        "sku": "TL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 440,
+        "stock": 50
+      }
+    ]
+  },
+  {
+    "id": "cmsec4bzd0001uiskl65ube2m",
+    "slug": "till-sesame-laddu",
+    "title": "Till Sesame Laddu",
+    "description": "Traditional black sesame laddu made with natural unrefined cane sugar, no millet blend. PLACEHOLDER: recipe, pricing, and product photo not yet finalized -- created for catalog/planning tracking only, inactive until ready.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "TSL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjmm9005huigkbmu2pczj",
+    "createdAt": "2026-08-04T07:26:39.469Z",
+    "updatedAt": "2026-08-09T16:00:45.171Z",
+    "supplierId": null,
+    "category": {
+      "name": "Laddu"
+    },
+    "variants": [
+      {
+        "sku": "TSL-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 115,
+        "stock": 100
+      },
+      {
+        "sku": "TSL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 230,
+        "stock": 100
+      },
+      {
+        "sku": "TSL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 460,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo6jo005lui4camrkdqdh",
+    "slug": "health-mix-sathu-maavu",
+    "title": "Health Mix (Sathu Maavu)",
+    "description": "Health Mix (Sathu Maavu) — instant health drink mix, packed with multi-grain nutrition.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "HMSM",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo6cw005jui4c76nz5fxp",
+    "createdAt": "2026-07-14T07:21:00.707Z",
+    "updatedAt": "2026-07-14T07:21:00.707Z",
+    "supplierId": null,
+    "category": {
+      "name": "Malt & Health Mixes"
+    },
+    "variants": [
+      {
+        "sku": "HMSM-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 100,
+        "stock": 100
+      },
+      {
+        "sku": "HMSM-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 185,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo8f1005xui4c6c3yyqhd",
+    "slug": "ragi-malt-beetroot",
+    "title": "Ragi Malt Beetroot",
+    "description": "Ragi Malt Beetroot — instant health drink mix, packed with multi-grain nutrition.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RMBT",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo6cw005jui4c76nz5fxp",
+    "createdAt": "2026-07-14T07:21:03.133Z",
+    "updatedAt": "2026-07-14T07:21:03.133Z",
+    "supplierId": null,
+    "category": {
+      "name": "Malt & Health Mixes"
+    },
+    "variants": [
+      {
+        "sku": "RMBT-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 118,
+        "stock": 100
+      },
+      {
+        "sku": "RMBT-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 215,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo7hh005rui4c7ztkx247",
+    "slug": "ragi-malt-carrot",
+    "title": "Ragi Malt Carrot",
+    "description": "Ragi Malt Carrot — instant health drink mix, packed with multi-grain nutrition.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RMCA",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo6cw005jui4c76nz5fxp",
+    "createdAt": "2026-07-14T07:21:01.925Z",
+    "updatedAt": "2026-07-14T07:21:01.925Z",
+    "supplierId": null,
+    "category": {
+      "name": "Malt & Health Mixes"
+    },
+    "variants": [
+      {
+        "sku": "RMCA-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 120,
+        "stock": 100
+      },
+      {
+        "sku": "RMCA-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 220,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkhg001guigk6qdti2w8",
+    "slug": "barley-flakes",
+    "title": "Barley Flakes",
+    "description": "Premium organic Barley Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BAF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/barley-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:30.580Z",
+    "updatedAt": "2026-08-06T03:16:45.539Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "BAF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 35,
+        "stock": 43
+      },
+      {
+        "sku": "BAF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 62,
+        "stock": 100
+      },
+      {
+        "sku": "BAF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 124,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjk0l000muigk1uqjl17m",
+    "slug": "barnyard-flakes",
+    "title": "Barnyard Flakes",
+    "description": "Premium organic Barnyard Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/barnyard-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:29.973Z",
+    "updatedAt": "2026-08-06T03:16:46.086Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "BF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 47,
+        "stock": 97
+      },
+      {
+        "sku": "BF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 89,
+        "stock": 100
+      },
+      {
+        "sku": "BF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 177,
+        "stock": 95
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjjoi0004uigk6hzzi64r",
+    "slug": "foxtail-flakes",
+    "title": "Foxtail Flakes",
+    "description": "Premium organic Foxtail Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/foxtail-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:29.538Z",
+    "updatedAt": "2026-08-06T03:16:46.609Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "FF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 38,
+        "stock": 100
+      },
+      {
+        "sku": "FF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 69,
+        "stock": 100
+      },
+      {
+        "sku": "FF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 137,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnjz00017ui4c2wdexirs",
+    "slug": "green-gram-flakes",
+    "title": "Green Gram Flakes",
+    "description": "Green Gram Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "GGFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:31.452Z",
+    "updatedAt": "2026-07-14T07:20:31.452Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "GGFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 42,
+        "stock": 100
+      },
+      {
+        "sku": "GGFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 80,
+        "stock": 100
+      },
+      {
+        "sku": "GGFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 159,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnkuu001dui4clklvvdox",
+    "slug": "horsegram-flakes",
+    "title": "Horsegram Flakes",
+    "description": "Horsegram Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "HGFL",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/horsegram-flakes.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:32.598Z",
+    "updatedAt": "2026-08-06T03:16:46.928Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "HGFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 27,
+        "stock": 100
+      },
+      {
+        "sku": "HGFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 51,
+        "stock": 100
+      },
+      {
+        "sku": "HGFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 101,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnhpe000vui4cwvxqd2sl",
+    "slug": "karunguruvai-flakes",
+    "title": "Karunguruvai Flakes",
+    "description": "Karunguruvai Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KGFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:28.513Z",
+    "updatedAt": "2026-07-14T07:20:28.513Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "KGFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 28,
+        "stock": 100
+      },
+      {
+        "sku": "KGFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 53,
+        "stock": 100
+      },
+      {
+        "sku": "KGFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 106,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnetj000dui4ch4662a1r",
+    "slug": "karupukavuni-flakes",
+    "title": "Karupukavuni Flakes",
+    "description": "Karupukavuni Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KVFL",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/karupukavuni-flakes.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:24.775Z",
+    "updatedAt": "2026-08-06T03:16:47.045Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "KVFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 40,
+        "stock": 100
+      },
+      {
+        "sku": "KVFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 78,
+        "stock": 100
+      },
+      {
+        "sku": "KVFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 155,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbngxw000pui4cgq7i51ly",
+    "slug": "kattuyanam-flakes",
+    "title": "Kattuyanam Flakes",
+    "description": "Kattuyanam Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KTFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:27.524Z",
+    "updatedAt": "2026-07-14T07:20:27.524Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "KTFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 29,
+        "stock": 100
+      },
+      {
+        "sku": "KTFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 54,
+        "stock": 100
+      },
+      {
+        "sku": "KTFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 108,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjjxd000guigk0h7kti8d",
+    "slug": "kodo-flakes",
+    "title": "Kodo Flakes",
+    "description": "Premium organic Kodo Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/kodo-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:29.857Z",
+    "updatedAt": "2026-08-06T03:16:47.175Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "KF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 42,
+        "stock": 100
+      },
+      {
+        "sku": "KF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 77,
+        "stock": 100
+      },
+      {
+        "sku": "KF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 153,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjju1000auigkekym87i0",
+    "slug": "little-flakes",
+    "title": "Little Flakes",
+    "description": "Premium organic Little Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "LF",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:29.737Z",
+    "updatedAt": "2026-08-05T16:24:36.639Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "LF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 45,
+        "stock": 96
+      },
+      {
+        "sku": "LF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 85,
+        "stock": 100
+      },
+      {
+        "sku": "LF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 170,
+        "stock": 96
+      }
+    ]
+  },
+  {
+    "id": "cmrkbndwo0007ui4cl4t7d81r",
+    "slug": "mapillai-samba-flakes",
+    "title": "Mapillai Samba Flakes",
+    "description": "Mapillai Samba Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MSFL",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/mapillai-samba-flakes.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:23.592Z",
+    "updatedAt": "2026-08-06T09:24:41.058Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "MSFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 28,
+        "stock": 100
+      },
+      {
+        "sku": "MSFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 52,
+        "stock": 100
+      },
+      {
+        "sku": "MSFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 103,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnlvf001jui4c2e1j0wcs",
+    "slug": "moth-beans-flakes",
+    "title": "Moth Beans Flakes",
+    "description": "Moth Beans Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MBFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:33.915Z",
+    "updatedAt": "2026-07-14T07:20:33.915Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "MBFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 35,
+        "stock": 100
+      },
+      {
+        "sku": "MBFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 67,
+        "stock": 100
+      },
+      {
+        "sku": "MBFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 133,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjk7a000yuigkx7s77r8o",
+    "slug": "pearl-flakes",
+    "title": "Pearl Flakes",
+    "description": "Premium organic Pearl Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/pearl-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:30.214Z",
+    "updatedAt": "2026-08-06T03:16:47.811Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "PF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 32,
+        "stock": 100
+      },
+      {
+        "sku": "PF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 53,
+        "stock": 100
+      },
+      {
+        "sku": "PF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 105,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnfyx000jui4cnedqxp75",
+    "slug": "poongar-flakes",
+    "title": "Poongar Flakes",
+    "description": "Poongar Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PNFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:26.264Z",
+    "updatedAt": "2026-07-14T07:20:26.264Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "PNFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 29,
+        "stock": 100
+      },
+      {
+        "sku": "PNFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 54,
+        "stock": 100
+      },
+      {
+        "sku": "PNFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 108,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjk40000suigkyvyoukjb",
+    "slug": "ragi-flakes",
+    "title": "Ragi Flakes",
+    "description": "Premium organic Ragi Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/ragi-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:30.096Z",
+    "updatedAt": "2026-08-06T03:16:48.124Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "RF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 33,
+        "stock": 78
+      },
+      {
+        "sku": "RF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 55,
+        "stock": 100
+      },
+      {
+        "sku": "RF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 109,
+        "stock": 93
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnmrc001pui4c4rre5ua5",
+    "slug": "red-matta-rice-flakes",
+    "title": "Red Matta Rice Flakes",
+    "description": "Red Matta Rice Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RMFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:35.064Z",
+    "updatedAt": "2026-07-14T07:20:35.064Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "RMFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 26,
+        "stock": 100
+      },
+      {
+        "sku": "RMFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 48,
+        "stock": 100
+      },
+      {
+        "sku": "RMFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 96,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnnv5001vui4cfikc2jpo",
+    "slug": "red-rice-flakes",
+    "title": "Red Rice Flakes",
+    "description": "Red Rice Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RRFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:36.496Z",
+    "updatedAt": "2026-07-14T07:20:36.496Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "RRFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 27,
+        "stock": 100
+      },
+      {
+        "sku": "RRFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 51,
+        "stock": 100
+      },
+      {
+        "sku": "RRFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 101,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkao0014uigku48ipqco",
+    "slug": "red-sorghum-flakes",
+    "title": "Red Sorghum Flakes",
+    "description": "Premium organic Red Sorghum Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RSF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/red-sorghum-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:30.336Z",
+    "updatedAt": "2026-08-06T03:16:48.416Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "RSF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 35,
+        "stock": 100
+      },
+      {
+        "sku": "RSF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 62,
+        "stock": 100
+      },
+      {
+        "sku": "RSF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 124,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnitc0011ui4cmundg7jz",
+    "slug": "thanga-samba-flakes",
+    "title": "Thanga Samba Flakes",
+    "description": "Thanga Samba Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "TSFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:29.952Z",
+    "updatedAt": "2026-07-14T07:20:29.952Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "TSFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 27,
+        "stock": 100
+      },
+      {
+        "sku": "TSFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 51,
+        "stock": 100
+      },
+      {
+        "sku": "TSFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 101,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbncr90001ui4cxuy7p1ds",
+    "slug": "wheat-flakes",
+    "title": "Wheat Flakes",
+    "description": "Wheat Flakes — nutritious millet flakes, stone-processed for quality.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WFL",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/wheat-flakes.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-07-14T07:20:22.022Z",
+    "updatedAt": "2026-08-06T03:16:48.520Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "WFL-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 27,
+        "stock": 100
+      },
+      {
+        "sku": "WFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 52,
+        "stock": 100
+      },
+      {
+        "sku": "WFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 103,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkdw001auigk2gw4dskt",
+    "slug": "white-sorghum-flakes",
+    "title": "White Sorghum Flakes",
+    "description": "Premium organic White Sorghum Flakes for breakfast nutrition",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WSF",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/white-sorghum-flakes.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjjmd0002uigkcmzlbfx6",
+    "createdAt": "2026-06-22T18:48:30.452Z",
+    "updatedAt": "2026-08-06T03:16:48.621Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flakes"
+    },
+    "variants": [
+      {
+        "sku": "WSF-200G",
+        "size": "200g",
+        "weightGrams": 200,
+        "price": 33,
+        "stock": 100
+      },
+      {
+        "sku": "WSF-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 54,
+        "stock": 100
+      },
+      {
+        "sku": "WSF-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 107,
+        "stock": 98
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjl60002quigkj0rk00nq",
+    "slug": "barnyard-flour",
+    "title": "Barnyard Flour",
+    "description": "Nutritious multi-purpose Barnyard Flour stone-ground flour",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BYFL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-06-22T18:48:31.464Z",
+    "updatedAt": "2026-08-05T16:24:36.114Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "BYFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 84,
+        "stock": 98
+      },
+      {
+        "sku": "BYFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 152,
+        "stock": 99
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjl2j002kuigk8naqprdk",
+    "slug": "foxtail-flour",
+    "title": "Foxtail Flour",
+    "description": "Nutritious multi-purpose Foxtail Flour stone-ground flour",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FTFL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-06-22T18:48:31.339Z",
+    "updatedAt": "2026-08-05T16:24:36.476Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "FTFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 58,
+        "stock": 100
+      },
+      {
+        "sku": "FTFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 103,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkwg0028uigkqsu7xmzu",
+    "slug": "little-flour",
+    "title": "Little Flour",
+    "description": "Nutritious multi-purpose Little Flour stone-ground flour",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "LTFL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-06-22T18:48:31.120Z",
+    "updatedAt": "2026-08-05T16:24:36.676Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "LTFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 75,
+        "stock": 100
+      },
+      {
+        "sku": "LTFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 135,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnr7u002jui4c1u8fohll",
+    "slug": "mapillai-samba-flour",
+    "title": "Mapillai Samba Flour",
+    "description": "Mapillai Samba Flour — stone-ground, fine-milled for authentic taste.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MSFO",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-07-14T07:20:40.842Z",
+    "updatedAt": "2026-07-14T07:20:40.842Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "MSFO-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 48,
+        "stock": 100
+      },
+      {
+        "sku": "MSFO-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 84,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjl8z002wuigkyalqpmym",
+    "slug": "pearl-flour",
+    "title": "Pearl Flour",
+    "description": "Nutritious multi-purpose Pearl Flour stone-ground flour",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PLFL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-06-22T18:48:31.571Z",
+    "updatedAt": "2026-08-05T16:24:36.702Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "PLFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 39,
+        "stock": 100
+      },
+      {
+        "sku": "PLFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 68,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkzf002euigkac0tsw6j",
+    "slug": "ragi-flour",
+    "title": "Ragi Flour",
+    "description": "Nutritious multi-purpose Ragi Flour stone-ground flour",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RGFL",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-06-22T18:48:31.228Z",
+    "updatedAt": "2026-08-05T16:24:36.708Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "RGFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 44,
+        "stock": 100
+      },
+      {
+        "sku": "RGFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 78,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnom00021ui4c78lvipdy",
+    "slug": "sprouted-ragi-flour",
+    "title": "Sprouted Ragi Flour",
+    "description": "Sprouted Ragi Flour — stone-ground, fine-milled for authentic taste.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "SRFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-07-14T07:20:37.464Z",
+    "updatedAt": "2026-07-14T07:20:37.464Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "SRFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 50,
+        "stock": 100
+      },
+      {
+        "sku": "SRFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 87,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnpnn0027ui4c2tj2fiy2",
+    "slug": "w-sorghum-flour",
+    "title": "W Sorghum Flour",
+    "description": "W Sorghum Flour — stone-ground, fine-milled for authentic taste.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WSFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-07-14T07:20:38.818Z",
+    "updatedAt": "2026-07-14T07:20:38.818Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "WSFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 33,
+        "stock": 100
+      },
+      {
+        "sku": "WSFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 57,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnqc6002dui4cfuwpp1m7",
+    "slug": "whole-wheat-flour",
+    "title": "Whole Wheat Flour",
+    "description": "Whole Wheat Flour — stone-ground, fine-milled for authentic taste.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WWFL",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkuy0026uigkjmdv3495",
+    "createdAt": "2026-07-14T07:20:39.702Z",
+    "updatedAt": "2026-07-14T07:20:39.702Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Flour"
+    },
+    "variants": [
+      {
+        "sku": "WWFL-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 32,
+        "stock": 100
+      },
+      {
+        "sku": "WWFL-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 56,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkr90020uigk0wtj3lf0",
+    "slug": "barnyard-rava",
+    "title": "Barnyard Rava",
+    "description": "Organic Barnyard Rava fine semolina for healthy recipes",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BYRV",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-06-22T18:48:30.933Z",
+    "updatedAt": "2026-08-05T16:24:36.472Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "BYRV-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 107,
+        "stock": 100
+      },
+      {
+        "sku": "BYRV-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 199,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjkle001ouigkj0wwu8jj",
+    "slug": "foxtail-rava",
+    "title": "Foxtail Rava",
+    "description": "Organic Foxtail Rava fine semolina for healthy recipes",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FTR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-06-22T18:48:30.722Z",
+    "updatedAt": "2026-08-05T16:24:36.622Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "FTR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 75,
+        "stock": 100
+      },
+      {
+        "sku": "FTR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 137,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjko8001uuigksuoh290n",
+    "slug": "little-rava",
+    "title": "Little Rava",
+    "description": "Organic Little Rava fine semolina for healthy recipes",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "LTRV",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-06-22T18:48:30.824Z",
+    "updatedAt": "2026-08-05T16:24:36.685Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "LTRV-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 97,
+        "stock": 100
+      },
+      {
+        "sku": "LTRV-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 182,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnzf00047ui4cfvink4o6",
+    "slug": "mapillai-samba-rava",
+    "title": "Mapillai Samba Rava",
+    "description": "Mapillai Samba Rava — coarse-ground semolina for upma, porridge and traditional recipes.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MSVA",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-07-14T07:20:51.468Z",
+    "updatedAt": "2026-07-14T07:20:51.468Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "MSVA-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 63,
+        "stock": 100
+      },
+      {
+        "sku": "MSVA-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 116,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnx48003pui4crnkszqm5",
+    "slug": "pearl-rava",
+    "title": "Pearl Rava",
+    "description": "Pearl Rava — coarse-ground semolina for upma, porridge and traditional recipes.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PRVA",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-07-14T07:20:48.488Z",
+    "updatedAt": "2026-07-14T07:20:48.488Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "PRVA-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 43,
+        "stock": 100
+      },
+      {
+        "sku": "PRVA-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 77,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnxvx003vui4ci7mbbml6",
+    "slug": "ragi-rava",
+    "title": "Ragi Rava",
+    "description": "Ragi Rava — coarse-ground semolina for upma, porridge and traditional recipes.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RGVA",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-07-14T07:20:49.485Z",
+    "updatedAt": "2026-07-14T07:20:49.485Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "RGVA-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 48,
+        "stock": 100
+      },
+      {
+        "sku": "RGVA-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 86,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnyoc0041ui4ciuw7cz2e",
+    "slug": "w-sorghum-rava",
+    "title": "W Sorghum Rava",
+    "description": "W Sorghum Rava — coarse-ground semolina for upma, porridge and traditional recipes.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WSVA",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjkkf001muigkw4dctf8y",
+    "createdAt": "2026-07-14T07:20:50.508Z",
+    "updatedAt": "2026-07-14T07:20:50.508Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rava"
+    },
+    "variants": [
+      {
+        "sku": "WSVA-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 45,
+        "stock": 100
+      },
+      {
+        "sku": "WSVA-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 79,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbntdv0031ui4c43f5d78y",
+    "slug": "barley-rice",
+    "title": "Barley Rice",
+    "description": "Barley Rice — naturally grown, minimally processed whole grain.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BARI",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-07-14T07:20:43.651Z",
+    "updatedAt": "2026-07-14T07:20:43.651Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "BARI-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 42,
+        "stock": 100
+      },
+      {
+        "sku": "BARI-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 73,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjm96004uuigkpzn9jaul",
+    "slug": "barnyard-rice",
+    "title": "Barnyard Rice",
+    "description": "Organic whole-grain raw Barnyard Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BYR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/barnyard-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:32.874Z",
+    "updatedAt": "2026-08-06T03:16:46.255Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "BYR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 91,
+        "stock": 10
+      },
+      {
+        "sku": "BYR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 165,
+        "stock": 74
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnryz002pui4cxgde7ann",
+    "slug": "browntop-rice",
+    "title": "Browntop Rice",
+    "description": "Browntop Rice — naturally grown, minimally processed whole grain.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BTR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/browntop-rice.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-07-14T07:20:41.819Z",
+    "updatedAt": "2026-08-06T03:16:46.408Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "BTR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 80,
+        "stock": 100
+      },
+      {
+        "sku": "BTR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 146,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlzp004cuigkr7ai69cq",
+    "slug": "foxtail-rice",
+    "title": "Foxtail Rice",
+    "description": "Organic whole-grain raw Foxtail Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FXR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/foxtail-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:32.533Z",
+    "updatedAt": "2026-08-06T03:16:46.758Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "FXR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 67,
+        "stock": 100
+      },
+      {
+        "sku": "FXR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 121,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjm61004ouigk5psqumte",
+    "slug": "kodo-rice",
+    "title": "Kodo Rice",
+    "description": "Organic whole-grain raw Kodo Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KDR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/kodo-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:32.761Z",
+    "updatedAt": "2026-08-06T03:16:47.332Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "KDR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 82,
+        "stock": 100
+      },
+      {
+        "sku": "KDR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 148,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjm31004iuigkde21o26b",
+    "slug": "little-rice",
+    "title": "Little Rice",
+    "description": "Organic whole-grain raw Little Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "LTR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/little-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:32.653Z",
+    "updatedAt": "2026-08-06T03:16:47.536Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "LTR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 83,
+        "stock": 100
+      },
+      {
+        "sku": "LTR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 150,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjmg80056uigkw8mcbxt5",
+    "slug": "pearl-rice",
+    "title": "Pearl Rice",
+    "description": "Organic whole-grain raw Pearl Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PLR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/pearl-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:33.128Z",
+    "updatedAt": "2026-08-06T03:16:47.959Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "PLR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 50,
+        "stock": 100
+      },
+      {
+        "sku": "PLR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 89,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnvh0003dui4c8vex2528",
+    "slug": "r-sorghum-rice",
+    "title": "R Sorghum",
+    "description": "R Sorghum — naturally grown, minimally processed whole grain.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RSR",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-07-14T07:20:46.356Z",
+    "updatedAt": "2026-07-14T07:20:46.356Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "RSR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 32,
+        "stock": 100
+      },
+      {
+        "sku": "RSR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 56,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjmcw0050uigkw9yun4vr",
+    "slug": "ragi-rice",
+    "title": "Ragi Rice",
+    "description": "Organic whole-grain raw Ragi Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RGR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/ragi-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:33.008Z",
+    "updatedAt": "2026-08-06T03:16:48.285Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "RGR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 57,
+        "stock": 100
+      },
+      {
+        "sku": "RGR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 102,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnsn0002vui4cf3ufj1ut",
+    "slug": "sprouted-ragi",
+    "title": "Sprouted Ragi",
+    "description": "Sprouted Ragi — naturally grown, minimally processed whole grain.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "SPRI",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-07-14T07:20:42.684Z",
+    "updatedAt": "2026-07-14T07:20:42.684Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "SPRI-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 48,
+        "stock": 100
+      },
+      {
+        "sku": "SPRI-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 87,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbnuhv0037ui4cpdfd0ayy",
+    "slug": "wheat-grain",
+    "title": "Wheat",
+    "description": "Wheat — naturally grown, minimally processed whole grain.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WHTG",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-07-14T07:20:45.091Z",
+    "updatedAt": "2026-07-14T07:20:45.091Z",
+    "supplierId": null,
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "WHTG-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 29,
+        "stock": 100
+      },
+      {
+        "sku": "WHTG-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 51,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjmj8005cuigkexer7t7f",
+    "slug": "white-sorghum-rice",
+    "title": "White Sorghum Rice",
+    "description": "Organic whole-grain raw White Sorghum Rice fields product",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WSR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/white-sorghum-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlym004auigkr0302epz",
+    "createdAt": "2026-06-22T18:48:33.236Z",
+    "updatedAt": "2026-08-06T03:16:48.763Z",
+    "supplierId": "cmqrt8u3h0000uinw3xp8quhc",
+    "category": {
+      "name": "Millet Rice"
+    },
+    "variants": [
+      {
+        "sku": "WSR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 51,
+        "stock": 100
+      },
+      {
+        "sku": "WSR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 90,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmr3l6dmr000juihcli84wfpt",
+    "slug": "chocolate-muesli",
+    "title": "Chocolate Muesli ",
+    "description": "",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MUE-CHOCMUES",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-02T14:15:01.252Z",
+    "updatedAt": "2026-07-10T04:14:42.000Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "MUE-CHOCMUES-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 102,
+        "stock": 100
+      },
+      {
+        "sku": "MUE-CHOCMUES-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 192,
+        "stock": 25
+      },
+      {
+        "sku": "MUE-CHOCMUES-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 346,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmr3l8yad000ruihczk6uw8z1",
+    "slug": "fruits-granola",
+    "title": "Fruits Granola ",
+    "description": "",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MUE-FRUIGRAN",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-02T14:17:01.333Z",
+    "updatedAt": "2026-07-02T14:45:26.643Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "MUE-FRUIGRAN-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 95,
+        "stock": 100
+      },
+      {
+        "sku": "MUE-FRUIGRAN-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 178,
+        "stock": 24
+      },
+      {
+        "sku": "MUE-FRUIGRAN-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 320,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmr3l46cu000fuihcm03dkm2y",
+    "slug": "honey-muesli",
+    "title": "Honey Muesli",
+    "description": "",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MUE-HONEMUES",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-02T14:13:18.506Z",
+    "updatedAt": "2026-07-10T04:15:10.978Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "MUE-HONEMUES-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 93,
+        "stock": 100
+      },
+      {
+        "sku": "MUE-HONEMUES-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 175,
+        "stock": 25
+      },
+      {
+        "sku": "MUE-HONEMUES-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 315,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmr3la2nw000vuihcvocslnqf",
+    "slug": "mixed-fruit-and-nuts-muesli",
+    "title": "Mixed Fruit and Nuts Muesli ",
+    "description": "",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MUE-MIXEFRUI",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-02T14:17:53.660Z",
+    "updatedAt": "2026-07-02T14:42:06.514Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "MUE-MIXEFRUI-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 94,
+        "stock": 100
+      },
+      {
+        "sku": "MUE-MIXEFRUI-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 176,
+        "stock": 25
+      },
+      {
+        "sku": "MUE-MIXEFRUI-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 317,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmr3l7gcy000nuihcwxyif8u1",
+    "slug": "strawberry-muesli",
+    "title": "Strawberry Muesli ",
+    "description": "",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MUE-STRAMUES",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-02T14:15:51.442Z",
+    "updatedAt": "2026-07-10T04:14:10.026Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "MUE-STRAMUES-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 104,
+        "stock": 100
+      },
+      {
+        "sku": "MUE-STRAMUES-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 196,
+        "stock": 25
+      },
+      {
+        "sku": "MUE-STRAMUES-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 353,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo1y7004pui4cfgdsydvb",
+    "slug": "sugar-free-muesli",
+    "title": "Sugar Free Muesli",
+    "description": "Sugar Free Muesli — wholesome breakfast blend with no added sugar.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "SFM",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-14T07:20:54.750Z",
+    "updatedAt": "2026-07-14T07:20:54.750Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "SFM-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 75,
+        "stock": 100
+      },
+      {
+        "sku": "SFM-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 141,
+        "stock": 100
+      },
+      {
+        "sku": "SFM-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 254,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo2yu004vui4chmha8u34",
+    "slug": "sugar-free-stevia-muesli",
+    "title": "Sugar Free Stevia Muesli",
+    "description": "Sugar Free Stevia Muesli — wholesome breakfast blend with no added sugar.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "SFSM",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmr3l1ygo000duihcy0u857iz",
+    "createdAt": "2026-07-14T07:20:56.070Z",
+    "updatedAt": "2026-07-14T07:20:56.070Z",
+    "supplierId": null,
+    "category": {
+      "name": "Muesli & Granola"
+    },
+    "variants": [
+      {
+        "sku": "SFSM-250G",
+        "size": "250g",
+        "weightGrams": 250,
+        "price": 85,
+        "stock": 100
+      },
+      {
+        "sku": "SFSM-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 160,
+        "stock": 100
+      },
+      {
+        "sku": "SFSM-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 290,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlm8003muigksllduqr0",
+    "slug": "barnyard-parboiled-rice",
+    "title": "Barnyard Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Barnyard Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BPR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/barnyard-parboiled-rice.webp",
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:32.048Z",
+    "updatedAt": "2026-08-06T09:51:28.116Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "BPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 91,
+        "stock": 100
+      },
+      {
+        "sku": "BPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 165,
+        "stock": 99
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjld20034uigkh597h9cc",
+    "slug": "foxtail-parboiled-rice",
+    "title": "Foxtail Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Foxtail Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "FPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:31.719Z",
+    "updatedAt": "2026-08-05T16:24:36.478Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "FPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 67,
+        "stock": 100
+      },
+      {
+        "sku": "FPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 121,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlj6003guigk621mu5hw",
+    "slug": "kodo-parboiled-rice",
+    "title": "Kodo Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Kodo Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:31.938Z",
+    "updatedAt": "2026-08-05T16:24:36.631Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "KPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 82,
+        "stock": 100
+      },
+      {
+        "sku": "KPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 148,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlg5003auigkmo32i4y6",
+    "slug": "little-parboiled-rice",
+    "title": "Little Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Little Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "LPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:31.830Z",
+    "updatedAt": "2026-08-05T16:24:36.682Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "LPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 83,
+        "stock": 100
+      },
+      {
+        "sku": "LPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 150,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlse003yuigktb6ri76c",
+    "slug": "pearl-parboiled-rice",
+    "title": "Pearl Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Pearl Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:32.270Z",
+    "updatedAt": "2026-08-05T16:24:36.706Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "PPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 50,
+        "stock": 100
+      },
+      {
+        "sku": "PPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 89,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlp6003suigkjyy9p78g",
+    "slug": "ragi-parboiled-rice",
+    "title": "Ragi Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled Ragi Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "RPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:32.155Z",
+    "updatedAt": "2026-08-05T16:24:36.711Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "RPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 57,
+        "stock": 100
+      },
+      {
+        "sku": "RPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 102,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjlvh0044uigkqq5chchm",
+    "slug": "white-sorghum-parboiled-rice",
+    "title": "White Sorghum Parboiled Rice",
+    "description": "Easily digestible hydrothermal parboiled White Sorghum Parboiled Rice",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "WPR",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjlc20032uigk5ydslf7f",
+    "createdAt": "2026-06-22T18:48:32.381Z",
+    "updatedAt": "2026-08-05T16:24:36.714Z",
+    "supplierId": null,
+    "category": {
+      "name": "Parboiled"
+    },
+    "variants": [
+      {
+        "sku": "WPR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 51,
+        "stock": 100
+      },
+      {
+        "sku": "WPR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 90,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo175004jui4c3iou6ydh",
+    "slug": "coconut-jaggery",
+    "title": "Coconut Jaggery",
+    "description": "Coconut Jaggery — natural, unrefined traditional sweetener.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "CJP",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjn5p006euigkfq9ektck",
+    "createdAt": "2026-07-14T07:20:53.776Z",
+    "updatedAt": "2026-08-09T15:49:39.709Z",
+    "supplierId": null,
+    "category": {
+      "name": "Sweeteners"
+    },
+    "variants": [
+      {
+        "sku": "CJP-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 182,
+        "stock": 100
+      },
+      {
+        "sku": "CJP-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 332,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo0a8004dui4c7wehkech",
+    "slug": "palm-jaggery",
+    "title": "Palm Jaggery",
+    "description": "Palm Jaggery — natural, unrefined traditional sweetener.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PJP",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjn5p006euigkfq9ektck",
+    "createdAt": "2026-07-14T07:20:52.591Z",
+    "updatedAt": "2026-08-09T15:49:39.157Z",
+    "supplierId": null,
+    "category": {
+      "name": "Sweeteners"
+    },
+    "variants": [
+      {
+        "sku": "PJP-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 185,
+        "stock": 100
+      },
+      {
+        "sku": "PJP-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 340,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmslzk2960001uiis5zs8maf0",
+    "slug": "sugarcane-jaggery",
+    "title": "Sugarcane Jaggery",
+    "description": "Sugarcane Jaggery — natural, unrefined traditional sweetener.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "SCJ",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmqpkjn5p006euigkfq9ektck",
+    "createdAt": "2026-08-09T15:57:07.803Z",
+    "updatedAt": "2026-08-09T15:57:07.803Z",
+    "supplierId": null,
+    "category": {
+      "name": "Sweeteners"
+    },
+    "variants": [
+      {
+        "sku": "SCJ-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 185,
+        "stock": 100
+      },
+      {
+        "sku": "SCJ-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 340,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmqpkjn6y006guigkfck3p7o6",
+    "slug": "unrefined-cane-sugar",
+    "title": "Unrefined Cane Sugar",
+    "description": "Natural unrefined cane sugar crystals with rich molasses extraction",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "BS",
+    "active": true,
+    "image": null,
+    "rating": "4.5",
+    "reviews": 32,
+    "categoryId": "cmqpkjn5p006euigkfq9ektck",
+    "createdAt": "2026-06-22T18:48:34.090Z",
+    "updatedAt": "2026-08-09T15:49:39.714Z",
+    "supplierId": "cmqrt8u3h0000uinw3xp8quhc",
+    "category": {
+      "name": "Sweeteners"
+    },
+    "variants": [
+      {
+        "sku": "BS-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 41,
+        "stock": 200
+      },
+      {
+        "sku": "BS-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 73,
+        "stock": 220
+      },
+      {
+        "sku": "BS-2KG",
+        "size": "2kg",
+        "weightGrams": 2000,
+        "price": 145,
+        "stock": 199
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo4sg0058ui4cghpsrd96",
+    "slug": "karupu-kavuni-rice-tr",
+    "title": "Karupu Kavuni Rice",
+    "description": "Karupu Kavuni Rice — rare heirloom variety, traditionally grown with no chemicals.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "KKTR",
+    "active": true,
+    "image": "https://szsrdtiphbdpdfggxwpw.supabase.co/storage/v1/object/public/media/naturals/products/karupu-kavuni-rice-tr.webp",
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo3r70050ui4cx9ww4726",
+    "createdAt": "2026-07-14T07:20:58.431Z",
+    "updatedAt": "2026-08-06T09:24:40.823Z",
+    "supplierId": null,
+    "category": {
+      "name": "Traditional Rice"
+    },
+    "variants": [
+      {
+        "sku": "KKTR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 71,
+        "stock": 100
+      },
+      {
+        "sku": "KKTR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 130,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo3xi0052ui4c3hmz3m36",
+    "slug": "mapillai-samba-rice",
+    "title": "Mapillai Samba Rice",
+    "description": "Mapillai Samba Rice — rare heirloom variety, traditionally grown with no chemicals.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "MSTR",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo3r70050ui4cx9ww4726",
+    "createdAt": "2026-07-14T07:20:57.318Z",
+    "updatedAt": "2026-07-14T07:20:57.318Z",
+    "supplierId": null,
+    "category": {
+      "name": "Traditional Rice"
+    },
+    "variants": [
+      {
+        "sku": "MSTR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 42,
+        "stock": 100
+      },
+      {
+        "sku": "MSTR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 76,
+        "stock": 100
+      }
+    ]
+  },
+  {
+    "id": "cmrkbo5kf005eui4c9uu73sn1",
+    "slug": "poongar-rice",
+    "title": "Poongar Rice",
+    "description": "Poongar Rice — rare heirloom variety, traditionally grown with no chemicals.",
+    "currency": "INR",
+    "gstRate": 5,
+    "sku": "PNGR",
+    "active": true,
+    "image": null,
+    "rating": null,
+    "reviews": 0,
+    "categoryId": "cmrkbo3r70050ui4cx9ww4726",
+    "createdAt": "2026-07-14T07:20:59.439Z",
+    "updatedAt": "2026-07-14T07:20:59.439Z",
+    "supplierId": null,
+    "category": {
+      "name": "Traditional Rice"
+    },
+    "variants": [
+      {
+        "sku": "PNGR-500G",
+        "size": "500g",
+        "weightGrams": 500,
+        "price": 45,
+        "stock": 92
+      },
+      {
+        "sku": "PNGR-1KG",
+        "size": "1kg",
+        "weightGrams": 1000,
+        "price": 80,
+        "stock": 100
+      }
+    ]
+  }
+]

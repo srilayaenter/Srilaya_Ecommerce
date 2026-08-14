@@ -13,6 +13,7 @@
 import { test, expect } from "@playwright/test";
 import { loginAsAdmin, loginAsUser } from "./helpers/auth";
 import { addFirstProductToCart } from "./helpers/cart";
+import { TEST_ADDRESS } from "./helpers/address";
 
 // ─── Homepage stats ───────────────────────────────────────────────────────────
 
@@ -236,12 +237,12 @@ test("JUL17-19 COD confirm page mentions Cash or UPI", async ({ page }) => {
   await page.goto("/checkout");
 
   await page.getByLabel(/full name/i).fill("Test COD User");
-  await page.getByLabel(/phone/i).fill("9876543210");
+  await page.getByLabel(/phone/i).fill(TEST_ADDRESS.phone);
   await page.getByLabel(/email/i).fill("codtest@srilaya.test");
   await page.getByLabel(/address/i).fill("1 Test St");
-  await page.getByLabel(/city/i).fill("Bengaluru");
-  await page.getByLabel(/state/i).fill("Karnataka");
-  await page.getByLabel(/zip code/i).fill("560001");
+  await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
+  await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
+  await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
   const codRadio = page.getByRole("radio", { name: /pay on delivery|cash.*upi|cod/i }).first();
   if (await codRadio.count() > 0) await codRadio.click();

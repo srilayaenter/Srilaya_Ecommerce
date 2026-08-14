@@ -1,1 +1,4 @@
 .vercel
+
+# Local product images — never commit, upload to Supabase when ready
+public/images/

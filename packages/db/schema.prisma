@@ -234,6 +234,26 @@ model OrderItem {
   variant   ProductVariant @relation(fields: [variantId], references: [id])
 }
 
+model PaymentAuditLog {
+  id                String   @id @default(cuid())
+  orderId           String?
+  eventType         String
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  amount            Decimal? @db.Decimal(10, 2)
+  status            String
+  ipAddress         String?
+  userAgent         String?
+  userId            String?
+  metadata          Json?
+  createdAt         DateTime @default(now())
+
+  @@index([orderId])
+  @@index([razorpayOrderId])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
 model WebhookEvent {
   id          String   @id @default(cuid())
   provider    String
