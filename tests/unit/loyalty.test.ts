@@ -1,101 +1,177 @@
-import { describe, it, expect } from "vitest";
-import {
-  pointsEarned,
-  pointsToRupees,
-  maxRedeemablePoints,
-  generateReferralCode,
-} from "../../apps/web/lib/loyaltyMath";
-import {
-  POINTS_PER_RUPEE,
-  RUPEES_PER_POINT,
-  MAX_REDEEM_PCT,
-  REFERRAL_BONUS,
-} from "../../apps/web/lib/loyaltyConstants";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-describe("pointsEarned", () => {
-  it("earns 1 point per ₹10 spent", () => {
-    expect(pointsEarned(100)).toBe(10);
-    expect(pointsEarned(1000)).toBe(100);
+// Mock prisma before importing loyalty functions
+vi.mock("../../apps/web/lib/db", () => ({
+  prisma: {
+    loyaltyAccount: {
+      findUnique: vi.fn(),
+      upsert: vi.fn(),
+      update: vi.fn(),
+    },
+    order: {
+      count: vi.fn(),
+    },
+  },
+}));
+
+import { getBalance, earnPoints, redeemPoints, processReferral } from "../../apps/web/lib/loyalty";
+import { prisma } from "../../apps/web/lib/db";
+
+const mockPrisma = prisma as {
+  loyaltyAccount: {
+    findUnique: ReturnType<typeof vi.fn>;
+    upsert: ReturnType<typeof vi.fn>;
+    update: ReturnType<typeof vi.fn>;
+  };
+  order: { count: ReturnType<typeof vi.fn> };
+};
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+// ── getBalance ────────────────────────────────────────────────────────────────
+
+describe("getBalance", () => {
+  it("returns the balance when account exists", async () => {
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue({ balance: 250 });
+    expect(await getBalance("user@example.com")).toBe(250);
   });
 
-  it("floors partial points", () => {
-    expect(pointsEarned(105)).toBe(10); // 10.5 → 10
-    expect(pointsEarned(9)).toBe(0);    // 0.9 → 0
+  it("returns 0 when account does not exist", async () => {
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue(null);
+    expect(await getBalance("new@example.com")).toBe(0);
   });
 
-  it("returns 0 for zero order", () => {
-    expect(pointsEarned(0)).toBe(0);
+  it("queries by the correct email", async () => {
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue({ balance: 100 });
+    await getBalance("test@example.com");
+    expect(mockPrisma.loyaltyAccount.findUnique).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { email: "test@example.com" } })
+    );
   });
 });
 
-describe("pointsToRupees", () => {
-  it("converts 10 points to ₹1", () => {
-    expect(pointsToRupees(10)).toBe(1);
+// ── earnPoints ────────────────────────────────────────────────────────────────
+
+describe("earnPoints", () => {
+  it("calls upsert when orderTotal generates points", async () => {
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+    await earnPoints("user@example.com", "order-001", 500);
+    expect(mockPrisma.loyaltyAccount.upsert).toHaveBeenCalledTimes(1);
   });
 
-  it("converts 100 points to ₹10", () => {
-    expect(pointsToRupees(100)).toBe(10);
+  it("does not call upsert when orderTotal is 0 (no points earned)", async () => {
+    await earnPoints("user@example.com", "order-002", 0);
+    expect(mockPrisma.loyaltyAccount.upsert).not.toHaveBeenCalled();
   });
 
-  it("rounds to 2 decimal places", () => {
-    expect(pointsToRupees(1)).toBe(0.1);
-    expect(pointsToRupees(3)).toBe(0.3);
+  it("upsert create payload includes correct points for ₹500 order (0.1 per rupee = 50)", async () => {
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+    await earnPoints("user@example.com", "order-003", 500);
+    const call = mockPrisma.loyaltyAccount.upsert.mock.calls[0][0];
+    expect(call.create.balance).toBe(50);
+    expect(call.create.totalEarned).toBe(50);
   });
 
-  it("returns 0 for 0 points", () => {
-    expect(pointsToRupees(0)).toBe(0);
-  });
-});
-
-describe("maxRedeemablePoints", () => {
-  it("caps at 10% of order total", () => {
-    // ₹1000 order → max 10% = ₹100 → 100 / 0.1 = 1000 points
-    expect(maxRedeemablePoints(1000, 5000)).toBe(1000);
+  it("upsert update payload increments balance by correct points", async () => {
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+    await earnPoints("user@example.com", "order-004", 1000);
+    const call = mockPrisma.loyaltyAccount.upsert.mock.calls[0][0];
+    expect(call.update.balance).toEqual({ increment: 100 });
+    expect(call.update.totalEarned).toEqual({ increment: 100 });
   });
 
-  it("caps at available balance when balance is lower", () => {
-    expect(maxRedeemablePoints(1000, 200)).toBe(200);
-  });
-
-  it("returns 0 when balance is 0", () => {
-    expect(maxRedeemablePoints(1000, 0)).toBe(0);
-  });
-
-  it("handles small orders correctly", () => {
-    // ₹50 order → max ₹5 → 50 points; balance 1000
-    expect(maxRedeemablePoints(50, 1000)).toBe(50);
-  });
-});
-
-describe("generateReferralCode", () => {
-  it("starts with SL-", () => {
-    expect(generateReferralCode()).toMatch(/^SL-/);
-  });
-
-  it("is 9 characters total (SL- + 6 hex)", () => {
-    expect(generateReferralCode()).toHaveLength(9);
-  });
-
-  it("generates unique codes", () => {
-    const codes = new Set(Array.from({ length: 100 }, generateReferralCode));
-    expect(codes.size).toBe(100);
+  it("transaction note contains short uppercased orderId", async () => {
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+    await earnPoints("user@example.com", "clxyz00000000001", 200);
+    const call = mockPrisma.loyaltyAccount.upsert.mock.calls[0][0];
+    expect(call.create.transactions.create.note).toContain("CLXYZ000");
   });
 });
 
-describe("constants sanity", () => {
-  it("1 point earned per ₹10", () => {
-    expect(POINTS_PER_RUPEE).toBe(0.1);
+// ── redeemPoints ──────────────────────────────────────────────────────────────
+
+describe("redeemPoints", () => {
+  it("calls update with correct decrement", async () => {
+    mockPrisma.loyaltyAccount.update.mockResolvedValue({});
+    await redeemPoints("user@example.com", "order-005", 100);
+    const call = mockPrisma.loyaltyAccount.update.mock.calls[0][0];
+    expect(call.where).toEqual({ email: "user@example.com" });
+    expect(call.data.balance).toEqual({ decrement: 100 });
   });
 
-  it("10 points redeemable for ₹1", () => {
-    expect(RUPEES_PER_POINT).toBe(0.1);
+  it("transaction points is stored as negative value", async () => {
+    mockPrisma.loyaltyAccount.update.mockResolvedValue({});
+    await redeemPoints("user@example.com", "order-006", 50);
+    const call = mockPrisma.loyaltyAccount.update.mock.calls[0][0];
+    expect(call.data.transactions.create.points).toBe(-50);
   });
 
-  it("max redemption is 10% of order", () => {
-    expect(MAX_REDEEM_PCT).toBe(10);
+  it("transaction type is 'redeemed'", async () => {
+    mockPrisma.loyaltyAccount.update.mockResolvedValue({});
+    await redeemPoints("user@example.com", "order-007", 200);
+    const call = mockPrisma.loyaltyAccount.update.mock.calls[0][0];
+    expect(call.data.transactions.create.type).toBe("redeemed");
+  });
+});
+
+// ── processReferral ───────────────────────────────────────────────────────────
+
+describe("processReferral", () => {
+  it("does nothing when customer already has a prior paid order", async () => {
+    mockPrisma.order.count.mockResolvedValue(1);
+    await processReferral("new@example.com", "REF123", "order-008");
+    expect(mockPrisma.loyaltyAccount.findUnique).not.toHaveBeenCalled();
+    expect(mockPrisma.loyaltyAccount.update).not.toHaveBeenCalled();
   });
 
-  it("referral bonus is 50 points", () => {
-    expect(REFERRAL_BONUS).toBe(50);
+  it("does nothing when referral code is not found", async () => {
+    mockPrisma.order.count.mockResolvedValue(0);
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue(null);
+    await processReferral("new@example.com", "BADCODE", "order-009");
+    expect(mockPrisma.loyaltyAccount.update).not.toHaveBeenCalled();
+  });
+
+  it("does nothing when referrer email matches new customer (self-referral)", async () => {
+    mockPrisma.order.count.mockResolvedValue(0);
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue({
+      id: "acc-001",
+      email: "new@example.com", // same as new customer
+    });
+    await processReferral("new@example.com", "SELFREF", "order-010");
+    expect(mockPrisma.loyaltyAccount.update).not.toHaveBeenCalled();
+  });
+
+  it("awards 50 points to referrer on valid first-order referral", async () => {
+    mockPrisma.order.count.mockResolvedValue(0);
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue({
+      id: "acc-001",
+      email: "referrer@example.com",
+    });
+    mockPrisma.loyaltyAccount.update.mockResolvedValue({});
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+
+    await processReferral("new@example.com", "REF123", "order-011");
+
+    const updateCall = mockPrisma.loyaltyAccount.update.mock.calls[0][0];
+    expect(updateCall.data.balance).toEqual({ increment: 50 });
+    expect(updateCall.data.totalEarned).toEqual({ increment: 50 });
+  });
+
+  it("awards 50 bonus points to new customer on valid referral", async () => {
+    mockPrisma.order.count.mockResolvedValue(0);
+    mockPrisma.loyaltyAccount.findUnique.mockResolvedValue({
+      id: "acc-001",
+      email: "referrer@example.com",
+    });
+    mockPrisma.loyaltyAccount.update.mockResolvedValue({});
+    mockPrisma.loyaltyAccount.upsert.mockResolvedValue({});
+
+    await processReferral("new@example.com", "REF123", "order-012");
+
+    const upsertCall = mockPrisma.loyaltyAccount.upsert.mock.calls[0][0];
+    expect(upsertCall.create.balance).toBe(50);
+    expect(upsertCall.update.balance).toEqual({ increment: 50 });
   });
 });

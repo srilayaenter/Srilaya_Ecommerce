@@ -5,6 +5,7 @@
 import { test, expect } from "@playwright/test";
 import { loginAsAdmin, loginAsUser } from "./helpers/auth";
 import { addFirstProductToCart } from "./helpers/cart";
+import { TEST_ADDRESS } from "./helpers/address";
 
 test("REG-01 homepage loads without JS errors", async ({ page }) => {
   const errors: string[] = [];
@@ -43,12 +44,12 @@ test("REG-04 checkout form submits COD order", async ({ page }) => {
   await page.goto("/checkout");
 
   await page.getByLabel(/full name/i).fill("Regression Test");
-  await page.getByLabel(/phone/i).fill("9876543210");
+  await page.getByLabel(/phone/i).fill(TEST_ADDRESS.phone);
   await page.getByLabel(/email/i).fill("regression@srilaya.test");
   await page.getByLabel(/address/i).fill("1 Test Lane");
-  await page.getByLabel(/city/i).fill("Bengaluru");
-  await page.getByLabel(/state/i).fill("Karnataka");
-  await page.getByLabel(/zip code/i).fill("560001");
+  await page.getByLabel(/city/i).fill(TEST_ADDRESS.city);
+  await page.getByLabel(/state/i).fill(TEST_ADDRESS.state);
+  await page.getByLabel(/zip code/i).fill(TEST_ADDRESS.pincode);
 
   // Select COD — radio value="cod", label says "Pay on Delivery"
   await page.locator("input[value='cod'][type='radio']").click().catch(() => {});

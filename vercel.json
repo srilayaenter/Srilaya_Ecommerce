@@ -16,6 +16,14 @@
     {
       "path": "/api/cron/cleanup-failed-emails",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-payment-audit",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-mfa-attempts",
+      "schedule": "0 4 * * *"
     }
   ]
 }

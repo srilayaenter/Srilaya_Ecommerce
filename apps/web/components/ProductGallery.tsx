@@ -22,7 +22,7 @@ export default function ProductGallery({
     ? images
     : fallback
       ? [{ id: "fallback", url: fallback, alt: title }]
-      : [{ id: "placeholder", url: `https://placehold.co/600x600/006A38/white?text=${encodeURIComponent(title)}`, alt: title }];
+      : [{ id: "placeholder", url: "/product-placeholder.svg", alt: title }];
 
   const [active, setActive] = useState(0);
 

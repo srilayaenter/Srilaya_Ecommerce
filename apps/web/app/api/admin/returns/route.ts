@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import { sendEmail } from "@/lib/email";
 import { logStockChanges } from "@/lib/stockLog";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -13,6 +14,9 @@ async function guard() {
 
 export async function GET() {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const returns = await prisma.return.findMany({
     include: {
       order: { select: { id: true, customerName: true, email: true, phone: true, total: true } },
@@ -25,6 +29,9 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   const { returnId, status, adminNote } = body;

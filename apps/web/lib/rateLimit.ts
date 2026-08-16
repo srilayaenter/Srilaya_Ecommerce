@@ -22,6 +22,6 @@ export function checkRateLimit(
 
 export function getIp(request: Request): string {
   return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
   );
 }

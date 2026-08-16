@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev apps/web",
+    "dev": "next dev apps/web --turbo",
     "build": "prisma generate --schema=./packages/db/schema.prisma && next build apps/web",
     "start": "next start apps/web",
     "prisma:generate": "prisma generate --schema=./packages/db/schema.prisma",
@@ -63,7 +63,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "prisma": "6.19.3",
     "ts-node": "10.9.2",
-    "tsx": "^4.22.4",
+    "tsx": "^4.23.9",
     "vitest": "^4.1.10"
   }
 }

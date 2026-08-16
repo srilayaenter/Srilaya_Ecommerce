@@ -90,6 +90,177 @@ export default async function CategoryPage({ params }: PageProps) {
         </Link>
       )}
 
+      {slug === "millet-flour" && (
+        <Link
+          href="/flour"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-[#FDF0E8] to-[#f0faf3] border border-[#5C3A21]/20 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Millet Flour collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare all 8 stone-ground varieties, health benefits, and get personalised recommendations
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "sweeteners" && (
+        <Link
+          href="/sweeteners"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-50 to-[#f0faf3] border border-amber-200 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Natural Sweeteners collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare jaggery varieties, health benefits, and find your natural sugar alternative
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "traditional-rice" && (
+        <Link
+          href="/traditional-rice"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-red-50 to-[#f0faf3] border border-red-100 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Traditional Rice collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Discover 4 heritage rice varieties, health benefits, and culinary traditions
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "muesli-and-granola" && (
+        <Link
+          href="/muesli"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-[#f0faf3] border border-emerald-100 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Muesli & Granola collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare all 8 varieties, nutritional benefits, and find your perfect breakfast blend
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "millet-rice" && (
+        <Link
+          href="/rice"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-[#f0faf3] border border-emerald-100 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Millet Rice collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare all 12 whole grain varieties — cooks like rice, fraction of the glycemic load
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "malt-and-health-mixes" && (
+        <Link
+          href="/malt"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-50 to-[#f0faf3] border border-amber-200 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Malt & Health Mixes collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Sathu Maavu, Ragi Malt Carrot & Beetroot — instant nutrition, no refined sugar
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "laddu" && (
+        <Link
+          href="/laddu"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-[#FDF0E8] to-[#f0faf3] border border-[#5C3A21]/20 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Handcrafted Laddu collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Millet laddus roasted in ghee, sweetened with unrefined cane sugar — no refined sugar
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "millet-flakes" && (
+        <Link
+          href="/flakes"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-50 to-[#f0faf3] border border-amber-200 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Millet Flakes collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Browse all 21 varieties — millet, heritage rice & grain flakes with health benefits
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
+      {slug === "millet-parboiled" && (
+        <Link
+          href="/parboiled-millets"
+          className="flex items-center justify-between gap-4 mb-6 px-5 py-4 rounded-2xl bg-gradient-to-r from-amber-50 to-[#f0faf3] border border-amber-200 hover:border-[#2E6F40] hover:shadow-md transition-all group"
+        >
+          <div>
+            <p className="font-bold text-[#5C3A21] text-sm">
+              <Grains size={14} weight="regular" className="inline-block mr-1" />Explore our Parboiled Millets collection
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Compare all 8 parboiled varieties, health benefits, and cooking tips
+            </p>
+          </div>
+          <span className="text-[#2E6F40] font-bold text-sm whitespace-nowrap group-hover:underline">
+            View collection →
+          </span>
+        </Link>
+      )}
+
       {siblingChips.length > 0 && (
         <div className="flex gap-3 flex-wrap mb-8">
           {siblingChips.map((sib) => (
@@ -131,7 +302,7 @@ export default async function CategoryPage({ params }: PageProps) {
               >
                 <div className="relative h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-100">
                   <Image
-                    src={product.image || "https://placehold.co/400x400/png?text=SriLaYa+Foods&bg=006A38&fc=white"}
+                    src={product.image || "/product-placeholder.svg"}
                     alt={product.title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

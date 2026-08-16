@@ -4,7 +4,8 @@
  */
 import { test, expect } from "@playwright/test";
 
-const BASE = process.env.TEST_BASE_URL || "http://localhost:3000";
+const BASE = process.env.TEST_BASE_URL;
+if (!BASE) throw new Error("TEST_BASE_URL is not set — check your .env.test or .env.test.local");
 
 test("API contact route — valid submission returns 200", async ({ request }) => {
   const res = await request.post(`${BASE}/api/contact`, {
