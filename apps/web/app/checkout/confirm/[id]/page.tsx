@@ -1,10 +1,14 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
 import { toNum } from "@/lib/decimal";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import CartRefresher from "./CartRefresher";
 import { Scooter } from "@phosphor-icons/react/dist/ssr";
+import { authOptions } from "@/lib/auth";
+import { canAccessOrder, orderAccessCookieName } from "@/lib/orderAccess";
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -16,6 +20,11 @@ export default async function CodConfirmPage({ params }: Props) {
   });
 
   if (!order || order.status !== 'cod_pending') notFound();
+
+  const [session, cookieStore] = await Promise.all([getServerSession(authOptions), cookies()]);
+  if (!canAccessOrder(order, session, cookieStore.get(orderAccessCookieName(order.id))?.value)) {
+    notFound();
+  }
 
   const shortId = order.id.slice(0, 8).toUpperCase();
 
