@@ -1,17 +1,22 @@
 import { prisma } from "../../../../lib/db";
 import { notFound, redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 import { toNum } from "../../../../lib/decimal";
 import { BRAND } from "../../../../lib/brand";
 import PayButton from "./PayButton";
 import { DeviceMobile, Bank } from "@phosphor-icons/react/dist/ssr";
+import { authOptions } from "../../../../lib/auth";
+import { canPayOrder } from "../../../../lib/payAuth";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ pay_token?: string }>;
 }
 
-export default async function PaymentGatewayPage({ params }: PageProps) {
+export default async function PaymentGatewayPage({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
+  const { pay_token: payToken } = await searchParams;
 
   // Retrieve order details securely from the database rows
   const order = await prisma.order.findUnique({
@@ -31,6 +36,11 @@ export default async function PaymentGatewayPage({ params }: PageProps) {
 
   if (order.status !== 'pending') {
     redirect('/product');
+  }
+
+  const session = await getServerSession(authOptions);
+  if (!canPayOrder(order, session, payToken)) {
+    notFound();
   }
 
   const orderTotal = toNum(order.total);
@@ -124,12 +134,13 @@ export default async function PaymentGatewayPage({ params }: PageProps) {
               </p>
               
               {/* Fixed: Nullish coalescing operators fall back cleanly to strip any string | null mismatch */}
-              <PayButton 
+              <PayButton
                 orderId={order.id}
                 amount={orderTotal}
                 customerName={order.customerName || ""}
                 customerEmail={order.email || ""}
                 customerPhone={order.phone || ""}
+                payToken={payToken}
               />
             </div>
           </div>

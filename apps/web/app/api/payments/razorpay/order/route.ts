@@ -1,24 +1,45 @@
 import { prisma } from "../../../../../lib/db";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import Razorpay from "razorpay";
 import { toNum } from "../../../../../lib/decimal";
+import { authOptions } from "../../../../../lib/auth";
+import { canPayOrder } from "../../../../../lib/payAuth";
+
+// Generic, non-enumerating error for every authorization failure below —
+// never distinguishes "order not found" from "order exists but you're not
+// authorized" or "order isn't pending", same discipline as the pay page.
+const GENERIC_ERROR = "Unable to start payment for this order.";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { dbOrderId } = body;
+    const { dbOrderId, payToken } = body;
 
-    if (!dbOrderId) {
+    if (!dbOrderId || typeof dbOrderId !== "string") {
       return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
     }
 
     // Always read the authoritative total from the DB — never trust client-supplied amount
     const dbOrder = await prisma.order.findUnique({ where: { id: dbOrderId } });
     if (!dbOrder) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+      return NextResponse.json({ error: GENERIC_ERROR }, { status: 404 });
     }
-    if (dbOrder.status === "paid") {
-      return NextResponse.json({ error: "Order already paid" }, { status: 400 });
+
+    // Require a pending order explicitly — reject paid, expired, cancelled,
+    // failed, or any other non-pending state, not just "already paid".
+    if (dbOrder.status !== "pending") {
+      return NextResponse.json({ error: GENERIC_ERROR }, { status: 400 });
+    }
+
+    // Authorization boundary: never trust a client-supplied identity. A
+    // logged-in caller must own the order via session; a guest caller must
+    // present a valid pay capability token bound to this exact order ID.
+    // No Razorpay call and no paymentId mutation happen below this point
+    // unless this passes.
+    const session = await getServerSession(authOptions);
+    if (!canPayOrder(dbOrder, session, typeof payToken === "string" ? payToken : undefined)) {
+      return NextResponse.json({ error: GENERIC_ERROR }, { status: 403 });
     }
 
     const amount = toNum(dbOrder.total);

@@ -16,6 +16,7 @@ import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
 import { logOrderPlaced } from "@/lib/logger";
 import { buildOrderAccessGrant } from "@/lib/orderAccess";
+import { buildPayCapabilityToken } from "@/lib/payAuth";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -338,6 +339,16 @@ export async function createOrder(formData: FormData): Promise<void> {
 
   if (isCodOrder) {
     redirect(`/checkout/confirm/${orderId}`);
+  }
+
+  // Guest online orders need a pre-payment capability to reach their own
+  // pay page (see lib/payAuth.ts) — logged-in orders don't, since ownership
+  // is already provable via session on that page. Never mint one for COD
+  // (handled above) or if order creation didn't actually succeed (this line
+  // is unreachable unless orderId was assigned from a committed transaction).
+  if (!sessionUserId) {
+    const payToken = buildPayCapabilityToken(orderId);
+    redirect(`/checkout/pay/${orderId}?pay_token=${payToken}`);
   }
   redirect(`/checkout/pay/${orderId}`);
 }
