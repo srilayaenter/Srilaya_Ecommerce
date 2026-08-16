@@ -22,6 +22,7 @@ model User {
   orders          Order[]
   wishlistItems   WishlistItem[]
   mfaTotpAttempts MfaTotpAttempt[]
+  activationTokens StaffActivationToken[]
 }
 
 model PhoneOtp {
@@ -564,4 +565,16 @@ model MfaTotpAttempt {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, attemptedAt])
+}
+
+model StaffActivationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

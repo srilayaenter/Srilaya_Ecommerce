@@ -59,6 +59,35 @@ export function logAuthEvent(
   log.info(`auth.${event}`, params);
 }
 
+// Union of outcomes for a staff-activation issue/redeem attempt.
+export type StaffActivationEventResult =
+  | "issued"
+  | "redeemed"
+  | "rejected_not_found"
+  | "rejected_expired"
+  | "rejected_already_used"
+  | "rejected_malformed"
+  | "rejected_account_deactivated"
+  | "rejected_unauthorised"
+  | "rejected_rate_limited"
+  | "email_delivery_failed";
+
+// Audit log for staff-activation-token lifecycle events.
+// Logs non-sensitive metadata only — do NOT pass the raw token, token hash,
+// password, TOTP secret, cookies, or payment data in params.
+export function logStaffActivationEvent(params: {
+  userId?: string;
+  actorId?: string;
+  actorRole?: string;
+  result: StaffActivationEventResult;
+}) {
+  if (params.result === "issued" || params.result === "redeemed") {
+    log.info("staff_activation." + params.result, params);
+  } else {
+    log.warn("staff_activation." + params.result, params);
+  }
+}
+
 export function logError(
   context: string,
   error: unknown,
