@@ -20,6 +20,10 @@
     {
       "path": "/api/cron/cleanup-payment-audit",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-mfa-attempts",
+      "schedule": "0 4 * * *"
     }
   ]
 }

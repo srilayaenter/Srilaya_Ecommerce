@@ -6,6 +6,7 @@ import { isAdminRole } from "@/lib/permissions";
 import { sendEmail } from "@/lib/email";
 import { buildInStoreInvoiceEmail } from "@/lib/emails/inStoreInvoice";
 import { toNum } from "@/lib/decimal";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 export async function POST(
   request: Request,
@@ -15,6 +16,8 @@ export async function POST(
   if (!session?.user?.role || !isAdminRole(session.user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { orderId } = await params;
 

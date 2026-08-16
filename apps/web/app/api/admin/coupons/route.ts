@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -12,12 +13,18 @@ async function guard() {
 
 export async function GET() {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const coupons = await prisma.coupon.findMany({ orderBy: { createdAt: "desc" } });
   return NextResponse.json({ coupons });
 }
 
 export async function POST(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   const { code, type, value, minOrder, maxUses, expiresAt } = body;
@@ -45,6 +52,9 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const patch = await request.json().catch(() => null);
   if (!patch) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   const { id, active } = patch;
@@ -54,6 +64,9 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
