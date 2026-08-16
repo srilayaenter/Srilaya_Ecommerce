@@ -35,7 +35,8 @@ export default withAuth(
     const isLoginPage = path.startsWith("/admin/login");
     const isPublicAdminPage =
       path.startsWith("/admin/forgot-password") ||
-      path.startsWith("/admin/reset-password");
+      path.startsWith("/admin/reset-password") ||
+      path.startsWith("/admin/activate");
     const isMfaVerifyPage = path.startsWith("/admin/mfa-verify");
     const isMfaSetupPage  = path.startsWith("/admin/mfa-setup");
 
@@ -91,6 +92,7 @@ export default withAuth(
           path.startsWith("/admin/login") ||
           path.startsWith("/admin/forgot-password") ||
           path.startsWith("/admin/reset-password") ||
+          path.startsWith("/admin/activate") ||
           path.startsWith("/admin/mfa-verify");
         return isPublic || !!token;
       },
