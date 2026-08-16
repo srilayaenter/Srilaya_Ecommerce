@@ -4,12 +4,15 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import { toNum } from "@/lib/decimal";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.role || !isAdminRole(session.user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const products = await prisma.product.findMany({
     where: { active: true },

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -9,6 +10,8 @@ type Params = { params: Promise<{ id: string }> };
 export async function GET(_req: Request, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { id } = await params;
   const images = await prisma.productImage.findMany({
@@ -24,6 +27,8 @@ export async function POST(req: Request, { params }: Params) {
   if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { id } = await params;
   const { url, alt } = await req.json();
@@ -42,6 +47,8 @@ export async function PATCH(req: Request, { params }: Params) {
   if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { id: productId } = await params;
   const { images } = await req.json() as { images: { id: string; position: number; alt?: string }[] };
@@ -63,6 +70,8 @@ export async function DELETE(req: Request, { params }: Params) {
   if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { id: productId } = await params;
   const imageId = new URL(req.url).searchParams.get("imageId");

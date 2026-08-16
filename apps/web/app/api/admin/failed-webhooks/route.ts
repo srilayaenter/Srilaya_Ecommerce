@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import crypto from "crypto";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -13,6 +14,9 @@ async function guard() {
 // GET /api/admin/failed-webhooks — list unresolved failures
 export async function GET() {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const items = await prisma.failedWebhook.findMany({
     where: { resolvedAt: null },
@@ -26,6 +30,9 @@ export async function GET() {
 // POST /api/admin/failed-webhooks — replay a single failed webhook
 export async function POST(request: Request) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const body = await request.json().catch(() => null);
   if (!body?.id) return NextResponse.json({ error: "id required" }, { status: 400 });

@@ -3,12 +3,15 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user || !["admin", "manager", "billing_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { searchParams } = new URL(request.url);
   const status      = searchParams.get("status");

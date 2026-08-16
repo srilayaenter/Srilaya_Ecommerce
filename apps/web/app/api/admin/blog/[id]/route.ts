@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 type Params = Promise<{ id: string }>;
 
@@ -10,6 +11,8 @@ export async function PATCH(request: Request, { params }: { params: Params }) {
   if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
   const { id } = await params;
   const body = await request.json();
   const { title, excerpt, content, category, image, readMins, published, scheduledAt } = body;
@@ -44,6 +47,8 @@ export async function DELETE(_req: Request, { params }: { params: Params }) {
   if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
   const { id } = await params;
   await prisma.blogPost.delete({ where: { id } });
   return NextResponse.json({ success: true });
