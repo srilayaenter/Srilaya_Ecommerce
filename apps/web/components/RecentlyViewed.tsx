@@ -47,7 +47,7 @@ export default function RecentlyViewed({ excludeSlug }: { excludeSlug?: string }
           >
             <div className="relative h-24 bg-[#F5F5F5]">
               <Image
-                src={p.image ?? `https://placehold.co/200x200/006A38/white?text=${encodeURIComponent(p.title)}`}
+                src={p.image ?? "/product-placeholder.svg"}
                 alt={p.title}
                 fill
                 className="object-contain p-2"

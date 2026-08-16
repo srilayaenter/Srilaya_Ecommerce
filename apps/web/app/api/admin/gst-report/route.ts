@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { BRAND } from "@/lib/brand";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 // State code extracted from GSTIN (first 2 digits) — used for intra/inter-state split
 function getGstinState(gstin: string): string {
@@ -18,6 +19,8 @@ export async function GET(request: Request) {
   if (!session?.user || !["admin", "manager"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { searchParams } = new URL(request.url);
   const month  = parseInt(searchParams.get("month") ?? "0");

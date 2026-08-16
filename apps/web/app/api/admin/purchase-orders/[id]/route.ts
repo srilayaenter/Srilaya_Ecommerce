@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
 import { logStockChanges, type StockLogEntry } from "@/lib/stockLog";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -12,6 +13,9 @@ async function guard() {
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const { id } = await params;
   const po = await prisma.purchaseOrder.findUnique({
     where: { id },
@@ -24,6 +28,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const user = await guard();
   if (!user) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const rl = adminRateLimit((user as any).id ?? (user as any).email ?? "unknown");
+  if (rl) return rl;
   const { id } = await params;
 
   const body = await request.json();

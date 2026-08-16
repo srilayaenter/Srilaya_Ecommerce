@@ -11,6 +11,7 @@ interface PayButtonProps {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
+  payToken?: string;
 }
 
 declare global {
@@ -25,6 +26,7 @@ export default function PayButton({
   customerName,
   customerEmail,
   customerPhone,
+  payToken,
 }: PayButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -39,7 +41,7 @@ export default function PayButton({
       const orderRes = await fetch('/api/payments/razorpay/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, currency: 'INR', dbOrderId: orderId }),
+        body: JSON.stringify({ amount, currency: 'INR', dbOrderId: orderId, payToken }),
       });
 
       const orderData = await orderRes.json();

@@ -81,7 +81,9 @@ test("CART-07 valid coupon applies discount", async ({ page }) => {
 
   if (await couponInput.count() > 0) {
     const totalBefore = await page.getByText(/total.*₹|subtotal.*₹/i).first().textContent();
-    await couponInput.fill(process.env.TEST_COUPON_CODE || "SAVE10");
+    const couponCode = process.env.TEST_COUPON_CODE;
+    if (!couponCode) throw new Error("TEST_COUPON_CODE is not set — check your .env.test or .env.test.local");
+    await couponInput.fill(couponCode);
     await page.getByRole("button", { name: /apply/i }).click();
     await page.waitForTimeout(800);
 

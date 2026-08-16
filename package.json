@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev apps/web",
+    "dev": "next dev apps/web --turbo",
     "build": "prisma generate --schema=./packages/db/schema.prisma && next build apps/web",
     "start": "next start apps/web",
     "prisma:generate": "prisma generate --schema=./packages/db/schema.prisma",
@@ -37,14 +37,14 @@
     "otplib": "^13.4.1",
     "pdf-parse": "^2.4.5",
     "pdfkit": "^0.19.1",
-    "postcss": "8.4.41",
+    "postcss": "8.5.26",
     "posthog-js": "^1.404.1",
     "qrcode": "^1.5.4",
     "razorpay": "2.9.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^4.0.0",
-    "tailwindcss": "3.4.13",
+    "tailwindcss": "3.4.19",
     "twilio": "^6.0.2",
     "typescript": "5.9.3",
     "zod": "^4.4.3"
@@ -63,7 +63,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "prisma": "6.19.3",
     "ts-node": "10.9.2",
-    "tsx": "^4.22.4",
+    "tsx": "^4.23.9",
     "vitest": "^4.1.10"
   }
 }

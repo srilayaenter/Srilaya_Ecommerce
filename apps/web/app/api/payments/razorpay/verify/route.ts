@@ -8,6 +8,8 @@ import { toNum } from "../../../../../lib/decimal";
 import { earnPoints, processReferral } from "../../../../../lib/loyalty";
 import { generateInvoicePdf } from "../../../../../lib/generateInvoicePdf";
 import { log, logPaymentVerified, logPaymentFailed, logError } from "../../../../../lib/logger";
+import { logPaymentEvent } from "../../../../../lib/paymentAudit";
+import { buildOrderAccessGrant } from "../../../../../lib/orderAccess";
 
 export async function POST(request: Request) {
   let dbOrderId: string | undefined;
@@ -23,6 +25,7 @@ export async function POST(request: Request) {
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !dbOrderId) {
       logPaymentFailed({ reason: "missing_fields" });
+      await logPaymentEvent({ eventType: "payment.failed", status: "missing_fields", metadata: { reason: "missing_fields" } });
       await log.flush();
       return NextResponse.json(
         { error: "Missing payment details" },
@@ -51,6 +54,14 @@ export async function POST(request: Request) {
 
     if (!isValid) {
       logPaymentFailed({ razorpayOrderId: razorpay_order_id, reason: "invalid_signature" });
+      await logPaymentEvent({
+        eventType: "payment.signature_invalid",
+        status: "failed",
+        orderId: dbOrderId,
+        razorpayOrderId: razorpay_order_id,
+        ipAddress: request.headers.get("x-forwarded-for") ?? undefined,
+        userAgent: request.headers.get("user-agent") ?? undefined,
+      });
       await log.flush();
       return NextResponse.json(
         { error: "Invalid payment signature" },
@@ -68,8 +79,24 @@ export async function POST(request: Request) {
     // prevents an attacker from submitting a valid signature for order A
     // but claiming it belongs to order B.
     if (order.paymentId !== razorpay_order_id) {
+      await logPaymentEvent({
+        eventType: "payment.mismatch",
+        status: "failed",
+        orderId: dbOrderId,
+        razorpayOrderId: razorpay_order_id,
+        ipAddress: request.headers.get("x-forwarded-for") ?? undefined,
+        userAgent: request.headers.get("user-agent") ?? undefined,
+      });
       return NextResponse.json({ error: "Payment mismatch" }, { status: 400 });
     }
+
+    // Payment is now confirmed genuine for this exact order (signature +
+    // order-ID match both verified above). Mint a short-lived, order-scoped
+    // access grant so a guest (order.userId === null) can view their own
+    // confirmation/invoice page without logging in. For logged-in orders
+    // this cookie is set too, but is never consulted — see canAccessOrder().
+    const grant = buildOrderAccessGrant(dbOrderId);
+    (await cookies()).set(grant.name, grant.value, grant.options);
 
     if (order.status !== 'paid') {
       const invoiceNo = order.invoiceNo || `INV-${Date.now()}`;
@@ -80,6 +107,17 @@ export async function POST(request: Request) {
         razorpayPaymentId: razorpay_payment_id,
         total: toNum(order.total),
         email: order.email ?? "",
+      });
+      await logPaymentEvent({
+        eventType: "payment.verified",
+        status: "success",
+        orderId: dbOrderId,
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        amount: toNum(order.total),
+        userId: order.userId ?? undefined,
+        ipAddress: request.headers.get("x-forwarded-for") ?? undefined,
+        userAgent: request.headers.get("user-agent") ?? undefined,
       });
 
       const updatedOrder = await prisma.order.update({

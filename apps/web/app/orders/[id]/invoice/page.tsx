@@ -1,8 +1,12 @@
 import { prisma } from "../../../../lib/db";
 import { BRAND } from "../../../../lib/brand";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import PrintButton from "./PrintButton";
+import { authOptions } from "../../../../lib/auth";
+import { canAccessOrder, orderAccessCookieName } from "../../../../lib/orderAccess";
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -25,6 +29,11 @@ export default async function InvoicePage({ params }: PageProps) {
   });
 
   if (!order) {
+    notFound();
+  }
+
+  const [session, cookieStore] = await Promise.all([getServerSession(authOptions), cookies()]);
+  if (!canAccessOrder(order, session, cookieStore.get(orderAccessCookieName(order.id))?.value)) {
     notFound();
   }
 

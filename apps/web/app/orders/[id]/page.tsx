@@ -1,7 +1,11 @@
 import { prisma } from "../../../lib/db";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import CartRefresher from "./CartRefresher";
+import { authOptions } from "../../../lib/auth";
+import { canAccessOrder, orderAccessCookieName } from "../../../lib/orderAccess";
 interface PageProps {
   params: Promise<{ id: string }>
 }
@@ -23,6 +27,11 @@ export default async function OrderPage({ params }: PageProps) {
   });
 
   if (!order) {
+    notFound();
+  }
+
+  const [session, cookieStore] = await Promise.all([getServerSession(authOptions), cookies()]);
+  if (!canAccessOrder(order, session, cookieStore.get(orderAccessCookieName(order.id))?.value)) {
     notFound();
   }
 

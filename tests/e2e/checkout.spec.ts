@@ -9,16 +9,7 @@
 import { test, expect } from "@playwright/test";
 import { loginAsUser } from "./helpers/auth";
 import { addFirstProductToCart, emptyCart } from "./helpers/cart";
-
-const TEST_ADDRESS = {
-  name: "Test Buyer",
-  phone: "9876543210",
-  email: "testbuyer@srilaya.test",
-  address: "123 Test Street",
-  city: "Bengaluru",
-  state: "Karnataka",
-  pincode: "560001",
-};
+import { TEST_ADDRESS } from "./helpers/address";
 
 test.afterEach(async ({ page }) => {
   await emptyCart(page);

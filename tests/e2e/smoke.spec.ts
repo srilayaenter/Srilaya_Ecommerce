@@ -222,14 +222,14 @@ test("SMOKE-21 /traditional-rice landing page loads with hero and all 4 varietie
   }
 });
 
-test("SMOKE-20 /sweeteners landing page loads with hero heading and all 3 varieties", async ({ page }) => {
+test("SMOKE-20 /sweeteners landing page loads with hero heading and all 4 varieties", async ({ page }) => {
   await page.goto("/sweeteners", { waitUntil: "networkidle" });
   await expect(page).not.toHaveTitle(/error|not found/i);
   await expect(page.getByText("Something went wrong")).not.toBeVisible();
   await expect(
     page.getByRole("heading", { name: /sweet without/i, level: 1 })
   ).toBeVisible();
-  for (const name of ["Sugarcane Jaggery Powder", "Palm Jaggery Powder", "Coconut Jaggery Powder"]) {
+  for (const name of ["Sugarcane Jaggery", "Palm Jaggery", "Coconut Jaggery", "Unrefined Cane Sugar"]) {
     await expect(page.getByRole("heading", { name, level: 3 })).toBeVisible();
   }
 });
