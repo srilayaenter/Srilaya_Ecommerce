@@ -9,6 +9,7 @@ import { earnPoints, processReferral } from "../../../../../lib/loyalty";
 import { generateInvoicePdf } from "../../../../../lib/generateInvoicePdf";
 import { log, logPaymentVerified, logPaymentFailed, logError } from "../../../../../lib/logger";
 import { logPaymentEvent } from "../../../../../lib/paymentAudit";
+import { buildOrderAccessGrant } from "../../../../../lib/orderAccess";
 
 export async function POST(request: Request) {
   let dbOrderId: string | undefined;
@@ -88,6 +89,14 @@ export async function POST(request: Request) {
       });
       return NextResponse.json({ error: "Payment mismatch" }, { status: 400 });
     }
+
+    // Payment is now confirmed genuine for this exact order (signature +
+    // order-ID match both verified above). Mint a short-lived, order-scoped
+    // access grant so a guest (order.userId === null) can view their own
+    // confirmation/invoice page without logging in. For logged-in orders
+    // this cookie is set too, but is never consulted — see canAccessOrder().
+    const grant = buildOrderAccessGrant(dbOrderId);
+    (await cookies()).set(grant.name, grant.value, grant.options);
 
     if (order.status !== 'paid') {
       const invoiceNo = order.invoiceNo || `INV-${Date.now()}`;
