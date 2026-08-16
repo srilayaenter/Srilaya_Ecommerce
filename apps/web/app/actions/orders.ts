@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { logStockChanges } from "@/lib/stockLog";
 import { logOrderPlaced } from "@/lib/logger";
+import { buildOrderAccessGrant } from "@/lib/orderAccess";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -182,6 +183,32 @@ export async function createOrder(formData: FormData): Promise<void> {
   }))).catch(() => {});
 
   const isCodOrder = paymentMethod === 'cod';
+
+  // COD orders have no external payment-verification step — the transaction
+  // committing above (order created, stock reserved) is the equivalent
+  // "confirmed" moment that Razorpay's /verify route reaches via signature
+  // validation. Mint the same order-scoped guest access grant here so a
+  // guest can view their own COD confirmation page without logging in.
+  // For logged-in orders this cookie is set too, but is never consulted —
+  // see canAccessOrder() in lib/orderAccess.ts.
+  //
+  // Path override (call-site only — orderAccess.ts itself is unmodified):
+  // buildOrderAccessGrant()'s default path is "/orders/{orderId}", scoped
+  // for the Razorpay-verify mint site where only /orders/[id] and its
+  // /invoice sub-route need the cookie. A COD guest also needs it at
+  // /checkout/confirm/{orderId} — a sibling path with no common prefix
+  // with /orders other than "/". Browsers match cookie Path as a strict
+  // prefix (no OR-of-prefixes), so one cookie can't be scoped to two
+  // unrelated prefixes — "/" is the narrowest path that covers both
+  // routes this grant must work on. Security still rests entirely on the
+  // HMAC (order-ID + purpose + expiry bound, constant-time compared) and
+  // httpOnly/secure/sameSite, not on Path, so broadening Path here does
+  // not weaken the grant — it only changes which same-origin requests
+  // carry it, and the value remains useless for any other order.
+  if (isCodOrder) {
+    const grant = buildOrderAccessGrant(orderId);
+    (await cookies()).set(grant.name, grant.value, { ...grant.options, path: "/" });
+  }
 
   // Increment coupon usage counter
   if (validatedCouponCode) {
