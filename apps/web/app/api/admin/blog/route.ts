@@ -10,10 +10,10 @@ function slug(title: string) {
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
+  if (!session || !["admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
-  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
   if (rl) return rl;
   const posts = await prisma.blogPost.findMany({ orderBy: { createdAt: "desc" } });
   return NextResponse.json({ posts });
@@ -21,10 +21,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
+  if (!session || !["admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
-  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
   if (rl) return rl;
   const body = await request.json();
   const { title, excerpt, content, category, image, readMins, published, scheduledAt } = body;

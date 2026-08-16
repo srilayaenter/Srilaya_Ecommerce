@@ -8,10 +8,10 @@ type Params = Promise<{ id: string }>;
 
 export async function PATCH(request: Request, { params }: { params: Params }) {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
+  if (!session || !["admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
-  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
   if (rl) return rl;
   const { id } = await params;
   const body = await request.json();
@@ -44,10 +44,10 @@ export async function PATCH(request: Request, { params }: { params: Params }) {
 
 export async function DELETE(_req: Request, { params }: { params: Params }) {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) {
+  if (!session || !["admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
-  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
   if (rl) return rl;
   const { id } = await params;
   await prisma.blogPost.delete({ where: { id } });

@@ -18,9 +18,10 @@ model User {
   totpEnabled   Boolean        @default(false)
   totpSecret    String?
   phone         String?        @unique
-  carts         Cart[]
-  orders        Order[]
-  wishlistItems WishlistItem[]
+  carts           Cart[]
+  orders          Order[]
+  wishlistItems   WishlistItem[]
+  mfaTotpAttempts MfaTotpAttempt[]
 }
 
 model PhoneOtp {
@@ -552,4 +553,15 @@ model OpsRecipe {
   updatedAt  DateTime @updatedAt
 
   @@index([category])
+}
+
+model MfaTotpAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  attemptedAt DateTime @default(now())
+  succeeded   Boolean
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, attemptedAt])
 }
