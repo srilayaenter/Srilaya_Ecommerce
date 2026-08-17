@@ -1,41 +1,18 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getToken, encode } from "next-auth/jwt";
 import { prisma } from "@/lib/db";
 import { TOTP as TOTPClass } from "otplib";
 import { parseBody, MfaVerifySchema } from "@/lib/validation";
 import { decryptTotpSecret } from "@/lib/totp";
+import { checkMfaRateLimit, recordMfaAttempt } from "@/lib/mfaTotpRateLimit";
+import { log } from "@/lib/logger";
 
 const totp = new TOTPClass();
 
-const COOKIE_NAME = process.env.NODE_ENV === "production"
-  ? "__Secure-next-auth.session-token"
-  : "next-auth.session-token";
-
-// Rate limit: 5 failed attempts per 15 minutes per user id
-const failedAttempts = new Map<string, { count: number; resetAt: number }>();
-const WINDOW_MS = 15 * 60 * 1000;
-const MAX_FAILS = 5;
-
-function checkMfaRateLimit(userId: string): boolean {
-  const now = Date.now();
-  const entry = failedAttempts.get(userId);
-  if (!entry || now > entry.resetAt) return true;
-  return entry.count < MAX_FAILS;
-}
-
-function recordFailure(userId: string) {
-  const now = Date.now();
-  const entry = failedAttempts.get(userId);
-  if (!entry || now > entry.resetAt) {
-    failedAttempts.set(userId, { count: 1, resetAt: now + WINDOW_MS });
-  } else {
-    entry.count++;
-  }
-}
-
-function clearFailures(userId: string) {
-  failedAttempts.delete(userId);
-}
+const COOKIE_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Secure-next-auth.session-token"
+    : "next-auth.session-token";
 
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
@@ -43,7 +20,16 @@ export async function POST(request: NextRequest) {
 
   const userId = token.id as string;
 
-  if (!checkMfaRateLimit(userId)) {
+  let allowed: boolean;
+  try {
+    allowed = await checkMfaRateLimit(userId);
+  } catch {
+    log.error("mfa-verify: rate-limit check failed", { userId });
+    await log.flush();
+    return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
+  }
+
+  if (!allowed) {
     return NextResponse.json(
       { error: "Too many failed attempts. Please wait 15 minutes." },
       { status: 429 }
@@ -59,16 +45,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "MFA not configured" }, { status: 400 });
   }
 
-  // Decrypt secret before verifying
   const secret = decryptTotpSecret(user.totpSecret!);
   const isValid = totp.verify(code, { secret });
 
   if (!isValid) {
-    recordFailure(userId);
-    return NextResponse.json({ error: "Invalid code. Check your authenticator app." }, { status: 400 });
+    try {
+      await recordMfaAttempt(userId, false);
+    } catch {
+      log.error("mfa-verify: failed to record failed attempt", { userId });
+      await log.flush();
+      return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
+    }
+    return NextResponse.json(
+      { error: "Invalid code. Check your authenticator app." },
+      { status: 400 }
+    );
   }
 
-  clearFailures(userId);
+  try {
+    await recordMfaAttempt(userId, true);
+  } catch {
+    log.error("mfa-verify: failed to record successful attempt", { userId });
+    await log.flush();
+    // Allow login — TOTP code already verified
+  }
 
   const newToken = { ...token, totpPending: false };
   const encoded = await encode({
@@ -87,4 +87,3 @@ export async function POST(request: NextRequest) {
   });
   return response;
 }
-

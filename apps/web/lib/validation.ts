@@ -18,6 +18,16 @@ export const ResetPasswordSchema = z.object({
   password: z.string().min(8).max(128),
 });
 
+export const ActivateAccountSchema = z.object({
+  token: z.string().length(64).regex(/^[a-f0-9]{64}$/, "Malformed token"),
+  password: z.string().min(8).max(128),
+});
+
+export const IssueActivationSchema = z.object({
+  email: z.string().email("Invalid email address").max(200),
+  role: z.enum(["admin", "manager", "inventory_staff", "billing_staff"]).optional(),
+});
+
 export const CancelOrderSchema = z.object({
   orderId: z.string().min(1).max(64),
   email: z.string().email().max(200),

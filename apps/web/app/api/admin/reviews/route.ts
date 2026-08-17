@@ -3,12 +3,15 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 export async function PATCH(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.role || !isAdminRole(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const body = await request.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
@@ -46,6 +49,8 @@ export async function DELETE(request: Request) {
   if (!session?.user?.role || !isAdminRole(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
+  const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
+  if (rl) return rl;
 
   const { searchParams } = new URL(request.url);
   const reviewId = searchParams.get("id");

@@ -1,7 +1,26 @@
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { ROLE_LABELS, AppRole } from "@/lib/permissions";
+import { issueActivationToken, buildActivationUrl } from "@/lib/staffActivation";
+import { buildStaffActivationEmail } from "@/lib/emails/staffActivation";
+import { sendEmail } from "@/lib/email";
+import { logStaffActivationEvent } from "@/lib/logger";
 import bcrypt from "bcryptjs";
+
+// Only owner/admin may create staff accounts or (re)send activation links.
+// Server actions on this page are also gated by middleware (only owner/admin
+// can reach /admin/users at all), but we re-check here for defense in depth
+// since server actions can be invoked directly.
+async function requireOwnerOrAdmin() {
+  const session = await getServerSession(authOptions);
+  const role = session?.user?.role;
+  if (!session || (role !== "owner" && role !== "admin")) {
+    throw new Error("Unauthorised");
+  }
+  return session;
+}
 
 const ALLOWED_ROLES = ['customer', 'admin', 'manager', 'inventory_staff', 'billing_staff'] as const;
 type AllowedRole = typeof ALLOWED_ROLES[number];
@@ -61,12 +80,73 @@ async function createStaffUser(formData: FormData) {
   redirect('/admin/users?saved=true');
 }
 
+async function inviteStaffUser(formData: FormData) {
+  'use server';
+  const session = await requireOwnerOrAdmin();
+
+  const email = (formData.get('email') as string).trim().toLowerCase();
+  const role  = formData.get('role') as string;
+  if (!ALLOWED_ROLES.includes(role as AllowedRole) || role === 'customer') throw new Error('Invalid role');
+
+  let user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    user = await prisma.user.create({ data: { email, role, active: true } });
+  } else {
+    user = await prisma.user.update({ where: { id: user.id }, data: { role } });
+  }
+
+  const rawToken = await issueActivationToken(user.id);
+  const activationUrl = buildActivationUrl(rawToken);
+  const emailResult = await sendEmail({
+    to: email,
+    subject: 'Activate your SriLaYa staff account',
+    html: buildStaffActivationEmail({ activationUrl }),
+    context: `staff_activation:${user.id}`,
+  });
+
+  logStaffActivationEvent({
+    userId: user.id,
+    actorId: session.user.id,
+    actorRole: session.user.role,
+    result: emailResult.success ? 'issued' : 'email_delivery_failed',
+  });
+
+  redirect('/admin/users?saved=true');
+}
+
+async function resendActivation(formData: FormData) {
+  'use server';
+  const session = await requireOwnerOrAdmin();
+
+  const userId = formData.get('userId') as string;
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user || !user.email) throw new Error('User not found');
+
+  const rawToken = await issueActivationToken(user.id);
+  const activationUrl = buildActivationUrl(rawToken);
+  const emailResult = await sendEmail({
+    to: user.email,
+    subject: 'Activate your SriLaYa staff account',
+    html: buildStaffActivationEmail({ activationUrl }),
+    context: `staff_activation:${user.id}`,
+  });
+
+  logStaffActivationEvent({
+    userId: user.id,
+    actorId: session.user.id,
+    actorRole: session.user.role,
+    result: emailResult.success ? 'issued' : 'email_delivery_failed',
+  });
+
+  redirect('/admin/users?saved=true');
+}
+
 export default async function UsersPage({ searchParams }: { searchParams: Promise<{ saved?: string; reset?: string }> }) {
   const { saved, reset } = await searchParams;
 
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'asc' },
-    select: { id: true, email: true, role: true, active: true, createdAt: true },
+    select: { id: true, email: true, role: true, active: true, password: true, createdAt: true },
   });
 
   // Slot accounts first, then others
@@ -198,7 +278,10 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
             <tbody className="divide-y divide-[#F5F5F5]">
               {otherUsers.map(user => (
                 <tr key={user.id} className="hover:bg-[#FFF8E1]/20 transition-colors">
-                  <td className="px-6 py-4 text-sm font-medium text-[#212121]">{user.email}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-[#212121]">
+                    {user.email}
+                    {!user.password && <span className="ml-2 text-[10px] font-bold bg-[#FF9800]/10 text-[#E65100] px-1.5 py-0.5 rounded-full">Pending Activation</span>}
+                  </td>
                   <td className="px-6 py-4">
                     <span className={`text-xs font-bold px-2 py-1 rounded-full ${roleBadgeClass(user.role)}`}>
                       {ROLE_LABELS[user.role as AppRole] ?? user.role}
@@ -208,22 +291,32 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                     {new Date(user.createdAt).toLocaleDateString('en-IN')}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <form action={updateUserRole} className="flex items-center gap-2 justify-end">
-                      <input type="hidden" name="userId" value={user.id} />
-                      <select
-                        name="role"
-                        defaultValue={user.role}
-                        className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-[#006A38]"
-                      >
-                        <option value="customer">Customer</option>
-                        {STAFF_ROLES.map(r => (
-                          <option key={r} value={r}>{ROLE_LABELS[r]}</option>
-                        ))}
-                      </select>
-                      <button type="submit" className="bg-[#006A38] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#00522B] transition-colors">
-                        Save
-                      </button>
-                    </form>
+                    <div className="flex items-center gap-2 justify-end">
+                      {!user.password && (
+                        <form action={resendActivation}>
+                          <input type="hidden" name="userId" value={user.id} />
+                          <button type="submit" className="bg-[#FF9800] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#F57C00] transition-colors whitespace-nowrap">
+                            Resend Activation
+                          </button>
+                        </form>
+                      )}
+                      <form action={updateUserRole} className="flex items-center gap-2 justify-end">
+                        <input type="hidden" name="userId" value={user.id} />
+                        <select
+                          name="role"
+                          defaultValue={user.role}
+                          className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-[#006A38]"
+                        >
+                          <option value="customer">Customer</option>
+                          {STAFF_ROLES.map(r => (
+                            <option key={r} value={r}>{ROLE_LABELS[r]}</option>
+                          ))}
+                        </select>
+                        <button type="submit" className="bg-[#006A38] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#00522B] transition-colors">
+                          Save
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -232,10 +325,34 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         </div>
       )}
 
-      {/* Create ad-hoc staff account */}
+      {/* Invite staff via email activation (preferred) */}
       <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
-        <h2 className="text-base font-bold text-[#212121] mb-1">Add Staff Account</h2>
-        <p className="text-xs text-[#8D6E63] mb-4">For one-off accounts outside the named slots. If the email already exists, its role and password will be overwritten.</p>
+        <h2 className="text-base font-bold text-[#212121] mb-1">Invite Staff (Email Activation)</h2>
+        <p className="text-xs text-[#8D6E63] mb-4">Preferred way to add staff — they set their own password via a one-time link emailed to them. Link expires in 1 hour.</p>
+        <form action={inviteStaffUser} className="grid grid-cols-3 gap-4" autoComplete="off">
+          <div>
+            <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
+            <input type="email" name="email" required placeholder="staff@srilaya.com" autoComplete="off"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#616161] mb-1">Role</label>
+            <select name="role" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]">
+              {STAFF_ROLES.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <button type="submit" className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg hover:bg-[#00522B] transition-colors text-sm w-full">
+              Send Activation Link
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Create ad-hoc staff account (emergency / fallback path — kept alongside activation) */}
+      <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
+        <h2 className="text-base font-bold text-[#212121] mb-1">Add Staff Account (Manual Password)</h2>
+        <p className="text-xs text-[#8D6E63] mb-4">Emergency fallback for one-off accounts. Prefer the activation link above when possible. If the email already exists, its role and password will be overwritten.</p>
         <form action={createStaffUser} className="grid grid-cols-3 gap-4" autoComplete="off">
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>

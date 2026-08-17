@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAdminRole } from "@/lib/permissions";
+import { adminRateLimit } from "@/lib/adminGuard";
 
 async function guard() {
   const session = await getServerSession(authOptions);
@@ -11,6 +12,9 @@ async function guard() {
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   const data = await request.json();
   const bundle = await prisma.bundle.update({ where: { id: params.id }, data });
   return NextResponse.json({ bundle });
@@ -18,6 +22,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   if (!await guard()) return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
+  if (rl) return rl;
   await prisma.bundle.delete({ where: { id: params.id } });
   return NextResponse.json({ success: true });
 }
