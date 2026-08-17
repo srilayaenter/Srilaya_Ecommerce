@@ -15,6 +15,8 @@ import { authOptions } from "@/lib/auth";
 import { log } from "@/lib/logger";
 import { applyPaymentStatusChange } from "@/lib/updatePaymentStatus";
 import { applyFulfillmentStatusChange } from "@/lib/applyFulfillmentStatusChange";
+import { applyAddShipment } from "@/lib/applyAddShipment";
+import { classifyInvoiceNo } from "@/lib/orderMetaDisplay";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -81,43 +83,47 @@ async function addShipment(formData: FormData) {
   const orderId = formData.get("orderId") as string;
   const courier = formData.get("courier") as string;
   const trackingNumber = formData.get("trackingNumber") as string;
-  const trackingUrl = (formData.get("trackingUrl") as string) || undefined;
+  const trackingUrl = (formData.get("trackingUrl") as string) || null;
   const estimatedDelivery = (formData.get("estimatedDelivery") as string)
     ? new Date(formData.get("estimatedDelivery") as string)
     : null;
 
-  await prisma.shipment.upsert({
-    where: { orderId },
-    update: { courier, trackingNumber, trackingUrl, status: "booked" },
-    create: {
-      orderId,
-      courier,
-      trackingNumber,
-      trackingUrl: trackingUrl ?? null,
-      status: "booked",
-    },
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    await log.flush();
+    return;
+  }
+
+  const result = await applyAddShipment({
+    orderId,
+    actorId: session.user.id,
+    actorRole: session.user.role,
+    courier,
+    trackingNumber,
+    trackingUrl,
+    estimatedDelivery,
   });
 
-  const order = await prisma.order.update({
-    where: { id: orderId },
-    data: { fulfillmentStatus: "processing" },
-    select: { email: true, customerName: true, id: true },
-  });
+  await log.flush();
+
+  if (!result.ok) return;
 
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
 
-  if (order.email) {
-    const shortId = order.id.slice(0, 8).toUpperCase();
+  // Only notify the customer on an actual create/update — an identical
+  // resubmission (changed === false) must never resend the dispatch email.
+  if (result.changed && result.order.email) {
+    const shortId = result.order.id.slice(0, 8).toUpperCase();
     sendEmail({
-      to: order.email,
+      to: result.order.email,
       subject: `Your SriLaYa order #${shortId} has been dispatched!`,
       html: buildDispatchEmail({
-        customerName: order.customerName ?? "Valued Customer",
+        customerName: result.order.customerName ?? "Valued Customer",
         shortId,
         courier,
         trackingNumber,
-        trackingUrl: trackingUrl ?? null,
+        trackingUrl,
         estimatedDelivery,
       }),
       context: `dispatch-${orderId}`,
@@ -479,7 +485,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                   </p>
                 </div>
               )}
-              {order.paymentId && !order.paymentId.startsWith("COURIER:") && (
+              {order.paymentId && (
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#9E9E9E]">
                     Payment Ref
@@ -541,18 +547,36 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 <span className="font-bold">Channel:</span>{" "}
                 {isInStore ? "In-Store" : "Online"}
               </p>
-              {order.invoiceNo && !order.invoiceNo.startsWith("NOTE:") && (
-                <p>
-                  <span className="font-bold">Invoice No:</span>{" "}
-                  {order.invoiceNo}
-                </p>
-              )}
-              {order.invoiceNo?.startsWith("NOTE:") && (
-                <p>
-                  <span className="font-bold">Note:</span>{" "}
-                  {order.invoiceNo.replace("NOTE:", "")}
-                </p>
-              )}
+              {(() => {
+                const invoiceDisplay = classifyInvoiceNo(order.invoiceNo);
+                switch (invoiceDisplay.kind) {
+                  case "invoice":
+                    return (
+                      <p>
+                        <span className="font-bold">Invoice No:</span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "note":
+                    return (
+                      <p>
+                        <span className="font-bold">Note:</span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "legacy_courier":
+                    return (
+                      <p className="text-[#B26A00]">
+                        <span className="font-bold">
+                          Legacy courier data (unmigrated):
+                        </span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "none":
+                    return null;
+                }
+              })()}
               <p className="font-mono text-[10px] break-all text-[#bbb] pt-1">
                 {order.id}
               </p>
