@@ -113,6 +113,13 @@ export type FulfillmentStatusChangeResult =
   | "rejected_unauthorised"
   | "rejected_invalid_status";
 
+// Union of outcomes for an addShipment attempt by admin staff.
+export type ShipmentChangeResult =
+  | "success"
+  | "rejected_unauthorised"
+  | "rejected_invalid_input"
+  | "order_not_found";
+
 // Audit log for every fulfillment-status change attempt by admin staff.
 // Logs non-sensitive metadata only — do NOT pass email, phone, secrets, or
 // payment references in params.
@@ -149,5 +156,23 @@ export function logPaymentStatusChange(params: {
     log.info("payment.status_changed", params);
   } else {
     log.warn("payment.status_change_rejected", params);
+  }
+}
+
+// Audit log for every shipment create/update attempt by admin staff.
+// Logs non-sensitive logistics metadata only (courier, action) — do NOT pass
+// email, phone, or any payment reference in params.
+export function logShipmentChange(params: {
+  orderId: string;
+  actorId: string;
+  actorRole: string;
+  action: "created" | "updated";
+  courier: string;
+  result: ShipmentChangeResult;
+}) {
+  if (params.result === "success") {
+    log.info("shipment.changed", params);
+  } else {
+    log.warn("shipment.change_rejected", params);
   }
 }
