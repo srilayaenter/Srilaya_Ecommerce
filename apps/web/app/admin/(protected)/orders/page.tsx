@@ -25,6 +25,7 @@ import { authOptions } from "@/lib/auth";
 import { log } from "@/lib/logger";
 import { applyMarkCodPaid } from "@/lib/applyMarkCodPaid";
 import { applyFulfillmentStatusChange } from "@/lib/applyFulfillmentStatusChange";
+import { shouldRouteProcessThroughDetail } from "@/lib/orderCourierUiState";
 
 async function updateFulfillmentStatus(formData: FormData) {
   "use server";
@@ -163,6 +164,7 @@ export default async function OrdersPage({
   const orders = await prisma.order.findMany({
     where: whereClause,
     orderBy: { id: "desc" }, // Show newest orders first
+    include: { shipment: { select: { id: true } } },
   });
 
   // Helper function to color-code status badges
@@ -345,6 +347,13 @@ export default async function OrdersPage({
                             Ref: {order.codUpiRef}
                           </span>
                         )}
+                        {order.orderChannel !== "in_store" && (
+                          <span className="text-[9px] text-[#8D6E63]">
+                            {order.courierLabel
+                              ? `via ${order.courierLabel}`
+                              : "No courier selected"}
+                          </span>
+                        )}
                       </div>
                     </td>
 
@@ -371,26 +380,43 @@ export default async function OrdersPage({
                           </Link>
                         )}
 
-                        {order.fulfillmentStatus === "pending" && (
-                          <form action={updateFulfillmentStatus}>
-                            <input
-                              type="hidden"
-                              name="orderId"
-                              value={order.id}
-                            />
-                            <input
-                              type="hidden"
-                              name="newStatus"
-                              value="processing"
-                            />
-                            <button
-                              type="submit"
+                        {order.fulfillmentStatus === "pending" &&
+                          (shouldRouteProcessThroughDetail({
+                            orderChannel: order.orderChannel,
+                            courierLabel: order.courierLabel,
+                            hasShipment: !!order.shipment,
+                          }) ? (
+                            // Online order with a checkout courier snapshot
+                            // but no confirmed shipment yet — route through
+                            // the detail page to review/confirm the courier
+                            // before processing, rather than a blind
+                            // one-click transition.
+                            <Link
+                              href={`/admin/orders/${order.id}`}
                               className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
                             >
-                              Verify & Process
-                            </button>
-                          </form>
-                        )}
+                              Confirm Courier & Process
+                            </Link>
+                          ) : (
+                            <form action={updateFulfillmentStatus}>
+                              <input
+                                type="hidden"
+                                name="orderId"
+                                value={order.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="newStatus"
+                                value="processing"
+                              />
+                              <button
+                                type="submit"
+                                className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
+                              >
+                                Verify & Process
+                              </button>
+                            </form>
+                          ))}
 
                         {order.fulfillmentStatus === "processing" && (
                           <form action={updateFulfillmentStatus}>

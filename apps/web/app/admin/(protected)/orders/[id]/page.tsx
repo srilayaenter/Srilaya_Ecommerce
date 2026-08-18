@@ -17,6 +17,7 @@ import { applyPaymentStatusChange } from "@/lib/updatePaymentStatus";
 import { applyFulfillmentStatusChange } from "@/lib/applyFulfillmentStatusChange";
 import { applyAddShipment } from "@/lib/applyAddShipment";
 import { classifyInvoiceNo } from "@/lib/orderMetaDisplay";
+import { getShipmentEmptyStateCopy } from "@/lib/orderCourierUiState";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -311,6 +312,24 @@ export default async function OrderDetailPage({ params }: PageProps) {
             </div>
           </div>
 
+          {/* Checkout courier selection — customer's choice at checkout time,
+              kept visually and semantically separate from admin-confirmed
+              shipment data below. Read-only; never mutated by viewing. */}
+          {!isInStore && order.courierLabel && (
+            <div className="bg-[#FFF8E1] rounded-xl border border-[#FF9800]/30 shadow-sm p-5">
+              <h2 className="font-bold text-[#E65100] mb-2 text-sm uppercase tracking-wide">
+                Customer Selected at Checkout
+              </h2>
+              <p className="text-sm text-[#212121] font-semibold">
+                {order.courierLabel}
+              </p>
+              <p className="text-xs text-[#8D6E63] mt-1">
+                This is what the customer chose during checkout — it is not
+                the confirmed shipment. Confirm or update the courier below.
+              </p>
+            </div>
+          )}
+
           {/* Shipment — online orders only */}
           {!isInStore && (
             <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm p-6">
@@ -354,10 +373,18 @@ export default async function OrderDetailPage({ params }: PageProps) {
               ) : (
                 <form action={addShipment} className="space-y-3">
                   <input type="hidden" name="orderId" value={order.id} />
-                  <p className="text-sm text-[#9E9E9E] mb-3">
-                    No shipment added yet. Enter courier details to mark as
-                    processing.
-                  </p>
+                  {(() => {
+                    const emptyStateCopy = getShipmentEmptyStateCopy(
+                      order.courierLabel,
+                    );
+                    return (
+                      <p
+                        className={`text-sm mb-3 ${emptyStateCopy.tone === "info" ? "text-[#9E9E9E]" : "text-[#B26A00]"}`}
+                      >
+                        {emptyStateCopy.message}
+                      </p>
+                    );
+                  })()}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-[#616161] mb-1">
@@ -366,6 +393,10 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       <input
                         name="courier"
                         required
+                        defaultValue={
+                          getShipmentEmptyStateCopy(order.courierLabel)
+                            .prefillCourier
+                        }
                         placeholder="e.g. DTDC, Bluedart"
                         className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
