@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { computePlReport, istMonthRange } from "@/lib/plReport";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,20 @@ type SearchParams = Promise<{ month?: string; year?: string }>;
 function toNum(d: any): number {
   return parseFloat(d?.toString() ?? '0');
 }
+
+const COGS_DISCLOSURE =
+  "Cost of Goods Sold uses each product's CURRENT cost price, not the cost price at the time of sale. " +
+  "If a variant's cost price has changed since these orders were placed, this month's COGS and profit " +
+  "figures do not reflect actual historical cost.";
+
+const RETURN_VALUE_DISCLOSURE =
+  "Returns / Refunds is calculated as the original sale price × quantity returned — this system does not " +
+  "separately record the actual refunded cash amount, so this figure is a proxy, not a confirmed payout.";
+
+const SHIPPING_DISCLOSURE =
+  "Shipping income and shipping expense are not included above. This system does not record actual courier " +
+  "costs paid, only the customer-facing shipping fee charged — so shipping cannot be reliably reflected in " +
+  "gross margin without either overstating income or omitting a real cost.";
 
 export default async function ProfitLossPage({ searchParams }: { searchParams: SearchParams }) {
   const session = await getServerSession(authOptions);
@@ -22,18 +37,26 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
   const year  = parseInt(sp.year  ?? String(now.getFullYear()));
   const month = parseInt(sp.month ?? String(now.getMonth() + 1));
 
-  const from = new Date(year, month - 1, 1);
-  const to   = new Date(year, month, 1);   // exclusive upper bound
+  const { from, to } = istMonthRange(year, month);
 
-  // ── Revenue & COGS from delivered/completed orders ────────────────────────
+  // ── Revenue & COGS: orders that are BOTH fulfilled AND paid ───────────────
+  // Locked policy: fulfillmentStatus === 'completed' AND status === 'paid'.
+  // Fetches a slightly broader set (any order in the date range) and lets
+  // computePlReport apply exact eligibility, so that logic is unit-tested
+  // and used here rather than duplicated.
   const orders = await prisma.order.findMany({
     where: {
-      status:    { in: ['delivered', 'completed'] },
       createdAt: { gte: from, lt: to },
     },
-    include: {
+    select: {
+      id: true,
+      status: true,
+      fulfillmentStatus: true,
       items: {
-        include: {
+        select: {
+          variantId: true,
+          quantity: true,
+          price: true,
           variant: { select: { costPrice: true, size: true, product: { select: { title: true } } } },
         },
       },
@@ -51,93 +74,61 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
     },
   });
 
-  // ── Returns in the same period ────────────────────────────────────────────
-  const returns = await prisma.return.findMany({
-    where: {
-      status:    { in: ['approved', 'completed'] },
-      createdAt: { gte: from, lt: to },
-    },
-    include: {
-      items: true,
-      order: { include: { items: { select: { variantId: true, price: true, quantity: true } } } },
-    },
+  // ── Returns in the same period — only 'refunded' counts (locked policy) ──
+  const orderIds = orders.map(o => o.id);
+  const returns = orderIds.length
+    ? await prisma.return.findMany({
+        where: {
+          orderId:   { in: orderIds },
+          status:    'refunded',
+          createdAt: { gte: from, lt: to },
+        },
+        include: {
+          items: true,
+          order: { include: { items: { select: { variantId: true, price: true } } } },
+        },
+      })
+    : [];
+
+  const report = computePlReport({
+    orders: orders.map(o => ({
+      id: o.id,
+      status: o.status,
+      fulfillmentStatus: o.fulfillmentStatus,
+      items: o.items.map(i => ({
+        variantId: i.variantId,
+        quantity: i.quantity,
+        price: toNum(i.price),
+        costPrice: i.variant?.costPrice != null ? toNum(i.variant.costPrice) : null,
+        productTitle: i.variant?.product?.title ?? 'Unknown Product',
+      })),
+    })),
+    refunds: returns.map(r => ({
+      orderId: r.orderId,
+      status: r.status,
+      items: r.items.map(i => ({ variantId: i.variantId, quantity: i.quantity })),
+      orderItems: r.order.items.map(oi => ({ variantId: oi.variantId, price: toNum(oi.price) })),
+    })),
+    rawMaterialLogs: productionLogs.map(log => ({
+      materialName: log.rawMaterial.name,
+      unit: log.rawMaterial.unit,
+      qty: log.qty,
+      costPerUnit: log.rawMaterial.costPerUnit != null ? toNum(log.rawMaterial.costPerUnit) : null,
+    })),
   });
 
-  // ── Aggregate ─────────────────────────────────────────────────────────────
-  let revenue     = 0;
-  let cogs        = 0;
-  let missingCost = 0;
-
-  // per-product breakdown
-  const byProduct: Record<string, { title: string; revenue: number; cogs: number; qty: number; missingCost: boolean }> = {};
-
-  for (const order of orders) {
-    for (const item of order.items) {
-      const lineRevenue = toNum(item.price) * item.quantity;
-      const costPrice   = toNum(item.variant?.costPrice ?? null);
-      const lineCogs    = costPrice > 0 ? costPrice * item.quantity : 0;
-      const hasCost     = costPrice > 0;
-
-      revenue += lineRevenue;
-      cogs    += lineCogs;
-      if (!hasCost) missingCost += 1;
-
-      const title = item.variant?.product?.title ?? 'Unknown Product';
-      const key   = title;
-      if (!byProduct[key]) byProduct[key] = { title, revenue: 0, cogs: 0, qty: 0, missingCost: false };
-      byProduct[key].revenue     += lineRevenue;
-      byProduct[key].cogs        += lineCogs;
-      byProduct[key].qty         += item.quantity;
-      if (!hasCost) byProduct[key].missingCost = true;
-    }
-  }
-
-  // ── Raw material production cost ─────────────────────────────────────────
-  let rawMatCost = 0;
-  let rawMatMissingCost = false;
-  const byRawMat: Record<string, { name: string; unit: string; qtyConsumed: number; cost: number; missingCost: boolean }> = {};
-
-  for (const log of productionLogs) {
-    const consumed   = Math.abs(log.qty);           // logs are negative (deduction)
-    const costPerUnit = toNum(log.rawMaterial.costPerUnit ?? null);
-    const lineCost    = costPerUnit > 0 ? consumed * costPerUnit : 0;
-    rawMatCost += lineCost;
-    if (costPerUnit <= 0) rawMatMissingCost = true;
-
-    const key = log.rawMaterial.name;
-    if (!byRawMat[key]) byRawMat[key] = { name: key, unit: log.rawMaterial.unit, qtyConsumed: 0, cost: 0, missingCost: false };
-    byRawMat[key].qtyConsumed += consumed;
-    byRawMat[key].cost        += lineCost;
-    if (costPerUnit <= 0) byRawMat[key].missingCost = true;
-  }
-  const sortedRawMat = Object.values(byRawMat).sort((a, b) => b.cost - a.cost);
-
-  let returnValue = 0;
-  for (const ret of returns) {
-    for (const item of ret.items) {
-      // Match the original price paid from the order items
-      const orderItem = ret.order.items.find(oi => oi.variantId === item.variantId);
-      const unitPrice = orderItem ? toNum(orderItem.price) : 0;
-      returnValue += unitPrice * item.quantity;
-    }
-  }
-
-  const grossProfit  = revenue - cogs;
-  const netProfit    = grossProfit - returnValue - rawMatCost;
-  const grossMargin  = revenue > 0 ? (grossProfit / revenue) * 100 : 0;
-  const netMargin    = revenue > 0 ? (netProfit   / revenue) * 100 : 0;
-
-  const totalOrders  = orders.length;
-  const totalReturns = returns.length;
+  const {
+    revenue, cogs, missingCostLineCount: missingCost, byProduct: sortedProducts,
+    rawMatCost, rawMatMissingCost, byRawMat: sortedRawMat,
+    returnValue, totalReturns, grossProfit, netProfit, grossMargin, netMargin, totalOrders,
+  } = report;
 
   // ── Month navigation ──────────────────────────────────────────────────────
   const prevMonth = month === 1  ? 12 : month - 1;
   const prevYear  = month === 1  ? year - 1 : year;
   const nextMonth = month === 12 ? 1  : month + 1;
   const nextYear  = month === 12 ? year + 1 : year;
-  const monthName = from.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
-
-  const sortedProducts = Object.values(byProduct).sort((a, b) => b.revenue - a.revenue);
+  const monthName = new Date(year, month - 1, 1).toLocaleString('en-IN', { month: 'long', year: 'numeric' });
 
   function fmt(n: number) {
     return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -152,7 +143,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#212121]">Profit & Loss Report</h1>
-          <p className="text-sm text-[#8D6E63] mt-1">Visible only to Business Owner · Based on delivered & completed orders</p>
+          <p className="text-sm text-[#8D6E63] mt-1">Visible only to Business Owner · Based on completed & paid orders</p>
         </div>
         {/* Month navigation */}
         <div className="flex items-center gap-3">
@@ -169,6 +160,19 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
           >
             Next →
           </Link>
+        </div>
+      </div>
+
+      {/* Disclosures */}
+      <div className="space-y-2">
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg text-sm">
+          ⚠ <strong>Live cost price:</strong> {COGS_DISCLOSURE}
+        </div>
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg text-sm">
+          ⚠ <strong>Refund figure is a proxy:</strong> {RETURN_VALUE_DISCLOSURE}
+        </div>
+        <div className="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg text-sm">
+          ⚠ <strong>Shipping not included:</strong> {SHIPPING_DISCLOSURE}
         </div>
       </div>
 
@@ -207,11 +211,11 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         </div>
         <table className="w-full text-sm">
           <tbody className="divide-y divide-[#F5F5F5]">
-            <PLRow label="Gross Revenue"             value={fmt(revenue)}          note="All delivered/completed orders" />
+            <PLRow label="Gross Revenue"             value={fmt(revenue)}          note="Completed & paid orders" />
             <PLRow label="Cost of Goods Sold"        value={`(${fmt(cogs)})`}      note="Variant cost price × qty sold" negative />
             <PLRow label="Gross Profit"              value={fmt(grossProfit)}      bold highlight={grossProfit >= 0 ? 'green' : 'red'} />
             <PLRow label="Production Material Cost"  value={`(${fmt(rawMatCost)})`} note={`${sortedRawMat.length} raw material(s) consumed in production`} negative />
-            <PLRow label="Returns & Refunds"         value={`(${fmt(returnValue)})`} note={`${totalReturns} approved return(s)`} negative />
+            <PLRow label="Returns & Refunds"         value={`(${fmt(returnValue)})`} note={`${totalReturns} refunded return(s)`} negative />
             <PLRow label="Net Profit / (Loss)"       value={fmt(netProfit)}        bold large highlight={isProfitable ? 'green' : 'red'} />
           </tbody>
         </table>
@@ -224,7 +228,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
           <span className="text-xs text-[#9E9E9E]">Sorted by revenue · {sortedProducts.length} products</span>
         </div>
         {sortedProducts.length === 0 ? (
-          <p className="text-sm text-[#9E9E9E] px-6 py-8 text-center">No delivered orders in this period.</p>
+          <p className="text-sm text-[#9E9E9E] px-6 py-8 text-center">No completed & paid orders in this period.</p>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-[#F5F5F5] text-[11px] uppercase font-bold text-[#9E9E9E] tracking-wider">
