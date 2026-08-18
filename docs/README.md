@@ -46,3 +46,5 @@ C:\Users\HP\OneDrive\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
 | Product image tracker | `D:\CompanyWebsite\SriLaYa_Product_Image_Tracker.xlsx` |
 | Label status tracker | `D:\CompanyWebsite\SriLaYa_Label_Status_Tracker.xlsx` |
 | Local product images | `apps/web/public/images/products/` (git-ignored) |
+
+<!-- redeploy trigger 2026-08-18T06:04:06Z -->
