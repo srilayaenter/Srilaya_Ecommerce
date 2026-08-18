@@ -26,7 +26,7 @@ const SHIPPING_GST_DISCLOSURE =
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || !["admin", "manager"].includes(session.user.role ?? "")) {
+  if (!session?.user || !["owner", "admin", "manager"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
