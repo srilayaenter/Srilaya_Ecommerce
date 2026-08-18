@@ -49,3 +49,4 @@ C:\Users\HP\OneDrive\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
 
 <!-- redeploy trigger 2026-08-18T06:04:06Z -->
 <!-- redeploy retry 2026-08-18T06:21:28Z -->
+<!-- redeploy trigger to pick up rotated staging DATABASE_URL 2026-08-18T10:07:26Z -->
