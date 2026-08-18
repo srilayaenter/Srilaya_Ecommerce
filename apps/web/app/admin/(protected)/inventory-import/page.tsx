@@ -7,6 +7,7 @@ interface ImportResult {
   updated: number;
   skipped: number;
   notFound: string[];
+  conflicted: string[];
 }
 
 export default function InventoryImportPage() {
@@ -139,6 +140,25 @@ export default function InventoryImportPage() {
               <div className="flex flex-wrap gap-2">
                 {result.notFound.map(sku => (
                   <span key={sku} className="text-xs bg-[#F5F5F5] border border-[#E0E0E0] px-2 py-1 rounded-lg font-mono text-[#424242]">
+                    {sku}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {result.conflicted && result.conflicted.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+              <p className="text-sm font-bold text-red-700 mb-2">
+                ⚠ {result.conflicted.length} SKU(s) skipped — stock changed since this import started:
+              </p>
+              <p className="text-xs text-red-700 mb-2">
+                A concurrent order or edit changed these variants' stock while this import was running. To avoid
+                silently overwriting that change, these rows were NOT applied. Re-check current stock and re-import
+                if still needed.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {result.conflicted.map(sku => (
+                  <span key={sku} className="text-xs bg-white border border-red-200 px-2 py-1 rounded-lg font-mono text-red-700">
                     {sku}
                   </span>
                 ))}
