@@ -91,3 +91,11 @@ export function getAllCourierOptions(
     cost: calculateShipping(c.key, zone, totalWeightGrams),
   }));
 }
+
+// Resolves a raw courier key (as submitted from the checkout form) to its
+// current display label. Returns null for an unrecognized/empty key so
+// callers can decide how to handle it — never throws.
+export function resolveCourierLabel(key: string | null | undefined): string | null {
+  if (!key) return null;
+  return COURIERS.find((c) => c.key === key)?.name ?? null;
+}
