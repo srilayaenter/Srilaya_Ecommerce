@@ -205,6 +205,13 @@ model Order {
   referralCode      String?
   codPaymentMethod  String?
   codUpiRef         String?
+  // Snapshot of the courier selected at checkout time — not a live reference
+  // to lib/shipping.ts's COURIERS list, so historical orders stay accurate
+  // even if courier definitions change later. Populated by createOrder();
+  // read by the admin order detail page to pre-fill/display the customer's
+  // choice before a Shipment row exists.
+  courierKey        String?
+  courierLabel      String?
   user              User?       @relation(fields: [userId], references: [id])
   items             OrderItem[]
   returns           Return[]
