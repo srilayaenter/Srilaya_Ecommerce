@@ -5,14 +5,24 @@ import { prisma } from "@/lib/db";
 import { toNum } from "@/lib/decimal";
 import { BRAND } from "@/lib/brand";
 import { adminRateLimit } from "@/lib/adminGuard";
+import { computeGstReport, istMonthRange } from "@/lib/gstReport";
 
 // State code extracted from GSTIN (first 2 digits) — used for intra/inter-state split
 function getGstinState(gstin: string): string {
   return gstin.slice(0, 2);
 }
 
-// Karnataka state code is "29"; orders from same state = CGST+SGST, else IGST
 const HOME_STATE_CODE = getGstinState(BRAND.gstin);
+
+// Shipping is never taxed at checkout (Order.total = subtotal + taxTotal +
+// shippingFee, with no tax computed on shippingFee — confirmed in
+// apps/web/app/actions/orders.ts) and no shipping-tax-rate field exists
+// anywhere in the schema. Rather than inventing a rate, shipping is excluded
+// from the GST slab/tax breakdown and disclosed explicitly here instead.
+const SHIPPING_GST_DISCLOSURE =
+  "Shipping fees are included in Gross Collection but excluded from the taxable/tax breakdown above — " +
+  "this system does not currently record a shipping tax rate or amount at checkout. If shipping charges " +
+  "are taxable under your GST registration, verify this amount manually before filing.";
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
@@ -31,25 +41,29 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid month or year" }, { status: 400 });
   }
 
-  const from = new Date(year, month - 1, 1);           // first day of month
-  const to   = new Date(year, month, 1);               // first day of next month
+  const { from, to } = istMonthRange(year, month);
 
-  // Fetch all paid/cod_paid orders in the period with their items
+  // Fetch all orders in the period whose payment status could make them GST
+  // candidates — final eligibility (incl. cancelled-order exclusion) is
+  // applied inside computeGstReport so the same logic is unit-tested and
+  // used here, not duplicated.
   const orders = await prisma.order.findMany({
     where: {
-      status: { in: ["paid", "cod_paid"] },
+      status: "paid",
       createdAt: { gte: from, lt: to },
     },
     select: {
       id: true,
       state: true,
       subtotal: true,
-      taxTotal: true,
       shippingFee: true,
       total: true,
       discountAmount: true,
+      status: true,
+      fulfillmentStatus: true,
       items: {
         select: {
+          variantId: true,
           quantity: true,
           price: true,
           gstRate: true,
@@ -58,87 +72,55 @@ export async function GET(request: Request) {
     },
   });
 
-  // Aggregate by GST rate slab
-  const slabMap: Record<number, {
-    taxableValue: number;
-    cgst: number;
-    sgst: number;
-    igst: number;
-    totalTax: number;
-    orderIds: Set<string>;
-  }> = {};
+  const orderIds = orders.map((o) => o.id);
 
-  let grandTaxable  = 0;
-  let grandCgst     = 0;
-  let grandSgst     = 0;
-  let grandIgst     = 0;
-  let grandTax      = 0;
-  let shippingFee   = 0;
-  let discount      = 0;
-  let grandTotal    = 0;
+  // Refund credit adjustments: only returns actually recorded as refunded,
+  // and only credited in the period the refund itself occurred — never
+  // retroactively into the original sale's month.
+  const refundedReturns = orderIds.length
+    ? await prisma.return.findMany({
+        where: {
+          orderId: { in: orderIds },
+          status: "refunded",
+          createdAt: { gte: from, lt: to },
+        },
+        select: {
+          orderId: true,
+          items: { select: { variantId: true, quantity: true } },
+        },
+      })
+    : [];
 
-  for (const order of orders) {
-    const isIntraState = (order.state ?? "").trim().toLowerCase().startsWith("karnataka");
-    shippingFee += toNum(order.shippingFee);
-    discount    += toNum(order.discountAmount ?? 0);
-    grandTotal  += toNum(order.total);
+  const report = computeGstReport({
+    orders: orders.map((o) => ({
+      id: o.id,
+      state: o.state,
+      subtotal: toNum(o.subtotal),
+      discountAmount: o.discountAmount ? toNum(o.discountAmount) : null,
+      shippingFee: toNum(o.shippingFee),
+      total: toNum(o.total),
+      status: o.status,
+      fulfillmentStatus: o.fulfillmentStatus,
+      items: o.items.map((i) => ({
+        variantId: i.variantId,
+        quantity: i.quantity,
+        price: toNum(i.price),
+        gstRate: toNum(i.gstRate),
+      })),
+    })),
+    refunds: refundedReturns.map((r) => ({
+      orderId: r.orderId,
+      items: r.items.map((i) => ({ variantId: i.variantId, quantity: i.quantity })),
+    })),
+    homeStateCode: HOME_STATE_CODE,
+  });
 
-    for (const item of order.items) {
-      const rate       = toNum(item.gstRate);            // e.g. 5, 12, 18
-      const lineValue  = toNum(item.price) * item.quantity;
-      // Back-calculate taxable value: lineValue already includes GST
-      const taxable    = lineValue / (1 + rate / 100);
-      const taxAmount  = lineValue - taxable;
-      const halfTax    = taxAmount / 2;
-
-      const cgst = isIntraState ? halfTax : 0;
-      const sgst = isIntraState ? halfTax : 0;
-      const igst = isIntraState ? 0 : taxAmount;
-
-      if (!slabMap[rate]) {
-        slabMap[rate] = { taxableValue: 0, cgst: 0, sgst: 0, igst: 0, totalTax: 0, orderIds: new Set() };
-      }
-      slabMap[rate].taxableValue += taxable;
-      slabMap[rate].cgst         += cgst;
-      slabMap[rate].sgst         += sgst;
-      slabMap[rate].igst         += igst;
-      slabMap[rate].totalTax     += taxAmount;
-      slabMap[rate].orderIds.add(order.id);
-
-      grandTaxable += taxable;
-      grandCgst    += cgst;
-      grandSgst    += sgst;
-      grandIgst    += igst;
-      grandTax     += taxAmount;
-    }
-  }
-
-  const slabs = Object.entries(slabMap)
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([rate, data]) => ({
-      rate:         Number(rate),
-      taxableValue: parseFloat(data.taxableValue.toFixed(2)),
-      cgst:         parseFloat(data.cgst.toFixed(2)),
-      sgst:         parseFloat(data.sgst.toFixed(2)),
-      igst:         parseFloat(data.igst.toFixed(2)),
-      totalTax:     parseFloat(data.totalTax.toFixed(2)),
-      orderCount:   data.orderIds.size,
-    }));
-
-  const report = {
+  const fullReport = {
     month,
     year,
-    gstin:        BRAND.gstin,
-    slabs,
-    grandTaxable: parseFloat(grandTaxable.toFixed(2)),
-    grandCgst:    parseFloat(grandCgst.toFixed(2)),
-    grandSgst:    parseFloat(grandSgst.toFixed(2)),
-    grandIgst:    parseFloat(grandIgst.toFixed(2)),
-    grandTax:     parseFloat(grandTax.toFixed(2)),
-    shippingFee:  parseFloat(shippingFee.toFixed(2)),
-    discount:     parseFloat(discount.toFixed(2)),
-    grandTotal:   parseFloat(grandTotal.toFixed(2)),
-    orderCount:   orders.length,
+    gstin: BRAND.gstin,
+    shippingGstDisclosure: SHIPPING_GST_DISCLOSURE,
+    ...report,
   };
 
   // CSV download
@@ -149,20 +131,22 @@ export async function GET(request: Request) {
       `GST Report - ${MONTHS[month - 1]} ${year}`,
       `GSTIN,${BRAND.gstin}`,
       `Generated,${new Date().toISOString()}`,
-      `Total Orders,${orders.length}`,
+      `Total Orders,${report.orderCount}`,
       "",
       "GST Rate,Taxable Value (₹),CGST (₹),SGST (₹),IGST (₹),Total Tax (₹),Order Count",
-      ...slabs.map(s =>
+      ...report.slabs.map(s =>
         `${s.rate}%,${s.taxableValue.toFixed(2)},${s.cgst.toFixed(2)},${s.sgst.toFixed(2)},${s.igst.toFixed(2)},${s.totalTax.toFixed(2)},${s.orderCount}`
       ),
-      `TOTAL,${grandTaxable.toFixed(2)},${grandCgst.toFixed(2)},${grandSgst.toFixed(2)},${grandIgst.toFixed(2)},${grandTax.toFixed(2)},${orders.length}`,
+      `TOTAL,${report.grandTaxable.toFixed(2)},${report.grandCgst.toFixed(2)},${report.grandSgst.toFixed(2)},${report.grandIgst.toFixed(2)},${report.grandTax.toFixed(2)},${report.orderCount}`,
       "",
       "Revenue Reconciliation",
-      `Taxable Sales,${grandTaxable.toFixed(2)}`,
-      `Total GST,${grandTax.toFixed(2)}`,
-      `Shipping Fees,${shippingFee.toFixed(2)}`,
-      `Discounts Given,${discount.toFixed(2)}`,
-      `Gross Collection,${grandTotal.toFixed(2)}`,
+      `Taxable Sales,${report.grandTaxable.toFixed(2)}`,
+      `Total GST,${report.grandTax.toFixed(2)}`,
+      `Shipping Fees,${report.shippingFee.toFixed(2)}`,
+      `Discounts Given,${report.discount.toFixed(2)}`,
+      `Gross Collection,${report.grandTotal.toFixed(2)}`,
+      "",
+      `Note,"${SHIPPING_GST_DISCLOSURE.replace(/"/g, '""')}"`,
     ];
 
     return new Response(lines.join("\n"), {
@@ -173,5 +157,5 @@ export async function GET(request: Request) {
     });
   }
 
-  return NextResponse.json(report);
+  return NextResponse.json(fullReport);
 }
