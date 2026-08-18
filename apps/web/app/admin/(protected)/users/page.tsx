@@ -7,7 +7,13 @@ import { issueActivationToken, buildActivationUrl } from "@/lib/staffActivation"
 import { buildStaffActivationEmail } from "@/lib/emails/staffActivation";
 import { sendEmail } from "@/lib/email";
 import { logStaffActivationEvent } from "@/lib/logger";
-import bcrypt from "bcryptjs";
+import {
+  ALLOWED_STAFF_ROLES,
+  applyToggleUserActive,
+  applyUpdateUserRole,
+  applyResetPassword,
+  applyCreateStaffUser,
+} from "@/lib/userAdminActions";
 
 // Only owner/admin may create staff accounts or (re)send activation links.
 // Server actions on this page are also gated by middleware (only owner/admin
@@ -22,7 +28,7 @@ async function requireOwnerOrAdmin() {
   return session;
 }
 
-const ALLOWED_ROLES = ['customer', 'admin', 'manager', 'inventory_staff', 'billing_staff'] as const;
+const ALLOWED_ROLES = ALLOWED_STAFF_ROLES;
 type AllowedRole = typeof ALLOWED_ROLES[number];
 const STAFF_ROLES: AppRole[] = ['admin', 'manager', 'inventory_staff', 'billing_staff'];
 
@@ -39,44 +45,42 @@ const SLOT_LABELS: Record<string, string> = {
 
 async function updateUserRole(formData: FormData) {
   'use server';
+  const session = await getServerSession(authOptions);
   const userId = formData.get('userId') as string;
   const role   = formData.get('role') as string;
-  if (!ALLOWED_ROLES.includes(role as AllowedRole)) throw new Error('Invalid role');
-  await prisma.user.update({ where: { id: userId }, data: { role } });
+  const result = await applyUpdateUserRole({ actorRole: session?.user?.role, userId, role });
+  if (!result.ok) return;
   redirect('/admin/users?saved=true');
 }
 
 async function toggleUserActive(formData: FormData) {
   'use server';
+  const session = await getServerSession(authOptions);
   const userId = formData.get('userId') as string;
   const active = formData.get('active') === 'true';
-  await prisma.user.update({ where: { id: userId }, data: { active } });
+  const result = await applyToggleUserActive({ actorRole: session?.user?.role, userId, active });
+  if (!result.ok) return;
   redirect('/admin/users?saved=true');
 }
 
 async function resetPassword(formData: FormData) {
   'use server';
+  const session = await getServerSession(authOptions);
   const userId   = formData.get('userId') as string;
   const password = formData.get('newPassword') as string;
-  if (!password || password.length < 8) throw new Error('Password too short');
-  const hash = await bcrypt.hash(password, 10);
-  await prisma.user.update({ where: { id: userId }, data: { password: hash } });
+  const result = await applyResetPassword({ actorRole: session?.user?.role, userId, newPassword: password });
+  if (!result.ok) return;
   redirect('/admin/users?saved=true');
 }
 
 async function createStaffUser(formData: FormData) {
   'use server';
+  const session  = await getServerSession(authOptions);
   const email    = (formData.get('email') as string).trim().toLowerCase();
   const password = formData.get('password') as string;
   const role     = formData.get('role') as string;
-  if (!ALLOWED_ROLES.includes(role as AllowedRole)) throw new Error('Invalid role');
-  const hash = await bcrypt.hash(password, 10);
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    await prisma.user.update({ where: { email }, data: { role, password: hash } });
-  } else {
-    await prisma.user.create({ data: { email, password: hash, role } });
-  }
+  const result = await applyCreateStaffUser({ actorRole: session?.user?.role, email, password, role });
+  if (!result.ok) return;
   redirect('/admin/users?saved=true');
 }
 
