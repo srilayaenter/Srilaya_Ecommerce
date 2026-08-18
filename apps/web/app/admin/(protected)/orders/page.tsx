@@ -45,6 +45,7 @@ async function updateFulfillmentStatus(formData: FormData) {
     newStatus,
     actorId: session.user.id,
     actorRole: session.user.role,
+    actorType: "staff",
   });
 
   await log.flush();

@@ -10,17 +10,33 @@ vi.mock("next-axiom", () => ({
   },
 }));
 
-vi.mock("../../apps/web/lib/db", () => ({
-  prisma: {
-    order: {
-      findUnique: vi.fn(),
-      update: vi.fn(),
+vi.mock("../../apps/web/lib/db", () => {
+  const mockShipmentUpsert = vi.fn();
+  const mockOrderUpdate = vi.fn();
+  return {
+    prisma: {
+      order: {
+        findUnique: vi.fn(),
+        update: mockOrderUpdate,
+      },
+      shipment: {
+        upsert: mockShipmentUpsert,
+      },
+      // The real implementation runs the shipment upsert and the
+      // fulfillmentStatus write inside one $transaction (Phase 5 decision 5:
+      // atomicity). The mock just invokes the callback with a tx object
+      // routed to the SAME mock functions, so existing call-count/argument
+      // assertions on mockShipmentUpsert/mockOrderUpdate keep working
+      // unchanged, while still exercising the real atomic code path.
+      $transaction: vi.fn(async (cb: any) =>
+        cb({
+          shipment: { upsert: mockShipmentUpsert },
+          order: { update: mockOrderUpdate },
+        }),
+      ),
     },
-    shipment: {
-      upsert: vi.fn(),
-    },
-  },
-}));
+  };
+});
 
 import { applyAddShipment } from "../../apps/web/lib/applyAddShipment";
 import { prisma } from "../../apps/web/lib/db";
@@ -34,6 +50,7 @@ const ORDER_NO_SHIPMENT = {
   id: "order-001",
   email: "customer@example.com",
   customerName: "Jane Doe",
+  fulfillmentStatus: "pending",
   shipment: null,
 };
 
@@ -41,6 +58,7 @@ const ORDER_WITH_SHIPMENT = {
   id: "order-001",
   email: "customer@example.com",
   customerName: "Jane Doe",
+  fulfillmentStatus: "processing",
   shipment: {
     courier: "DTDC",
     trackingNumber: "AWB123",
@@ -114,6 +132,90 @@ describe("applyAddShipment — order lookup", () => {
   });
 });
 
+// ── Terminal-state guard (Phase 5 decision 10) ────────────────────────────────
+
+describe("applyAddShipment — terminal-state guard", () => {
+  it.each(["completed", "cancelled"])(
+    "rejects when the order is %s (terminal) — no shipment write",
+    async (status) => {
+      mockFindUnique.mockResolvedValue({ ...ORDER_NO_SHIPMENT, fulfillmentStatus: status } as any);
+      const result = await applyAddShipment(call());
+      expect(result.ok).toBe(false);
+      if (!result.ok) expect(result.reason).toBe("rejected_invalid_transition");
+      expect(mockShipmentUpsert).not.toHaveBeenCalled();
+      expect(mockOrderUpdate).not.toHaveBeenCalled();
+    },
+  );
+
+  it("terminal-state guard runs even for a resubmission that would otherwise be idempotent", async () => {
+    mockFindUnique.mockResolvedValue({ ...ORDER_WITH_SHIPMENT, fulfillmentStatus: "completed" } as any);
+    const result = await applyAddShipment(call());
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reason).toBe("rejected_invalid_transition");
+    // Must be rejected outright, not silently treated as a no-op.
+    expect(mockShipmentUpsert).not.toHaveBeenCalled();
+  });
+
+  it("logs shipment.change_rejected with rejected_invalid_transition for a terminal order", async () => {
+    mockFindUnique.mockResolvedValue({ ...ORDER_NO_SHIPMENT, fulfillmentStatus: "cancelled" } as any);
+    await applyAddShipment(call());
+    expect(log.warn).toHaveBeenCalledWith(
+      "shipment.change_rejected",
+      expect.objectContaining({ result: "rejected_invalid_transition" }),
+    );
+  });
+});
+
+// ── Atomic pending -> processing transition (Phase 5 decisions 4/5) ──────────
+
+describe("applyAddShipment — atomic pending -> processing transition", () => {
+  it("creates a new shipment when none exists AND transitions fulfillmentStatus to processing, in one $transaction", async () => {
+    mockFindUnique.mockResolvedValue(ORDER_NO_SHIPMENT as any);
+    const result = await applyAddShipment(call());
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.changed).toBe(true);
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(mockShipmentUpsert).toHaveBeenCalledTimes(1);
+    expect(mockOrderUpdate).toHaveBeenCalledWith({
+      where: { id: "order-001" },
+      data: { fulfillmentStatus: "processing" },
+    });
+  });
+
+  it("when the order is already processing, updates the shipment WITHOUT re-writing fulfillmentStatus", async () => {
+    mockFindUnique.mockResolvedValue({
+      ...ORDER_WITH_SHIPMENT,
+      fulfillmentStatus: "processing",
+      shipment: { courier: "DTDC", trackingNumber: "OLD-AWB", trackingUrl: null },
+    } as any);
+    const result = await applyAddShipment(call({ trackingNumber: "NEW-AWB" }));
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.changed).toBe(true);
+    expect(mockShipmentUpsert).toHaveBeenCalledTimes(1);
+    // fulfillmentStatus is already "processing" — no transition write needed.
+    expect(mockOrderUpdate).not.toHaveBeenCalled();
+  });
+
+  it("both the shipment upsert and the status update happen inside the same $transaction callback (atomicity)", async () => {
+    mockFindUnique.mockResolvedValue(ORDER_NO_SHIPMENT as any);
+    const callOrder: string[] = [];
+    mockShipmentUpsert.mockImplementation(async () => {
+      callOrder.push("shipment.upsert");
+      return {};
+    });
+    mockOrderUpdate.mockImplementation(async () => {
+      callOrder.push("order.update");
+      return {};
+    });
+    await applyAddShipment(call());
+    // Both writes happened, in order, and both were reached via the single
+    // $transaction call (asserted above) rather than two separate top-level
+    // prisma calls.
+    expect(callOrder).toEqual(["shipment.upsert", "order.update"]);
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("applyAddShipment — create vs update vs idempotent no-op", () => {
   it("creates a new shipment when none exists, returns changed: true", async () => {
     mockFindUnique.mockResolvedValue(ORDER_NO_SHIPMENT as any);
@@ -157,8 +259,8 @@ describe("applyAddShipment — create vs update vs idempotent no-op", () => {
     if (first.ok) expect(first.changed).toBe(true);
     expect(mockShipmentUpsert).toHaveBeenCalledTimes(1);
 
-    // Second identical call — simulate the shipment now existing as it would
-    // in the real DB after the first call.
+    // Second identical call — simulate the shipment now existing (and the
+    // order now "processing") as it would in the real DB after the first call.
     mockFindUnique.mockResolvedValue(ORDER_WITH_SHIPMENT as any);
     const second = await applyAddShipment(call());
     expect(second.ok).toBe(true);

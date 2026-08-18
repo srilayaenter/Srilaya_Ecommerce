@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
 import { parseBody, CancelOrderSchema } from "@/lib/validation";
+import { applyFulfillmentStatusChange } from "@/lib/applyFulfillmentStatusChange";
+import { log } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -31,18 +33,54 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Order has already been dispatched and cannot be cancelled" }, { status: 400 });
     }
 
-    await prisma.$transaction(async (tx) => {
-      for (const item of order.items) {
-        await tx.productVariant.update({
-          where: { id: item.variantId },
-          data: { stock: { increment: item.quantity } },
+    // The fast-path check above gives a clear customer-facing error message,
+    // but applyFulfillmentStatusChange (called inside the transaction below)
+    // is the actual authority — it re-checks the transition under the same
+    // guarded matrix used everywhere else, closing the race window between
+    // the check above and the write, and guarantees a customer actor can
+    // never reach anything but pending -> cancelled server-side.
+    //
+    // A rejection inside the transaction must roll back the restock too, so
+    // it's signalled by throwing a tagged error and caught specifically here
+    // — a generic throw would otherwise fall through to the catch-all below
+    // and be misreported as a 500.
+    const REJECTED_TAG = "fulfillment_transition_rejected";
+    try {
+      await prisma.$transaction(async (tx) => {
+        for (const item of order.items) {
+          await tx.productVariant.update({
+            where: { id: item.variantId },
+            data: { stock: { increment: item.quantity } },
+          });
+        }
+
+        const result = await applyFulfillmentStatusChange({
+          orderId,
+          newStatus: "cancelled",
+          actorId: email.trim().toLowerCase(),
+          actorRole: "customer",
+          actorType: "customer",
+          tx,
         });
-      }
-      await tx.order.update({
-        where: { id: orderId },
-        data: { status: "cancelled", fulfillmentStatus: "cancelled" },
+
+        if (!result.ok) {
+          throw new Error(`${REJECTED_TAG}:${result.reason}`);
+        }
+
+        await tx.order.update({
+          where: { id: orderId },
+          data: { status: "cancelled" },
+        });
       });
-    });
+    } catch (txError: any) {
+      await log.flush();
+      if (typeof txError?.message === "string" && txError.message.startsWith(REJECTED_TAG)) {
+        return NextResponse.json({ error: "This order cannot be cancelled" }, { status: 400 });
+      }
+      throw txError;
+    }
+
+    await log.flush();
 
     // Send cancellation confirmation
     if (order.email) {
