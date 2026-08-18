@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { toNum } from "@/lib/decimal";
+import { isCustomersPageAllowed } from "@/lib/pageAccess";
 
 export const metadata = { title: "Customers | Admin" };
 
@@ -26,7 +27,7 @@ function getSegments(orderCount: number, totalSpend: number, maxSingleOrder: num
 
 export default async function CustomersPage() {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) redirect("/admin");
+  if (!isCustomersPageAllowed(session?.user?.role)) redirect("/admin");
 
   const orders = await prisma.order.findMany({
     where: { status: { in: ["paid", "cod_pending"] }, email: { not: null } },
