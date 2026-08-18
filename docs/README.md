@@ -48,3 +48,4 @@ C:\Users\HP\OneDrive\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
 | Local product images | `apps/web/public/images/products/` (git-ignored) |
 
 <!-- redeploy trigger 2026-08-18T06:04:06Z -->
+<!-- redeploy retry 2026-08-18T06:21:28Z -->
