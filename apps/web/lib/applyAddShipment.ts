@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { isAllowedFulfillmentTransition, type FulfillmentStatus } from "@/lib/orderConstants";
 import { logShipmentChange, logError } from "@/lib/logger";
 
 // Roles permitted to create/update a shipment. Matches FULFILLMENT_ALLOWED_ROLES
@@ -31,13 +32,30 @@ export type AddShipmentOutcome =
       reason:
         | "rejected_unauthorised"
         | "rejected_invalid_input"
-        | "order_not_found";
+        | "order_not_found"
+        | "rejected_invalid_transition";
     };
 
 /**
  * Core business logic for creating/updating an order's shipment by admin staff.
  * Authorized roles: owner, admin, manager, billing_staff (same as fulfillment
- * status changes, since this also transitions fulfillmentStatus to "processing").
+ * status changes).
+ *
+ * Phase 5: this is the SOLE entry point for the pending -> processing
+ * transition on an online order that captured a courier snapshot at
+ * checkout (applyFulfillmentStatusChange refuses that specific case and
+ * defers to this function — see needsConfirmedShipmentBeforeProcessing).
+ * The Shipment write and the fulfillmentStatus transition happen atomically
+ * in one Prisma transaction, so it is never possible to observe a Shipment
+ * row without the corresponding "processing" status, or vice versa.
+ *
+ * completed and cancelled are terminal states (Phase 5 decision 10): calling
+ * this function on an order in either state is rejected outright — a
+ * shipment can never be created or edited on a terminal order.
+ *
+ * If the order is already "processing" (e.g. editing shipment details after
+ * the transition already happened), no fulfillmentStatus write occurs — only
+ * the Shipment row is updated.
  *
  * Idempotent: resubmitting identical courier/tracking data is a no-op — no
  * DB write, no audit log entry, no dispatch email. This guards against
@@ -102,6 +120,7 @@ export async function applyAddShipment({
       id: true,
       email: true,
       customerName: true,
+      fulfillmentStatus: true,
       shipment: true,
     },
   });
@@ -115,7 +134,23 @@ export async function applyAddShipment({
     return { ok: false, reason: "order_not_found" };
   }
 
-  // ── 4. Idempotency guard ─────────────────────────────────────────────────
+  // ── 4. Terminal-state guard ───────────────────────────────────────────────
+  // completed and cancelled orders are immutable — a shipment can never be
+  // created or edited on either (Phase 5 decision 10).
+  const fromStatus = order.fulfillmentStatus as FulfillmentStatus;
+  if (fromStatus === "completed" || fromStatus === "cancelled") {
+    logShipmentChange({
+      orderId,
+      actorId,
+      actorRole,
+      action: order.shipment ? "updated" : "created",
+      courier,
+      result: "rejected_invalid_transition",
+    });
+    return { ok: false, reason: "rejected_invalid_transition" };
+  }
+
+  // ── 5. Idempotency guard ─────────────────────────────────────────────────
   const existing = order.shipment;
   const normalizedUrl = trackingUrl || null;
   const isIdenticalResubmission =
@@ -132,22 +167,33 @@ export async function applyAddShipment({
     };
   }
 
-  // ── 5. Apply write ───────────────────────────────────────────────────────
-  await prisma.shipment.upsert({
-    where: { orderId },
-    update: { courier, trackingNumber, trackingUrl: normalizedUrl, status: "booked" },
-    create: {
-      orderId,
-      courier,
-      trackingNumber,
-      trackingUrl: normalizedUrl,
-      status: "booked",
-    },
-  });
+  // ── 6. Determine whether this call also transitions fulfillmentStatus ───
+  // Only pending -> processing is driven from here; if the order is already
+  // "processing" this is just a shipment-detail update with no status write.
+  const shouldTransitionToProcessing =
+    fromStatus === "pending" &&
+    isAllowedFulfillmentTransition(fromStatus, "processing");
 
-  await prisma.order.update({
-    where: { id: orderId },
-    data: { fulfillmentStatus: "processing" },
+  // ── 7. Apply write — Shipment + (optionally) fulfillmentStatus, atomically ─
+  await prisma.$transaction(async (tx) => {
+    await tx.shipment.upsert({
+      where: { orderId },
+      update: { courier, trackingNumber, trackingUrl: normalizedUrl, status: "booked" },
+      create: {
+        orderId,
+        courier,
+        trackingNumber,
+        trackingUrl: normalizedUrl,
+        status: "booked",
+      },
+    });
+
+    if (shouldTransitionToProcessing) {
+      await tx.order.update({
+        where: { id: orderId },
+        data: { fulfillmentStatus: "processing" },
+      });
+    }
   });
 
   logShipmentChange({
