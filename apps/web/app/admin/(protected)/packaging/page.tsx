@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { isAdminRole } from "@/lib/permissions";
+import { isAdminRole, isOwner } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import { addPackagingItem, addPackagingStock, usePackagingStock } from "./actions";
 import { Bag, Package, Scissors, Tag, ShieldCheck, Paperclip, Lightbulb } from "@phosphor-icons/react/dist/ssr";
@@ -25,6 +25,10 @@ const CATEGORY_ICONS: Record<string, PhosphorIcon> = {
 export default async function PackagingPage() {
   const session = await getServerSession(authOptions);
   if (!isAdminRole(session?.user?.role ?? "")) notFound();
+
+  // Exact supplier cost (costPerUnit) is owner-only, both to view and to
+  // write — everyone else with page access sees "—" and cannot set it.
+  const showCost = isOwner(session?.user?.role ?? "");
 
   const [items, suppliers] = await Promise.all([
     prisma.packagingItem.findMany({
@@ -115,7 +119,9 @@ export default async function PackagingPage() {
                               </td>
                               <td className="px-4 py-3 text-right text-[#9E9E9E] text-xs">{item.reorderThreshold} {item.unit}</td>
                               <td className="px-4 py-3 text-right text-[#424242]">
-                                {item.costPerUnit ? `₹${parseFloat(item.costPerUnit.toString()).toFixed(2)}` : "—"}
+                                {showCost
+                                  ? (item.costPerUnit ? `₹${parseFloat(item.costPerUnit.toString()).toFixed(2)}` : "—")
+                                  : <span className="text-[#BDBDBD]">—</span>}
                               </td>
                               <td className="px-4 py-3 text-[#424242] text-xs">
                                 {item.supplier?.name ?? <span className="text-[#BDBDBD]">Not set</span>}
@@ -198,11 +204,13 @@ export default async function PackagingPage() {
                 <input name="reorderThreshold" type="number" min="0" defaultValue="50"
                   className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
-              <div>
-                <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Cost per Unit (₹)</label>
-                <input name="costPerUnit" type="number" step="0.01" min="0" placeholder="0.00"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
-              </div>
+              {showCost && (
+                <div>
+                  <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Cost per Unit (₹)</label>
+                  <input name="costPerUnit" type="number" step="0.01" min="0" placeholder="0.00"
+                    className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                </div>
+              )}
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Supplier</label>
                 <select name="supplierId"
