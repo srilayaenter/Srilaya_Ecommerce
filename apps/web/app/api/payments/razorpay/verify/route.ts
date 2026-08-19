@@ -203,10 +203,13 @@ export async function POST(request: Request) {
       }
     }
 
-    const cookieStore = await cookies();
-    const cartId = cookieStore.get('cartId')?.value;
-    if (cartId) {
-      await prisma.cartItem.deleteMany({ where: { cartId } });
+    // Clear by the cartId snapshotted on the order at creation time, not the
+    // request's own cartId cookie — this keeps verify and the webhook (which
+    // has no cookie access) consistent, and is correct even if the browser's
+    // cart cookie changed between order creation and payment completion. See
+    // docs/proposal-1a-order-cart-linkage-2026-08-19.md.
+    if (order.cartId) {
+      await prisma.cartItem.deleteMany({ where: { cartId: order.cartId } });
     }
 
     await log.flush();
