@@ -16,10 +16,22 @@ export async function GET() {
   const rl = adminRateLimit((session!.user as any).id ?? (session!.user as any).email ?? "unknown");
   if (rl) return rl;
 
+  // Exact supplier purchase cost (unitCost) is owner-only — omitted entirely
+  // from the response for every other role, not just hidden client-side.
+  const isOwnerRole = session!.user.role === "owner";
+
   const orders = await prisma.purchaseOrder.findMany({
     include: {
       supplier: { select: { id: true, name: true } },
-      items: true,
+      items: {
+        select: {
+          id: true,
+          sku: true,
+          quantityOrdered: true,
+          quantityReceived: true,
+          ...(isOwnerRole ? { unitCost: true } : {}),
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
