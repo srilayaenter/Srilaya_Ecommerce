@@ -63,7 +63,7 @@ describe("GET /api/admin/variants — exact cost visibility", () => {
   });
 
   it.each(["manager", "inventory_staff", "billing_staff"])(
-    "%s passes this route's own isAdminRole check (unchanged — no route-path access modified in this pass) but never receives costPrice",
+    "%s passes this route's own isAdminRole check but never receives costPrice — this test exercises the route handler directly (bypassing middleware), so it holds regardless of a role's ROLE_ALLOWED_PATHS entry; manager/inventory_staff separately gained the middleware-level path to reach this route at all (see permissions.test.ts), billing_staff did not",
     async (role) => {
       mockGetServerSession.mockResolvedValue({ user: { id: "u1", role } });
       const res = await GET();

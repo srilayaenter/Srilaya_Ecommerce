@@ -63,6 +63,7 @@ export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
     '/api/admin/reviews',
     '/api/admin/coupons',
     '/api/admin/bundles',
+    '/api/admin/variants',
   ],
   inventory_staff: [
     '/admin/products',
@@ -81,6 +82,7 @@ export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
     '/api/admin/stock-log',
     '/api/admin/products',
     '/api/admin/upload',
+    '/api/admin/variants',
   ],
   billing_staff: [
     '/admin/orders',
