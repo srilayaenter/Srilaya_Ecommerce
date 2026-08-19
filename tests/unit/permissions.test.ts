@@ -207,8 +207,13 @@ describe("canAccessPath — manager API-path additions (Category 1)", () => {
     "/api/admin/coupons",
     "/api/admin/bundles",
     "/api/admin/variants",
+    "/api/admin/bulk-pricing",
   ])("manager can access %s", (path) => {
     expect(canAccessPath("manager", path)).toBe(true);
+  });
+
+  it("manager can access the bulk-pricing page path", () => {
+    expect(canAccessPath("manager", "/admin/bulk-pricing")).toBe(true);
   });
 
   it("manager can access API sub-paths (e.g. /api/admin/orders/export, send-invoice)", () => {
@@ -273,16 +278,16 @@ describe("canAccessPath — Category 2 exclusions remain rejected", () => {
     ["billing_staff", "/api/admin/products"],
     ["billing_staff", "/api/admin/upload"],
     ["billing_staff", "/api/admin/variants"],
+    ["inventory_staff", "/api/admin/bulk-pricing"],
+    ["billing_staff", "/api/admin/bulk-pricing"],
   ] as const)("%s cannot access %s", (role, path) => {
     expect(canAccessPath(role, path)).toBe(false);
   });
 
-  it.each(["manager", "inventory_staff", "billing_staff"])(
-    "%s cannot access /api/admin/bulk-pricing (page-level gap, out of scope)",
-    (role) => {
-      expect(canAccessPath(role, "/api/admin/bulk-pricing")).toBe(false);
-    }
-  );
+  it("inventory_staff and billing_staff cannot access the bulk-pricing page path (no sidebar evidence, out of scope)", () => {
+    expect(canAccessPath("inventory_staff", "/admin/bulk-pricing")).toBe(false);
+    expect(canAccessPath("billing_staff", "/admin/bulk-pricing")).toBe(false);
+  });
 
   it.each(["manager", "inventory_staff", "billing_staff"])(
     "%s cannot access /api/admin/failed-webhooks (no confirmed UI caller, out of scope)",
