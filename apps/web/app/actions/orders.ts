@@ -164,6 +164,47 @@ export async function createOrder(formData: FormData): Promise<void> {
       const info = err.message.replace('INSUFFICIENT_STOCK:', '');
       redirect(`/checkout?error=${encodeURIComponent(`Not enough stock for ${info}`)}`);
     }
+
+    // This cart already has a live (pending/cod_pending) order — the
+    // Order_cartId_live_unique partial index (packages/db/migrations/
+    // 20260819194746_add_order_cartid_live_unique) rejected our insert.
+    // Rather than fail the request, send the customer to the order that
+    // already exists for this cart instead of creating a duplicate. This is
+    // the expected, common outcome of a retry (double-click, refresh, a
+    // second tab, or resubmitting after an abandoned/failed payment while
+    // the original order is still live) — not an error condition. See
+    // docs/proposal-2-final-release-ready-plan-2026-08-20.md.
+    //
+    // Prisma reports this as P2002 with meta.target = ["cartId"] (the
+    // underlying column name), NOT the raw-SQL index name — confirmed via
+    // tests/unit/orderCreationIdempotencyRace.integration.test.ts against a
+    // real database, since this index isn't declared in schema.prisma for
+    // Prisma to know its name by. "cartId" has no other unique constraint
+    // anywhere in this schema, so matching on it here is unambiguous.
+    const isLiveOrderConflict =
+      err?.code === 'P2002' &&
+      (Array.isArray(err?.meta?.target)
+        ? err.meta.target.includes('cartId')
+        : String(err?.meta?.target ?? '').includes('cartId'));
+
+    if (isLiveOrderConflict) {
+      const existing = await prisma.order.findFirst({
+        where: { cartId, status: { in: ['pending', 'cod_pending'] } },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (existing) {
+        if (existing.status === 'cod_pending') {
+          redirect(`/checkout/confirm/${existing.id}`);
+        }
+        if (!sessionUserId) {
+          const payToken = buildPayCapabilityToken(existing.id);
+          redirect(`/checkout/pay/${existing.id}?pay_token=${payToken}`);
+        }
+        redirect(`/checkout/pay/${existing.id}`);
+      }
+    }
+
     throw err;
   }
 
