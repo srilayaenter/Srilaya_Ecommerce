@@ -212,6 +212,13 @@ model Order {
   // choice before a Shipment row exists.
   courierKey        String?
   courierLabel      String?
+  // Snapshot of the cartId cookie value present at order-creation time — not
+  // a relation to Cart (that model has an independent lifecycle and no FK is
+  // needed here; see docs/proposal-1a-order-cart-linkage-2026-08-19.md).
+  // Lets payment-confirmation code (verify + webhook) clear the correct cart
+  // without relying on browser cookies, which the webhook never has access
+  // to. Null on orders created before this field existed.
+  cartId            String?
   user              User?       @relation(fields: [userId], references: [id])
   items             OrderItem[]
   returns           Return[]
