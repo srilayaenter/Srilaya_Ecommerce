@@ -23,6 +23,7 @@ export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
   manager: [
     '/admin',
     '/admin/orders',
+    '/admin/bulk-pricing',
     '/admin/products',
     '/admin/inventory-import',
     '/admin/stock-log',
@@ -64,6 +65,7 @@ export const ROLE_ALLOWED_PATHS: Record<AppRole, string[]> = {
     '/api/admin/coupons',
     '/api/admin/bundles',
     '/api/admin/variants',
+    '/api/admin/bulk-pricing',
   ],
   inventory_staff: [
     '/admin/products',
