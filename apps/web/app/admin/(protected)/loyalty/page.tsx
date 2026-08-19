@@ -3,12 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { RUPEES_PER_POINT } from "@/lib/loyalty";
+import { isLoyaltyPageAllowed } from "@/lib/pageAccess";
 
 export const metadata = { title: "Loyalty Points | Admin" };
 
 export default async function LoyaltyAdminPage() {
   const session = await getServerSession(authOptions);
-  if (!["admin", "manager"].includes(session?.user?.role ?? "")) redirect("/admin");
+  if (!isLoyaltyPageAllowed(session?.user?.role)) redirect("/admin");
 
   const accounts = await prisma.loyaltyAccount.findMany({
     orderBy: { balance: "desc" },

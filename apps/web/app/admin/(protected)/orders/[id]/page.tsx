@@ -15,6 +15,9 @@ import { authOptions } from "@/lib/auth";
 import { log } from "@/lib/logger";
 import { applyPaymentStatusChange } from "@/lib/updatePaymentStatus";
 import { applyFulfillmentStatusChange } from "@/lib/applyFulfillmentStatusChange";
+import { applyAddShipment } from "@/lib/applyAddShipment";
+import { classifyInvoiceNo } from "@/lib/orderMetaDisplay";
+import { getShipmentEmptyStateCopy } from "@/lib/orderCourierUiState";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -37,6 +40,7 @@ async function updateFulfillmentStatus(formData: FormData) {
     newStatus,
     actorId: session.user.id,
     actorRole: session.user.role,
+    actorType: "staff",
   });
 
   await log.flush();
@@ -81,43 +85,47 @@ async function addShipment(formData: FormData) {
   const orderId = formData.get("orderId") as string;
   const courier = formData.get("courier") as string;
   const trackingNumber = formData.get("trackingNumber") as string;
-  const trackingUrl = (formData.get("trackingUrl") as string) || undefined;
+  const trackingUrl = (formData.get("trackingUrl") as string) || null;
   const estimatedDelivery = (formData.get("estimatedDelivery") as string)
     ? new Date(formData.get("estimatedDelivery") as string)
     : null;
 
-  await prisma.shipment.upsert({
-    where: { orderId },
-    update: { courier, trackingNumber, trackingUrl, status: "booked" },
-    create: {
-      orderId,
-      courier,
-      trackingNumber,
-      trackingUrl: trackingUrl ?? null,
-      status: "booked",
-    },
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    await log.flush();
+    return;
+  }
+
+  const result = await applyAddShipment({
+    orderId,
+    actorId: session.user.id,
+    actorRole: session.user.role,
+    courier,
+    trackingNumber,
+    trackingUrl,
+    estimatedDelivery,
   });
 
-  const order = await prisma.order.update({
-    where: { id: orderId },
-    data: { fulfillmentStatus: "processing" },
-    select: { email: true, customerName: true, id: true },
-  });
+  await log.flush();
+
+  if (!result.ok) return;
 
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin/orders");
 
-  if (order.email) {
-    const shortId = order.id.slice(0, 8).toUpperCase();
+  // Only notify the customer on an actual create/update — an identical
+  // resubmission (changed === false) must never resend the dispatch email.
+  if (result.changed && result.order.email) {
+    const shortId = result.order.id.slice(0, 8).toUpperCase();
     sendEmail({
-      to: order.email,
+      to: result.order.email,
       subject: `Your SriLaYa order #${shortId} has been dispatched!`,
       html: buildDispatchEmail({
-        customerName: order.customerName ?? "Valued Customer",
+        customerName: result.order.customerName ?? "Valued Customer",
         shortId,
         courier,
         trackingNumber,
-        trackingUrl: trackingUrl ?? null,
+        trackingUrl,
         estimatedDelivery,
       }),
       context: `dispatch-${orderId}`,
@@ -305,6 +313,24 @@ export default async function OrderDetailPage({ params }: PageProps) {
             </div>
           </div>
 
+          {/* Checkout courier selection — customer's choice at checkout time,
+              kept visually and semantically separate from admin-confirmed
+              shipment data below. Read-only; never mutated by viewing. */}
+          {!isInStore && order.courierLabel && (
+            <div className="bg-[#FFF8E1] rounded-xl border border-[#FF9800]/30 shadow-sm p-5">
+              <h2 className="font-bold text-[#E65100] mb-2 text-sm uppercase tracking-wide">
+                Customer Selected at Checkout
+              </h2>
+              <p className="text-sm text-[#212121] font-semibold">
+                {order.courierLabel}
+              </p>
+              <p className="text-xs text-[#8D6E63] mt-1">
+                This is what the customer chose during checkout — it is not
+                the confirmed shipment. Confirm or update the courier below.
+              </p>
+            </div>
+          )}
+
           {/* Shipment — online orders only */}
           {!isInStore && (
             <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm p-6">
@@ -348,10 +374,18 @@ export default async function OrderDetailPage({ params }: PageProps) {
               ) : (
                 <form action={addShipment} className="space-y-3">
                   <input type="hidden" name="orderId" value={order.id} />
-                  <p className="text-sm text-[#9E9E9E] mb-3">
-                    No shipment added yet. Enter courier details to mark as
-                    processing.
-                  </p>
+                  {(() => {
+                    const emptyStateCopy = getShipmentEmptyStateCopy(
+                      order.courierLabel,
+                    );
+                    return (
+                      <p
+                        className={`text-sm mb-3 ${emptyStateCopy.tone === "info" ? "text-[#9E9E9E]" : "text-[#B26A00]"}`}
+                      >
+                        {emptyStateCopy.message}
+                      </p>
+                    );
+                  })()}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-[#616161] mb-1">
@@ -360,6 +394,10 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       <input
                         name="courier"
                         required
+                        defaultValue={
+                          getShipmentEmptyStateCopy(order.courierLabel)
+                            .prefillCourier
+                        }
                         placeholder="e.g. DTDC, Bluedart"
                         className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
@@ -479,7 +517,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                   </p>
                 </div>
               )}
-              {order.paymentId && !order.paymentId.startsWith("COURIER:") && (
+              {order.paymentId && (
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#9E9E9E]">
                     Payment Ref
@@ -541,18 +579,36 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 <span className="font-bold">Channel:</span>{" "}
                 {isInStore ? "In-Store" : "Online"}
               </p>
-              {order.invoiceNo && !order.invoiceNo.startsWith("NOTE:") && (
-                <p>
-                  <span className="font-bold">Invoice No:</span>{" "}
-                  {order.invoiceNo}
-                </p>
-              )}
-              {order.invoiceNo?.startsWith("NOTE:") && (
-                <p>
-                  <span className="font-bold">Note:</span>{" "}
-                  {order.invoiceNo.replace("NOTE:", "")}
-                </p>
-              )}
+              {(() => {
+                const invoiceDisplay = classifyInvoiceNo(order.invoiceNo);
+                switch (invoiceDisplay.kind) {
+                  case "invoice":
+                    return (
+                      <p>
+                        <span className="font-bold">Invoice No:</span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "note":
+                    return (
+                      <p>
+                        <span className="font-bold">Note:</span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "legacy_courier":
+                    return (
+                      <p className="text-[#B26A00]">
+                        <span className="font-bold">
+                          Legacy courier data (unmigrated):
+                        </span>{" "}
+                        {invoiceDisplay.text}
+                      </p>
+                    );
+                  case "none":
+                    return null;
+                }
+              })()}
               <p className="font-mono text-[10px] break-all text-[#bbb] pt-1">
                 {order.id}
               </p>

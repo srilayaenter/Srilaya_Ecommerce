@@ -17,6 +17,7 @@ import { logStockChanges } from "@/lib/stockLog";
 import { logOrderPlaced } from "@/lib/logger";
 import { buildOrderAccessGrant } from "@/lib/orderAccess";
 import { buildPayCapabilityToken } from "@/lib/payAuth";
+import { resolveCourierLabel } from "@/lib/shipping";
 
 export async function createOrder(formData: FormData): Promise<void> {
   const cookieStore = await cookies();
@@ -129,7 +130,14 @@ export async function createOrder(formData: FormData): Promise<void> {
           status: isCod ? 'cod_pending' : 'pending',
           orderChannel: 'online',
           paymentMethod: paymentMethod || undefined,
-          invoiceNo: courierName ? `COURIER:${courierName}` : undefined,
+          cartId,
+          // courierName currently holds the submitted CourierKey (e.g.
+          // "delhivery"), not a display name — see CheckoutForm.tsx's hidden
+          // "courierName" field. Snapshot both the key and its resolved
+          // label at order-creation time so historical orders stay accurate
+          // even if shipping.ts's COURIERS list changes later.
+          courierKey: courierName || undefined,
+          courierLabel: resolveCourierLabel(courierName) || undefined,
           discountAmount: (loyaltyDiscount + couponDiscount) > 0 ? loyaltyDiscount + couponDiscount : undefined,
           couponCode: validatedCouponCode || undefined,
           referralCode: referralCode || undefined,
@@ -159,8 +167,15 @@ export async function createOrder(formData: FormData): Promise<void> {
     throw err;
   }
 
-  // Clear cart now that the order is placed
-  await prisma.cartItem.deleteMany({ where: { cartId } });
+  // COD is a firm commitment at creation — no external payment step follows,
+  // so its cart is cleared immediately, same as always. Online orders are
+  // NOT cleared here: clearing happens only once Razorpay confirms payment
+  // (verify or webhook, keyed off order.cartId set above), so an abandoned
+  // or failed payment leaves the cart intact for the customer to retry. See
+  // docs/proposal-1a-order-cart-linkage-2026-08-19.md.
+  if (paymentMethod === 'cod') {
+    await prisma.cartItem.deleteMany({ where: { cartId } });
+  }
 
   logOrderPlaced({
     orderId,

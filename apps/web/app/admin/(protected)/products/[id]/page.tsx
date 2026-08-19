@@ -11,6 +11,7 @@ import { logStockChange } from "@/lib/stockLog";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isOwner } from "@/lib/permissions";
+import { resolveCostPriceForUpdate } from "@/lib/costFieldAuthorization";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -44,6 +45,11 @@ async function updateVariant(formData: FormData) {
 
   const before = await prisma.productVariant.findUnique({ where: { id: variantId }, select: { stock: true, sku: true } });
 
+  // Server-side authorization for costPrice — the form only renders this
+  // field for owner (see showCostPrice below), but that's UI-only and does
+  // not stop a crafted request from including it. resolveCostPriceForUpdate
+  // is the actual enforcement boundary; see apps/web/lib/costFieldAuthorization.ts.
+  const session = await getServerSession(authOptions);
   const costPriceRaw = parseFloat(formData.get('costPrice') as string);
   const hasCostField = formData.has('costPrice');
   const newSize = formData.get('size') as string;
@@ -53,8 +59,7 @@ async function updateVariant(formData: FormData) {
     data: {
       size:             newSize,
       price:            parseFloat(formData.get('price') as string),
-      // Only update costPrice if the field was present in the form (owner only)
-      ...(hasCostField && { costPrice: !isNaN(costPriceRaw) && costPriceRaw > 0 ? costPriceRaw : null }),
+      ...resolveCostPriceForUpdate(session?.user?.role, hasCostField, costPriceRaw),
       stock:            newStock,
       weightGrams:      weightGramsRaw > 0 ? weightGramsRaw : (deriveWeightGramsFromSize(newSize) ?? 500),
       reorderThreshold: parseInt(formData.get('reorderThreshold') as string, 10) || 10,

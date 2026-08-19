@@ -70,6 +70,15 @@ export async function POST(request: Request) {
                 invoiceNo: order.invoiceNo || `INV-${Date.now()}`,
               }
             }),
+            // Webhook has no request cookies, so it clears the cart via the
+            // cartId snapshotted on the order at creation time. This is the
+            // only cart-clearing path for a payment confirmed solely by
+            // webhook (client never reached /verify). Harmless no-op if the
+            // cart was already cleared by verify. See
+            // docs/proposal-1a-order-cart-linkage-2026-08-19.md.
+            ...(order.cartId
+              ? [prisma.cartItem.deleteMany({ where: { cartId: order.cartId } })]
+              : []),
             prisma.webhookEvent.create({ data: { provider: 'razorpay', eventId } }),
           ]);
           eventClaimed = true;

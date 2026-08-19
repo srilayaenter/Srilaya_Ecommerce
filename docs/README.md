@@ -46,3 +46,8 @@ C:\Users\HP\OneDrive\SriLaYa Business Plan\SriLaYa Naturals Business Plan\
 | Product image tracker | `D:\CompanyWebsite\SriLaYa_Product_Image_Tracker.xlsx` |
 | Label status tracker | `D:\CompanyWebsite\SriLaYa_Label_Status_Tracker.xlsx` |
 | Local product images | `apps/web/public/images/products/` (git-ignored) |
+
+<!-- redeploy trigger 2026-08-18T06:04:06Z -->
+<!-- redeploy retry 2026-08-18T06:21:28Z -->
+<!-- redeploy trigger after Preview DATABASE_URL fix 2026-08-18T09:28:57Z -->
+<!-- redeploy trigger to pick up rotated staging DATABASE_URL 2026-08-18T10:07:26Z -->

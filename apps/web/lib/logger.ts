@@ -111,15 +111,31 @@ export type PaymentStatusChangeResult =
 export type FulfillmentStatusChangeResult =
   | "success"
   | "rejected_unauthorised"
-  | "rejected_invalid_status";
+  | "rejected_invalid_status"
+  // Phase 5 additions:
+  | "rejected_invalid_transition" // from/to pair not in FULFILLMENT_TRANSITIONS
+  | "rejected_missing_shipment" // online + courier snapshot + no confirmed Shipment, on pending->processing
+  | "rejected_customer_scope"; // customer actor requested a transition outside pending->cancelled
 
-// Audit log for every fulfillment-status change attempt by admin staff.
+// Union of outcomes for an addShipment attempt by admin staff.
+export type ShipmentChangeResult =
+  | "success"
+  | "rejected_unauthorised"
+  | "rejected_invalid_input"
+  | "order_not_found"
+  // Phase 5 addition:
+  | "rejected_invalid_transition"; // order is completed/cancelled (terminal) — shipment cannot be created/updated
+
+// Audit log for every fulfillment-status change attempt.
+// actorType distinguishes staff-driven changes (role-gated) from customer
+// self-service cancellation (email-match gated) — Phase 5.
 // Logs non-sensitive metadata only — do NOT pass email, phone, secrets, or
 // payment references in params.
 export function logFulfillmentStatusChange(params: {
   orderId: string;
   actorId: string;
   actorRole: string;
+  actorType?: "staff" | "customer";
   fromStatus: string;
   toStatus: string;
   result: FulfillmentStatusChangeResult;
@@ -149,5 +165,23 @@ export function logPaymentStatusChange(params: {
     log.info("payment.status_changed", params);
   } else {
     log.warn("payment.status_change_rejected", params);
+  }
+}
+
+// Audit log for every shipment create/update attempt by admin staff.
+// Logs non-sensitive logistics metadata only (courier, action) — do NOT pass
+// email, phone, or any payment reference in params.
+export function logShipmentChange(params: {
+  orderId: string;
+  actorId: string;
+  actorRole: string;
+  action: "created" | "updated";
+  courier: string;
+  result: ShipmentChangeResult;
+}) {
+  if (params.result === "success") {
+    log.info("shipment.changed", params);
+  } else {
+    log.warn("shipment.change_rejected", params);
   }
 }

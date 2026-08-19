@@ -205,6 +205,20 @@ model Order {
   referralCode      String?
   codPaymentMethod  String?
   codUpiRef         String?
+  // Snapshot of the courier selected at checkout time — not a live reference
+  // to lib/shipping.ts's COURIERS list, so historical orders stay accurate
+  // even if courier definitions change later. Populated by createOrder();
+  // read by the admin order detail page to pre-fill/display the customer's
+  // choice before a Shipment row exists.
+  courierKey        String?
+  courierLabel      String?
+  // Snapshot of the cartId cookie value present at order-creation time — not
+  // a relation to Cart (that model has an independent lifecycle and no FK is
+  // needed here; see docs/proposal-1a-order-cart-linkage-2026-08-19.md).
+  // Lets payment-confirmation code (verify + webhook) clear the correct cart
+  // without relying on browser cookies, which the webhook never has access
+  // to. Null on orders created before this field existed.
+  cartId            String?
   user              User?       @relation(fields: [userId], references: [id])
   items             OrderItem[]
   returns           Return[]

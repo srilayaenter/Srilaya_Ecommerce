@@ -3,9 +3,13 @@ import {
   PAYMENT_STATUSES,
   ADMIN_WRITABLE_PAYMENT_STATUSES,
   FULFILLMENT_STATUSES,
+  FULFILLMENT_TRANSITIONS,
   isValidPaymentStatus,
   isAdminWritablePaymentStatus,
   isValidFulfillmentStatus,
+  isAllowedFulfillmentTransition,
+  isCustomerAllowedFulfillmentTransition,
+  needsConfirmedShipmentBeforeProcessing,
   type PaymentStatus,
   type AdminWritablePaymentStatus,
   type FulfillmentStatus,
@@ -322,5 +326,139 @@ describe("isValidFulfillmentStatus", () => {
     const fulfillmentSet = new Set<string>(FULFILLMENT_STATUSES);
     const overlap = [...paymentSet].filter((s) => fulfillmentSet.has(s));
     expect(overlap.sort()).toEqual(["cancelled", "pending"]);
+  });
+});
+
+// ── FULFILLMENT_TRANSITIONS / isAllowedFulfillmentTransition — Phase 5 ────────
+
+describe("FULFILLMENT_TRANSITIONS", () => {
+  it("matches the locked Phase 5 matrix exactly", () => {
+    expect(FULFILLMENT_TRANSITIONS).toEqual({
+      pending: ["processing", "cancelled"],
+      processing: ["completed", "cancelled"],
+      completed: [],
+      cancelled: [],
+    });
+  });
+
+  it("completed and cancelled are terminal — no outbound transitions", () => {
+    expect(FULFILLMENT_TRANSITIONS.completed).toEqual([]);
+    expect(FULFILLMENT_TRANSITIONS.cancelled).toEqual([]);
+  });
+});
+
+describe("isAllowedFulfillmentTransition", () => {
+  const ALLOWED: [FulfillmentStatus, FulfillmentStatus][] = [
+    ["pending", "processing"],
+    ["pending", "cancelled"],
+    ["processing", "completed"],
+    ["processing", "cancelled"],
+  ];
+  const REJECTED: [FulfillmentStatus, FulfillmentStatus][] = [
+    ["pending", "completed"], // decision 2
+    ["processing", "pending"], // decision 3
+    ["completed", "pending"],
+    ["completed", "processing"],
+    ["completed", "cancelled"], // terminal, decision 1
+    ["cancelled", "pending"],
+    ["cancelled", "processing"],
+    ["cancelled", "completed"], // terminal, decision 1
+  ];
+
+  for (const [from, to] of ALLOWED) {
+    it(`allows ${from} -> ${to}`, () => {
+      expect(isAllowedFulfillmentTransition(from, to)).toBe(true);
+    });
+  }
+
+  for (const [from, to] of REJECTED) {
+    it(`rejects ${from} -> ${to}`, () => {
+      expect(isAllowedFulfillmentTransition(from, to)).toBe(false);
+    });
+  }
+
+  it("rejects every same-status pair (not itself a transition)", () => {
+    for (const s of FULFILLMENT_STATUSES) {
+      expect(isAllowedFulfillmentTransition(s, s)).toBe(false);
+    }
+  });
+});
+
+describe("isCustomerAllowedFulfillmentTransition — Phase 5 decision 8a/8b", () => {
+  it("allows pending -> cancelled (decision 8b: customer self-cancel from pending)", () => {
+    expect(isCustomerAllowedFulfillmentTransition("pending", "cancelled")).toBe(true);
+  });
+
+  it("rejects processing -> cancelled (decision 8b: customer self-cancel from processing is rejected, even though staff may do it per 8a)", () => {
+    expect(isCustomerAllowedFulfillmentTransition("processing", "cancelled")).toBe(false);
+  });
+
+  it("rejects every other (from, to) pair, including ones staff may perform", () => {
+    const staffOnlyOrInvalid: [FulfillmentStatus, FulfillmentStatus][] = [
+      ["pending", "processing"],
+      ["processing", "completed"],
+      ["pending", "completed"],
+      ["completed", "cancelled"],
+      ["cancelled", "pending"],
+    ];
+    for (const [from, to] of staffOnlyOrInvalid) {
+      expect(isCustomerAllowedFulfillmentTransition(from, to)).toBe(false);
+    }
+  });
+});
+
+describe("needsConfirmedShipmentBeforeProcessing — Phase 5 decisions 4/5/6", () => {
+  it("blocks: online + courier snapshot + no shipment", () => {
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "online",
+        courierLabel: "Delhivery",
+        hasShipment: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("does not block: online + courier snapshot + confirmed shipment", () => {
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "online",
+        courierLabel: "Delhivery",
+        hasShipment: true,
+      }),
+    ).toBe(false);
+  });
+
+  it("does not block: online with no courier snapshot at all (decision 6)", () => {
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "online",
+        courierLabel: null,
+        hasShipment: false,
+      }),
+    ).toBe(false);
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "online",
+        courierLabel: undefined,
+        hasShipment: false,
+      }),
+    ).toBe(false);
+  });
+
+  it("does not block: in-store, regardless of courier/shipment data", () => {
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "in_store",
+        courierLabel: null,
+        hasShipment: false,
+      }),
+    ).toBe(false);
+    expect(
+      needsConfirmedShipmentBeforeProcessing({
+        orderChannel: "in_store",
+        courierLabel: "Delhivery", // in-store orders never carry courier data in practice, but the function must not gate on channel alone if it somehow did
+        hasShipment: false,
+      }),
+    ).toBe(false);
   });
 });

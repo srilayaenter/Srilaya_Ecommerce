@@ -17,6 +17,7 @@ interface GstReport {
   month: number;
   year: number;
   gstin: string;
+  shippingGstDisclosure: string;
   slabs: GstSlab[];
   grandTaxable: number;
   grandCgst: number;
@@ -226,9 +227,14 @@ export default function GstReportPage() {
             </div>
           </div>
 
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-5 py-3 text-xs">
+            ⚠ {report.shippingGstDisclosure}
+          </div>
+
           <p className="text-xs text-[#9E9E9E]">
             * CGST & SGST apply to intra-state orders (same state as GSTIN). IGST applies to inter-state orders.
-            Only paid and COD-collected orders are included.
+            Only paid, non-cancelled orders are included. Refunds recorded as "refunded" in the same period are
+            credited back against the relevant GST slab.
           </p>
         </div>
       )}
@@ -237,7 +243,7 @@ export default function GstReportPage() {
         <div className="bg-white rounded-2xl border border-[#E0E0E0] p-16 text-center">
           <ChartBar size={48} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           <p className="text-[#424242] font-semibold">Select a month and year, then click Generate Report.</p>
-          <p className="text-sm text-[#9E9E9E] mt-1">Only paid & COD-collected orders are included.</p>
+          <p className="text-sm text-[#9E9E9E] mt-1">Only paid, non-cancelled orders are included.</p>
         </div>
       )}
     </div>
