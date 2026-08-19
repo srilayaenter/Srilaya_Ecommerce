@@ -10,7 +10,7 @@ function slug(title: string) {
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session || !["admin", "manager"].includes(session.user.role)) {
+  if (!session || !["owner", "admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!session || !["admin", "manager"].includes(session.user.role)) {
+  if (!session || !["owner", "admin", "manager"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit(session.user.id ?? session.user.email ?? "unknown");
