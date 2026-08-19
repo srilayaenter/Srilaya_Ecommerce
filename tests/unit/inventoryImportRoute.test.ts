@@ -44,14 +44,14 @@ beforeEach(() => {
 });
 
 describe("POST /api/admin/inventory/import — authorization", () => {
-  it.each(["admin", "manager", "inventory_staff"])("allows role %s", async (role) => {
+  it.each(["owner", "admin", "manager", "inventory_staff"])("allows role %s", async (role) => {
     mockGetServerSession.mockResolvedValue({ user: { id: "u1", role } });
     const res = await POST(makeRequest("sku,stock\nSKU-A,60"));
     expect(res.status).toBe(200);
   });
 
-  it("rejects unauthorized roles with no DB query", async () => {
-    mockGetServerSession.mockResolvedValue({ user: { id: "u1", role: "billing_staff" } });
+  it.each(["billing_staff", "customer"])("rejects unauthorized role %s with no DB query", async (role) => {
+    mockGetServerSession.mockResolvedValue({ user: { id: "u1", role } });
     const res = await POST(makeRequest("sku,stock\nSKU-A,60"));
     expect(res.status).toBe(401);
     expect(mockFindMany).not.toHaveBeenCalled();
