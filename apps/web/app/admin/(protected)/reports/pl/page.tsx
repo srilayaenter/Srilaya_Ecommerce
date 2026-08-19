@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { isOwner } from "@/lib/permissions";
+import { requireExactRoles } from "@/lib/permissions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { computePlReport, istMonthRange } from "@/lib/plReport";
@@ -30,7 +30,7 @@ const SHIPPING_DISCLOSURE =
 
 export default async function ProfitLossPage({ searchParams }: { searchParams: SearchParams }) {
   const session = await getServerSession(authOptions);
-  if (!isOwner(session?.user?.role ?? '')) notFound();
+  if (!requireExactRoles(session?.user?.role ?? '', ['owner'])) notFound();
 
   const sp = await searchParams;
   const now = new Date();
