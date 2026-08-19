@@ -182,3 +182,126 @@ describe("isOwner", () => {
   it("customer → false", () => expect(isOwner("customer")).toBe(false));
   it("empty string → false", () => expect(isOwner("")).toBe(false));
 });
+
+// ── canAccessPath — Phase B API-path additions (2026-08-19) ───────────────────
+// Each pairing below mirrors a page path this role already had, per the
+// approved Category 1 migration map. Confirms the manager/inventory_staff
+// inventory-import gap is fixed, plus every other approved API-path addition.
+
+describe("canAccessPath — manager API-path additions (Category 1)", () => {
+  it.each([
+    "/api/admin/inventory/import",
+    "/api/admin/inventory/export",
+    "/api/admin/blog",
+    "/api/admin/gst-report",
+    "/api/admin/orders",
+    "/api/admin/ops-app-download",
+    "/api/admin/purchase-orders",
+    "/api/admin/suppliers",
+    "/api/admin/stock-log",
+    "/api/admin/products",
+    "/api/admin/upload",
+    "/api/admin/products-for-order",
+    "/api/admin/returns",
+    "/api/admin/reviews",
+    "/api/admin/coupons",
+    "/api/admin/bundles",
+  ])("manager can access %s", (path) => {
+    expect(canAccessPath("manager", path)).toBe(true);
+  });
+
+  it("manager can access API sub-paths (e.g. /api/admin/orders/export, send-invoice)", () => {
+    expect(canAccessPath("manager", "/api/admin/orders/export")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/orders/abc123/send-invoice")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/blog/abc123")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/products/abc123")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/products/abc123/images")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/bundles/abc123")).toBe(true);
+    expect(canAccessPath("manager", "/api/admin/purchase-orders/abc123")).toBe(true);
+  });
+});
+
+describe("canAccessPath — inventory_staff API-path additions (Category 1)", () => {
+  it.each([
+    "/api/admin/inventory/import",
+    "/api/admin/inventory/export",
+    "/api/admin/purchase-orders",
+    "/api/admin/suppliers",
+    "/api/admin/stock-log",
+    "/api/admin/products",
+    "/api/admin/upload",
+  ])("inventory_staff can access %s", (path) => {
+    expect(canAccessPath("inventory_staff", path)).toBe(true);
+  });
+});
+
+describe("canAccessPath — billing_staff API-path additions (Category 1)", () => {
+  it.each([
+    "/api/admin/orders",
+    "/api/admin/products-for-order",
+  ])("billing_staff can access %s", (path) => {
+    expect(canAccessPath("billing_staff", path)).toBe(true);
+  });
+
+  it("billing_staff can access /api/admin/orders sub-paths", () => {
+    expect(canAccessPath("billing_staff", "/api/admin/orders/export")).toBe(true);
+    expect(canAccessPath("billing_staff", "/api/admin/orders/abc123/send-invoice")).toBe(true);
+  });
+});
+
+// ── canAccessPath — Category 2 exclusions (explicitly NOT granted) ────────────
+// These prove the migration did not silently widen access beyond the approved
+// map — each pairing was flagged as ambiguous/policy-sensitive and excluded.
+
+describe("canAccessPath — Category 2 exclusions remain rejected", () => {
+  it.each([
+    ["inventory_staff", "/api/admin/orders"],
+    ["inventory_staff", "/api/admin/products-for-order"],
+    ["inventory_staff", "/api/admin/returns"],
+    ["billing_staff", "/api/admin/returns"],
+    ["inventory_staff", "/api/admin/reviews"],
+    ["billing_staff", "/api/admin/reviews"],
+    ["inventory_staff", "/api/admin/coupons"],
+    ["billing_staff", "/api/admin/coupons"],
+    ["inventory_staff", "/api/admin/bundles"],
+    ["billing_staff", "/api/admin/bundles"],
+    ["billing_staff", "/api/admin/purchase-orders"],
+    ["billing_staff", "/api/admin/suppliers"],
+    ["billing_staff", "/api/admin/stock-log"],
+    ["billing_staff", "/api/admin/products"],
+    ["billing_staff", "/api/admin/upload"],
+  ] as const)("%s cannot access %s", (role, path) => {
+    expect(canAccessPath(role, path)).toBe(false);
+  });
+
+  it.each(["manager", "inventory_staff", "billing_staff"])(
+    "%s cannot access /api/admin/bulk-pricing (page-level gap, out of scope)",
+    (role) => {
+      expect(canAccessPath(role, "/api/admin/bulk-pricing")).toBe(false);
+    }
+  );
+
+  it.each(["manager", "inventory_staff", "billing_staff"])(
+    "%s cannot access /api/admin/failed-webhooks (no confirmed UI caller, out of scope)",
+    (role) => {
+      expect(canAccessPath(role, "/api/admin/failed-webhooks")).toBe(false);
+    }
+  );
+
+  it.each(["manager", "inventory_staff"])(
+    "%s cannot access /api/admin/variants (excluded pending caller confirmation)",
+    (role) => {
+      expect(canAccessPath(role, "/api/admin/variants")).toBe(false);
+    }
+  );
+});
+
+describe("canAccessPath — owner/admin unaffected by Phase B migration", () => {
+  it("owner and admin still have unrestricted access to every API path", () => {
+    for (const role of ["owner", "admin"]) {
+      expect(canAccessPath(role, "/api/admin/inventory/import")).toBe(true);
+      expect(canAccessPath(role, "/api/admin/bulk-pricing")).toBe(true);
+      expect(canAccessPath(role, "/api/admin/variants")).toBe(true);
+    }
+  });
+});
