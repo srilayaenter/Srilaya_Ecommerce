@@ -24,7 +24,7 @@ export async function GET(_req: Request, { params }: Params) {
 // POST — add an image
 export async function POST(req: Request, { params }: Params) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
+  if (!session?.user || !["owner", "admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
@@ -44,7 +44,7 @@ export async function POST(req: Request, { params }: Params) {
 // PATCH — reorder or update alt text  { images: [{ id, position, alt }] }
 export async function PATCH(req: Request, { params }: Params) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
+  if (!session?.user || !["owner", "admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
@@ -67,7 +67,7 @@ export async function PATCH(req: Request, { params }: Params) {
 // DELETE — remove one image  ?imageId=xxx
 export async function DELETE(req: Request, { params }: Params) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || !["admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
+  if (!session?.user || !["owner", "admin", "manager", "inventory_staff"].includes(session.user.role ?? "")) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
   const rl = adminRateLimit((session.user as any).id ?? (session.user as any).email ?? "unknown");
