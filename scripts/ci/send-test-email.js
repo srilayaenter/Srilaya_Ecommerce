@@ -25,7 +25,11 @@ const {
   REPORT_RUN_URL = '',
   REPORT_TRIGGER = 'push',
   REPORT_TO      = 'avrsrikanth@gmail.com',
-  REPORT_FROM    = 'SriLaYa CI <info@srilaya.com>',
+  // srilaya.com isn't verified in Resend yet — onboarding@resend.dev works
+  // with no domain verification, but only delivers to the account owner's
+  // own registered email (REPORT_TO above). Switch back once srilaya.com is
+  // verified at https://resend.com/domains.
+  REPORT_FROM    = 'SriLaYa CI <onboarding@resend.dev>',
   REPORT_ISSUE_URL = '',
 } = process.env;
 
