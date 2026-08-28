@@ -16,7 +16,7 @@
 const https = require('https');
 
 const {
-  RESEND_API_KEY,
+  RESEND_API_KEY: RESEND_API_KEY_RAW,
   REPORT_PASSED = '0',
   REPORT_FAILED = '0',
   REPORT_TOTAL  = '0',
@@ -28,6 +28,11 @@ const {
   REPORT_FROM    = 'SriLaYa CI <info@srilaya.com>',
   REPORT_ISSUE_URL = '',
 } = process.env;
+
+// GitHub Secrets can pick up a trailing newline/whitespace depending on how
+// they were pasted in — Node's http client rejects that outright with
+// ERR_INVALID_CHAR on the Authorization header, so strip it defensively.
+const RESEND_API_KEY = RESEND_API_KEY_RAW?.trim();
 
 if (!RESEND_API_KEY) {
   console.error('RESEND_API_KEY is not set — skipping email');
