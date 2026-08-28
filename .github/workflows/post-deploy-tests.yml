@@ -193,13 +193,13 @@ jobs:
           ISSUE_URL=$(gh issue create \
             --title "CI: ${FAILED} test(s) failed on staging (${COMMIT_SHORT}) — ${DATE}" \
             --body "**Failed:** ${FAILED} / ${TOTAL}
-**Scope:** ${SCOPE}
-**Trigger:** Post-deploy (push to staging)
-**Commit:** \`${COMMIT_SHORT}\` (${{ github.sha }})
-**Branch:** staging
-**Actions run:** ${RUN_URL}
+          **Scope:** ${SCOPE}
+          **Trigger:** Post-deploy (push to staging)
+          **Commit:** \`${COMMIT_SHORT}\` (${{ github.sha }})
+          **Branch:** staging
+          **Actions run:** ${RUN_URL}
 
-Check the Actions run linked above for the full Playwright HTML report and failure details." \
+          Check the Actions run linked above for the full Playwright HTML report and failure details." \
             --label "bug,test" \
             --repo "${{ github.repository }}" 2>&1)
 

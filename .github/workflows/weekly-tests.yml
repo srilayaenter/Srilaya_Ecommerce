@@ -96,12 +96,12 @@ jobs:
           ISSUE_URL=$(gh issue create \
             --title "CI: Weekly full suite — ${FAILED} test(s) failed (${DATE})" \
             --body "**Failed:** ${FAILED} / ${TOTAL}
-**Scope:** Full suite
-**Trigger:** Weekly scheduled run (Friday 08:00 IST)
-**Branch:** staging (HEAD)
-**Actions run:** ${RUN_URL}
+          **Scope:** Full suite
+          **Trigger:** Weekly scheduled run (Friday 08:00 IST)
+          **Branch:** staging (HEAD)
+          **Actions run:** ${RUN_URL}
 
-Check the Actions run linked above for the full Playwright HTML report and failure details." \
+          Check the Actions run linked above for the full Playwright HTML report and failure details." \
             --label "bug,test" \
             --repo "${{ github.repository }}" 2>&1)
 
