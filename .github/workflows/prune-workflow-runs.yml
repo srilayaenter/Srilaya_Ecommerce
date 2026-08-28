@@ -1,0 +1,62 @@
+name: Prune workflow run history
+
+# Weekly housekeeping: for every workflow in this repo, keeps only the 3
+# most recent successful runs and the 3 most recent failed runs, and
+# deletes everything else (older success/failure runs, plus any run in a
+# terminal state that isn't success/failure — cancelled, skipped,
+# timed_out, etc.). In-progress/queued/requested/waiting runs are never
+# touched, since they're never fetched by the status filters used below.
+#
+# Runs 30 minutes after weekly-tests.yml's Friday schedule so that week's
+# fresh run is already counted.
+
+on:
+  schedule:
+    - cron: '0 3 * * 5'   # Friday 03:00 UTC = 08:30 IST
+  workflow_dispatch:        # allow manual trigger from the Actions tab
+
+jobs:
+  prune:
+    name: Prune old workflow runs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: write
+
+    steps:
+      - name: Prune runs, keeping the last 3 success + 3 failure per workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+
+          WORKFLOW_IDS=$(gh api "repos/$REPO/actions/workflows" --paginate -q '.workflows[].id')
+
+          for wf_id in $WORKFLOW_IDS; do
+            echo "=== Workflow $wf_id ==="
+
+            for conclusion in success failure; do
+              IDS=$(gh api "repos/$REPO/actions/workflows/$wf_id/runs?status=$conclusion&per_page=100" --paginate -q '.workflow_runs[].id')
+              TO_DELETE=$(echo "$IDS" | tail -n +4)
+              for id in $TO_DELETE; do
+                [ -z "$id" ] && continue
+                echo "  deleting $conclusion run $id"
+                gh api -X DELETE "repos/$REPO/actions/runs/$id" || true
+              done
+            done
+
+            # Any other terminal conclusion (cancelled, skipped, timed_out,
+            # action_required, neutral, stale, startup_failure) is deleted
+            # entirely — none of it is worth keeping a "last 3" of.
+            for other in cancelled skipped timed_out action_required neutral stale startup_failure; do
+              IDS=$(gh api "repos/$REPO/actions/workflows/$wf_id/runs?status=$other&per_page=100" --paginate -q '.workflow_runs[].id')
+              for id in $IDS; do
+                [ -z "$id" ] && continue
+                echo "  deleting $other run $id"
+                gh api -X DELETE "repos/$REPO/actions/runs/$id" || true
+              done
+            done
+          done
+
+          echo "Prune complete."
