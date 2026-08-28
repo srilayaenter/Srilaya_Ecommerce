@@ -24,7 +24,11 @@ const {
   REPORT_COMMIT = 'unknown',
   REPORT_RUN_URL = '',
   REPORT_TRIGGER = 'push',
-  REPORT_TO      = 'avrsrikanth@gmail.com',
+  // Resend's test mode (unverified domain) only delivers to the account
+  // owner's own registered email — srilayaenterprises@gmail.com, not
+  // avrsrikanth@gmail.com. Switch back once srilaya.com is verified at
+  // https://resend.com/domains, which lifts this restriction.
+  REPORT_TO      = 'srilayaenterprises@gmail.com',
   // srilaya.com isn't verified in Resend yet — onboarding@resend.dev works
   // with no domain verification, but only delivers to the account owner's
   // own registered email (REPORT_TO above). Switch back once srilaya.com is
