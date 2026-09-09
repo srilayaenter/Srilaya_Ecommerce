@@ -62,11 +62,11 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
             <h2 className="font-bold text-lg text-[#212121] mb-4">Your Points Balance</h2>
             <div className="rounded-xl bg-[#f0fdf4] border border-[#d1fae5] p-5">
               <div className="flex items-baseline gap-3 mb-1">
-                <span className="text-4xl font-black text-[#006A38]">{balance}</span>
-                <span className="text-lg font-semibold text-[#006A38]">points</span>
+                <span className="text-4xl font-black text-naturals-green">{balance}</span>
+                <span className="text-lg font-semibold text-naturals-green">points</span>
               </div>
               <p className="text-sm text-gray-600 mb-3">
-                Worth <span className="font-semibold text-[#006A38]">₹{rupeeValue}</span> off your next order
+                Worth <span className="font-semibold text-naturals-green">₹{rupeeValue}</span> off your next order
               </p>
               {canRedeem ? (
                 <div className="flex items-center gap-2 text-sm text-[#065F46] font-medium">
@@ -104,13 +104,13 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setError(""); }}
                   placeholder="Enter your order email"
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#006A38] focus:border-transparent"
+                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-naturals-green focus:border-transparent"
                   required
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#006A38] text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
+                  className="bg-naturals-green text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
                 >
                   {loading ? "Checking…" : "Check"}
                 </button>
@@ -122,11 +122,11 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
             {balance !== null && (
               <div className="mt-5 rounded-xl bg-[#f0fdf4] border border-[#d1fae5] p-5">
                 <div className="flex items-baseline gap-3 mb-1">
-                  <span className="text-4xl font-black text-[#006A38]">{balance}</span>
-                  <span className="text-lg font-semibold text-[#006A38]">points</span>
+                  <span className="text-4xl font-black text-naturals-green">{balance}</span>
+                  <span className="text-lg font-semibold text-naturals-green">points</span>
                 </div>
                 <p className="text-sm text-gray-600 mb-3">
-                  Worth <span className="font-semibold text-[#006A38]">₹{rupeeValue}</span> off your next order
+                  Worth <span className="font-semibold text-naturals-green">₹{rupeeValue}</span> off your next order
                 </p>
                 {canRedeem ? (
                   <div className="flex items-center gap-2 text-sm text-[#065F46] font-medium">
@@ -156,7 +156,7 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
             { n: "3", title: "Redeem at checkout", desc: `Enter your email at checkout and choose how many points to apply. Points can cover up to 10% of your order value.` },
           ].map(({ n, title, desc }) => (
             <div key={n} className="flex gap-4 items-start">
-              <div className="w-9 h-9 rounded-full bg-[#e8f5ee] flex items-center justify-center flex-shrink-0 text-[#006A38] font-bold">{n}</div>
+              <div className="w-9 h-9 rounded-full bg-[#e8f5ee] flex items-center justify-center flex-shrink-0 text-naturals-green font-bold">{n}</div>
               <div>
                 <p className="font-semibold text-[#212121]">{title}</p>
                 <p className="text-sm text-gray-500 mt-0.5">{desc}</p>
@@ -171,22 +171,22 @@ export default function LoyaltyClient({ prefilled, isLoggedIn }: Props) {
         <h2 className="font-bold text-lg text-[#212121] mb-5">Ways to Earn</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-[#f0fdf4] rounded-xl p-4">
-            <ShoppingCart size={24} weight="regular" className="text-[#006A38] mb-1" />
+            <ShoppingCart size={24} weight="regular" className="text-naturals-green mb-1" />
             <p className="font-semibold text-[#212121] text-sm">Every purchase</p>
-            <p className="text-[#006A38] font-black text-lg">1 pt / ₹10</p>
+            <p className="text-naturals-green font-black text-lg">1 pt / ₹10</p>
             <p className="text-xs text-gray-500 mt-1">Automatic on every confirmed order</p>
           </div>
           <div className="bg-[#f0fdf4] rounded-xl p-4">
-            <Gift size={24} weight="regular" className="text-[#006A38] mb-1" />
+            <Gift size={24} weight="regular" className="text-naturals-green mb-1" />
             <p className="font-semibold text-[#212121] text-sm">Refer a friend</p>
-            <p className="text-[#006A38] font-black text-lg">{REFERRAL_BONUS} pts</p>
+            <p className="text-naturals-green font-black text-lg">{REFERRAL_BONUS} pts</p>
             <p className="text-xs text-gray-500 mt-1">You and your friend both get 50 points when they place their first order</p>
           </div>
         </div>
         <div className="mt-4 text-center">
           <Link
             href="/referral"
-            className="inline-block text-[#006A38] font-semibold text-sm border border-[#006A38] rounded-lg px-4 py-2 hover:bg-[#e8f5ee] transition-colors"
+            className="inline-block text-naturals-green font-semibold text-sm border border-naturals-green rounded-lg px-4 py-2 hover:bg-[#e8f5ee] transition-colors"
           >
             Get your referral code →
           </Link>

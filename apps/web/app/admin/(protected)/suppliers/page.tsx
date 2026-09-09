@@ -35,7 +35,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6 font-sans">
       {saved === 'true' && (
-        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg font-semibold text-sm">
+        <div className="bg-naturals-green/10 border border-naturals-green/30 text-naturals-green px-4 py-3 rounded-lg font-semibold text-sm">
           ✓ Supplier updated successfully.
         </div>
       )}
@@ -67,7 +67,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
                     {s.phone || s.email || "No contact info"}
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#006A38] bg-[#006A38]/10 px-2.5 py-1 rounded-full">
+                <span className="text-[11px] font-bold text-naturals-green bg-naturals-green/10 px-2.5 py-1 rounded-full">
                   {s._count.products} product{s._count.products !== 1 ? "s" : ""}
                 </span>
               </Link>
@@ -91,7 +91,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
                 type="text"
                 name="name"
                 required
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div>
@@ -101,7 +101,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
               <input
                 type="text"
                 name="contactPerson"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -112,7 +112,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
                 <input
                   type="tel"
                   name="phone"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
                 />
               </div>
               <div>
@@ -122,7 +122,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
                 <input
                   type="email"
                   name="email"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
                 />
               </div>
             </div>
@@ -133,7 +133,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
               <textarea
                 name="address"
                 rows={2}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] resize-none"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green resize-none"
               />
             </div>
             <div>
@@ -144,12 +144,12 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
                 name="notes"
                 rows={2}
                 placeholder="e.g. payment terms, delivery schedule"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] resize-none"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green resize-none"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-[#006A38] hover:bg-[#00522B] text-white py-2.5 rounded-lg font-bold text-sm transition-colors"
+              className="w-full bg-naturals-green hover:bg-naturals-green-dark text-white py-2.5 rounded-lg font-bold text-sm transition-colors"
             >
               Add Supplier
             </button>

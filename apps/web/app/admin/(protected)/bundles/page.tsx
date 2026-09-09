@@ -96,24 +96,24 @@ export default function BundlesAdminPage() {
             <div>
               <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1">Title *</label>
               <input value={title} onChange={e => { setTitle(e.target.value); setSlug(autoSlug(e.target.value)); }}
-                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" placeholder="Millet Starter Pack" />
+                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" placeholder="Millet Starter Pack" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1">Slug *</label>
               <input value={slug} onChange={e => setSlug(e.target.value)}
-                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-[#006A38]" placeholder="millet-starter-pack" />
+                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-naturals-green" placeholder="millet-starter-pack" />
             </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1">Bundle Price (₹) *</label>
               <input type="number" step="0.01" min="0" value={price} onChange={e => setPrice(e.target.value)}
-                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" placeholder="499.00" />
+                required className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" placeholder="499.00" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1">Description</label>
               <input value={description} onChange={e => setDescription(e.target.value)}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" placeholder="Best value combo for beginners" />
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" placeholder="Best value combo for beginners" />
             </div>
           </div>
 
@@ -124,7 +124,7 @@ export default function BundlesAdminPage() {
               {items.map((item, i) => (
                 <div key={i} className="flex gap-2 items-center">
                   <select value={item.variantId} onChange={e => setItems(prev => prev.map((it, idx) => idx === i ? { ...it, variantId: e.target.value } : it))}
-                    className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
+                    className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
                     <option value="">Select variant…</option>
                     {variants.map(v => (
                       <option key={v.id} value={v.id}>{v.product.title} — {v.size} [{v.sku}]</option>
@@ -132,7 +132,7 @@ export default function BundlesAdminPage() {
                   </select>
                   <input type="number" min="1" value={item.quantity}
                     onChange={e => setItems(prev => prev.map((it, idx) => idx === i ? { ...it, quantity: parseInt(e.target.value) || 1 } : it))}
-                    className="w-16 border border-[#E0E0E0] rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:border-[#006A38]" />
+                    className="w-16 border border-[#E0E0E0] rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:border-naturals-green" />
                   {items.length > 1 && (
                     <button type="button" onClick={() => setItems(prev => prev.filter((_, idx) => idx !== i))}
                       className="text-red-500 hover:text-red-700 text-lg font-bold">×</button>
@@ -141,12 +141,12 @@ export default function BundlesAdminPage() {
               ))}
             </div>
             <button type="button" onClick={() => setItems(prev => [...prev, { variantId: "", quantity: 1 }])}
-              className="mt-2 text-xs text-[#006A38] font-bold hover:underline">+ Add item</button>
+              className="mt-2 text-xs text-naturals-green font-bold hover:underline">+ Add item</button>
           </div>
 
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button type="submit" disabled={saving}
-            className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
+            className="bg-naturals-green text-white font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
             {saving ? "Saving…" : "Create Bundle"}
           </button>
         </form>
@@ -181,7 +181,7 @@ export default function BundlesAdminPage() {
                       ))}
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-right font-bold text-[#006A38]">₹{b.price.toFixed(2)}</td>
+                  <td className="px-5 py-3 text-right font-bold text-naturals-green">₹{b.price.toFixed(2)}</td>
                   <td className="px-5 py-3 text-center">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${b.active ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"}`}>
                       {b.active ? "Active" : "Inactive"}

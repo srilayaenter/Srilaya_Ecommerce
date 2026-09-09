@@ -31,7 +31,7 @@ export default async function RecipesPage() {
           <p className="text-sm text-[#8D6E63] mt-1">Define ingredient quantities per kg of finished laddu</p>
         </div>
         <Link href="/admin/raw-materials"
-          className="text-sm text-[#006A38] font-bold hover:underline">← Back to Raw Materials</Link>
+          className="text-sm text-naturals-green font-bold hover:underline">← Back to Raw Materials</Link>
       </div>
 
       {materials.length === 0 && (
@@ -58,9 +58,9 @@ export default async function RecipesPage() {
                     <input type="hidden" name="recipeId" value={recipe.id} />
                     <label className="text-xs text-[#9E9E9E] font-bold">Yield (kg):</label>
                     <input name="yieldKg" type="number" step="0.1" min="0.1" defaultValue={recipe.yieldKg}
-                      className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
+                      className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-naturals-green" />
                     <button type="submit"
-                      className="text-xs bg-[#006A38] text-white px-2 py-1 rounded font-bold hover:bg-[#00522B]">
+                      className="text-xs bg-naturals-green text-white px-2 py-1 rounded font-bold hover:bg-naturals-green-dark">
                       Save
                     </button>
                   </form>
@@ -81,7 +81,7 @@ export default async function RecipesPage() {
                     {recipe.lines.map(line => (
                       <tr key={line.id} className="hover:bg-[#FAFAFA]">
                         <td className="px-5 py-2 font-medium text-[#212121]">{line.rawMaterial.name}</td>
-                        <td className="px-5 py-2 text-right font-mono text-[#006A38] font-bold">
+                        <td className="px-5 py-2 text-right font-mono text-naturals-green font-bold">
                           {line.qtyPerYield.toFixed(3)}
                         </td>
                         <td className="px-5 py-2 text-right text-[#9E9E9E] text-xs">{line.rawMaterial.unit}</td>
@@ -112,7 +112,7 @@ export default async function RecipesPage() {
                   <div>
                     <label className="block text-xs font-bold text-[#9E9E9E] mb-1">Ingredient</label>
                     <select name="rawMaterialId" required
-                      className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] min-w-[200px]">
+                      className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green min-w-[200px]">
                       {materials.map(m => (
                         <option key={m.id} value={m.id}>{m.name} ({m.unit})</option>
                       ))}
@@ -123,10 +123,10 @@ export default async function RecipesPage() {
                       Qty per {recipe?.yieldKg ?? 1}kg yield
                     </label>
                     <input name="qtyPerYield" type="number" step="0.001" min="0.001" placeholder="0.000" required
-                      className="w-28 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                      className="w-28 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
                   </div>
                   <button type="submit"
-                    className="bg-[#006A38] text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-[#00522B]">
+                    className="bg-naturals-green text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-naturals-green-dark">
                     + Add Ingredient
                   </button>
                 </form>

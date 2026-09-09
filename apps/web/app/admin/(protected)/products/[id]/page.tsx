@@ -166,7 +166,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
   return (
     <div className="container mx-auto px-6 py-8">
       {saved === 'true' && variant !== 'last' && (
-        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+        <div className="bg-naturals-green/10 border border-naturals-green/30 text-naturals-green px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
           {variant === 'true' && '✓ Variant updated successfully.'}
           {variant === 'added' && '✓ New variant added successfully.'}
           {variant === 'deleted' && '✓ Variant deleted successfully.'}
@@ -189,7 +189,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
         </div>
       )}
       {saved === 'true' && variant === 'activated' && (
-        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
+        <div className="bg-naturals-green/10 border border-naturals-green/30 text-naturals-green px-4 py-3 rounded-lg mb-6 font-semibold text-sm">
           ✓ Variant reactivated — now visible on the store.
         </div>
       )}
@@ -241,7 +241,7 @@ export default async function EditProductPage({ params, searchParams }: PageProp
               />
             </div>
             <label className="flex items-center gap-2"><input type="checkbox" name="active" defaultChecked={product.active} /> Active</label>
-            <button type="submit" className="w-full bg-[#006A38] text-white py-3 rounded-lg font-bold hover:bg-[#00522B]">Save Changes</button>
+            <button type="submit" className="w-full bg-naturals-green text-white py-3 rounded-lg font-bold hover:bg-naturals-green-dark">Save Changes</button>
           </form>
         </div>
 

@@ -11,7 +11,7 @@ const LAST_UPDATED = "30 June 2026";
 export default function ShippingPolicyPage() {
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white">Shipping Policy</h1>
         <p className="text-green-200 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
       </div>
@@ -91,12 +91,12 @@ export default function ShippingPolicyPage() {
             <p>
               Once your order is dispatched, you will receive an email and/or SMS with the tracking
               number and courier name. You can track your order at{" "}
-              <a href="/track" className="text-[#006A38] font-medium hover:underline">srilaya.com/track</a>{" "}
+              <a href="/track" className="text-naturals-green font-medium hover:underline">srilaya.com/track</a>{" "}
               or directly on the courier's website.
             </p>
             <p className="mt-2">
               Tracking details are also available in your account under{" "}
-              <a href="/account" className="text-[#006A38] font-medium hover:underline">My Orders</a>.
+              <a href="/account" className="text-naturals-green font-medium hover:underline">My Orders</a>.
             </p>
           </Section>
 
@@ -128,7 +128,7 @@ export default function ShippingPolicyPage() {
           <Section title="9. Contact Us">
             <p>
               For shipping-related queries, email us at{" "}
-              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">{BRAND.email}</a>{" "}
+              <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-medium hover:underline">{BRAND.email}</a>{" "}
               or call <strong>{BRAND.phone}</strong> (Mon–Sat, 9 AM – 6 PM IST).
             </p>
           </Section>

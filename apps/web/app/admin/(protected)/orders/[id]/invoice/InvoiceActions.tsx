@@ -48,12 +48,12 @@ export default function InvoiceActions({ orderId, defaultEmail, whatsappUrl }: I
             value={email}
             onChange={e => { setEmail(e.target.value); setSent(false); setError(''); }}
             placeholder="customer@email.com"
-            className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+            className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
           />
           <button
             onClick={sendEmail}
             disabled={sending || !email}
-            className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-50 whitespace-nowrap"
+            className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-50 whitespace-nowrap"
           >
             {sending ? 'Sending…' : 'Send Invoice'}
           </button>

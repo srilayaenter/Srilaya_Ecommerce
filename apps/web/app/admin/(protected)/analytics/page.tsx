@@ -144,7 +144,7 @@ export default async function AnalyticsPage() {
                 const label  = new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
                 return (
                   <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
-                    <div className="w-full bg-[#006A38] rounded-t-sm transition-all group-hover:bg-[#00522B]"
+                    <div className="w-full bg-naturals-green rounded-t-sm transition-all group-hover:bg-naturals-green-dark"
                          style={{ height: `${Math.max(height, value > 0 ? 4 : 0)}%` }} />
                     <div className="absolute bottom-full mb-1 hidden group-hover:block bg-[#212121] text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap z-10">
                       {label}: ₹{value.toFixed(0)}
@@ -173,10 +173,10 @@ export default async function AnalyticsPage() {
               <div key={i}>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="font-semibold text-[#212121] truncate">{item.label} <span className="text-[#9E9E9E] font-normal">({item.size})</span></span>
-                  <span className="font-bold text-[#006A38] ml-2 flex-shrink-0">{item.qty} sold</span>
+                  <span className="font-bold text-naturals-green ml-2 flex-shrink-0">{item.qty} sold</span>
                 </div>
                 <div className="w-full bg-[#F5F5F5] rounded-full h-2">
-                  <div className="bg-[#006A38] h-2 rounded-full" style={{ width: `${(item.qty / maxQty) * 100}%` }} />
+                  <div className="bg-naturals-green h-2 rounded-full" style={{ width: `${(item.qty / maxQty) * 100}%` }} />
                 </div>
               </div>
             ))}
@@ -194,7 +194,7 @@ export default async function AnalyticsPage() {
                 <div key={cat}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="font-semibold text-[#212121]">{cat}</span>
-                    <span className="font-bold text-[#006A38]">₹{rev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                    <span className="font-bold text-naturals-green">₹{rev.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
                   </div>
                   <div className="w-full bg-[#F5F5F5] rounded-full h-2">
                     <div className="bg-[#8D6E63] h-2 rounded-full" style={{ width: `${(rev / maxCatRev) * 100}%` }} />
@@ -217,12 +217,12 @@ export default async function AnalyticsPage() {
             {orderStatusCounts.map(s => (
               <div key={s.status} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#006A38]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-naturals-green" />
                   <span className="capitalize text-[#424242] font-medium">{s.status.replace(/_/g, " ")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-24 bg-[#F5F5F5] rounded-full h-2">
-                    <div className="bg-[#006A38] h-2 rounded-full" style={{ width: `${totalOrders > 0 ? (s._count / totalOrders) * 100 : 0}%` }} />
+                    <div className="bg-naturals-green h-2 rounded-full" style={{ width: `${totalOrders > 0 ? (s._count / totalOrders) * 100 : 0}%` }} />
                   </div>
                   <span className="font-bold text-[#212121] w-8 text-right">{s._count}</span>
                 </div>
@@ -250,7 +250,7 @@ export default async function AnalyticsPage() {
                       <span className="text-[#9E9E9E] text-xs">{c.count} orders · ₹{c.revenue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
                     </div>
                     <div className="w-full bg-[#F5F5F5] rounded-full h-3">
-                      <div className="bg-[#006A38] h-3 rounded-full flex items-center justify-end pr-2" style={{ width: `${Math.max(pct, 4)}%` }}>
+                      <div className="bg-naturals-green h-3 rounded-full flex items-center justify-end pr-2" style={{ width: `${Math.max(pct, 4)}%` }}>
                         {pct >= 20 && <span className="text-white text-[9px] font-bold">{pct.toFixed(0)}%</span>}
                       </div>
                     </div>

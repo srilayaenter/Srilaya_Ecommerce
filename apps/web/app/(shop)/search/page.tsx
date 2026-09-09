@@ -102,7 +102,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
     <div className="min-h-screen bg-[#F9F6F0]">
 
       {/* Hero strip */}
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins mb-3">
           {query ? `Results for "${query}"` : "Search Products"}
         </h1>
@@ -118,7 +118,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
           />
           <button
             type="submit"
-            className="bg-[#FFF8E1] text-[#006A38] font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white transition-colors"
+            className="bg-[#FFF8E1] text-naturals-green font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white transition-colors"
           >
             Search
           </button>
@@ -134,8 +134,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
               href={query ? `/search?q=${encodeURIComponent(query)}` : "/search"}
               className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 !selectedCat
-                  ? "bg-[#006A38] text-white border-[#006A38]"
-                  : "bg-white text-[#424242] border-[#E0E0E0] hover:border-[#006A38] hover:text-[#006A38]"
+                  ? "bg-naturals-green text-white border-naturals-green"
+                  : "bg-white text-[#424242] border-[#E0E0E0] hover:border-naturals-green hover:text-naturals-green"
               }`}
             >
               All
@@ -146,8 +146,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 href={query ? `/search?q=${encodeURIComponent(query)}&cat=${c.slug}` : `/search?cat=${c.slug}`}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                   selectedCat === c.slug
-                    ? "bg-[#006A38] text-white border-[#006A38]"
-                    : "bg-white text-[#424242] border-[#E0E0E0] hover:border-[#006A38] hover:text-[#006A38]"
+                    ? "bg-naturals-green text-white border-naturals-green"
+                    : "bg-white text-[#424242] border-[#E0E0E0] hover:border-naturals-green hover:text-naturals-green"
                 }`}
               >
                 {c.name}
@@ -165,7 +165,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <Link
                   key={s}
                   href={`/search?q=${s}`}
-                  className="bg-white border border-[#E0E0E0] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:border-[#006A38] hover:text-[#006A38] transition-colors capitalize"
+                  className="bg-white border border-[#E0E0E0] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:border-naturals-green hover:text-naturals-green transition-colors capitalize"
                 >
                   {s}
                 </Link>
@@ -194,13 +194,13 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <Link
                   key={s}
                   href={`/search?q=${s}`}
-                  className="bg-[#F5F5F5] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#006A38] hover:text-white transition-colors capitalize"
+                  className="bg-[#F5F5F5] text-[#424242] px-4 py-2 rounded-full text-sm font-medium hover:bg-naturals-green hover:text-white transition-colors capitalize"
                 >
                   {s}
                 </Link>
               ))}
             </div>
-            <Link href="/product" className="inline-block mt-6 text-[#006A38] font-bold text-sm hover:underline">
+            <Link href="/product" className="inline-block mt-6 text-naturals-green font-bold text-sm hover:underline">
               Browse all products →
             </Link>
           </div>
@@ -213,7 +213,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {bundles.map((b: any) => (
                 <Link key={b.id} href={`/bundles/${b.slug}`}
-                  className="bg-white border border-[#E0E0E0] rounded-2xl p-4 hover:border-[#006A38] transition-colors flex gap-4 items-center">
+                  className="bg-white border border-[#E0E0E0] rounded-2xl p-4 hover:border-naturals-green transition-colors flex gap-4 items-center">
                   {b.image && (
                     <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-[#F9F6F0]">
                       <Image src={b.image} alt={b.title} fill sizes="64px" className="object-contain p-1" />

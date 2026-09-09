@@ -44,8 +44,8 @@ export default async function ProductionPage() {
           <p className="text-sm text-[#8D6E63] mt-1">Record a laddu production run · Auto-deducts raw material stock</p>
         </div>
         <div className="flex gap-3">
-          <Link href="/admin/raw-materials" className="text-sm text-[#006A38] font-bold hover:underline">Raw Materials</Link>
-          <Link href="/admin/raw-materials/recipes" className="text-sm text-[#006A38] font-bold hover:underline">Recipes</Link>
+          <Link href="/admin/raw-materials" className="text-sm text-naturals-green font-bold hover:underline">Raw Materials</Link>
+          <Link href="/admin/raw-materials/recipes" className="text-sm text-naturals-green font-bold hover:underline">Recipes</Link>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default async function ProductionPage() {
                       <span className="ml-1 text-[#9E9E9E] text-xs">({b.variant.size})</span>
                       {b.notes && <p className="text-[11px] text-[#9E9E9E]">{b.notes}</p>}
                     </td>
-                    <td className="px-5 py-3 text-right font-bold text-[#006A38]">{b.unitsProduced}</td>
+                    <td className="px-5 py-3 text-right font-bold text-naturals-green">{b.unitsProduced}</td>
                     <td className="px-5 py-3 text-right text-[#9E9E9E] text-xs">
                       {new Date(b.producedAt).toLocaleDateString('en-IN', {
                         day: '2-digit', month: 'short', year: 'numeric',

@@ -119,7 +119,7 @@ export default function PayButton({
         className={`w-full text-white py-3 rounded-xl font-bold transition-all shadow-sm text-center text-xs tracking-wide uppercase block ${
           loading 
             ? 'bg-emerald-800/70 cursor-not-allowed opacity-80' 
-            : 'bg-brand-green hover:bg-emerald-800'
+            : 'bg-naturals-green hover:bg-emerald-800'
         }`}
       >
         {loading ? 'Opening payment gateway...' : `Pay Securely ₹${amount.toFixed(2)}`}

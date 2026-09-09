@@ -62,7 +62,7 @@ export default function InventoryImportPage() {
         </div>
         <a
           href="/api/admin/inventory/export"
-          className="bg-[#006A38] text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors"
+          className="bg-naturals-green text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors"
         >
           ⬇ Export Current Inventory
         </a>
@@ -75,7 +75,7 @@ export default function InventoryImportPage() {
         <p className="text-sm text-[#424242]">Optional columns: <code className="bg-white px-1 py-0.5 rounded text-xs border border-[#E0E0E0]">price</code>, <code className="bg-white px-1 py-0.5 rounded text-xs border border-[#E0E0E0]">reorderThreshold</code></p>
         <p className="text-sm text-[#424242]">SKU must match exactly what's in the system. Unknown SKUs are skipped.</p>
         <p className="text-sm text-[#424242]">Variants restocked from 0 will automatically trigger notify-when-in-stock emails.</p>
-        <button onClick={downloadTemplate} className="text-sm font-bold text-[#006A38] underline underline-offset-2 mt-1">
+        <button onClick={downloadTemplate} className="text-sm font-bold text-naturals-green underline underline-offset-2 mt-1">
           ⬇ Download Template CSV
         </button>
       </div>
@@ -98,7 +98,7 @@ export default function InventoryImportPage() {
           onChange={e => setCsvText(e.target.value)}
           placeholder={"sku,stock,price,reorderThreshold\nPROD-001-500G,100,199.00,10"}
           rows={10}
-          className="w-full font-mono text-xs border border-[#E0E0E0] rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-[#006A38]/30 resize-y"
+          className="w-full font-mono text-xs border border-[#E0E0E0] rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-naturals-green/30 resize-y"
         />
 
         {error && (
@@ -110,7 +110,7 @@ export default function InventoryImportPage() {
         <button
           onClick={handleImport}
           disabled={loading || !csvText.trim()}
-          className="bg-[#006A38] text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-[#005A30] transition-colors disabled:opacity-50 w-full"
+          className="bg-naturals-green text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-naturals-green-dark transition-colors disabled:opacity-50 w-full"
         >
           {loading ? "Importing…" : "Import & Update Stock"}
         </button>
@@ -122,8 +122,8 @@ export default function InventoryImportPage() {
           <h2 className="font-black text-[#212121]">Import Complete</h2>
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-[#E8F5E9] rounded-xl p-4 text-center">
-              <p className="text-2xl font-black text-[#006A38]">{result.updated}</p>
-              <p className="text-xs font-bold text-[#006A38] mt-1">Variants Updated</p>
+              <p className="text-2xl font-black text-naturals-green">{result.updated}</p>
+              <p className="text-xs font-bold text-naturals-green mt-1">Variants Updated</p>
             </div>
             <div className="bg-[#FFF8E1] rounded-xl p-4 text-center">
               <p className="text-2xl font-black text-[#E65100]">{result.skipped}</p>
