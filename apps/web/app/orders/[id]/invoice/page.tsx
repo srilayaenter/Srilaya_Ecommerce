@@ -67,7 +67,7 @@ export default async function InvoicePage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-start mb-8 border-b pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-naturals-green mb-2">{BRAND.name}</h1>
+              <h1 className="text-3xl font-bold text-[#006A38] mb-2">{BRAND.name}</h1>
               <p className="text-sm text-gray-600 mt-2">{BRAND.address}</p>
               <p className="text-sm text-gray-600">Email: {BRAND.email}</p>
               <p className="text-sm text-gray-600">Phone: {BRAND.phone}</p>
@@ -174,7 +174,7 @@ export default async function InvoicePage({ params }: PageProps) {
               </button>
             </Link>
             <Link href="/product">
-              <button className="bg-naturals-green text-white px-6 py-3 rounded-lg hover:bg-emerald-800 font-semibold text-sm">
+              <button className="bg-[#006A38] text-white px-6 py-3 rounded-lg hover:bg-emerald-800 font-semibold text-sm">
                 Continue Shopping
               </button>
             </Link>

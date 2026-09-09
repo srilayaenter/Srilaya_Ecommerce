@@ -137,7 +137,7 @@ export default function BulkPricingPage() {
             <div className="flex rounded-lg border border-[#E0E0E0] overflow-hidden text-sm font-semibold">
               {(["percent", "fixed", "set"] as AdjustMode[]).map(m => (
                 <button key={m} onClick={() => { setMode(m); setValue(""); }}
-                  className={`px-4 py-2 transition-colors capitalize ${mode === m ? "bg-naturals-green text-white" : "bg-white text-[#616161] hover:bg-[#F5F5F5]"}`}>
+                  className={`px-4 py-2 transition-colors capitalize ${mode === m ? "bg-[#006A38] text-white" : "bg-white text-[#616161] hover:bg-[#F5F5F5]"}`}>
                   {m === "percent" ? "% Change" : m === "fixed" ? "₹ Change" : "Set price"}
                 </button>
               ))}
@@ -149,14 +149,14 @@ export default function BulkPricingPage() {
             </label>
             <input value={value} onChange={e => setValue(e.target.value)} type="number" step="0.01"
               placeholder={mode === "percent" ? "e.g. 10" : "e.g. 250"}
-              className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm w-36 focus:outline-none focus:border-naturals-green" />
+              className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm w-36 focus:outline-none focus:border-[#006A38]" />
           </div>
           <button onClick={preview} disabled={selectedCount === 0 || !value}
             className="bg-[#424242] text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-[#212121] transition-colors disabled:opacity-40">
             Preview changes
           </button>
           <button onClick={applyPrices} disabled={saving || pendingCount === 0}
-            className="bg-naturals-green text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-40">
+            className="bg-[#006A38] text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-40">
             {saving ? "Saving…" : `Apply to ${pendingCount} variant${pendingCount === 1 ? "" : "s"}`}
           </button>
           {saved && <span className="text-sm font-bold text-green-700">✓ Prices updated</span>}
@@ -170,16 +170,16 @@ export default function BulkPricingPage() {
       {/* Filter bar */}
       <div className="flex flex-wrap gap-3 items-center">
         <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Search products…"
-          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm w-56 focus:outline-none focus:border-naturals-green" />
+          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm w-56 focus:outline-none focus:border-[#006A38]" />
         <select value={catFilter} onChange={e => setCatFilter(e.target.value)}
-          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
           {categories.map(c => <option key={c} value={c}>{c === "all" ? "All categories" : c}</option>)}
         </select>
         <label className="flex items-center gap-2 text-sm text-[#616161] cursor-pointer ml-2">
           <input type="checkbox"
             checked={visible.length > 0 && visible.every(p => p.selected)}
             onChange={e => toggleAll(e.target.checked)}
-            className="accent-naturals-green" />
+            className="accent-[#006A38]" />
           Select all visible
         </label>
       </div>
@@ -190,10 +190,10 @@ export default function BulkPricingPage() {
       ) : (
         <div className="space-y-2">
           {visible.map(p => (
-            <div key={p.id} className={`bg-white rounded-xl border transition-colors ${p.selected ? "border-naturals-green" : "border-[#E0E0E0]"}`}>
+            <div key={p.id} className={`bg-white rounded-xl border transition-colors ${p.selected ? "border-[#006A38]" : "border-[#E0E0E0]"}`}>
               <div className="flex items-center gap-3 px-5 py-3 border-b border-[#F5F5F5]">
                 <input type="checkbox" checked={p.selected} onChange={() => toggleOne(p.id)}
-                  className="accent-naturals-green" />
+                  className="accent-[#006A38]" />
                 <div className="flex-1">
                   <p className="font-semibold text-[#212121] text-sm">{p.title}</p>
                   <p className="text-xs text-[#9E9E9E]">{p.categoryName}</p>

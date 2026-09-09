@@ -70,7 +70,7 @@ export default function StockLogPage() {
         </div>
         <a
           href="/api/admin/inventory/export"
-          className="bg-naturals-green text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors"
+          className="bg-[#006A38] text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors"
         >
           ⬇ Export Current Inventory CSV
         </a>
@@ -83,12 +83,12 @@ export default function StockLogPage() {
           value={sku}
           onChange={e => setSku(e.target.value)}
           placeholder="Filter by SKU…"
-          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green w-48"
+          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] w-48"
         />
         <select
           value={reason}
           onChange={e => setReason(e.target.value)}
-          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
         >
           <option value="">All reasons</option>
           {Object.entries(REASON_LABELS).map(([k, v]) => (

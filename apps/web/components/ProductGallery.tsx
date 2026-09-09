@@ -65,7 +65,7 @@ export default function ProductGallery({
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${i === active ? "bg-naturals-green w-4" : "bg-naturals-green/30"}`}
+                  className={`w-2 h-2 rounded-full transition-all ${i === active ? "bg-[#006A38] w-4" : "bg-[#006A38]/30"}`}
                   aria-label={`Image ${i + 1}`}
                 />
               ))}
@@ -83,8 +83,8 @@ export default function ProductGallery({
               onClick={() => setActive(i)}
               className={`relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
                 i === active
-                  ? "border-naturals-green shadow-md"
-                  : "border-[#E0E0E0] hover:border-naturals-green/40"
+                  ? "border-[#006A38] shadow-md"
+                  : "border-[#E0E0E0] hover:border-[#006A38]/40"
               }`}
             >
               <Image

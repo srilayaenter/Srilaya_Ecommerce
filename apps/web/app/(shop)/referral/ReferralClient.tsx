@@ -50,7 +50,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
 
         {/* Header */}
         <div className="text-center">
-          <Gift size={48} weight="regular" className="text-naturals-green mx-auto mb-3" />
+          <Gift size={48} weight="regular" className="text-[#006A38] mx-auto mb-3" />
           <h1 className="text-3xl font-black text-[#212121]">Refer & Earn</h1>
           <p className="text-[#757575] mt-2 text-sm leading-relaxed">
             Share your referral code with friends. When they place their first order,
@@ -62,16 +62,16 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
         {data ? (
           <div className="bg-white rounded-2xl border border-[#E0E0E0] p-6 space-y-5">
             {isLoggedIn && prefilled && (
-              <p className="text-xs font-semibold text-naturals-green uppercase tracking-wider">Your referral code</p>
+              <p className="text-xs font-semibold text-[#006A38] uppercase tracking-wider">Your referral code</p>
             )}
 
             <div className="flex items-center gap-3">
               <div className="flex-1 bg-[#F5F5F5] border border-[#E0E0E0] rounded-xl px-5 py-3 text-center">
-                <span className="text-2xl font-black text-naturals-green tracking-widest">{data.referralCode}</span>
+                <span className="text-2xl font-black text-[#006A38] tracking-widest">{data.referralCode}</span>
               </div>
               <button
                 onClick={copyCode}
-                className="border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm font-bold text-naturals-green hover:bg-[#F5F5F5] transition-colors"
+                className="border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm font-bold text-[#006A38] hover:bg-[#F5F5F5] transition-colors"
               >
                 {copied ? <><CheckCircle size={14} weight="regular" className="inline-block mr-1" />Copied!</> : "Copy"}
               </button>
@@ -88,7 +88,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#F0F0F0]">
               <div className="text-center">
-                <p className="text-xl font-black text-naturals-green">{data.balance}</p>
+                <p className="text-xl font-black text-[#006A38]">{data.balance}</p>
                 <p className="text-xs text-[#9E9E9E] mt-0.5">Points balance</p>
               </div>
               <div className="text-center">
@@ -98,7 +98,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
             </div>
 
             <div className="text-center pt-1">
-              <Link href="/loyalty" className="text-xs text-naturals-green font-semibold hover:underline">
+              <Link href="/loyalty" className="text-xs text-[#006A38] font-semibold hover:underline">
                 View full loyalty dashboard →
               </Link>
             </div>
@@ -109,7 +109,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
             {isLoggedIn ? (
               <div className="text-center py-4 text-[#9E9E9E] mb-4">
                 <p className="text-sm">Place your first order to receive a referral code.</p>
-                <Link href="/product" className="text-naturals-green font-semibold text-sm hover:underline mt-1 inline-block">
+                <Link href="/product" className="text-[#006A38] font-semibold text-sm hover:underline mt-1 inline-block">
                   Shop now →
                 </Link>
               </div>
@@ -129,12 +129,12 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder="Email used at checkout"
-                    className="flex-1 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                    className="flex-1 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
                   />
                   <button
                     type="submit"
                     disabled={loading}
-                    className="bg-naturals-green text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-50"
+                    className="bg-[#006A38] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#005A30] transition-colors disabled:opacity-50"
                   >
                     {loading ? "…" : "Lookup"}
                   </button>
@@ -160,7 +160,7 @@ export default function ReferralClient({ prefilled, isLoggedIn }: Props) {
               { step: "4", text: `You both get ${REFERRAL_BONUS} points = ₹${(REFERRAL_BONUS * 0.1).toFixed(0)} off your next order` },
             ].map(item => (
               <div key={item.step} className="flex gap-3 items-start">
-                <div className="w-7 h-7 rounded-full bg-naturals-green text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-7 h-7 rounded-full bg-[#006A38] text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
                   {item.step}
                 </div>
                 <p className="text-sm text-[#424242]">{item.text}</p>

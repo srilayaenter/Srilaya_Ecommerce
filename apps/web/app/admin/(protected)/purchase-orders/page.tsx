@@ -134,7 +134,7 @@ export default function PurchaseOrdersPage() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="bg-naturals-green text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors"
+          className="bg-[#006A38] text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors"
         >
           + New Purchase Order
         </button>
@@ -145,7 +145,7 @@ export default function PurchaseOrdersPage() {
         {["all", "draft", "sent", "partial", "received", "cancelled"].map(s => (
           <button key={s} onClick={() => setFilter(s)}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg border capitalize transition-colors ${
-              filter === s ? "bg-naturals-green text-white border-naturals-green" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
+              filter === s ? "bg-[#006A38] text-white border-[#006A38]" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
             }`}>
             {(() => { const I = STATUS_ICONS[s]; return I ? <I size={12} weight="regular" className="inline-block mr-1" /> : null; })()}{s} {s !== "all" && `(${pos.filter(p => p.status === s).length})`}
           </button>
@@ -165,7 +165,7 @@ export default function PurchaseOrdersPage() {
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Supplier *</label>
                 <select value={supplierId} onChange={e => setSupplierId(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                   <option value="">Select supplier…</option>
                   {suppliers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
@@ -173,14 +173,14 @@ export default function PurchaseOrdersPage() {
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Expected By</label>
                 <input type="date" value={expectedAt} onChange={e => setExpectedAt(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-[#9E9E9E] mb-1.5">Note</label>
               <textarea value={note} onChange={e => setNote(e.target.value)} rows={2}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-naturals-green"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-[#006A38]"
                 placeholder="Optional note to supplier…" />
             </div>
 
@@ -189,7 +189,7 @@ export default function PurchaseOrdersPage() {
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-[#9E9E9E]">Items *</label>
                 <button onClick={() => setPoItems(prev => [...prev, { sku: "", qty: "", cost: "" }])}
-                  className="text-xs text-naturals-green font-bold hover:underline">+ Add row</button>
+                  className="text-xs text-[#006A38] font-bold hover:underline">+ Add row</button>
               </div>
               <div className="space-y-2">
                 <div className="grid grid-cols-12 gap-2 text-[10px] font-bold uppercase text-[#9E9E9E] px-1">
@@ -202,7 +202,7 @@ export default function PurchaseOrdersPage() {
                   <div key={i} className="grid grid-cols-12 gap-2">
                     <div className="col-span-5">
                       <select value={item.sku} onChange={e => setPoItems(prev => prev.map((p, j) => j === i ? { ...p, sku: e.target.value } : p))}
-                        className="w-full border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-naturals-green">
+                        className="w-full border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-[#006A38]">
                         <option value="">Select SKU…</option>
                         {variants.map(v => (
                           <option key={v.id} value={v.sku}>{v.sku} — {v.product.title} ({v.size})</option>
@@ -212,11 +212,11 @@ export default function PurchaseOrdersPage() {
                     <input type="number" min="1" value={item.qty}
                       onChange={e => setPoItems(prev => prev.map((p, j) => j === i ? { ...p, qty: e.target.value } : p))}
                       placeholder="100"
-                      className="col-span-3 border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-naturals-green" />
+                      className="col-span-3 border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-[#006A38]" />
                     <input type="number" step="0.01" min="0" value={item.cost}
                       onChange={e => setPoItems(prev => prev.map((p, j) => j === i ? { ...p, cost: e.target.value } : p))}
                       placeholder="80.00"
-                      className="col-span-3 border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-naturals-green" />
+                      className="col-span-3 border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-[#006A38]" />
                     <button onClick={() => setPoItems(prev => prev.filter((_, j) => j !== i))}
                       className="col-span-1 text-red-400 hover:text-red-600 text-sm">✕</button>
                   </div>
@@ -226,7 +226,7 @@ export default function PurchaseOrdersPage() {
 
             <div className="flex gap-3 pt-2">
               <button onClick={createPO} disabled={creating || !supplierId || poItems.every(i => !i.sku)}
-                className="bg-naturals-green text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                className="bg-[#006A38] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                 {creating ? "Creating…" : "Create PO"}
               </button>
               <button onClick={() => setShowCreate(false)} className="text-sm text-[#9E9E9E] hover:text-[#212121] px-4">
@@ -254,7 +254,7 @@ export default function PurchaseOrdersPage() {
               <div className="flex items-center justify-between p-5 flex-wrap gap-3">
                 <div className="flex items-center gap-4 flex-wrap">
                   <div>
-                    <p className="font-mono font-bold text-naturals-green text-sm">PO-{po.id.slice(0, 8).toUpperCase()}</p>
+                    <p className="font-mono font-bold text-[#006A38] text-sm">PO-{po.id.slice(0, 8).toUpperCase()}</p>
                     <p className="font-semibold text-[#212121]">{po.supplier.name}</p>
                     <p className="text-xs text-[#9E9E9E]">
                       {new Date(po.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
@@ -269,7 +269,7 @@ export default function PurchaseOrdersPage() {
                   <span className="text-xs text-[#9E9E9E]">{po.items.length} item{po.items.length !== 1 ? "s" : ""}</span>
                   <button
                     onClick={() => setExpanded(expanded === po.id ? null : po.id)}
-                    className="text-xs font-bold text-naturals-green hover:underline"
+                    className="text-xs font-bold text-[#006A38] hover:underline"
                   >
                     {expanded === po.id ? "Hide" : "View"} details
                   </button>
@@ -315,7 +315,7 @@ export default function PurchaseOrdersPage() {
                                   [po.id]: { ...prev[po.id], [item.id]: e.target.value }
                                 }))}
                                 placeholder="0"
-                                className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-right focus:outline-none focus:border-naturals-green"
+                                className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-right focus:outline-none focus:border-[#006A38]"
                               />
                             </td>
                           )}
@@ -329,14 +329,14 @@ export default function PurchaseOrdersPage() {
                       <button
                         onClick={() => receivePO(po)}
                         disabled={receiving === po.id || !Object.values(receiveMap[po.id] ?? {}).some(v => parseInt(v, 10) > 0)}
-                        className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-50"
+                        className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-50"
                       >
                         {receiving === po.id ? "Updating stock…" : <><ArrowCircleDown size={14} weight="regular" className="inline-block mr-1" />Receive & Update Stock</>}
                       </button>
                     )}
                     {po.status === "draft" && (
                       <button onClick={() => updateStatus(po.id, "sent")}
-                        className="border border-naturals-green text-naturals-green font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#F0FAF4] transition-colors">
+                        className="border border-[#006A38] text-[#006A38] font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#F0FAF4] transition-colors">
                         <PaperPlaneTilt size={14} weight="regular" className="inline-block mr-1" />Mark Sent
                       </button>
                     )}

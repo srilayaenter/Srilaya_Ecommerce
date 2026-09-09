@@ -6,18 +6,18 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-naturals-green-deep text-white">
+    <footer className="bg-[#003D20] text-white">
       <div className="container mx-auto px-4 max-w-7xl py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-naturals-green bg-white flex-shrink-0">
+              <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#4CAF50] bg-white flex-shrink-0">
                 <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals Logo" fill className="object-cover" />
               </div>
               <span className="font-black text-xl text-white tracking-tight">
-                SriLaYa <span className="text-naturals-green">Naturals</span>
+                SriLaYa <span className="text-[#4CAF50]">Naturals</span>
               </span>
             </Link>
             <p className="text-green-200 text-sm leading-relaxed mb-4">
@@ -31,12 +31,12 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-green-400 mb-4">Shop</h4>
             <ul className="space-y-2.5 text-sm text-green-100">
-              <li><Link href="/product" className="hover:text-naturals-green transition-colors">All Products</Link></li>
-              <li><Link href="/category/millet-flakes" className="hover:text-naturals-green transition-colors">Millet Flakes</Link></li>
-              <li><Link href="/category/millet-flour" className="hover:text-naturals-green transition-colors">Millet Flour</Link></li>
-              <li><Link href="/category/laddu" className="hover:text-naturals-green transition-colors">Laddu</Link></li>
-              <li><Link href="/category/sweeteners" className="hover:text-naturals-green transition-colors">Sweeteners</Link></li>
-              <li><Link href="/bundles" className="hover:text-naturals-green transition-colors">Bundle Packs</Link></li>
+              <li><Link href="/product" className="hover:text-[#4CAF50] transition-colors">All Products</Link></li>
+              <li><Link href="/category/millet-flakes" className="hover:text-[#4CAF50] transition-colors">Millet Flakes</Link></li>
+              <li><Link href="/category/millet-flour" className="hover:text-[#4CAF50] transition-colors">Millet Flour</Link></li>
+              <li><Link href="/category/laddu" className="hover:text-[#4CAF50] transition-colors">Laddu</Link></li>
+              <li><Link href="/category/sweeteners" className="hover:text-[#4CAF50] transition-colors">Sweeteners</Link></li>
+              <li><Link href="/bundles" className="hover:text-[#4CAF50] transition-colors">Bundle Packs</Link></li>
             </ul>
           </div>
 
@@ -44,14 +44,14 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-green-400 mb-4">Company</h4>
             <ul className="space-y-2.5 text-sm text-green-100">
-              <li><Link href="/about" className="hover:text-naturals-green transition-colors">About Us</Link></li>
-              <li><Link href="/blog" className="hover:text-naturals-green transition-colors">Blog & Recipes</Link></li>
-              <li><Link href="/contact" className="hover:text-naturals-green transition-colors">Contact Us</Link></li>
-              <li><Link href="/feedback" className="hover:text-naturals-green transition-colors">Share Feedback</Link></li>
-              <li><Link href="/track" className="hover:text-naturals-green transition-colors">Track Order</Link></li>
-              <li><Link href="/account" className="hover:text-naturals-green transition-colors">My Orders</Link></li>
-              <li><Link href="/wishlist" className="hover:text-naturals-green transition-colors">Wishlist</Link></li>
-              <li><Link href="/referral" className="hover:text-naturals-green transition-colors">Refer & Earn</Link></li>
+              <li><Link href="/about" className="hover:text-[#4CAF50] transition-colors">About Us</Link></li>
+              <li><Link href="/blog" className="hover:text-[#4CAF50] transition-colors">Blog & Recipes</Link></li>
+              <li><Link href="/contact" className="hover:text-[#4CAF50] transition-colors">Contact Us</Link></li>
+              <li><Link href="/feedback" className="hover:text-[#4CAF50] transition-colors">Share Feedback</Link></li>
+              <li><Link href="/track" className="hover:text-[#4CAF50] transition-colors">Track Order</Link></li>
+              <li><Link href="/account" className="hover:text-[#4CAF50] transition-colors">My Orders</Link></li>
+              <li><Link href="/wishlist" className="hover:text-[#4CAF50] transition-colors">Wishlist</Link></li>
+              <li><Link href="/referral" className="hover:text-[#4CAF50] transition-colors">Refer & Earn</Link></li>
             </ul>
           </div>
 
@@ -78,16 +78,16 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-white/10 bg-naturals-green-deep">
+      <div className="border-t border-white/10 bg-[#002A16]">
         <div className="container mx-auto px-4 max-w-7xl py-4 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-xs text-green-400">
-            <Link href="/privacy" className="hover:text-naturals-green transition-colors">Privacy</Link>
+            <Link href="/privacy" className="hover:text-[#4CAF50] transition-colors">Privacy</Link>
             <span className="opacity-40">·</span>
-            <Link href="/terms" className="hover:text-naturals-green transition-colors">Terms</Link>
+            <Link href="/terms" className="hover:text-[#4CAF50] transition-colors">Terms</Link>
             <span className="opacity-40">·</span>
-            <Link href="/shipping-policy" className="hover:text-naturals-green transition-colors">Shipping</Link>
+            <Link href="/shipping-policy" className="hover:text-[#4CAF50] transition-colors">Shipping</Link>
             <span className="opacity-40">·</span>
-            <Link href="/returns-policy" className="hover:text-naturals-green transition-colors">Returns</Link>
+            <Link href="/returns-policy" className="hover:text-[#4CAF50] transition-colors">Returns</Link>
           </div>
           <p className="text-xs text-green-400 text-center sm:text-right">
             © {currentYear} {BRAND.name}. All rights reserved.

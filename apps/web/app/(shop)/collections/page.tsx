@@ -21,7 +21,7 @@ const COLLECTIONS: Array<{
       "From Foxtail to Mapillai Samba — discover India's most nutrient-dense granular grains. Low GI, high fibre, ready in minutes.",
     href: "/rava",
     icon: Grains,
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     accentLight: "#FFF8E1",
     badge: "Live",
     badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-300",
@@ -163,12 +163,12 @@ export default function CollectionsPage() {
     <div className="bg-[#FDFBF7] min-h-screen text-[#2D2722]">
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-b from-naturals-green-deep to-naturals-green py-16 md:py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-[#003D20] to-[#006A38] py-16 md:py-20 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none opacity-10"
           style={{
             backgroundImage:
-              "radial-gradient(rgb(var(--naturals-gold)) 0.75px, transparent 0.75px)",
+              "radial-gradient(#D99B26 0.75px, transparent 0.75px)",
             backgroundSize: "24px 24px",
           }}
         />
@@ -178,7 +178,7 @@ export default function CollectionsPage() {
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-4">
             Every Grain.<br className="hidden sm:block" />
-            <span className="text-naturals-gold">Every Benefit.</span>
+            <span className="text-[#D99B26]">Every Benefit.</span>
           </h1>
           <p className="text-emerald-100 text-lg max-w-2xl mx-auto mb-8">
             We don't just sell grains — we curate collections around each grain's
@@ -186,15 +186,15 @@ export default function CollectionsPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-6 text-center">
             <div className="bg-white/10 rounded-xl px-6 py-3 border border-white/15">
-              <div className="text-2xl font-black text-naturals-gold">{totalCount}</div>
+              <div className="text-2xl font-black text-[#D99B26]">{totalCount}</div>
               <div className="text-xs text-emerald-200 font-semibold uppercase tracking-wide mt-0.5">Collections</div>
             </div>
             <div className="bg-white/10 rounded-xl px-6 py-3 border border-white/15">
-              <div className="text-2xl font-black text-naturals-gold">{liveCount}</div>
+              <div className="text-2xl font-black text-[#D99B26]">{liveCount}</div>
               <div className="text-xs text-emerald-200 font-semibold uppercase tracking-wide mt-0.5">Live Now</div>
             </div>
             <div className="bg-white/10 rounded-xl px-6 py-3 border border-white/15">
-              <div className="text-2xl font-black text-naturals-gold">100%</div>
+              <div className="text-2xl font-black text-[#D99B26]">100%</div>
               <div className="text-xs text-emerald-200 font-semibold uppercase tracking-wide mt-0.5">Natural</div>
             </div>
           </div>
@@ -211,7 +211,7 @@ export default function CollectionsPage() {
               <div
                 className={`group relative bg-white rounded-2xl border overflow-hidden shadow-sm flex flex-col transition-all duration-300 ${
                   isLive
-                    ? "border-naturals-gold/30 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                    ? "border-[#D99B26]/30 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
                     : "border-gray-200 opacity-75"
                 }`}
                 style={{ borderTop: `4px solid ${c.accent}` }}
@@ -295,7 +295,7 @@ export default function CollectionsPage() {
         {/* Bottom note */}
         <p className="text-center text-sm text-gray-400 mt-12">
           New collections are added as we curate and craft each variety guide.{" "}
-          <Link href="/product" className="text-naturals-green font-semibold hover:underline">
+          <Link href="/product" className="text-[#006A38] font-semibold hover:underline">
             Browse all products →
           </Link>
         </p>

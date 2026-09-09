@@ -65,7 +65,7 @@ export default function StyledSelect({
               }}
               className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                 opt.value === selected
-                  ? "bg-naturals-green text-white"
+                  ? "bg-[#006A38] text-white"
                   : "text-[#212121] hover:bg-[#FFF8E1]"
               }`}
             >

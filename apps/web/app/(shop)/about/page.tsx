@@ -127,7 +127,7 @@ export default function AboutUsPage() {
         </p>
         <Link
           href="/product"
-          className="inline-flex items-center justify-center font-bold text-sm bg-naturals-green text-white hover:bg-naturals-green-dark px-6 py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
+          className="inline-flex items-center justify-center font-bold text-sm bg-[#006A38] text-white hover:bg-[#00522B] px-6 py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
         >
           Explore Products Catalog
         </Link>

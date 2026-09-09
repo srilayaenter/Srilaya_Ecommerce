@@ -59,11 +59,11 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] font-sans pb-20 mt-12 px-4">
       <div className="text-center mb-8 flex flex-col items-center">
-        <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-naturals-green bg-white mb-3">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#006A38] bg-white mb-3">
           <Image src="/brand/srilaya-logo.png" alt="SriLaYa" fill className="object-cover" />
         </div>
         <h1 className="text-[32px] font-black text-[#212121] tracking-tight font-poppins">
-          SriLaYa <span className="text-naturals-green">Naturals</span>
+          SriLaYa <span className="text-[#006A38]">Naturals</span>
         </h1>
         <p className="text-[#424242] font-bold tracking-wide mt-1 uppercase text-[12px]">
           Create Your Account
@@ -81,7 +81,7 @@ export default function RegisterPage() {
               onChange={e => setName(e.target.value)}
               required
               placeholder="Ravi Kumar"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-naturals-green focus:ring-1 focus:ring-naturals-green text-[#212121] transition-all"
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ export default function RegisterPage() {
               onChange={e => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-naturals-green focus:ring-1 focus:ring-naturals-green text-[#212121] transition-all"
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
             />
           </div>
           <div>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
               required
               minLength={8}
               placeholder="At least 8 characters"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-naturals-green focus:ring-1 focus:ring-naturals-green text-[#212121] transition-all"
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
             />
           </div>
           <div>
@@ -118,7 +118,7 @@ export default function RegisterPage() {
               onChange={e => setConfirm(e.target.value)}
               required
               placeholder="Re-enter password"
-              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-naturals-green focus:ring-1 focus:ring-naturals-green text-[#212121] transition-all"
+              className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38] text-[#212121] transition-all"
             />
           </div>
 
@@ -127,7 +127,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-naturals-green text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-naturals-green-dark transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
+            className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all shadow-[0_4px_12px_rgba(0,106,56,0.2)] disabled:opacity-60"
           >
             {loading ? "Creating account…" : "Create Account"}
           </button>
@@ -136,7 +136,7 @@ export default function RegisterPage() {
         <div className="mt-6 text-center border-t border-[#E0E0E0] pt-5">
           <p className="text-[14px] text-[#424242] font-medium">
             Already have an account?{" "}
-            <Link href="/login" className="text-naturals-green font-bold hover:underline">
+            <Link href="/login" className="text-[#006A38] font-bold hover:underline">
               Sign in here
             </Link>
           </p>

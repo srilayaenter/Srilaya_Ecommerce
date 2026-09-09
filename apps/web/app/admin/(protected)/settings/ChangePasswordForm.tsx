@@ -35,7 +35,7 @@ export default function ChangePasswordForm() {
     }
   };
 
-  const inputClass = "w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm text-[#212121] focus:outline-none focus:border-naturals-green transition-colors";
+  const inputClass = "w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm text-[#212121] focus:outline-none focus:border-[#006A38] transition-colors";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +55,7 @@ export default function ChangePasswordForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
+        className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
       >
         {loading ? 'Updating…' : 'Update Password'}
       </button>

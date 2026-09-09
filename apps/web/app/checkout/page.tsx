@@ -41,7 +41,7 @@ export default async function CheckoutPage({
         <ShoppingCart size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
         <Link href="/product">
-          <button className="bg-naturals-green text-white px-6 py-3 rounded-xl font-bold hover:bg-naturals-green-dark transition-all shadow-sm">
+          <button className="bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm">
             Continue Shopping
           </button>
         </Link>

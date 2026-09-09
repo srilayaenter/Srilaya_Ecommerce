@@ -30,15 +30,15 @@ export default async function RawMaterialsPage() {
         </div>
         <div className="flex gap-3">
           <Link href="/admin/raw-materials/import"
-            className="px-4 py-2 rounded-lg bg-naturals-green text-white text-sm font-bold hover:bg-naturals-green-dark">
+            className="px-4 py-2 rounded-lg bg-[#006A38] text-white text-sm font-bold hover:bg-[#00522B]">
             <FileText size={14} weight="regular" className="inline-block mr-1" />Import Purchase Bill
           </Link>
           <Link href="/admin/raw-materials/recipes"
-            className="px-4 py-2 rounded-lg border border-naturals-green text-naturals-green text-sm font-bold hover:bg-[#F5F5F5]">
+            className="px-4 py-2 rounded-lg border border-[#006A38] text-[#006A38] text-sm font-bold hover:bg-[#F5F5F5]">
             <ClipboardText size={14} weight="regular" className="inline-block mr-1" />Recipes
           </Link>
           <Link href="/admin/production"
-            className="px-4 py-2 rounded-lg border border-naturals-green text-naturals-green text-sm font-bold hover:bg-[#F5F5F5]">
+            className="px-4 py-2 rounded-lg border border-[#006A38] text-[#006A38] text-sm font-bold hover:bg-[#F5F5F5]">
             <Factory size={14} weight="regular" className="inline-block mr-1" />Log Production
           </Link>
         </div>
@@ -81,13 +81,13 @@ export default async function RawMaterialsPage() {
                       <tr key={m.id} className={isLow ? 'bg-red-50/50' : 'hover:bg-[#FAFAFA]'}>
                         <td className="px-5 py-3">
                           <Link href={`/admin/raw-materials/${m.id}`}
-                            className="font-semibold text-naturals-green hover:underline">
+                            className="font-semibold text-[#006A38] hover:underline">
                             {m.name}
                           </Link>
                           <span className="ml-2 text-[11px] text-[#9E9E9E] font-normal">({m.unit})</span>
                           {isLow && <span className="ml-2 text-[10px] text-red-600 font-bold">LOW</span>}
                         </td>
-                        <td className={`px-5 py-3 text-right font-mono font-bold ${isLow ? 'text-red-600' : 'text-naturals-green'}`}>
+                        <td className={`px-5 py-3 text-right font-mono font-bold ${isLow ? 'text-red-600' : 'text-[#006A38]'}`}>
                           {m.stockQty.toFixed(2)}
                         </td>
                         <td className="px-5 py-3 text-right text-[#424242]">
@@ -99,9 +99,9 @@ export default async function RawMaterialsPage() {
                             <input type="hidden" name="rawMaterialId" value={m.id} />
                             <div className="flex items-center gap-1 justify-center">
                               <input type="number" name="qty" step="0.1" min="0.1" placeholder="qty"
-                                className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-naturals-green" />
+                                className="w-20 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
                               <button type="submit"
-                                className="bg-naturals-green text-white text-xs px-2 py-1 rounded hover:bg-naturals-green-dark font-bold">
+                                className="bg-[#006A38] text-white text-xs px-2 py-1 rounded hover:bg-[#00522B] font-bold">
                                 +
                               </button>
                             </div>
@@ -109,7 +109,7 @@ export default async function RawMaterialsPage() {
                         </td>
                         <td className="px-5 py-3 text-right">
                           <Link href={`/admin/raw-materials/${m.id}`}
-                            className="text-[11px] text-[#9E9E9E] hover:text-naturals-green underline">
+                            className="text-[11px] text-[#9E9E9E] hover:text-[#006A38] underline">
                             View →
                           </Link>
                         </td>
@@ -128,12 +128,12 @@ export default async function RawMaterialsPage() {
             <div>
               <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Name *</label>
               <input name="name" required placeholder="e.g. Groundnut, Till (Sesame), Moong Dal"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Unit</label>
               <select name="unit"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                 <option value="kg">kg</option>
                 <option value="g">g</option>
                 <option value="litre">litre</option>
@@ -143,15 +143,15 @@ export default async function RawMaterialsPage() {
             <div>
               <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Cost per Unit (₹)</label>
               <input name="costPerUnit" type="number" step="0.01" min="0" placeholder="0.00"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Reorder Threshold</label>
               <input name="reorderThreshold" type="number" step="0.5" min="0" defaultValue="5"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
             </div>
             <button type="submit"
-              className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-lg hover:bg-naturals-green-dark text-sm">
+              className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-lg hover:bg-[#00522B] text-sm">
               Add Material
             </button>
           </form>

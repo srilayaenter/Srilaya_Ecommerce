@@ -62,7 +62,7 @@ export default function ReturnsAdminPage() {
         {["requested", "approved", "received", "rejected", "refunded", "all"].map(s => (
           <button key={s} onClick={() => setFilter(s)}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg border transition-colors capitalize ${
-              filter === s ? "bg-naturals-green text-white border-naturals-green" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
+              filter === s ? "bg-[#006A38] text-white border-[#006A38]" : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
             }`}>
             {s} {s !== "all" && `(${returns.filter(r => r.status === s).length})`}
           </button>
@@ -80,7 +80,7 @@ export default function ReturnsAdminPage() {
             <div key={r.id} className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm p-6">
               <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
                 <div>
-                  <p className="font-mono font-bold text-naturals-green">#{r.order.id.slice(0, 8).toUpperCase()}</p>
+                  <p className="font-mono font-bold text-[#006A38]">#{r.order.id.slice(0, 8).toUpperCase()}</p>
                   <p className="font-semibold text-[#212121]">{r.order.customerName}</p>
                   <p className="text-xs text-[#9E9E9E]">{r.order.email} · {r.order.phone}</p>
                   <p className="text-xs text-[#9E9E9E] mt-0.5">{new Date(r.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</p>
@@ -115,11 +115,11 @@ export default function ReturnsAdminPage() {
                     onChange={e => setNoteMap(prev => ({ ...prev, [r.id]: e.target.value }))}
                     placeholder="Optional note to customer…"
                     rows={2}
-                    className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-naturals-green"
+                    className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-[#006A38]"
                   />
                   <div className="flex gap-2">
                     <button onClick={() => updateStatus(r.id, "approved")} disabled={saving === r.id}
-                      className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                      className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                       ✓ Approve
                     </button>
                     <button onClick={() => updateStatus(r.id, "rejected")} disabled={saving === r.id}
@@ -137,7 +137,7 @@ export default function ReturnsAdminPage() {
                     <Package size={14} weight="regular" className="inline-block mr-1" />Mark Received & Restock
                   </button>
                   <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
-                    className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                    className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                     <CurrencyDollar size={14} weight="regular" className="inline-block mr-1" />Mark as Refunded
                   </button>
                 </div>
@@ -146,7 +146,7 @@ export default function ReturnsAdminPage() {
               {r.status === "received" && (
                 <div className="border-t border-[#F5F5F5] pt-4">
                   <button onClick={() => updateStatus(r.id, "refunded")} disabled={saving === r.id}
-                    className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                    className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                     <CurrencyDollar size={14} weight="regular" className="inline-block mr-1" />Mark as Refunded
                   </button>
                 </div>

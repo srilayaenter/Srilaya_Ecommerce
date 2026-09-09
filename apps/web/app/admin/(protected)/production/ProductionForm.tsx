@@ -46,7 +46,7 @@ export default function ProductionForm({
         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Laddu Variant</label>
         <select name="variantId" value={selectedId}
           onChange={e => setSelectedId(e.target.value)}
-          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
           {variants.map(v => (
             <option key={v.id} value={v.id}>
               {v.product.title} — {v.size}
@@ -59,7 +59,7 @@ export default function ProductionForm({
         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Units Produced</label>
         <input name="unitsProduced" type="number" min="1" step="1" value={units}
           onChange={e => setUnits(Math.max(1, parseInt(e.target.value) || 1))}
-          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
         <p className="text-[11px] text-[#9E9E9E] mt-1">
           = {(units * variantKg).toFixed(2)} kg finished product
         </p>
@@ -80,7 +80,7 @@ export default function ProductionForm({
                 return (
                   <tr key={line.id} className={isShort ? 'bg-red-50' : ''}>
                     <td className="px-4 py-2 font-medium text-[#212121]">{line.rawMaterial.name}</td>
-                    <td className={`px-4 py-2 text-right font-mono font-bold ${isShort ? 'text-red-600' : 'text-naturals-green'}`}>
+                    <td className={`px-4 py-2 text-right font-mono font-bold ${isShort ? 'text-red-600' : 'text-[#006A38]'}`}>
                       {consumed.toFixed(3)} {line.rawMaterial.unit}
                     </td>
                     <td className="px-4 py-2 text-right text-[#9E9E9E]">
@@ -100,11 +100,11 @@ export default function ProductionForm({
       <div>
         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Notes (optional)</label>
         <input name="notes" placeholder="e.g. Batch 12, special occasion"
-          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
       </div>
 
       <button type="submit"
-        className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-lg hover:bg-naturals-green-dark text-sm">
+        className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-lg hover:bg-[#00522B] text-sm">
         Confirm Production & Deduct Stock
       </button>
     </form>

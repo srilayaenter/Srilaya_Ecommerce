@@ -79,7 +79,7 @@ export default function WishlistClient() {
           <Heart size={40} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           <h2 className="text-lg font-bold text-[#212121] mb-2">Your wishlist is empty</h2>
           <p className="text-sm text-[#424242] mb-6">Browse products and tap the heart icon to save them here.</p>
-          <Link href="/product" className="inline-block bg-naturals-green text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors">
+          <Link href="/product" className="inline-block bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors">
             Browse Products
           </Link>
         </div>

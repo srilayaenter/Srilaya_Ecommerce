@@ -15,7 +15,7 @@ const PRODUCTS = [
     local: "Parboiled Navane / Thinai",
     badge: "Energy Booster",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     accentLight: "#FFFBEB",
     tags: ["heart", "diabetic"],
     benefits: [
@@ -193,7 +193,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-950 leading-tight max-w-4xl mx-auto mb-4">
             The Parboiled<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
               Powerhouse.
             </span>
           </h1>
@@ -316,7 +316,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
         {/* What is parboiling */}
         <section className="bg-gradient-to-r from-blue-950 to-[#2E6F40] text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">The Science</span>
+            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">The Science</span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">What Is Parboiling?</h2>
             <p className="text-blue-100 mt-2 text-sm">A 3-step traditional process that pushes nutrients from the bran into the grain — so they survive cooking.</p>
           </div>
@@ -328,8 +328,8 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
               { icon: Gear, step: "Step 4", title: "Mill", desc: "Lightly dehusked — bran layer mostly intact, nutrients locked in place." },
             ].map((b) => (
               <div key={b.title} className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300">
-                <div className="text-xs font-bold text-naturals-gold uppercase tracking-widest mb-2">{b.step}</div>
-                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
+                <div className="text-xs font-bold text-[#D99B26] uppercase tracking-widest mb-2">{b.step}</div>
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-blue-100">{b.desc}</p>
               </div>
@@ -343,7 +343,7 @@ export default function ParboiledMilletsPageClient({ productImageMap = {} }: Par
               ["Uniform Cooking", "Grains cook evenly with no clumping"],
             ].map(([title, sub]) => (
               <div key={title} className="bg-white/10 rounded-xl px-4 py-3 border border-white/15">
-                <div className="font-bold text-sm text-naturals-gold">{title}</div>
+                <div className="font-bold text-sm text-[#D99B26]">{title}</div>
                 <div className="text-xs text-blue-200 mt-1">{sub}</div>
               </div>
             ))}

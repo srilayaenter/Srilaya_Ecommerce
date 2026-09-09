@@ -96,7 +96,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="text-sm font-bold text-naturals-green border border-naturals-green px-4 py-2 rounded-lg hover:bg-naturals-green hover:text-white transition-colors"
+            className="text-sm font-bold text-[#006A38] border border-[#006A38] px-4 py-2 rounded-lg hover:bg-[#006A38] hover:text-white transition-colors"
           >
             Write a Review
           </button>
@@ -124,7 +124,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 required
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
               />
             </div>
             <div>
@@ -135,7 +135,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
                 onChange={e => setEmail(e.target.value)}
                 required
                 placeholder="Email used at checkout"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
               onChange={e => setComment(e.target.value)}
               rows={3}
               placeholder="Tell others about your experience with this product…"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green resize-none"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] resize-none"
             />
           </div>
 
@@ -165,7 +165,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
               value={photoUrl}
               onChange={e => setPhotoUrl(e.target.value)}
               placeholder="https://i.imgur.com/your-photo.jpg"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
             />
           </div>
 
@@ -177,7 +177,7 @@ export default function ReviewsSection({ slug, reviews: initialReviews }: {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-naturals-green text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
+              className="bg-[#006A38] text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
             >
               {submitting ? "Submitting…" : "Submit Review"}
             </button>

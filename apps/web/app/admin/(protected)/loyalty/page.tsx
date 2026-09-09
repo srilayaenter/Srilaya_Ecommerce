@@ -32,7 +32,7 @@ export default async function LoyaltyAdminPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-[#E0E0E0] p-5">
-          <p className="text-3xl font-black text-naturals-green">{accounts.length}</p>
+          <p className="text-3xl font-black text-[#006A38]">{accounts.length}</p>
           <p className="text-sm font-bold text-[#757575] mt-1">Members</p>
         </div>
         <div className="bg-white rounded-2xl border border-[#E0E0E0] p-5">
@@ -69,7 +69,7 @@ export default async function LoyaltyAdminPage() {
                 {accounts.map(acc => (
                   <tr key={acc.id} className="hover:bg-[#FAFAFA]">
                     <td className="px-6 py-4 font-medium text-[#212121]">{acc.email}</td>
-                    <td className="px-6 py-4 text-right font-black text-naturals-green">{acc.balance.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-right font-black text-[#006A38]">{acc.balance.toLocaleString()}</td>
                     <td className="px-6 py-4 text-right text-[#757575]">₹{(acc.balance * RUPEES_PER_POINT).toFixed(2)}</td>
                     <td className="px-6 py-4 text-right text-[#757575]">{acc.totalEarned.toLocaleString()}</td>
                     <td className="px-6 py-4">

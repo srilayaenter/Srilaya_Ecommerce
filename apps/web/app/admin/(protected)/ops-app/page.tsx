@@ -21,7 +21,7 @@ export default function OpsAppDownloadPage() {
         </div>
         <a
           href="/api/admin/ops-app-download"
-          className="inline-block bg-naturals-green hover:bg-naturals-green-dark text-white font-bold px-5 py-2.5 rounded-lg text-sm transition-colors"
+          className="inline-block bg-[#006A38] hover:bg-[#00522B] text-white font-bold px-5 py-2.5 rounded-lg text-sm transition-colors"
         >
           <DeviceMobileCamera size={16} weight="regular" className="inline-block mr-1.5" /> Download SriLaYa Ops (Android)
         </a>

@@ -62,7 +62,7 @@ export default async function PaymentGatewayPage({ params, searchParams }: PageP
           </div>
           <div className="text-right flex-shrink-0">
             <span className="text-xs text-slate-400 block font-medium">Total Amount Due</span>
-            <span className="text-2xl font-black text-naturals-green">₹{orderTotal.toFixed(2)}</span>
+            <span className="text-2xl font-black text-brand-green">₹{orderTotal.toFixed(2)}</span>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ export default async function PaymentGatewayPage({ params, searchParams }: PageP
                 <div className="w-32 h-32 bg-white rounded-xl border-2 border-slate-200 flex flex-col items-center justify-center text-center shadow-inner flex-shrink-0 relative">
                   <div className="absolute inset-2 bg-[linear-gradient(45deg,#ccc_25%,transparent_25%,transparent_50%,#ccc_50%,#ccc_75%,transparent_75%,transparent)] [background-size:8px_8px] opacity-20"></div>
                   <span className="text-[10px] font-bold text-slate-400 relative z-10 tracking-wider">UPI QR CODE</span>
-                  <span className="text-[9px] text-naturals-green font-mono font-bold mt-1 relative z-10">Scan to Pay</span>
+                  <span className="text-[9px] text-brand-green font-mono font-bold mt-1 relative z-10">Scan to Pay</span>
                 </div>
                 
                 <div className="space-y-2 text-center sm:text-left">
@@ -118,7 +118,7 @@ export default async function PaymentGatewayPage({ params, searchParams }: PageP
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-200/60">
                   <span className="text-slate-400">IFSC Routing Code</span>
-                  <span className="font-mono font-bold text-naturals-green">SBIN0040182</span>
+                  <span className="font-mono font-bold text-brand-green">SBIN0040182</span>
                 </div>
               </div>
             </div>

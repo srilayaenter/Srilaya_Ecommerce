@@ -81,7 +81,7 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 border border-[#9E9E9E] text-[#616161] text-sm font-bold px-4 py-2.5 rounded-xl hover:border-naturals-green hover:text-naturals-green transition-colors"
+        className="inline-flex items-center gap-2 border border-[#9E9E9E] text-[#616161] text-sm font-bold px-4 py-2.5 rounded-xl hover:border-[#006A38] hover:text-[#006A38] transition-colors"
       >
         <ArrowCounterClockwise size={14} weight="regular" /> Request Return
       </button>
@@ -99,12 +99,12 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
                 <p className="text-xs font-bold text-[#9E9E9E] uppercase tracking-wider mb-2">Select items to return</p>
                 <div className="space-y-2">
                   {items.map((item, idx) => (
-                    <label key={idx} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selected[idx] ? "border-naturals-green bg-naturals-green/5" : "border-[#E0E0E0]"}`}>
+                    <label key={idx} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selected[idx] ? "border-[#006A38] bg-[#006A38]/5" : "border-[#E0E0E0]"}`}>
                       <input
                         type="checkbox"
                         checked={!!selected[idx]}
                         onChange={() => toggleItem(idx, item.quantity)}
-                        className="accent-naturals-green w-4 h-4"
+                        className="accent-[#006A38] w-4 h-4"
                       />
                       <span className="text-sm text-[#212121]">
                         {item.title} <span className="text-[#9E9E9E]">({item.size}) × {item.quantity}</span>
@@ -117,7 +117,7 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase tracking-wider mb-2">Reason *</label>
                 <select value={reason} onChange={e => setReason(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green">
+                  className="w-full border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]">
                   <option value="">Select a reason…</option>
                   {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
@@ -127,7 +127,7 @@ export default function ReturnRequestButton({ orderId, contact, items }: Props) 
 
               <div className="flex gap-2 pt-1">
                 <button type="submit" disabled={loading}
-                  className="flex-1 bg-naturals-green text-white font-bold py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                  className="flex-1 bg-[#006A38] text-white font-bold py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                   {loading ? "Submitting…" : "Submit Return Request"}
                 </button>
                 <button type="button" onClick={() => setOpen(false)}

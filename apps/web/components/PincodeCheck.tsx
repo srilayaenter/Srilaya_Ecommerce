@@ -40,19 +40,19 @@ export default function PincodeCheck() {
           onChange={e => { setPin(e.target.value.replace(/\D/g, "")); setResult(null); }}
           onKeyDown={e => e.key === "Enter" && check()}
           placeholder="Enter pincode"
-          className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+          className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
         />
         <button
           onClick={check}
           disabled={loading || pin.length !== 6}
-          className="bg-naturals-green text-white text-sm font-bold px-4 py-2 rounded-xl hover:bg-naturals-green-dark transition-colors disabled:opacity-50"
+          className="bg-[#006A38] text-white text-sm font-bold px-4 py-2 rounded-xl hover:bg-[#005A30] transition-colors disabled:opacity-50"
         >
           {loading ? "…" : "Check"}
         </button>
       </div>
 
       {result && (
-        <div className={`mt-3 rounded-xl px-3 py-2.5 text-sm ${result.serviceable ? "bg-[#E8F5E9] text-naturals-green" : "bg-red-50 text-red-600"}`}>
+        <div className={`mt-3 rounded-xl px-3 py-2.5 text-sm ${result.serviceable ? "bg-[#E8F5E9] text-[#006A38]" : "bg-red-50 text-red-600"}`}>
           {result.serviceable ? (
             <div>
               <p className="font-bold inline-flex items-center gap-1"><CheckCircle size={14} weight="regular" />Delivery available to {result.state}</p>

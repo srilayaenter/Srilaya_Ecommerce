@@ -90,7 +90,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
 
     return (
       <div className="min-h-screen bg-[#F9F6F0]">
-        <div className="bg-naturals-green py-10 px-4 text-center">
+        <div className="bg-[#006A38] py-10 px-4 text-center">
           <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl mx-auto mb-3">
             {user.email ? user.email[0].toUpperCase() : <DeviceMobile size={28} weight="regular" className="text-white/70" />}
           </div>
@@ -116,7 +116,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
             <div className="pt-3 flex gap-3">
               <button
                 onClick={() => setShowPw(v => !v)}
-                className="text-sm font-bold text-naturals-green border border-naturals-green px-4 py-2 rounded-lg hover:bg-naturals-green hover:text-white transition-colors"
+                className="text-sm font-bold text-[#006A38] border border-[#006A38] px-4 py-2 rounded-lg hover:bg-[#006A38] hover:text-white transition-colors"
               >
                 {showPw ? "Cancel" : "Change Password"}
               </button>
@@ -139,7 +139,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
                     <label className="block text-xs font-bold text-[#424242] mb-1">{f.label}</label>
                     <input
                       type="password" value={f.value} onChange={e => f.set(e.target.value)} required
-                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
                     />
                   </div>
                 ))}
@@ -148,7 +148,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
                 )}
                 <button
                   type="submit" disabled={pwLoading}
-                  className="bg-naturals-green text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
+                  className="bg-[#006A38] text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
                 >
                   {pwLoading ? "Saving…" : "Update Password"}
                 </button>
@@ -166,7 +166,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
               <div className="bg-white rounded-2xl border border-[#E8E0D5] p-10 text-center">
                 <ShoppingCart size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-3" />
                 <p className="font-bold text-[#212121]">No orders yet</p>
-                <Link href="/product" className="inline-block mt-4 text-naturals-green font-bold text-sm hover:underline">
+                <Link href="/product" className="inline-block mt-4 text-[#006A38] font-bold text-sm hover:underline">
                   Start shopping →
                 </Link>
               </div>
@@ -188,7 +188,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
   // ── GUEST VIEW ──────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-naturals-green py-10 px-4 text-center">
+      <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">My Orders</h1>
         <p className="text-[#FFF8E1] text-sm mt-1">Sign in or look up by email to view your orders.</p>
       </div>
@@ -202,13 +202,13 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
           <p className="text-sm text-[#757575] mb-5">See all your orders, track deliveries, manage your profile, and view your loyalty points — all in one place.</p>
           <a
             href="/login"
-            className="inline-block w-full sm:w-auto bg-naturals-green text-white font-bold px-8 py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors"
+            className="inline-block w-full sm:w-auto bg-[#006A38] text-white font-bold px-8 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors"
           >
             Sign In
           </a>
           <p className="text-xs text-[#9E9E9E] mt-3">
             New here?{" "}
-            <a href="/register" className="text-naturals-green font-bold hover:underline">Create an account</a>
+            <a href="/register" className="text-[#006A38] font-bold hover:underline">Create an account</a>
           </p>
         </div>
 
@@ -226,11 +226,11 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
             <input
               type="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)}
               placeholder="Email used at checkout" required
-              className="flex-1 border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-naturals-green"
+              className="flex-1 border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006A38]"
             />
             <button
               type="submit" disabled={guestLoading}
-              className="border border-naturals-green text-naturals-green font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#e8f5ee] transition-colors disabled:opacity-60 whitespace-nowrap"
+              className="border border-[#006A38] text-[#006A38] font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#e8f5ee] transition-colors disabled:opacity-60 whitespace-nowrap"
             >
               {guestLoading ? "Looking up…" : "View Orders"}
             </button>
@@ -243,7 +243,7 @@ export default function AccountClient({ mode, user, initialOrders }: Props) {
             <div className="bg-white rounded-2xl border border-[#E8E0D5] p-10 text-center">
               <ShoppingCart size={32} weight="regular" className="text-[#9E9E9E] mx-auto mb-3" />
               <p className="font-bold text-[#212121]">No orders found</p>
-              <Link href="/product" className="inline-block mt-4 text-naturals-green font-bold text-sm hover:underline">Start shopping →</Link>
+              <Link href="/product" className="inline-block mt-4 text-[#006A38] font-bold text-sm hover:underline">Start shopping →</Link>
             </div>
           ) : (
             <div className="space-y-4">
@@ -282,7 +282,7 @@ function OrderCard({ order, contact, onCancel }: { order: OrderSummary; contact:
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
           <p className="text-xs font-bold text-[#9E9E9E] uppercase tracking-wider">Order</p>
-          <p className="text-xl font-black text-naturals-green font-mono">#{order.shortId}</p>
+          <p className="text-xl font-black text-[#006A38] font-mono">#{order.shortId}</p>
           <p className="text-xs text-[#9E9E9E] mt-0.5">
             {new Date(order.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}
           </p>
@@ -310,7 +310,7 @@ function OrderCard({ order, contact, onCancel }: { order: OrderSummary; contact:
       <div className="mt-4 flex flex-wrap gap-2">
         <Link
           href={`/track?orderId=${order.id}&contact=${encodeURIComponent(contact)}`}
-          className="text-xs font-bold text-naturals-green border border-naturals-green px-3 py-1.5 rounded-lg hover:bg-naturals-green hover:text-white transition-colors"
+          className="text-xs font-bold text-[#006A38] border border-[#006A38] px-3 py-1.5 rounded-lg hover:bg-[#006A38] hover:text-white transition-colors"
         >
           Track Order
         </Link>

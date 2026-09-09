@@ -126,7 +126,7 @@ export default async function CustomersPage() {
                         {c.phone && <p className="text-xs text-[#9E9E9E]">{c.phone}</p>}
                       </td>
                       <td className="px-6 py-4 text-right font-bold text-[#212121]">{c.orders}</td>
-                      <td className="px-6 py-4 text-right font-black text-naturals-green">₹{c.totalSpend.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-right font-black text-[#006A38]">₹{c.totalSpend.toFixed(2)}</td>
                       <td className="px-6 py-4 text-right text-[#757575] text-xs">
                         {c.lastOrder.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
                       </td>

@@ -49,7 +49,7 @@ export default function ProductRecommendations({ slug }: { slug: string }) {
             <div className="p-3">
               <p className="text-sm font-bold text-[#212121] line-clamp-2 leading-snug">{p.title}</p>
               {p.price !== null && (
-                <p className="text-sm font-black text-naturals-green mt-1">₹{p.price.toFixed(2)}</p>
+                <p className="text-sm font-black text-[#006A38] mt-1">₹{p.price.toFixed(2)}</p>
               )}
             </div>
           </Link>

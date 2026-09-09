@@ -15,7 +15,7 @@ const PRODUCTS = [
     local: "Whole Grain Oats · Honey · Mixed Nuts",
     badge: "Classic Favourite",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     accentLight: "#FFFBEB",
     tags: ["all-day", "natural-sweet"],
     benefits: [
@@ -186,7 +186,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
           className="absolute inset-0 pointer-events-none opacity-10"
           style={{
             backgroundImage:
-              "radial-gradient(rgb(var(--naturals-gold)) 0.75px, transparent 0.75px), radial-gradient(rgb(var(--naturals-gold)) 0.75px, #fdfbf7 0.75px)",
+              "radial-gradient(#D99B26 0.75px, transparent 0.75px), radial-gradient(#D99B26 0.75px, #fdfbf7 0.75px)",
             backgroundSize: "30px 30px",
             backgroundPosition: "0 0, 15px 15px",
           }}
@@ -198,7 +198,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             Wake Up to<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
               Whole Grains.
             </span>
           </h1>
@@ -343,7 +343,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
         {/* Why Muesli & Granola */}
         <section className="bg-gradient-to-r from-amber-900 to-[#2E6F40] text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -365,7 +365,7 @@ export default function MuesliPageClient({ productImageMap = {} }: MuesliPageCli
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
                   <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

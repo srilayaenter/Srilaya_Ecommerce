@@ -136,7 +136,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
           <>
             <div
               onClick={() => fileRef.current?.click()}
-              className="border-2 border-dashed border-[#BDBDBD] rounded-xl p-6 text-center cursor-pointer hover:border-naturals-green hover:bg-naturals-green/5 transition-colors"
+              className="border-2 border-dashed border-[#BDBDBD] rounded-xl p-6 text-center cursor-pointer hover:border-[#006A38] hover:bg-[#006A38]/5 transition-colors"
             >
               {preview ? (
                 <div className="flex flex-col items-center gap-2">
@@ -144,7 +144,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
                     <Image src={preview} alt="preview" fill className="object-contain" />
                   </div>
                   <span className="text-xs text-[#616161] truncate max-w-[180px]">{fileName}</span>
-                  <span className="text-xs text-naturals-green font-semibold">Click to change</span>
+                  <span className="text-xs text-[#006A38] font-semibold">Click to change</span>
                 </div>
               ) : (
                 <>
@@ -168,7 +168,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
             placeholder="https://… (image URL)"
             value={newUrl}
             onChange={e => setNewUrl(e.target.value)}
-            className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-naturals-green/30"
+            className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#006A38]/30"
           />
         )}
 
@@ -177,7 +177,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
           placeholder="Alt text (optional)"
           value={newAlt}
           onChange={e => setNewAlt(e.target.value)}
-          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-naturals-green/30"
+          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#006A38]/30"
         />
 
         {error && <p className="text-xs text-red-600">{error}</p>}
@@ -185,7 +185,7 @@ export default function ImageManager({ productId, slug }: { productId: string; s
         <button
           onClick={mode === "upload" ? uploadAndAdd : addByUrl}
           disabled={adding || (mode === "url" && !newUrl.trim()) || (mode === "upload" && !preview)}
-          className="bg-naturals-green text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-naturals-green-dark transition-colors disabled:opacity-50"
+          className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#005A30] transition-colors disabled:opacity-50"
         >
           {adding
             ? mode === "upload" ? "Uploading…" : "Adding…"

@@ -42,12 +42,12 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="max-w-2xl mx-auto px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
-      <Link href="/blog" className="text-sm text-naturals-green font-semibold hover:underline inline-flex items-center gap-1 mb-6">
+      <Link href="/blog" className="text-sm text-[#006A38] font-semibold hover:underline inline-flex items-center gap-1 mb-6">
         ← Back to Blog
       </Link>
 
       <div className="mb-4 flex items-center gap-2">
-        <span className="text-xs font-bold text-naturals-green bg-[#E8F5E9] px-2 py-0.5 rounded-full capitalize">{post.category}</span>
+        <span className="text-xs font-bold text-[#006A38] bg-[#E8F5E9] px-2 py-0.5 rounded-full capitalize">{post.category}</span>
         <span className="text-xs text-[#9E9E9E]">{post.readMins} min read</span>
         {post.publishedAt && (
           <span className="text-xs text-[#BDBDBD]">
@@ -70,7 +70,7 @@ export default async function BlogPostPage({ params }: Props) {
       </article>
 
       <div className="mt-10 pt-8 border-t border-[#F0F0F0]">
-        <Link href="/blog" className="text-sm text-naturals-green font-semibold hover:underline">← More articles</Link>
+        <Link href="/blog" className="text-sm text-[#006A38] font-semibold hover:underline">← More articles</Link>
       </div>
     </main>
   );

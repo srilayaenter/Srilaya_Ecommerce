@@ -54,10 +54,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     <div className="fixed inset-0 z-[100] bg-[#F5F5F5] flex font-sans overflow-hidden">
       
       {/* STICKY LEFT SIDEBAR - Flex child */}
-      <aside className="w-64 bg-naturals-green text-white flex-shrink-0 flex flex-col shadow-[2px_0_8px_rgba(0,0,0,0.15)] z-20">
+      <aside className="w-64 bg-[#006A38] text-white flex-shrink-0 flex flex-col shadow-[2px_0_8px_rgba(0,0,0,0.15)] z-20">
         
         {/* Dashboard Header Title Frame */}
-        <div className="h-20 flex-shrink-0 flex items-center px-6 bg-naturals-green-dark border-b border-naturals-green">
+        <div className="h-20 flex-shrink-0 flex items-center px-6 bg-[#00522B] border-b border-[#006A38]">
           <Link href="/admin" className="flex items-center gap-3">
             
             {/* SriLaYa Logo replacing the Tractor Emoji */}
@@ -88,10 +88,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Sidebar Footer Link */}
-        <div className="p-4 bg-naturals-green-dark flex-shrink-0 mt-auto space-y-3">
+        <div className="p-4 bg-[#00522B] flex-shrink-0 mt-auto space-y-3">
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 w-full bg-white text-naturals-green hover:bg-[#FFF8E1] font-bold text-[13px] py-2.5 px-4 rounded-[8px] transition-all shadow-sm"
+            className="flex items-center justify-center gap-2 w-full bg-white text-[#006A38] hover:bg-[#FFF8E1] font-bold text-[13px] py-2.5 px-4 rounded-[8px] transition-all shadow-sm"
           >
             <Globe size={16} weight="regular" /> View Storefront
           </Link>
@@ -110,7 +110,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       <div className="flex-grow flex flex-col overflow-y-auto bg-[#F5F5F5] relative">
         <header className="h-20 flex-shrink-0 bg-white border-b border-[#E0E0E0] sticky top-0 z-10 flex items-center justify-between px-8 shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-naturals-green animate-pulse"></span>
+            <span className="h-2.5 w-2.5 rounded-full bg-[#006A38] animate-pulse"></span>
             <span className="text-[11px] font-bold text-[#9E9E9E] uppercase tracking-widest">
               Live Connection Secured
             </span>
