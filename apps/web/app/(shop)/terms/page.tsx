@@ -11,7 +11,7 @@ const LAST_UPDATED = "30 June 2026";
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-naturals-green py-10 px-4 text-center">
+      <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white">Terms of Service</h1>
         <p className="text-green-200 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
       </div>
@@ -58,7 +58,7 @@ export default function TermsPage() {
           <Section title="5. Shipping">
             <p>
               Please refer to our{" "}
-              <a href="/shipping-policy" className="text-naturals-green font-medium hover:underline">Shipping Policy</a>{" "}
+              <a href="/shipping-policy" className="text-[#006A38] font-medium hover:underline">Shipping Policy</a>{" "}
               for delivery timelines, pin code coverage, and charges. Title and risk of loss pass to
               you upon delivery to the address provided at checkout.
             </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
           <Section title="6. Returns and Refunds">
             <p>
               Please refer to our{" "}
-              <a href="/returns-policy" className="text-naturals-green font-medium hover:underline">Returns & Refund Policy</a>{" "}
+              <a href="/returns-policy" className="text-[#006A38] font-medium hover:underline">Returns & Refund Policy</a>{" "}
               for full details. In brief, we accept returns within 7 days of delivery for damaged or
               defective products. Perishable items cannot be returned unless defective.
             </p>
@@ -121,7 +121,7 @@ export default function TermsPage() {
               These Terms are governed by the laws of India. Any disputes shall be subject to the
               exclusive jurisdiction of courts in <strong>Bengaluru, Karnataka</strong>. We encourage
               you to contact us at{" "}
-              <a href={`mailto:${BRAND.email}`} className="text-naturals-green hover:underline">{BRAND.email}</a>{" "}
+              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] hover:underline">{BRAND.email}</a>{" "}
               before initiating legal proceedings, as most issues can be resolved amicably.
             </p>
           </Section>

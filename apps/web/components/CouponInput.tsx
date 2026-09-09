@@ -71,12 +71,12 @@ export default function CouponInput({ orderTotal }: { orderTotal: number }) {
           value={code}
           onChange={e => setCode(e.target.value.toUpperCase())}
           placeholder="Coupon code"
-          className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green font-mono uppercase"
+          className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] font-mono uppercase"
         />
         <button
           type="submit"
           disabled={loading || !code.trim()}
-          className="bg-naturals-green text-white font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-50 whitespace-nowrap"
+          className="bg-[#006A38] text-white font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-50 whitespace-nowrap"
         >
           {loading ? "…" : "Apply"}
         </button>

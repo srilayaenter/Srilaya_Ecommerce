@@ -205,7 +205,7 @@ export default function NewProductForm({
             <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium">Product SKU *</label>
               {!skuTouched && sku && (
-                <span className="text-[10px] text-naturals-green font-bold bg-green-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1"><Sparkle size={10} weight="regular" />Auto-generated</span>
+                <span className="text-[10px] text-[#006A38] font-bold bg-green-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1"><Sparkle size={10} weight="regular" />Auto-generated</span>
               )}
               {skuTouched && (
                 <button
@@ -226,7 +226,7 @@ export default function NewProductForm({
             />
             {variantSkuPreview && (
               <p className="text-[11px] text-[#9E9E9E] mt-1">
-                Variant SKU will be: <span className="font-mono font-bold text-naturals-green">{variantSkuPreview}</span>
+                Variant SKU will be: <span className="font-mono font-bold text-[#006A38]">{variantSkuPreview}</span>
               </p>
             )}
             <p className="text-[11px] text-[#BDBDBD] mt-0.5">Auto-filled from category + title. You can edit it.</p>
@@ -244,8 +244,8 @@ export default function NewProductForm({
         </div>
 
         {selectedCat && sku && (
-          <div className="bg-[#F0FAF4] border border-naturals-green/20 rounded-xl p-4 text-sm space-y-1">
-            <p className="font-bold text-naturals-green text-xs uppercase tracking-wider">SKU Preview</p>
+          <div className="bg-[#F0FAF4] border border-[#006A38]/20 rounded-xl p-4 text-sm space-y-1">
+            <p className="font-bold text-[#006A38] text-xs uppercase tracking-wider">SKU Preview</p>
             <p className="font-mono font-bold text-[#212121]">{sku}</p>
             <p className="text-[#8D6E63] text-xs">Category: {selectedCat.name}</p>
             {size && <p className="text-[#8D6E63] text-xs">First variant: <span className="font-mono">{sku}-{size.toUpperCase().replace(/\s+/g, "")}</span></p>}

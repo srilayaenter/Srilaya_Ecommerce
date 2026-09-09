@@ -55,10 +55,10 @@ export default function RecentlyViewed({ excludeSlug }: { excludeSlug?: string }
               />
             </div>
             <div className="p-2">
-              <p className="text-[11px] font-semibold text-[#212121] line-clamp-2 leading-snug group-hover:text-naturals-green transition-colors">
+              <p className="text-[11px] font-semibold text-[#212121] line-clamp-2 leading-snug group-hover:text-[#006A38] transition-colors">
                 {p.title}
               </p>
-              <p className="text-[11px] font-black text-naturals-green mt-0.5">₹{p.price.toFixed(0)}</p>
+              <p className="text-[11px] font-black text-[#006A38] mt-0.5">₹{p.price.toFixed(0)}</p>
             </div>
           </Link>
         ))}

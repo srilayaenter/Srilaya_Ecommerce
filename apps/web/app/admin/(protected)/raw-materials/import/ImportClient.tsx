@@ -177,14 +177,14 @@ export default function ImportClient({
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}
           className={`border-2 border-dashed rounded-xl p-16 text-center cursor-pointer transition-colors
-            ${dragging ? 'border-naturals-green bg-green-50' : 'border-[#E0E0E0] hover:border-naturals-green hover:bg-[#FAFAFA]'}`}
+            ${dragging ? 'border-[#006A38] bg-green-50' : 'border-[#E0E0E0] hover:border-[#006A38] hover:bg-[#FAFAFA]'}`}
         >
           <input ref={inputRef} type="file" accept=".pdf,image/*" className="hidden"
             onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
           <Receipt size={52} weight="regular" className="text-[#9E9E9E] mx-auto mb-4" />
           {loading ? (
             <div className="space-y-2">
-              <p className="text-sm font-bold text-naturals-green animate-pulse">AI is reading your bill...</p>
+              <p className="text-sm font-bold text-[#006A38] animate-pulse">AI is reading your bill...</p>
               <p className="text-xs text-[#9E9E9E]">Extracting vendor, items and quantities</p>
             </div>
           ) : (
@@ -207,17 +207,17 @@ export default function ImportClient({
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Vendor</label>
                 <input value={vendor} onChange={e => setVendor(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Bill / Invoice Ref</label>
                 <input value={billRef} onChange={e => setBillRef(e.target.value)} placeholder="e.g. INV-001"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Bill Date</label>
                 <input value={billDate} onChange={e => setBillDate(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function ImportClient({
                         <td className="px-4 py-3 text-center">
                           <input type="checkbox" checked={matchedInclude[l.rawMaterialId] ?? true}
                             onChange={e => setMatchedInclude(p => ({ ...p, [l.rawMaterialId]: e.target.checked }))}
-                            className="accent-naturals-green" />
+                            className="accent-[#006A38]" />
                         </td>
                         <td className="px-4 py-3 text-[#424242]">{l.name}</td>
                         <td className="px-4 py-3 font-semibold text-[#212121]">{l.rawMaterialName}</td>
@@ -252,7 +252,7 @@ export default function ImportClient({
                           <input type="number" step="0.001" min="0"
                             value={matchedQty[l.rawMaterialId] ?? l.qty}
                             onChange={e => setMatchedQty(p => ({ ...p, [l.rawMaterialId]: parseFloat(e.target.value) || 0 }))}
-                            className="w-24 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-right focus:outline-none focus:border-naturals-green" />
+                            className="w-24 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-right focus:outline-none focus:border-[#006A38]" />
                         </td>
                       </tr>
                     ))}
@@ -276,13 +276,13 @@ export default function ImportClient({
                       <div className="flex items-center gap-3">
                         <input type="checkbox" checked={nm.include}
                           onChange={e => setNewMaterials(p => ({ ...p, [i]: { ...p[i], include: e.target.checked } }))}
-                          className="accent-naturals-green" />
+                          className="accent-[#006A38]" />
                         <input value={nm.name}
                           onChange={e => setNewMaterials(p => ({ ...p, [i]: { ...p[i], name: e.target.value } }))}
-                          className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                          className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
                         <select value={nm.unit}
                           onChange={e => setNewMaterials(p => ({ ...p, [i]: { ...p[i], unit: e.target.value } }))}
-                          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                          className="border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                           <option value="kg">kg</option>
                           <option value="g">g</option>
                           <option value="litre">litre</option>
@@ -290,8 +290,8 @@ export default function ImportClient({
                         </select>
                         <input type="number" step="0.01" value={nm.costPerUnit} placeholder="₹/unit"
                           onChange={e => setNewMaterials(p => ({ ...p, [i]: { ...p[i], costPerUnit: e.target.value } }))}
-                          className="w-28 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
-                        <span className="font-mono font-bold text-naturals-green text-sm w-20 text-right">{u.qty.toFixed(3)} kg</span>
+                          className="w-28 border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                        <span className="font-mono font-bold text-[#006A38] text-sm w-20 text-right">{u.qty.toFixed(3)} kg</span>
                       </div>
                     </div>
                   );
@@ -306,7 +306,7 @@ export default function ImportClient({
               Upload different bill
             </button>
             <button onClick={confirmAI} disabled={importing}
-              className="flex-1 bg-naturals-green text-white font-bold py-2.5 rounded-xl hover:bg-naturals-green-dark disabled:opacity-50 text-sm">
+              className="flex-1 bg-[#006A38] text-white font-bold py-2.5 rounded-xl hover:bg-[#00522B] disabled:opacity-50 text-sm">
               {importing ? 'Saving...' : 'Confirm & Update Stock'}
             </button>
           </div>
@@ -324,17 +324,17 @@ export default function ImportClient({
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Vendor / Supplier</label>
                 <input value={manualVendor} onChange={e => setManualVendor(e.target.value)}
                   placeholder="e.g. Evenmore, Local market"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Bill / Invoice Ref</label>
                 <input value={manualRef} onChange={e => setManualRef(e.target.value)} placeholder="e.g. INV-001"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Bill Date</label>
                 <input type="date" value={manualDate} onChange={e => setManualDate(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
             </div>
           </div>
@@ -351,7 +351,7 @@ export default function ImportClient({
                     <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Material</label>
                     <select value={line.rawMaterialId}
                       onChange={e => updateManualLine(i, 'rawMaterialId', e.target.value)}
-                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                       {materials.map(m => <option key={m.id} value={m.id}>{m.name} ({m.unit})</option>)}
                       <option value="__new__">+ New material...</option>
                     </select>
@@ -363,12 +363,12 @@ export default function ImportClient({
                         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">New Name</label>
                         <input value={line.newName} onChange={e => updateManualLine(i, 'newName', e.target.value)}
                           placeholder="e.g. Groundnut"
-                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
                       </div>
                       <div className="w-24">
                         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Unit</label>
                         <select value={line.newUnit} onChange={e => updateManualLine(i, 'newUnit', e.target.value)}
-                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                           <option value="kg">kg</option>
                           <option value="g">g</option>
                           <option value="litre">litre</option>
@@ -379,7 +379,7 @@ export default function ImportClient({
                         <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Cost/unit ₹</label>
                         <input type="number" step="0.01" value={line.newCost}
                           onChange={e => updateManualLine(i, 'newCost', e.target.value)}
-                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                          className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
                       </div>
                     </>
                   )}
@@ -389,7 +389,7 @@ export default function ImportClient({
                     <input type="number" step="0.001" min="0" value={line.qty}
                       onChange={e => updateManualLine(i, 'qty', e.target.value)}
                       placeholder="0.000"
-                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                      className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
                   </div>
 
                   {manualLines.length > 1 && (
@@ -402,12 +402,12 @@ export default function ImportClient({
             </div>
             <div className="px-5 py-3 border-t border-[#F0F0F0]">
               <button onClick={() => setManualLines(p => [...p, emptyLine()])}
-                className="text-sm text-naturals-green font-bold hover:underline">+ Add another item</button>
+                className="text-sm text-[#006A38] font-bold hover:underline">+ Add another item</button>
             </div>
           </div>
 
           <button onClick={confirmManual} disabled={importing}
-            className="w-full bg-naturals-green text-white font-bold py-3 rounded-xl hover:bg-naturals-green-dark disabled:opacity-50 text-sm">
+            className="w-full bg-[#006A38] text-white font-bold py-3 rounded-xl hover:bg-[#00522B] disabled:opacity-50 text-sm">
             {importing ? 'Saving...' : 'Confirm & Update Stock'}
           </button>
         </div>

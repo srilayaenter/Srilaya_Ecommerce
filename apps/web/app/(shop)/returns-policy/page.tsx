@@ -11,7 +11,7 @@ const LAST_UPDATED = "30 June 2026";
 export default function ReturnsPolicyPage() {
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-naturals-green py-10 px-4 text-center">
+      <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white">Returns &amp; Refund Policy</h1>
         <p className="text-green-200 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
       </div>
@@ -49,7 +49,7 @@ export default function ReturnsPolicyPage() {
             <ol className="list-decimal pl-5 space-y-3">
               <li>
                 <strong>Email us</strong> at{" "}
-                <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-medium hover:underline">{BRAND.email}</a>{" "}
+                <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">{BRAND.email}</a>{" "}
                 or call <strong>{BRAND.phone}</strong> within 7 days of delivery.
               </li>
               <li>
@@ -131,7 +131,7 @@ export default function ReturnsPolicyPage() {
           <Section title="7. Contact for Returns">
             <p>
               Email:{" "}
-              <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-medium hover:underline">{BRAND.email}</a>
+              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">{BRAND.email}</a>
               <br />
               Phone: <strong>{BRAND.phone}</strong> (Mon–Sat, 9 AM – 6 PM IST)
             </p>

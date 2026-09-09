@@ -15,7 +15,7 @@ const MILLET_VARIETIES = [
     local: "Navane / Thinai / Kangni",
     badge: "Top Seller",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     tags: ["millet", "diabetic", "heart"],
     benefits: [
       { label: "Low GI", desc: "Steady blood sugar, no spikes" },
@@ -237,7 +237,7 @@ export default function RicePageClient({ productImageMap = {} }: { productImageM
     const imgUrl = getProductImage(p.keyword);
     return (
       <div
-        className="bg-white/90 backdrop-blur-sm border border-naturals-gold/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+        className="bg-white/90 backdrop-blur-sm border border-[#D99B26]/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
         style={{ borderTop: `4px solid ${p.accent}` }}
       >
         {imgUrl ? (
@@ -298,7 +298,7 @@ export default function RicePageClient({ productImageMap = {} }: { productImageM
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             Replace White Rice.<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
               Reclaim Your Health.
             </span>
           </h1>
@@ -422,7 +422,7 @@ export default function RicePageClient({ productImageMap = {} }: { productImageM
                 step: "02",
                 title: "Cook",
                 desc: "Use a 1:2.5 ratio (1 cup millet : 2.5 cups water). Bring to boil, reduce to low flame, cover and cook for 15–20 minutes until water is absorbed.",
-                color: "rgb(var(--naturals-gold))",
+                color: "#D99B26",
               },
               {
                 step: "03",
@@ -450,7 +450,7 @@ export default function RicePageClient({ productImageMap = {} }: { productImageM
         {/* Why section */}
         <section className="bg-gradient-to-r from-[#2E6F40] to-emerald-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -472,7 +472,7 @@ export default function RicePageClient({ productImageMap = {} }: { productImageM
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
                   <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

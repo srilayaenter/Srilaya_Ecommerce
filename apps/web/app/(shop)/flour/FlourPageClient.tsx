@@ -15,7 +15,7 @@ const PRODUCTS = [
     local: "Navane Hittu / Thinai Maavu / Kangni Atta",
     badge: "Heart Healthy",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     tags: ["diabetic", "heart"],
     benefits: [
       { label: "Heart Healthy", desc: "Natural plant sterols lower bad cholesterol" },
@@ -190,7 +190,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             Bake Better.<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
               Eat Smarter.
             </span>
           </h1>
@@ -330,7 +330,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
         {/* Health Benefits */}
         <section className="bg-gradient-to-r from-[#5C3A21] to-[#2E6F40] text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -353,7 +353,7 @@ export default function FlourPageClient({ productImageMap = {} }: FlourPageClien
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
                   <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

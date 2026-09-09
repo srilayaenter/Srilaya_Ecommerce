@@ -15,7 +15,7 @@ const PRODUCTS = [
     local: "Sathu Maavu / Multi-Grain Health Drink",
     badge: "Family Favourite",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "rgb(var(--naturals-gold))",
+    accent: "#D99B26",
     tags: ["all", "family", "kids"],
     desc: "A time-honoured South Indian multigrain mix — roasted grains, legumes, and millets ground together into an instant health drink. One glass delivers what a full breakfast takes an hour to prepare.",
     benefits: [
@@ -102,19 +102,19 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
           className="absolute inset-0 pointer-events-none opacity-10"
           style={{
             backgroundImage:
-              "radial-gradient(rgb(var(--naturals-gold)) 0.75px, transparent 0.75px), radial-gradient(rgb(var(--naturals-gold)) 0.75px, #fdfbf7 0.75px)",
+              "radial-gradient(#D99B26 0.75px, transparent 0.75px), radial-gradient(#D99B26 0.75px, #fdfbf7 0.75px)",
             backgroundSize: "30px 30px",
             backgroundPosition: "0 0, 15px 15px",
           }}
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-naturals-gold/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-naturals-gold/30">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D99B26]/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#D99B26]/30">
             <Coffee className="w-4 h-4" weight="regular" /> Instant Nutrition Drinks
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             One Glass,<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
               Complete Nutrition
             </span>
           </h1>
@@ -189,7 +189,7 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
               return (
                 <div
                   key={p.id}
-                  className="bg-white/90 backdrop-blur-sm border border-naturals-gold/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="bg-white/90 backdrop-blur-sm border border-[#D99B26]/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
                   style={{ borderTop: `4px solid ${p.accent}` }}
                 >
                   {imgUrl ? (
@@ -219,7 +219,7 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
                         </li>
                       ))}
                     </ul>
-                    <div className="text-xs font-semibold text-naturals-gold bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-4">
+                    <div className="text-xs font-semibold text-[#D99B26] bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-4">
                       💡 {p.highlight}
                     </div>
                     <button
@@ -247,7 +247,7 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
                 step: "01",
                 title: "Warm Milk Drink",
                 desc: "Mix 2–3 tbsp in a glass of warm milk. Add jaggery or honey to taste. Stir well and serve. Perfect morning drink for kids and adults.",
-                color: "rgb(var(--naturals-gold))",
+                color: "#D99B26",
               },
               {
                 step: "02",
@@ -281,7 +281,7 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
         {/* Why section */}
         <section className="bg-gradient-to-r from-[#2E6F40] to-emerald-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -302,7 +302,7 @@ export default function MaltPageClient({ productImageMap = {} }: { productImageM
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
                   <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

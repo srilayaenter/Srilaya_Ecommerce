@@ -58,17 +58,17 @@ export default async function BlogPage() {
                 </div>
               ) : (
                 <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#C8E6C9] flex items-center justify-center">
-                  {post.category === "recipe" ? <BowlFood size={40} weight="regular" className="text-naturals-green" /> : post.category === "health" ? <Leaf size={40} weight="regular" className="text-naturals-green" /> : <Article size={40} weight="regular" className="text-naturals-green" />}
+                  {post.category === "recipe" ? <BowlFood size={40} weight="regular" className="text-[#006A38]" /> : post.category === "health" ? <Leaf size={40} weight="regular" className="text-[#006A38]" /> : <Article size={40} weight="regular" className="text-[#006A38]" />}
                 </div>
               )}
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-bold text-naturals-green bg-[#E8F5E9] px-2 py-0.5 rounded-full capitalize">
+                  <span className="text-xs font-bold text-[#006A38] bg-[#E8F5E9] px-2 py-0.5 rounded-full capitalize">
                     {CATEGORY_LABELS[post.category] ?? post.category}
                   </span>
                   <span className="text-xs text-[#9E9E9E]">{post.readMins} min read</span>
                 </div>
-                <h2 className="font-black text-[#212121] group-hover:text-naturals-green transition-colors leading-snug">{post.title}</h2>
+                <h2 className="font-black text-[#212121] group-hover:text-[#006A38] transition-colors leading-snug">{post.title}</h2>
                 {post.excerpt && <p className="text-sm text-[#757575] mt-1.5 line-clamp-2">{post.excerpt}</p>}
                 <p className="text-xs text-[#BDBDBD] mt-3">
                   {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : ""}

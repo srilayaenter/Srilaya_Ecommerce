@@ -187,7 +187,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
         <div className="flex items-center gap-3">
           <Link
             href="/admin/orders"
-            className="text-sm text-naturals-green font-bold hover:underline"
+            className="text-sm text-[#006A38] font-bold hover:underline"
           >
             ← Orders
           </Link>
@@ -291,7 +291,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       <td className="py-1 text-[#616161]">Shipping</td>
                       <td className="py-1 text-right">
                         {shippingFee === 0 ? (
-                          <span className="text-naturals-green font-semibold">
+                          <span className="text-[#006A38] font-semibold">
                             Free
                           </span>
                         ) : (
@@ -300,11 +300,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       </td>
                     </tr>
                   )}
-                  <tr className="border-t border-naturals-green">
+                  <tr className="border-t border-[#006A38]">
                     <td className="pt-2 font-black text-[#212121] text-base">
                       Total
                     </td>
-                    <td className="pt-2 text-right font-black text-naturals-green text-base">
+                    <td className="pt-2 text-right font-black text-[#006A38] text-base">
                       ₹{total.toFixed(2)}
                     </td>
                   </tr>
@@ -360,7 +360,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       href={order.shipment.trackingUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-naturals-green font-bold text-sm hover:underline"
+                      className="text-[#006A38] font-bold text-sm hover:underline"
                     >
                       Track Shipment →
                     </a>
@@ -399,7 +399,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                             .prefillCourier
                         }
                         placeholder="e.g. DTDC, Bluedart"
-                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
                     </div>
                     <div>
@@ -410,7 +410,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                         name="trackingNumber"
                         required
                         placeholder="AWB / tracking ID"
-                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
                     </div>
                     <div className="col-span-2">
@@ -421,7 +421,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
                         name="trackingUrl"
                         type="url"
                         placeholder="https://…"
-                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
                     </div>
                     <div className="col-span-2">
@@ -431,13 +431,13 @@ export default async function OrderDetailPage({ params }: PageProps) {
                       <input
                         name="estimatedDelivery"
                         type="date"
-                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
+                        className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
                       />
                     </div>
                   </div>
                   <button
                     type="submit"
-                    className="bg-naturals-green text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors"
+                    className="bg-[#006A38] text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-[#00522B] transition-colors"
                   >
                     Save Shipment & Email Customer
                   </button>

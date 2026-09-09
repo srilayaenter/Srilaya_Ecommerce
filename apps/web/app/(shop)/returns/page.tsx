@@ -72,7 +72,7 @@ export default function ReturnsPage() {
 
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-naturals-green py-10 px-4 text-center">
+      <div className="bg-[#006A38] py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white">Request a Return</h1>
         <p className="text-green-200 text-sm mt-1">7-day return window from date of delivery</p>
       </div>
@@ -86,7 +86,7 @@ export default function ReturnsPage() {
             <p className="text-sm text-[#616161] mb-6">
               Our team will review your request and respond within 2 business days. You'll receive an update at your email.
             </p>
-            <Link href="/" className="inline-block bg-naturals-green text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors">
+            <Link href="/" className="inline-block bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors">
               Back to shop
             </Link>
           </div>
@@ -102,7 +102,7 @@ export default function ReturnsPage() {
                 <input
                   value={orderId} onChange={e => setOrderId(e.target.value)} required
                   placeholder="e.g. A1B2C3D4"
-                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green font-mono"
+                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38] font-mono"
                 />
               </div>
               <div>
@@ -110,18 +110,18 @@ export default function ReturnsPage() {
                 <input
                   value={contact} onChange={e => setContact(e.target.value)} required
                   placeholder="email@example.com or 9876543210"
-                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
                 />
               </div>
               {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
               <button type="submit" disabled={loading}
-                className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                 {loading ? "Looking up…" : "Find Order →"}
               </button>
             </form>
             <p className="text-xs text-[#9E9E9E] mt-4 text-center">
-              Need help? <Link href="/contact" className="text-naturals-green hover:underline">Contact us</Link> ·{" "}
-              <Link href="/returns-policy" className="text-naturals-green hover:underline">Returns policy</Link>
+              Need help? <Link href="/contact" className="text-[#006A38] hover:underline">Contact us</Link> ·{" "}
+              <Link href="/returns-policy" className="text-[#006A38] hover:underline">Returns policy</Link>
             </p>
           </div>
         )}
@@ -150,7 +150,7 @@ export default function ReturnsPage() {
                       <select
                         value={selected[item.variantId] ?? 0}
                         onChange={e => setSelected(prev => ({ ...prev, [item.variantId]: Number(e.target.value) }))}
-                        className="border border-[#E0E0E0] rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-naturals-green"
+                        className="border border-[#E0E0E0] rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-[#006A38]"
                       >
                         {Array.from({ length: item.quantity + 1 }, (_, i) => (
                           <option key={i} value={i}>{i === 0 ? "Don't return" : i}</option>
@@ -165,7 +165,7 @@ export default function ReturnsPage() {
                 <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Reason for return</label>
                 <select
                   value={reason} onChange={e => setReason(e.target.value)}
-                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green"
+                  className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]"
                 >
                   {REASONS.map(r => <option key={r}>{r}</option>)}
                 </select>
@@ -174,7 +174,7 @@ export default function ReturnsPage() {
               {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
 
               <button type="submit" disabled={loading}
-                className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
+                className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
                 {loading ? "Submitting…" : "Submit Return Request"}
               </button>
             </form>

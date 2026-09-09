@@ -44,7 +44,7 @@ export default async function InvoicePage({ params, searchParams }: Props) {
   return (
     <div className="min-h-screen bg-[#F9F6F0] print:bg-white">
       {/* Toolbar — hidden when printing */}
-      <div className="print:hidden bg-naturals-green px-6 py-4 flex items-center justify-between">
+      <div className="print:hidden bg-[#006A38] px-6 py-4 flex items-center justify-between">
         <p className="text-white font-bold text-sm">Invoice {invoiceNo}</p>
         <PrintButton />
       </div>
@@ -55,7 +55,7 @@ export default async function InvoicePage({ params, searchParams }: Props) {
         {/* Header */}
         <div className="flex items-start justify-between mb-8 pb-6 border-b border-[#E0E0E0]">
           <div>
-            <p className="text-2xl font-black text-naturals-green">{BRAND.name}</p>
+            <p className="text-2xl font-black text-[#006A38]">{BRAND.name}</p>
             <p className="text-xs text-[#8D6E63] mt-0.5">{BRAND.tagline}</p>
             <p className="text-xs text-[#616161] mt-2 leading-relaxed">
               {BRAND.address}<br />
@@ -65,7 +65,7 @@ export default async function InvoicePage({ params, searchParams }: Props) {
           </div>
           <div className="text-right">
             <p className="text-xl font-black text-[#212121]">TAX INVOICE</p>
-            <p className="text-sm font-bold text-naturals-green mt-1">{invoiceNo}</p>
+            <p className="text-sm font-bold text-[#006A38] mt-1">{invoiceNo}</p>
             <p className="text-xs text-[#616161] mt-1">Date: {date}</p>
           </div>
         </div>
@@ -129,8 +129,8 @@ export default async function InvoicePage({ params, searchParams }: Props) {
                 <span>Shipping</span><span>₹{shippingFee.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between font-black text-base pt-2 border-t border-naturals-green">
-              <span>Total</span><span className="text-naturals-green">₹{total.toFixed(2)}</span>
+            <div className="flex justify-between font-black text-base pt-2 border-t border-[#006A38]">
+              <span>Total</span><span className="text-[#006A38]">₹{total.toFixed(2)}</span>
             </div>
           </div>
         </div>

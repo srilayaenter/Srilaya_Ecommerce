@@ -167,18 +167,18 @@ export default async function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
 
       {/* -- HERO ----------------------------------------------- */}
-      <section className="relative bg-gradient-to-br from-naturals-green-deep via-naturals-green-dark to-naturals-green text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 text-white overflow-hidden">
         {/* subtle dot grid texture */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
         <div className="container mx-auto px-4 max-w-7xl py-24 md:py-32 relative z-10">
           <div className="max-w-2xl">
-            <span className="inline-block bg-naturals-gold/20 text-naturals-gold text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-6 border border-naturals-gold/30">
+            <span className="inline-block bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-6 border border-amber-400/30">
               100% Organic &amp; Natural
             </span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6">
               Ancient Grains.<br />
-              <span className="text-naturals-gold">Modern Nutrition.</span>
+              <span className="text-amber-400">Modern Nutrition.</span>
             </h1>
             <p className="text-emerald-100 text-base md:text-lg leading-relaxed mb-10 max-w-xl">
               Pure, minimally-processed millets, flakes, and traditional foods sourced directly from
@@ -187,7 +187,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/product"
-                className="inline-flex items-center justify-center gap-2 bg-naturals-gold hover:opacity-90 text-naturals-green-deep font-black px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-naturals-gold/30 text-sm tracking-wide"
+                className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-400/30 text-sm tracking-wide"
               >
                 Shop Now →
               </Link>
@@ -211,7 +211,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[#F0F0F0]">
             {usps.map((usp) => (
               <div key={usp.label} className="flex items-center gap-3 px-4 md:px-6 py-4 md:py-5">
-                <usp.icon className="w-6 h-6 text-naturals-green flex-shrink-0" weight="regular" />
+                <usp.icon className="w-6 h-6 text-emerald-700 flex-shrink-0" weight="regular" />
                 <div>
                   <p className="font-bold text-sm text-[#212121]">{usp.label}</p>
                   <p className="text-xs text-[#9E9E9E] font-medium mt-0.5">{usp.sub}</p>
@@ -226,7 +226,7 @@ export default async function HomePage() {
       <section className="py-12 md:py-20 bg-[#F9F9F9]">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold text-naturals-green uppercase tracking-widest bg-naturals-green/10 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
               Specialty Collections
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-[#212121] mt-4 mb-3 tracking-tight">
@@ -269,18 +269,18 @@ export default async function HomePage() {
             {/* View all collections tile */}
             <Link
               href="/collections"
-              className="group flex flex-col items-center justify-center text-center rounded-2xl min-h-[200px] p-6 md:p-7 border-2 border-dashed border-naturals-green/40 hover:border-naturals-green hover:bg-naturals-green/10 transition-all duration-300"
+              className="group flex flex-col items-center justify-center text-center rounded-2xl min-h-[200px] p-6 md:p-7 border-2 border-dashed border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-naturals-green/15 flex items-center justify-center mb-4 group-hover:bg-naturals-green/25 transition-colors">
-                <Grains className="w-6 h-6 text-naturals-green" weight="regular" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4 group-hover:bg-emerald-200 transition-colors">
+                <Grains className="w-6 h-6 text-emerald-700" weight="regular" />
               </div>
-              <h3 className="font-black text-sm md:text-base text-naturals-green-dark leading-snug mb-1">
+              <h3 className="font-black text-sm md:text-base text-emerald-800 leading-snug mb-1">
                 All Collections
               </h3>
-              <p className="text-[11px] md:text-xs text-naturals-green leading-relaxed">
+              <p className="text-[11px] md:text-xs text-emerald-600 leading-relaxed">
                 See everything, including upcoming launches.
               </p>
-              <span className="mt-4 text-[10px] font-black uppercase tracking-widest text-naturals-green group-hover:text-naturals-green-deep transition-colors">
+              <span className="mt-4 text-[10px] font-black uppercase tracking-widest text-emerald-700 group-hover:text-emerald-900 transition-colors">
                 View All →
               </span>
             </Link>
@@ -293,7 +293,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <span className="text-xs font-bold text-naturals-green uppercase tracking-widest bg-naturals-green/10 px-3 py-1 rounded-full">
+              <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
                 Handpicked for You
               </span>
               <h2 className="text-3xl md:text-4xl font-black text-[#212121] mt-4 tracking-tight">
@@ -302,7 +302,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/product"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-bold text-naturals-green hover:text-naturals-green-deep border border-naturals-green/30 hover:border-naturals-green/60 bg-naturals-green/10 hover:bg-naturals-green/20 px-4 py-2 rounded-xl transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 hover:text-emerald-900 border border-emerald-200 hover:border-emerald-400 bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-xl transition-all"
             >
               View All Products →
             </Link>
@@ -331,10 +331,10 @@ export default async function HomePage() {
                       />
                     </div>
                     <div className="p-4">
-                      <p className="text-xs font-bold text-naturals-green uppercase tracking-wider mb-1">
+                      <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
                         {product.variants.length} size{product.variants.length !== 1 ? "s" : ""} available
                       </p>
-                      <h3 className="font-bold text-[#212121] text-sm leading-snug mb-3 group-hover:text-naturals-green transition-colors line-clamp-2">
+                      <h3 className="font-bold text-[#212121] text-sm leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
                         {product.title}
                       </h3>
                       <div className="flex items-center justify-between">
@@ -348,7 +348,7 @@ export default async function HomePage() {
                         ) : (
                           <span className="text-[#9E9E9E] text-sm">No variants</span>
                         )}
-                        <span className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-naturals-green-dark text-[#9E9E9E] group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm text-sm font-bold border border-[#E0E0E0] group-hover:border-naturals-green-dark">
+                        <span className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-[#00522B] text-[#9E9E9E] group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm text-sm font-bold border border-[#E0E0E0] group-hover:border-emerald-700">
                           →
                         </span>
                       </div>
@@ -362,7 +362,7 @@ export default async function HomePage() {
           )}
 
           <div className="text-center mt-10 sm:hidden">
-            <Link href="/product" className="inline-flex items-center gap-1.5 text-sm font-bold text-naturals-green border border-naturals-green/30 bg-naturals-green/10 px-6 py-3 rounded-xl">
+            <Link href="/product" className="inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-6 py-3 rounded-xl">
               View All Products →
             </Link>
           </div>
@@ -370,18 +370,18 @@ export default async function HomePage() {
       </section>
 
       {/* -- WHY CHOOSE US -------------------------------------- */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-naturals-green-deep to-naturals-green-dark text-white">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-emerald-950 to-emerald-900 text-white">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
             {/* Left: text */}
             <div>
-              <span className="text-xs font-bold text-naturals-gold uppercase tracking-widest bg-naturals-gold/10 px-3 py-1 rounded-full border border-naturals-gold/20">
+              <span className="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
                 Why SriLaYa Naturals
               </span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mt-5 mb-4">
                 We Don&apos;t Just Sell Grains.<br />
-                <span className="text-naturals-gold">We Revive Traditions.</span>
+                <span className="text-amber-400">We Revive Traditions.</span>
               </h2>
               <p className="text-emerald-200 text-sm md:text-base leading-relaxed mb-10 max-w-md">
                 For generations, millets formed the backbone of Indian nutrition. We&apos;re bringing
@@ -391,8 +391,8 @@ export default async function HomePage() {
               <div className="space-y-6">
                 {whyUs.map((item) => (
                   <div key={item.title} className="flex gap-4 items-start">
-                    <div className="w-11 h-11 rounded-xl bg-naturals-green-dark flex items-center justify-center flex-shrink-0 border border-naturals-green">
-                      <item.icon className="w-5 h-5 text-naturals-gold" weight="regular" />
+                    <div className="w-11 h-11 rounded-xl bg-emerald-800 flex items-center justify-center flex-shrink-0 border border-emerald-700">
+                      <item.icon className="w-5 h-5 text-amber-400" weight="regular" />
                     </div>
                     <div>
                       <h4 className="font-bold text-white text-sm mb-1">{item.title}</h4>
@@ -404,7 +404,7 @@ export default async function HomePage() {
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 mt-10 bg-naturals-gold hover:opacity-90 text-naturals-green-deep font-black px-6 py-3 rounded-xl transition-all text-sm"
+                className="inline-flex items-center gap-2 mt-10 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black px-6 py-3 rounded-xl transition-all text-sm"
               >
                 Read Our Story →
               </Link>
@@ -420,10 +420,10 @@ export default async function HomePage() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="bg-naturals-green-dark/50 border border-naturals-green/50 rounded-2xl p-4 md:p-6 flex flex-col items-center text-center hover:bg-naturals-green-dark transition-colors"
+                  className="bg-emerald-800/50 border border-emerald-700/50 rounded-2xl p-4 md:p-6 flex flex-col items-center text-center hover:bg-[#00522B] transition-colors"
                 >
-                  <stat.icon className="w-8 h-8 text-naturals-gold mb-2" weight="regular" />
-                  <span className="text-3xl font-black text-naturals-gold leading-none">{stat.value}</span>
+                  <stat.icon className="w-8 h-8 text-amber-400 mb-2" weight="regular" />
+                  <span className="text-3xl font-black text-amber-400 leading-none">{stat.value}</span>
                   <span className="text-emerald-300 text-xs font-medium mt-2 leading-snug">{stat.label}</span>
                 </div>
               ))}
@@ -444,10 +444,10 @@ export default async function HomePage() {
       <Testimonials />
 
       {/* -- WHATSAPP / CONTACT CTA ----------------------------- */}
-      <section className="py-16 bg-naturals-gold/10 border-t border-naturals-gold/20">
+      <section className="py-16 bg-amber-50 border-t border-amber-100">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-naturals-green/15 mb-4">
-            <ChatCircle className="w-7 h-7 text-naturals-green" weight="regular" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-100 mb-4">
+            <ChatCircle className="w-7 h-7 text-emerald-700" weight="regular" />
           </div>
           <h2 className="text-2xl md:text-3xl font-black text-[#212121] mb-3 tracking-tight">
             Questions? We&apos;re Here to Help.
@@ -459,13 +459,13 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-naturals-green hover:bg-naturals-green-dark text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-md text-sm"
+              className="inline-flex items-center gap-2 bg-emerald-700 hover:bg-[#00522B] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-md text-sm"
             >
               Contact Us
             </Link>
             <Link
               href="/payments"
-              className="inline-flex items-center gap-2 border border-slate-300 hover:border-naturals-green/60 hover:bg-naturals-green/10 text-[#424242] font-bold px-7 py-3.5 rounded-xl transition-all text-sm"
+              className="inline-flex items-center gap-2 border border-slate-300 hover:border-emerald-400 hover:bg-emerald-50 text-[#424242] font-bold px-7 py-3.5 rounded-xl transition-all text-sm"
             >
               Payment Details
             </Link>

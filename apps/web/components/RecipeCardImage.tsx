@@ -11,7 +11,7 @@ export default function RecipeCardImage({ src, alt, tag }: { src: string; alt: s
     return (
       <div className="h-44 bg-gradient-to-br from-[#E8F5E9] to-[#A5D6A7] flex flex-col items-center justify-center gap-2">
         <BowlFood size={52} weight="regular" className="text-[#2E6F40]" />
-        <span className="text-xs font-bold text-naturals-green bg-white/70 px-3 py-0.5 rounded-full">{tag}</span>
+        <span className="text-xs font-bold text-[#006A38] bg-white/70 px-3 py-0.5 rounded-full">{tag}</span>
       </div>
     );
   }
@@ -26,7 +26,7 @@ export default function RecipeCardImage({ src, alt, tag }: { src: string; alt: s
         unoptimized
         onError={() => setErrored(true)}
       />
-      <span className="absolute top-3 left-3 text-xs font-bold text-naturals-green bg-white/90 px-3 py-0.5 rounded-full">{tag}</span>
+      <span className="absolute top-3 left-3 text-xs font-bold text-[#006A38] bg-white/90 px-3 py-0.5 rounded-full">{tag}</span>
     </div>
   );
 }

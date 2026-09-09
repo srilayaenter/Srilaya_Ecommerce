@@ -69,7 +69,7 @@ export default async function RawMaterialDetailPage({ params }: Props) {
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Current Stock',    value: `${material.stockQty.toFixed(2)} ${material.unit}`, color: isLow ? 'text-red-600' : 'text-naturals-green' },
+          { label: 'Current Stock',    value: `${material.stockQty.toFixed(2)} ${material.unit}`, color: isLow ? 'text-red-600' : 'text-[#006A38]' },
           { label: 'Reorder Threshold', value: `${material.reorderThreshold} ${material.unit}`,   color: 'text-[#424242]' },
           { label: 'Total Received',   value: `${totalIn.toFixed(2)} ${material.unit}`,           color: 'text-green-700' },
           { label: 'Total Consumed',   value: `${totalOut.toFixed(2)} ${material.unit}`,          color: 'text-blue-600' },
@@ -94,12 +94,12 @@ export default async function RawMaterialDetailPage({ params }: Props) {
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Name</label>
                 <input name="name" required defaultValue={material.name}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Unit</label>
                 <select name="unit" defaultValue={material.unit}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
                   <option value="kg">kg</option>
                   <option value="g">g</option>
                   <option value="litre">litre</option>
@@ -111,16 +111,16 @@ export default async function RawMaterialDetailPage({ params }: Props) {
                 <input name="costPerUnit" type="number" step="0.01" min="0"
                   defaultValue={material.costPerUnit ?? ''}
                   placeholder="0.00"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Reorder Threshold</label>
                 <input name="reorderThreshold" type="number" step="0.5" min="0"
                   defaultValue={material.reorderThreshold}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <button type="submit"
-                className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-lg hover:bg-naturals-green-dark text-sm">
+                className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-lg hover:bg-[#00522B] text-sm">
                 Save Changes
               </button>
             </form>
@@ -138,15 +138,15 @@ export default async function RawMaterialDetailPage({ params }: Props) {
                 </label>
                 <input name="newQty" type="number" step="0.001" min="0"
                   defaultValue={material.stockQty}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Reason</label>
                 <input name="note" placeholder="e.g. Physical count, wastage, spillage"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
               </div>
               <button type="submit"
-                className="w-full border border-naturals-green text-naturals-green font-bold py-2.5 rounded-lg hover:bg-[#F5F5F5] text-sm">
+                className="w-full border border-[#006A38] text-[#006A38] font-bold py-2.5 rounded-lg hover:bg-[#F5F5F5] text-sm">
                 Apply Adjustment
               </button>
             </form>
@@ -162,7 +162,7 @@ export default async function RawMaterialDetailPage({ params }: Props) {
                     <span className="text-[#424242]">
                       {rl.recipe.variant.product.title} ({rl.recipe.variant.size})
                     </span>
-                    <span className="font-mono text-naturals-green font-bold">
+                    <span className="font-mono text-[#006A38] font-bold">
                       {rl.qtyPerYield.toFixed(3)} {material.unit}
                     </span>
                   </div>
