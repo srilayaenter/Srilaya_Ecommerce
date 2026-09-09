@@ -15,7 +15,7 @@ const MILLET_FLAKES = [
     local: "Navane Avalakki / Thinai Aval",
     badge: "Top Seller",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "#D99B26",
+    accent: "rgb(var(--naturals-gold))",
     tags: ["millet", "diabetic"],
     benefits: [
       { label: "Low Glycemic Index", desc: "Steady blood sugar, no spikes" },
@@ -381,7 +381,7 @@ export default function FlakesPageClient({ productImageMap = {} }: { productImag
     const imgUrl = getProductImage(p.keyword);
     return (
       <div
-        className="bg-white/90 backdrop-blur-sm border border-[#D99B26]/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+        className="bg-white/90 backdrop-blur-sm border border-naturals-gold/15 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
         style={{ borderTop: `4px solid ${p.accent}` }}
       >
         {imgUrl ? (
@@ -436,13 +436,13 @@ export default function FlakesPageClient({ productImageMap = {} }: { productImag
           }}
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D99B26]/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#D99B26]/30">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-naturals-gold/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-naturals-gold/30">
             <Grains className="w-4 h-4" weight="regular" /> Stone-Processed Flakes
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             Instant Nutrition,<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
               Endless Variety
             </span>
           </h1>
@@ -567,7 +567,7 @@ export default function FlakesPageClient({ productImageMap = {} }: { productImag
         {/* Why Flakes section */}
         <section className="bg-gradient-to-r from-[#2E6F40] to-emerald-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -589,7 +589,7 @@ export default function FlakesPageClient({ productImageMap = {} }: { productImag
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
+                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow">
                   <b.icon className="w-7 h-7" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

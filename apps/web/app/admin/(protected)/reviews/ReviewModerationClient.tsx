@@ -70,8 +70,8 @@ export default function ReviewModerationClient({ reviews: initial }: { reviews: 
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${
               filter === f
-                ? "bg-[#006A38] text-white"
-                : "bg-white border border-[#E0E0E0] text-[#616161] hover:border-[#006A38]"
+                ? "bg-naturals-green text-white"
+                : "bg-white border border-[#E0E0E0] text-[#616161] hover:border-naturals-green"
             }`}
           >
             {f === "pending"  ? `Pending (${pending})`  :
@@ -102,7 +102,7 @@ export default function ReviewModerationClient({ reviews: initial }: { reviews: 
                   <p className="text-xs text-[#9E9E9E] mb-2">
                     {review.email} · {new Date(review.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
                   </p>
-                  <Link href={`/product/${review.productSlug}`} className="text-xs font-bold text-[#006A38] hover:underline">
+                  <Link href={`/product/${review.productSlug}`} className="text-xs font-bold text-naturals-green hover:underline">
                     {review.productTitle}
                   </Link>
                   {review.comment && (

@@ -14,7 +14,7 @@ const PRODUCTS = [
     local: "Karumbu Vellam / Ganna Gud",
     badge: "Rich in Iron",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "#D99B26",
+    accent: "rgb(var(--naturals-gold))",
     accentLight: "#FFF8E1",
     production: "Traditional hot-boil process — retains natural nutrients and colour",
     benefits: [
@@ -104,19 +104,19 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
           className="absolute inset-0 pointer-events-none opacity-10"
           style={{
             backgroundImage:
-              "radial-gradient(#D99B26 0.75px, transparent 0.75px), radial-gradient(#D99B26 0.75px, #fdfbf7 0.75px)",
+              "radial-gradient(rgb(var(--naturals-gold)) 0.75px, transparent 0.75px), radial-gradient(rgb(var(--naturals-gold)) 0.75px, #fdfbf7 0.75px)",
             backgroundSize: "30px 30px",
             backgroundPosition: "0 0, 15px 15px",
           }}
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D99B26]/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-[#D99B26]/30">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-naturals-gold/15 text-[#5C3A21] font-bold text-xs uppercase tracking-wider mb-6 border border-naturals-gold/30">
             <Drop className="w-4 h-4" weight="regular" /> Natural Jaggery & Sweeteners
           </span>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5C3A21] leading-tight max-w-4xl mx-auto mb-4">
             Sweet Without<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
               the Guilt.
             </span>
           </h1>
@@ -234,7 +234,7 @@ export default function SweetenersPageClient({ productImageMap = {} }: Sweetener
         </section>
 
         {/* Why Natural Sweeteners */}
-        <section className="bg-gradient-to-r from-[#5C3A21] to-[#D99B26] text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <section className="bg-gradient-to-r from-[#5C3A21] to-naturals-gold text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
           <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-white font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First

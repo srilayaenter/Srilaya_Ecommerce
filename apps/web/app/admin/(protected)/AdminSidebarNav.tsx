@@ -123,7 +123,7 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
     `flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-[8px] transition-colors ${
       isActive(href)
         ? 'bg-white/20 text-white font-bold'
-        : 'text-white/80 hover:text-white hover:bg-[#00522B]'
+        : 'text-white/80 hover:text-white hover:bg-naturals-green-dark'
     }`;
 
   return (
@@ -159,7 +159,7 @@ export default function AdminSidebarNav({ items }: { items: MenuItem[] }) {
               className={`w-full flex items-center justify-between px-4 py-2.5 rounded-[8px] text-sm font-bold transition-colors ${
                 hasActive
                   ? 'bg-white/10 text-white'
-                  : 'text-white/70 hover:text-white hover:bg-[#00522B]'
+                  : 'text-white/70 hover:text-white hover:bg-naturals-green-dark'
               }`}
             >
               <span className="flex items-center gap-3">

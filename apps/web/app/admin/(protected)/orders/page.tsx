@@ -187,7 +187,7 @@ export default async function OrdersPage({
   return (
     <div className="space-y-6 font-sans">
       {created && (
-        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg text-sm font-semibold">
+        <div className="bg-naturals-green/10 border border-naturals-green/30 text-naturals-green px-4 py-3 rounded-lg text-sm font-semibold">
           In-store order created successfully — #
           {created.slice(0, 8).toUpperCase()}
         </div>
@@ -207,7 +207,7 @@ export default async function OrdersPage({
           <ExportButton filter={currentFilter} channel={channel} />
           <Link
             href="/admin/orders/new"
-            className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors whitespace-nowrap"
+            className="bg-naturals-green text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-naturals-green-dark transition-colors whitespace-nowrap"
           >
             + New In-Store Order
           </Link>
@@ -219,25 +219,25 @@ export default async function OrdersPage({
         <div className="flex bg-white rounded-lg border border-[#E0E0E0] p-1 shadow-sm w-fit">
           <Link
             href="/admin/orders"
-            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "all" ? "bg-[#FFF8E1] text-[#006A38]" : "text-[#9E9E9E] hover:text-[#212121]"}`}
+            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "all" ? "bg-[#FFF8E1] text-naturals-green" : "text-[#9E9E9E] hover:text-[#212121]"}`}
           >
             All
           </Link>
           <Link
             href="/admin/orders?filter=pending"
-            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "pending" ? "bg-[#FFF8E1] text-[#006A38]" : "text-[#9E9E9E] hover:text-[#212121]"}`}
+            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "pending" ? "bg-[#FFF8E1] text-naturals-green" : "text-[#9E9E9E] hover:text-[#212121]"}`}
           >
             Pending
           </Link>
           <Link
             href="/admin/orders?filter=processing"
-            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "processing" ? "bg-[#FFF8E1] text-[#006A38]" : "text-[#9E9E9E] hover:text-[#212121]"}`}
+            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "processing" ? "bg-[#FFF8E1] text-naturals-green" : "text-[#9E9E9E] hover:text-[#212121]"}`}
           >
             Processing
           </Link>
           <Link
             href="/admin/orders?filter=completed"
-            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "completed" ? "bg-[#FFF8E1] text-[#006A38]" : "text-[#9E9E9E] hover:text-[#212121]"}`}
+            className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-colors ${currentFilter === "completed" ? "bg-[#FFF8E1] text-naturals-green" : "text-[#9E9E9E] hover:text-[#212121]"}`}
           >
             Completed
           </Link>
@@ -288,7 +288,7 @@ export default async function OrdersPage({
                     <td className="py-4 px-6">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="font-mono font-semibold text-[#006A38] hover:underline"
+                        className="font-mono font-semibold text-naturals-green hover:underline"
                       >
                         #{order.id.slice(0, 8).toUpperCase()}
                       </Link>
@@ -315,7 +315,7 @@ export default async function OrdersPage({
                         : "N/A"}
                     </td>
 
-                    <td className="py-4 px-6 font-bold text-[#006A38] text-right">
+                    <td className="py-4 px-6 font-bold text-naturals-green text-right">
                       ₹{toNum(order.total).toFixed(2)}
                     </td>
 
@@ -394,7 +394,7 @@ export default async function OrdersPage({
                             // one-click transition.
                             <Link
                               href={`/admin/orders/${order.id}`}
-                              className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
+                              className="bg-naturals-green hover:bg-naturals-green-dark text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
                             >
                               Confirm Courier & Process
                             </Link>
@@ -412,7 +412,7 @@ export default async function OrdersPage({
                               />
                               <button
                                 type="submit"
-                                className="bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
+                                className="bg-naturals-green hover:bg-naturals-green-dark text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors shadow-sm"
                               >
                                 Verify & Process
                               </button>
@@ -433,7 +433,7 @@ export default async function OrdersPage({
                             />
                             <button
                               type="submit"
-                              className="bg-white border border-[#006A38] text-[#006A38] hover:bg-[#FFF8E1] px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                              className="bg-white border border-naturals-green text-naturals-green hover:bg-[#FFF8E1] px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
                             >
                               Mark Completed
                             </button>
@@ -460,7 +460,7 @@ export default async function OrdersPage({
                                   name="codPaymentMethod"
                                   value="cash"
                                   defaultChecked
-                                  className="accent-[#006A38]"
+                                  className="accent-naturals-green"
                                 />
                                 <span className="text-[11px] font-semibold inline-flex items-center gap-1">
                                   <CurrencyDollar size={13} weight="regular" />{" "}
@@ -472,7 +472,7 @@ export default async function OrdersPage({
                                   type="radio"
                                   name="codPaymentMethod"
                                   value="upi"
-                                  className="accent-[#006A38]"
+                                  className="accent-naturals-green"
                                 />
                                 <span className="text-[11px] font-semibold inline-flex items-center gap-1">
                                   <DeviceMobile size={13} weight="regular" />{" "}
@@ -484,11 +484,11 @@ export default async function OrdersPage({
                               type="text"
                               name="codUpiRef"
                               placeholder="UPI ref / UTR (optional)"
-                              className="w-full border border-[#E0E0E0] rounded px-2 py-1 text-[11px] focus:outline-none focus:border-[#006A38]"
+                              className="w-full border border-[#E0E0E0] rounded px-2 py-1 text-[11px] focus:outline-none focus:border-naturals-green"
                             />
                             <button
                               type="submit"
-                              className="w-full bg-[#006A38] hover:bg-[#00522B] text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
+                              className="w-full bg-naturals-green hover:bg-naturals-green-dark text-white px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-colors"
                             >
                               ✓ Confirm Collection
                             </button>

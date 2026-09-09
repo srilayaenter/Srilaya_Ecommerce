@@ -1,5 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 const path = require("path");
+
+// Standard Tailwind recipe for CSS-variable-backed colors that still support
+// opacity modifiers (e.g. bg-naturals-green/10). Variables are defined once,
+// in app/globals.css, as space-separated RGB channels.
+function withOpacity(variableName) {
+  return ({ opacityValue }) =>
+    opacityValue !== undefined
+      ? `rgb(var(${variableName}) / ${opacityValue})`
+      : `rgb(var(${variableName}))`;
+}
+
 module.exports = {
   // Absolute paths: this config is loaded with an explicit path from
   // postcss.config.js (needed so Next.js's production build doesn't fall
@@ -15,8 +26,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'brand-green': '#006837',
-        'brand-yellow': '#FBB040',
+        naturals: {
+          green: withOpacity('--naturals-green'),
+          'green-dark': withOpacity('--naturals-green-dark'),
+          'green-deep': withOpacity('--naturals-green-deep'),
+          gold: withOpacity('--naturals-gold'),
+          cream: withOpacity('--naturals-cream'),
+          charcoal: withOpacity('--naturals-charcoal'),
+          white: withOpacity('--naturals-white'),
+        },
       },
     },
   },

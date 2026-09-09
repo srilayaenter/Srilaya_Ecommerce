@@ -72,7 +72,7 @@ export default function MainImageUploader({ productId, slug, currentImage }: Pro
       {/* Upload area */}
       <div
         onClick={() => fileRef.current?.click()}
-        className="border-2 border-dashed border-[#BDBDBD] rounded-xl p-5 text-center cursor-pointer hover:border-[#006A38] hover:bg-[#006A38]/5 transition-colors"
+        className="border-2 border-dashed border-[#BDBDBD] rounded-xl p-5 text-center cursor-pointer hover:border-naturals-green hover:bg-naturals-green/5 transition-colors"
       >
         {preview ? (
           <div className="flex flex-col items-center gap-2">
@@ -80,7 +80,7 @@ export default function MainImageUploader({ productId, slug, currentImage }: Pro
               <Image src={preview} alt="preview" fill className="object-contain" />
             </div>
             <span className="text-xs text-[#616161] truncate max-w-[180px]">{fileName}</span>
-            <span className="text-xs text-[#006A38] font-semibold">Click to change</span>
+            <span className="text-xs text-naturals-green font-semibold">Click to change</span>
           </div>
         ) : (
           <>
@@ -100,12 +100,12 @@ export default function MainImageUploader({ productId, slug, currentImage }: Pro
       />
 
       {error && <p className="text-xs text-red-600">{error}</p>}
-      {saved && <p className="text-xs text-[#006A38] font-semibold">✓ Main image updated</p>}
+      {saved && <p className="text-xs text-naturals-green font-semibold">✓ Main image updated</p>}
 
       <button
         onClick={upload}
         disabled={uploading || !preview}
-        className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#005A30] transition-colors disabled:opacity-50"
+        className="bg-naturals-green text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-naturals-green-dark transition-colors disabled:opacity-50"
       >
         {uploading ? "Uploading…" : "Upload & Set as Main"}
       </button>

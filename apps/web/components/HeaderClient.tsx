@@ -78,7 +78,7 @@ export default function HeaderClient({
       <header className="w-full bg-white sticky top-0 z-50 border-b border-[#E0E0E0] font-sans shadow-sm">
 
         {/* ── Utility bar ── */}
-        <div className="hidden lg:block bg-[#003D20]">
+        <div className="hidden lg:block bg-naturals-green-deep">
           <div className="container mx-auto px-4 max-w-7xl flex items-center justify-end gap-5 h-8">
             {utilityLinks.map(link => (
               <Link key={link.name} href={link.href}
@@ -96,7 +96,7 @@ export default function HeaderClient({
               <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals Logo" width={52} height={52} className="object-contain" priority />
               <div className="hidden sm:flex flex-col leading-tight">
                 <span className="font-black text-[20px] text-[#212121] tracking-tight font-poppins">SriLaYa</span>
-                <span className="font-bold text-[12px] text-[#006A38] tracking-wide uppercase">Naturals</span>
+                <span className="font-bold text-[12px] text-naturals-green tracking-wide uppercase">Naturals</span>
               </div>
             </Link>
 
@@ -106,11 +106,11 @@ export default function HeaderClient({
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="relative text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13.5px] whitespace-nowrap"
+                  className="relative text-[#424242] hover:text-naturals-green font-semibold transition-colors text-[13.5px] whitespace-nowrap"
                 >
                   {link.name}
                   {link.badge && (
-                    <span className="absolute -top-2 -right-5 bg-[#D99B26] text-white text-[8px] font-black px-1 py-0.5 rounded leading-none uppercase tracking-wide">
+                    <span className="absolute -top-2 -right-5 bg-naturals-gold text-white text-[8px] font-black px-1 py-0.5 rounded leading-none uppercase tracking-wide">
                       {link.badge}
                     </span>
                   )}
@@ -127,7 +127,7 @@ export default function HeaderClient({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-4 pr-10 py-2 text-[13px] focus:outline-none text-[#212121] bg-transparent"
                 />
-                <button type="submit" aria-label="Search" className="absolute right-3 text-[#424242] hover:text-[#006A38]">
+                <button type="submit" aria-label="Search" className="absolute right-3 text-[#424242] hover:text-naturals-green">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 </button>
               </form>
@@ -139,7 +139,7 @@ export default function HeaderClient({
                     <button
                       onClick={() => setAccountOpen(o => !o)}
                       aria-label="Account menu"
-                      className="w-8 h-8 rounded-full bg-[#006A38] text-white text-[12px] font-black flex items-center justify-center hover:bg-[#00522B] transition-colors"
+                      className="w-8 h-8 rounded-full bg-naturals-green text-white text-[12px] font-black flex items-center justify-center hover:bg-naturals-green-dark transition-colors"
                     >
                       {initials}
                     </button>
@@ -150,12 +150,12 @@ export default function HeaderClient({
                           {sessionUser.name && <p className="text-[10px] text-[#9E9E9E] truncate">{sessionUser.email}</p>}
                         </div>
                         <Link href="/account" onClick={() => setAccountOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors">
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-naturals-green transition-colors">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                           My Orders
                         </Link>
                         <Link href="/account#profile" onClick={() => setAccountOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors">
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#424242] hover:bg-[#F5F5F5] hover:text-naturals-green transition-colors">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                           My Profile
                         </Link>
@@ -173,16 +173,16 @@ export default function HeaderClient({
                   </>
                 ) : (
                   <Link href="/login" aria-label="Sign in"
-                    className="flex items-center gap-1.5 text-[#424242] hover:text-[#006A38] transition-colors p-1">
+                    className="flex items-center gap-1.5 text-[#424242] hover:text-naturals-green transition-colors p-1">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                   </Link>
                 )}
               </div>
 
-              <Link href="/cart" aria-label={cartCount > 0 ? `View cart, ${cartCount} item${cartCount === 1 ? "" : "s"}` : "View cart"} className="relative text-[#424242] hover:text-[#006A38] p-1">
+              <Link href="/cart" aria-label={cartCount > 0 ? `View cart, ${cartCount} item${cartCount === 1 ? "" : "s"}` : "View cart"} className="relative text-[#424242] hover:text-naturals-green p-1">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-[#006A38] text-white text-[10px] font-black rounded-full w-4.5 h-4.5 flex items-center justify-center min-w-[18px] min-h-[18px] px-0.5">
+                  <span className="absolute -top-0.5 -right-0.5 bg-naturals-green text-white text-[10px] font-black rounded-full w-4.5 h-4.5 flex items-center justify-center min-w-[18px] min-h-[18px] px-0.5">
                     {cartCount}
                   </span>
                 )}
@@ -209,7 +209,7 @@ export default function HeaderClient({
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-[#424242] hover:text-[#006A38] font-semibold transition-colors text-[13px] whitespace-nowrap"
+                className="text-[#424242] hover:text-naturals-green font-semibold transition-colors text-[13px] whitespace-nowrap"
               >
                 {link.name}
               </Link>
@@ -235,7 +235,7 @@ export default function HeaderClient({
                 <Image src="/brand/srilaya-logo.png" alt="SriLaYa Naturals" width={44} height={44} className="object-contain" />
                 <div className="flex flex-col leading-tight">
                   <span className="font-black text-[15px] text-[#212121]">SriLaYa</span>
-                  <span className="font-bold text-[10px] text-[#006A38] tracking-wide uppercase">Naturals</span>
+                  <span className="font-bold text-[10px] text-naturals-green tracking-wide uppercase">Naturals</span>
                 </div>
               </div>
               <button
@@ -270,11 +270,11 @@ export default function HeaderClient({
                     <Link
                       href={link.href}
                       onClick={closeMenu}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-[#F5F5F5] hover:text-[#006A38] transition-colors"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-[#F5F5F5] hover:text-naturals-green transition-colors"
                     >
                       {link.name}
                       {link.badge && (
-                        <span className="bg-[#D99B26] text-white text-[8px] font-black px-1.5 py-0.5 rounded leading-none uppercase tracking-wide">
+                        <span className="bg-naturals-gold text-white text-[8px] font-black px-1.5 py-0.5 rounded leading-none uppercase tracking-wide">
                           {link.badge}
                         </span>
                       )}
@@ -293,9 +293,9 @@ export default function HeaderClient({
                     <Link
                       href={link.href}
                       onClick={closeMenu}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-emerald-50 hover:text-[#006A38] transition-colors"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-[#424242] hover:bg-naturals-green/10 hover:text-naturals-green transition-colors"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#006A38] flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-naturals-green flex-shrink-0" />
                       {link.name}
                     </Link>
                   </li>
@@ -308,7 +308,7 @@ export default function HeaderClient({
               <Link
                 href="/cart"
                 onClick={closeMenu}
-                className="flex items-center justify-center gap-2 w-full bg-[#006A38] text-white font-bold py-3 rounded-xl text-sm hover:bg-[#005A30] transition-colors"
+                className="flex items-center justify-center gap-2 w-full bg-naturals-green text-white font-bold py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 View Cart {cartCount > 0 && `(${cartCount})`}
@@ -325,7 +325,7 @@ export default function HeaderClient({
                 <Link
                   href="/login"
                   onClick={closeMenu}
-                  className="flex items-center justify-center gap-2 w-full border border-[#006A38] text-[#006A38] font-bold py-3 rounded-xl text-sm hover:bg-[#F0FFF7] transition-colors bg-white"
+                  className="flex items-center justify-center gap-2 w-full border border-naturals-green text-naturals-green font-bold py-3 rounded-xl text-sm hover:bg-[#F0FFF7] transition-colors bg-white"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                   Sign In

@@ -149,14 +149,14 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/reports/pl?month=${prevMonth}&year=${prevYear}`}
-            className="px-3 py-1.5 rounded-lg border border-[#E0E0E0] text-sm text-[#006A38] font-bold hover:bg-[#F5F5F5]"
+            className="px-3 py-1.5 rounded-lg border border-[#E0E0E0] text-sm text-naturals-green font-bold hover:bg-[#F5F5F5]"
           >
             ← Prev
           </Link>
           <span className="text-sm font-bold text-[#212121] min-w-[140px] text-center">{monthName}</span>
           <Link
             href={`/admin/reports/pl?month=${nextMonth}&year=${nextYear}`}
-            className="px-3 py-1.5 rounded-lg border border-[#E0E0E0] text-sm text-[#006A38] font-bold hover:bg-[#F5F5F5]"
+            className="px-3 py-1.5 rounded-lg border border-[#E0E0E0] text-sm text-naturals-green font-bold hover:bg-[#F5F5F5]"
           >
             Next →
           </Link>
@@ -206,7 +206,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
 
       {/* P&L Statement */}
       <div className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden">
-        <div className="px-6 py-4 bg-[#006A38]">
+        <div className="px-6 py-4 bg-naturals-green">
           <h2 className="font-bold text-white">P&L Statement — {monthName}</h2>
         </div>
         <table className="w-full text-sm">
@@ -252,9 +252,9 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
                       {p.missingCost && <span className="ml-2 text-[10px] text-amber-600 font-bold">⚠ cost missing</span>}
                     </td>
                     <td className="px-6 py-3 text-right text-[#424242]">{p.qty}</td>
-                    <td className="px-6 py-3 text-right font-mono text-[#006A38] font-bold">{fmt(p.revenue)}</td>
+                    <td className="px-6 py-3 text-right font-mono text-naturals-green font-bold">{fmt(p.revenue)}</td>
                     <td className="px-6 py-3 text-right font-mono text-[#424242]">{p.cogs > 0 ? fmt(p.cogs) : <span className="text-amber-500">—</span>}</td>
-                    <td className={`px-6 py-3 text-right font-mono font-bold ${gp >= 0 ? 'text-[#006A38]' : 'text-red-600'}`}>{fmt(gp)}</td>
+                    <td className={`px-6 py-3 text-right font-mono font-bold ${gp >= 0 ? 'text-naturals-green' : 'text-red-600'}`}>{fmt(gp)}</td>
                     <td className={`px-6 py-3 text-right text-xs font-bold ${margin >= 30 ? 'text-green-600' : margin >= 15 ? 'text-amber-600' : 'text-red-500'}`}>
                       {p.cogs > 0 ? `${margin.toFixed(1)}%` : '—'}
                     </td>
@@ -278,7 +278,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
         {sortedRawMat.length === 0 ? (
           <p className="text-sm text-[#9E9E9E] px-6 py-8 text-center">
             No production batches logged in this period.{' '}
-            <Link href="/admin/production" className="underline text-[#006A38]">Log a production batch →</Link>
+            <Link href="/admin/production" className="underline text-naturals-green">Log a production batch →</Link>
           </p>
         ) : (
           <table className="w-full text-sm">
@@ -312,7 +312,7 @@ export default async function ProfitLossPage({ searchParams }: { searchParams: S
                     <td className="px-6 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <div className="w-16 bg-[#F0F0F0] rounded-full h-1.5 overflow-hidden">
-                          <div className="bg-[#006A38] h-1.5 rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
+                          <div className="bg-naturals-green h-1.5 rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
                         </div>
                         <span className="text-xs font-mono text-[#424242] w-10 text-right">{pct.toFixed(1)}%</span>
                       </div>
@@ -366,7 +366,7 @@ function PLRow({ label, value, note, negative, bold, large, highlight }: {
   highlight?: 'green' | 'red';
 }) {
   const rowBg  = highlight === 'green' ? 'bg-green-50' : highlight === 'red' ? 'bg-red-50' : '';
-  const valCol = highlight === 'green' ? 'text-green-700' : highlight === 'red' ? 'text-red-700' : negative ? 'text-red-600' : 'text-[#006A38]';
+  const valCol = highlight === 'green' ? 'text-green-700' : highlight === 'red' ? 'text-red-700' : negative ? 'text-red-600' : 'text-naturals-green';
   return (
     <tr className={rowBg}>
       <td className={`px-6 py-3 ${bold ? 'font-bold' : 'font-medium'} text-[#212121] ${large ? 'text-base' : 'text-sm'}`}>

@@ -88,7 +88,7 @@ export default function AdminCouponsPage() {
         </div>
         <button
           onClick={() => setShowForm(v => !v)}
-          className="bg-[#006A38] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors"
+          className="bg-naturals-green text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors"
         >
           {showForm ? "Cancel" : "+ New Coupon"}
         </button>
@@ -101,12 +101,12 @@ export default function AdminCouponsPage() {
             <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Coupon Code</label>
             <input type="text" value={code} onChange={e => setCode(e.target.value.toUpperCase())} required
               placeholder="e.g. SAVE20"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] font-mono uppercase" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green font-mono uppercase" />
           </div>
           <div>
             <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Type</label>
             <select value={type} onChange={e => setType(e.target.value as any)}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]">
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green">
               <option value="percentage">Percentage (%)</option>
               <option value="fixed">Fixed (₹)</option>
             </select>
@@ -117,29 +117,29 @@ export default function AdminCouponsPage() {
             </label>
             <input type="number" value={value} onChange={e => setValue(e.target.value)} required min="0.01" step="0.01"
               placeholder={type === "percentage" ? "20" : "100"}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Min Order (₹)</label>
             <input type="number" value={minOrder} onChange={e => setMinOrder(e.target.value)} min="0" step="1"
               placeholder="Optional"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Max Uses</label>
             <input type="number" value={maxUses} onChange={e => setMaxUses(e.target.value)} min="1" step="1"
               placeholder="Unlimited"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-bold text-[#616161] uppercase tracking-wider mb-1.5">Expires On</label>
             <input type="date" value={expiresAt} onChange={e => setExpiresAt(e.target.value)}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           {error && <p className="col-span-full text-sm text-red-600 font-medium">{error}</p>}
           <div className="col-span-full">
             <button type="submit" disabled={saving}
-              className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
+              className="bg-naturals-green text-white font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
               {saving ? "Creating…" : "Create Coupon"}
             </button>
           </div>
@@ -168,7 +168,7 @@ export default function AdminCouponsPage() {
             <tbody className="divide-y divide-[#F5F5F5]">
               {coupons.map(c => (
                 <tr key={c.id} className="hover:bg-[#FAFAF8]">
-                  <td className="px-5 py-3.5 font-mono font-bold text-[#006A38]">{c.code}</td>
+                  <td className="px-5 py-3.5 font-mono font-bold text-naturals-green">{c.code}</td>
                   <td className="px-5 py-3.5 font-semibold">
                     {c.type === "percentage" ? `${c.value}%` : `₹${c.value}`} off
                   </td>
@@ -188,7 +188,7 @@ export default function AdminCouponsPage() {
                   </td>
                   <td className="px-5 py-3.5 text-right flex gap-2 justify-end">
                     <button onClick={() => toggleActive(c.id, c.active)}
-                      className="text-xs font-bold text-[#006A38] border border-[#006A38] px-2.5 py-1 rounded-lg hover:bg-[#006A38] hover:text-white transition-colors">
+                      className="text-xs font-bold text-naturals-green border border-naturals-green px-2.5 py-1 rounded-lg hover:bg-naturals-green hover:text-white transition-colors">
                       {c.active ? "Disable" : "Enable"}
                     </button>
                     <button onClick={() => deleteCoupon(c.id)}

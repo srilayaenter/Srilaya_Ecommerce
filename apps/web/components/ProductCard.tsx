@@ -137,7 +137,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={handleAddToCart}
               disabled={isPending || isAddedSuccess || (selectedVariant.stock ?? 1) <= 0}
               className={`w-full text-white font-bold py-2 rounded-lg text-xs transition duration-200 ${
-                isAddedSuccess ? "bg-emerald-600" : "bg-emerald-700 hover:bg-[#00522B] disabled:opacity-50"
+                isAddedSuccess ? "bg-emerald-600" : "bg-emerald-700 hover:bg-naturals-green-dark disabled:opacity-50"
               }`}
             >
               {isPending ? "Adding..." : isAddedSuccess ? "✓ Added!" : "Add to Cart"}
@@ -168,7 +168,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          <div className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-[#00522B] text-[#9E9E9E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#F9F9F9] group-hover:bg-naturals-green-dark text-[#9E9E9E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
             →
           </div>
         </div>

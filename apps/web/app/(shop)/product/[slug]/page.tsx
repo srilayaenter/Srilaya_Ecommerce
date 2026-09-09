@@ -149,7 +149,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             </div>
           )}
           {lowestPrice !== null && (
-            <p className="mt-3 text-2xl font-black text-[#006A38]">
+            <p className="mt-3 text-2xl font-black text-naturals-green">
               ₹{lowestPrice.toFixed(2)}
               <span className="text-sm font-medium text-[#9E9E9E] ml-2">onwards</span>
             </p>
@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
               { icon: ArrowCounterClockwise, label: "7-Day Returns" },
             ] as Array<{ icon: PhosphorIcon; label: string }>).map(b => (
               <div key={b.label} className="flex flex-col items-center gap-1 bg-white border border-[#E0E0E0] rounded-xl py-3 px-2 text-center">
-                <b.icon size={20} weight="regular" className="text-[#006A38]" />
+                <b.icon size={20} weight="regular" className="text-naturals-green" />
                 <span className="text-[11px] font-semibold text-[#424242]">{b.label}</span>
               </div>
             ))}

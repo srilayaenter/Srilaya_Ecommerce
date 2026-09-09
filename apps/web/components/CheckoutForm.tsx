@@ -140,7 +140,7 @@ export default function CheckoutForm({
                   id="chk-name" type="text" name="name" required
                   defaultValue={defaultName}
                   placeholder="Ravi Kumar"
-                  className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                  className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                 />
               </div>
 
@@ -154,7 +154,7 @@ export default function CheckoutForm({
                     defaultValue={defaultEmail}
                     placeholder="you@example.com"
                     onBlur={handleEmailBlur}
-                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
                 <div>
@@ -165,7 +165,7 @@ export default function CheckoutForm({
                     id="chk-phone" type="tel" name="phone" required
                     defaultValue={defaultPhone}
                     placeholder="+91 98765 43210"
-                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function CheckoutForm({
                   id="chk-address" name="address" required rows={3}
                   defaultValue={defaultAddress}
                   placeholder="Street address, flat/house number..."
-                  className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242] resize-none"
+                  className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242] resize-none"
                 />
               </div>
 
@@ -191,7 +191,7 @@ export default function CheckoutForm({
                     id="chk-city" type="text" name="city" required
                     defaultValue={defaultCity}
                     placeholder="Mysuru"
-                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
                 <div>
@@ -206,7 +206,7 @@ export default function CheckoutForm({
                       setState(e.target.value);
                       setSelectedCourier("");
                     }}
-                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
                 <div>
@@ -217,7 +217,7 @@ export default function CheckoutForm({
                     id="chk-zipcode" type="text" name="zipCode" required
                     defaultValue={defaultZip}
                     placeholder="570001"
-                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-sm border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
               </div>
@@ -249,7 +249,7 @@ export default function CheckoutForm({
                       key={opt.key}
                       className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${
                         selectedCourier === opt.key
-                          ? "border-[#006A38] bg-emerald-50"
+                          ? "border-naturals-green bg-emerald-50"
                           : "border-[#E0E0E0] hover:border-slate-300 bg-white"
                       }`}
                     >
@@ -297,7 +297,7 @@ export default function CheckoutForm({
                   key={opt.value}
                   className={`flex flex-col gap-1 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                     paymentMethod === opt.value
-                      ? "border-[#006A38] bg-emerald-50"
+                      ? "border-naturals-green bg-emerald-50"
                       : "border-[#E0E0E0] hover:border-slate-300"
                   }`}
                 >
@@ -328,7 +328,7 @@ export default function CheckoutForm({
               onChange={e => setReferralCode(e.target.value.toUpperCase())}
               placeholder="e.g. SL-ABC123"
               maxLength={12}
-              className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38] bg-white text-[#424242] font-mono tracking-widest"
+              className="w-full border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green bg-white text-[#424242] font-mono tracking-widest"
             />
             <p className="text-xs text-[#9E9E9E] mt-1">Both you and your friend get 50 loyalty points on your first order.</p>
           </div>
@@ -348,9 +348,9 @@ export default function CheckoutForm({
                     type="checkbox"
                     checked={applyPoints}
                     onChange={e => setApplyPoints(e.target.checked)}
-                    className="w-4 h-4 accent-[#006A38]"
+                    className="w-4 h-4 accent-naturals-green"
                   />
-                  <span className="text-sm font-bold text-[#006A38]">Apply</span>
+                  <span className="text-sm font-bold text-naturals-green">Apply</span>
                 </label>
               </div>
             </div>
@@ -359,7 +359,7 @@ export default function CheckoutForm({
           <button
             type="submit"
             disabled={!canSubmit}
-            className="w-full bg-[#006A38] text-white py-3.5 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-naturals-green text-white py-3.5 rounded-xl font-bold hover:bg-naturals-green-dark transition-all shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending
               ? "Processing..."
@@ -426,7 +426,7 @@ export default function CheckoutForm({
         <div className="border-t border-[#E0E0E0] pt-4 mt-4">
           <div className="flex justify-between text-xl font-extrabold">
             <span className="text-[#212121]">Total</span>
-            <span className="text-[#006A38]">
+            <span className="text-naturals-green">
               {selectedOption ? `₹${total.toFixed(2)}` : "—"}
             </span>
           </div>

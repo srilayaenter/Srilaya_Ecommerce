@@ -15,7 +15,7 @@ const PRODUCTS = [
     local: "Navane / Thinai / Kangni",
     badge: "Heart Healthy",
     badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-    accent: "#D99B26",
+    accent: "rgb(var(--naturals-gold))",
     accentLight: "#FFFBEB",
     tags: ["heart", "diabetic"],
     benefits: [
@@ -193,7 +193,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#2E6F40] leading-tight max-w-4xl mx-auto mb-4">
             Nature&apos;s Supergrains:<br className="hidden sm:block" />
-            <span className="text-[#5C3A21] underline decoration-[#D99B26] decoration-wavy decoration-2">
+            <span className="text-[#5C3A21] underline decoration-naturals-gold decoration-wavy decoration-2">
               The Grain Revolution.
             </span>
           </h1>
@@ -316,7 +316,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
         {/* Benefits */}
         <section className="bg-gradient-to-r from-[#2E6F40] to-emerald-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">Wellness First</span>
+            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">Wellness First</span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">Why Whole Millet Grains?</h2>
             <p className="text-emerald-100 mt-2 text-sm">The whole grain is always greater than the sum of its parts — bran, germ, and endosperm working together.</p>
           </div>
@@ -328,7 +328,7 @@ export default function RawMilletsPageClient({ productImageMap = {} }: RawMillet
               { icon: Leaf, title: "Truly Gluten-Free", desc: "All 8 varieties are naturally gluten-free — safe for wheat-sensitive diets." },
             ].map((b) => (
               <div key={b.title} className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 text-center hover:bg-white/20 transition-all duration-300">
-                <div className="w-14 h-14 bg-[#D99B26] text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
+                <div className="w-14 h-14 bg-naturals-gold text-[#5C3A21] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow"><b.icon className="w-7 h-7" weight="regular" /></div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>
                 <p className="text-xs text-emerald-100">{b.desc}</p>
               </div>

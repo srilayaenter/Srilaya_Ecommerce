@@ -166,7 +166,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
       </div>
 
       {saved && (
-        <div className="bg-[#006A38]/10 border border-[#006A38]/30 text-[#006A38] px-4 py-3 rounded-lg text-sm font-semibold">
+        <div className="bg-naturals-green/10 border border-naturals-green/30 text-naturals-green px-4 py-3 rounded-lg text-sm font-semibold">
           Changes saved successfully.
         </div>
       )}
@@ -177,7 +177,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         <div className="grid grid-cols-2 gap-3 text-xs">
           {STAFF_ROLES.map(r => (
             <div key={r} className="flex items-start gap-2 p-3 bg-[#F5F5F5] rounded-lg">
-              <span className="font-bold text-[#006A38] w-36 shrink-0">{ROLE_LABELS[r]}</span>
+              <span className="font-bold text-naturals-green w-36 shrink-0">{ROLE_LABELS[r]}</span>
               <span className="text-[#616161]">{roleDescription(r)}</span>
             </div>
           ))}
@@ -224,7 +224,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                       title={user.active ? 'Deactivate account' : 'Activate account'}
                       className={`w-10 h-6 rounded-full relative transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 ${
                         user.active
-                          ? 'bg-[#006A38] focus:ring-[#006A38]'
+                          ? 'bg-naturals-green focus:ring-naturals-green'
                           : 'bg-[#E0E0E0] focus:ring-[#9E9E9E]'
                       }`}
                     >
@@ -241,7 +241,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                       required
                       minLength={8}
                       placeholder="New password"
-                      className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm w-36 focus:outline-none focus:border-[#006A38]"
+                      className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm w-36 focus:outline-none focus:border-naturals-green"
                     />
                     <button
                       type="submit"
@@ -309,14 +309,14 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                         <select
                           name="role"
                           defaultValue={user.role}
-                          className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-[#006A38]"
+                          className="border border-[#E0E0E0] rounded-lg px-2 py-1.5 text-sm bg-white text-[#424242] focus:outline-none focus:border-naturals-green"
                         >
                           <option value="customer">Customer</option>
                           {STAFF_ROLES.map(r => (
                             <option key={r} value={r}>{ROLE_LABELS[r]}</option>
                           ))}
                         </select>
-                        <button type="submit" className="bg-[#006A38] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#00522B] transition-colors">
+                        <button type="submit" className="bg-naturals-green text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-naturals-green-dark transition-colors">
                           Save
                         </button>
                       </form>
@@ -337,16 +337,16 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
             <input type="email" name="email" required placeholder="staff@srilaya.com" autoComplete="off"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Role</label>
-            <select name="role" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]">
+            <select name="role" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green">
               {STAFF_ROLES.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
             </select>
           </div>
           <div className="flex items-end">
-            <button type="submit" className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg hover:bg-[#00522B] transition-colors text-sm w-full">
+            <button type="submit" className="bg-naturals-green text-white font-bold px-6 py-2.5 rounded-lg hover:bg-naturals-green-dark transition-colors text-sm w-full">
               Send Activation Link
             </button>
           </div>
@@ -361,21 +361,21 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Email</label>
             <input type="email" name="email" required placeholder="staff@srilaya.com" autoComplete="off"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Password</label>
             <input type="password" name="password" required minLength={8} placeholder="Min 8 characters" autoComplete="new-password"
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#616161] mb-1">Role</label>
-            <select name="role" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]">
+            <select name="role" className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green">
               {STAFF_ROLES.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
             </select>
           </div>
           <div className="col-span-3">
-            <button type="submit" className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-lg hover:bg-[#00522B] transition-colors text-sm">
+            <button type="submit" className="bg-naturals-green text-white font-bold px-6 py-2.5 rounded-lg hover:bg-naturals-green-dark transition-colors text-sm">
               Save Staff Account
             </button>
           </div>
@@ -397,7 +397,7 @@ function roleDescription(role: AppRole): string {
 
 function roleBadgeClass(role: string): string {
   switch (role) {
-    case 'admin':           return 'bg-[#006A38]/10 text-[#006A38]';
+    case 'admin':           return 'bg-naturals-green/10 text-naturals-green';
     case 'manager':         return 'bg-[#2196F3]/10 text-[#1976D2]';
     case 'inventory_staff': return 'bg-[#FF9800]/10 text-[#E65100]';
     case 'billing_staff':   return 'bg-[#9C27B0]/10 text-[#6A1B9A]';

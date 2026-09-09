@@ -35,7 +35,7 @@ export default async function ImportPage() {
           </p>
         </div>
         <Link href="/admin/raw-materials"
-          className="text-sm text-[#006A38] font-bold hover:underline">← Raw Materials</Link>
+          className="text-sm text-naturals-green font-bold hover:underline">← Raw Materials</Link>
       </div>
 
       {!aiEnabled && (

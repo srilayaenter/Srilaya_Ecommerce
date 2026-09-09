@@ -26,13 +26,13 @@ export default function GlobalError({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={reset}
-            className="bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#00522B] transition-colors text-sm"
+            className="bg-naturals-green text-white font-bold px-6 py-3 rounded-xl hover:bg-naturals-green-dark transition-colors text-sm"
           >
             Try Again
           </button>
           <Link
             href="/"
-            className="border border-[#006A38] text-[#006A38] font-bold px-6 py-3 rounded-xl hover:bg-[#e8f5ee] transition-colors text-sm"
+            className="border border-naturals-green text-naturals-green font-bold px-6 py-3 rounded-xl hover:bg-[#e8f5ee] transition-colors text-sm"
           >
             Go to Homepage
           </Link>

@@ -137,7 +137,7 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-red-950 leading-tight max-w-4xl mx-auto mb-4">
             Nature&apos;s Ancient Gems:<br className="hidden sm:block" />
-            <span className="text-[#2E6F40] underline decoration-[#D99B26] decoration-wavy decoration-2">
+            <span className="text-[#2E6F40] underline decoration-naturals-gold decoration-wavy decoration-2">
               The Rice Revolution.
             </span>
           </h1>
@@ -280,7 +280,7 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
         {/* Why Traditional Rice */}
         <section className="bg-gradient-to-r from-red-950 to-[#2E6F40] text-white rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-[#D99B26] font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
+            <span className="text-naturals-gold font-bold text-xs uppercase tracking-widest bg-white/10 px-4 py-1 rounded-full border border-white/20">
               Wellness First
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold mt-3">
@@ -304,7 +304,7 @@ export default function TraditionalRicePageClient({ productImageMap = {} }: Trad
                 key={b.title}
                 className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 hover:bg-white/20 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-[#D99B26] rounded-xl flex items-center justify-center mb-4 shadow">
+                <div className="w-12 h-12 bg-naturals-gold rounded-xl flex items-center justify-center mb-4 shadow">
                   <b.icon className="w-6 h-6 text-[#5C3A21]" weight="regular" />
                 </div>
                 <h3 className="font-bold text-base mb-1">{b.title}</h3>

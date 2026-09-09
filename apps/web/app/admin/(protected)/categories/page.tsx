@@ -79,7 +79,7 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <a href={`?edit=${category.id}`} className="text-xs text-[#006A38] font-bold hover:underline">
+                      <a href={`?edit=${category.id}`} className="text-xs text-naturals-green font-bold hover:underline">
                         Edit slug
                       </a>
                       <form action={deleteCategory}>
@@ -102,10 +102,10 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
                         type="text"
                         name="slug"
                         defaultValue={category.slug}
-                        className="flex-1 border rounded px-2 py-1 text-sm font-mono focus:outline-none focus:border-[#006A38]"
+                        className="flex-1 border rounded px-2 py-1 text-sm font-mono focus:outline-none focus:border-naturals-green"
                         placeholder="muesli-and-granola"
                       />
-                      <button type="submit" className="bg-[#006A38] text-white px-3 py-1 rounded text-sm font-bold hover:bg-[#00522B]">
+                      <button type="submit" className="bg-naturals-green text-white px-3 py-1 rounded text-sm font-bold hover:bg-naturals-green-dark">
                         Save
                       </button>
                       <a href="/admin/categories" className="text-sm text-gray-400 hover:text-gray-600">Cancel</a>
@@ -147,7 +147,7 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
 
             <button
               type="submit"
-              className="w-full bg-[#006A38] text-white py-3 rounded-lg font-semibold hover:bg-[#00522B]"
+              className="w-full bg-naturals-green text-white py-3 rounded-lg font-semibold hover:bg-naturals-green-dark"
             >
               Add Category
             </button>
