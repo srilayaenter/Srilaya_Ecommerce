@@ -22,7 +22,7 @@ export default function AdminError({
       </pre>
       <button
         onClick={reset}
-        className="bg-[#006A38] text-white px-6 py-2 rounded-lg font-bold"
+        className="bg-naturals-green text-white px-6 py-2 rounded-lg font-bold"
       >
         Try again
       </button>

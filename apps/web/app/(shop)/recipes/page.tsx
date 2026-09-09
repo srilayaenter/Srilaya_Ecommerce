@@ -124,7 +124,7 @@ export default async function RecipesPage() {
 
   return (
     <main className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">Millet Recipes</h1>
         <p className="text-[#FFF8E1] text-sm mt-1 max-w-md mx-auto">
           Quick, wholesome recipes using SriLaYa millets — most ready in under 20 minutes.
@@ -135,20 +135,20 @@ export default async function RecipesPage() {
 
         {/* Static featured millet rava recipes */}
         <div className="mb-10">
-          <h2 className="text-sm font-bold text-[#006A38] uppercase tracking-widest mb-4">Featured Millet Rava Recipes</h2>
+          <h2 className="text-sm font-bold text-naturals-green uppercase tracking-widest mb-4">Featured Millet Rava Recipes</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURED_RECIPES.map((r) => (
               <div key={r.title} className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
                 <RecipeCardImage src={r.image} alt={r.title} tag={r.tag} />
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-bold text-[#006A38] bg-[#E8F5E9] px-2 py-0.5 rounded-full">Recipe</span>
+                    <span className="text-xs font-bold text-naturals-green bg-[#E8F5E9] px-2 py-0.5 rounded-full">Recipe</span>
                     <span className="text-xs text-[#9E9E9E]">{r.readMins} min</span>
                   </div>
                   <h2 className="font-black text-[#212121] leading-snug mb-1">{r.title}</h2>
                   <p className="text-sm text-[#757575] line-clamp-2 mb-3">{r.excerpt}</p>
                   <p className="text-xs text-gray-600 leading-relaxed mb-3">{r.desc}</p>
-                  <div className="text-xs font-semibold text-[#006A38] bg-[#E8F5E9] px-3 py-2 rounded-lg">
+                  <div className="text-xs font-semibold text-naturals-green bg-[#E8F5E9] px-3 py-2 rounded-lg">
                     <ThumbsUp size={12} weight="regular" className="inline-block mr-1" />Best with: {r.best}
                   </div>
                 </div>
@@ -159,7 +159,7 @@ export default async function RecipesPage() {
 
         {/* Static featured millet flour recipes */}
         <div className="mb-10">
-          <h2 className="text-sm font-bold text-[#006A38] uppercase tracking-widest mb-4">Featured Millet Flour Recipes</h2>
+          <h2 className="text-sm font-bold text-naturals-green uppercase tracking-widest mb-4">Featured Millet Flour Recipes</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURED_FLOUR_RECIPES.map((r) => (
               <div key={r.title} className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
@@ -183,7 +183,7 @@ export default async function RecipesPage() {
 
         {/* Divider before DB recipes */}
         {recipes.length > 0 && (
-          <h2 className="text-sm font-bold text-[#006A38] uppercase tracking-widest mb-4">More Recipes</h2>
+          <h2 className="text-sm font-bold text-naturals-green uppercase tracking-widest mb-4">More Recipes</h2>
         )}
 
         {recipes.length === 0 ? null : (
@@ -205,12 +205,12 @@ export default async function RecipesPage() {
                 )}
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-bold text-[#006A38] bg-[#E8F5E9] px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-naturals-green bg-[#E8F5E9] px-2 py-0.5 rounded-full">
                       Recipe
                     </span>
                     <span className="text-xs text-[#9E9E9E]">{recipe.readMins} min read</span>
                   </div>
-                  <h2 className="font-black text-[#212121] group-hover:text-[#006A38] transition-colors leading-snug">
+                  <h2 className="font-black text-[#212121] group-hover:text-naturals-green transition-colors leading-snug">
                     {recipe.title}
                   </h2>
                   {recipe.excerpt && (
@@ -223,7 +223,7 @@ export default async function RecipesPage() {
         )}
 
         <div className="mt-12 text-center">
-          <Link href="/blog" className="text-sm text-[#006A38] font-semibold hover:underline">
+          <Link href="/blog" className="text-sm text-naturals-green font-semibold hover:underline">
             ← All articles &amp; health guides
           </Link>
         </div>

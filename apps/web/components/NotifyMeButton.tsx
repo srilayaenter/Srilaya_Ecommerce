@@ -40,7 +40,7 @@ export default function NotifyMeButton({ variantId }: { variantId: string }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full border-2 border-dashed border-[#E0E0E0] text-[#9E9E9E] font-bold py-3 rounded-xl text-sm hover:border-[#006A38] hover:text-[#006A38] transition-colors"
+        className="w-full border-2 border-dashed border-[#E0E0E0] text-[#9E9E9E] font-bold py-3 rounded-xl text-sm hover:border-naturals-green hover:text-naturals-green transition-colors"
       >
         <Bell size={15} weight="regular" className="inline-block mr-1.5" />Notify Me When In Stock
       </button>
@@ -56,12 +56,12 @@ export default function NotifyMeButton({ variantId }: { variantId: string }) {
         placeholder="your@email.com"
         required
         autoFocus
-        className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006A38]"
+        className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-naturals-green"
       />
       {error && <p className="text-xs text-red-600">{error}</p>}
       <div className="flex gap-2">
         <button type="submit" disabled={loading}
-          className="flex-1 bg-[#006A38] text-white font-bold py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60">
+          className="flex-1 bg-naturals-green text-white font-bold py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60">
           {loading ? "Saving…" : "Notify Me"}
         </button>
         <button type="button" onClick={() => setOpen(false)}

@@ -3,6 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Naturals design tokens — single source of truth for the site's brand palette.
+ * Stored as space-separated RGB channels so Tailwind's `naturals-*` colors
+ * (see tailwind.config.js) support opacity modifiers, e.g. bg-naturals-green/10.
+ * Non-Tailwind consumers (SVG attributes, inline styles) can use
+ * rgb(var(--naturals-green)) directly.
+ */
+:root {
+  --naturals-green: 0 106 56;        /* #006A38 */
+  --naturals-green-dark: 0 82 43;    /* #00522B */
+  --naturals-green-deep: 0 61 32;    /* #003D20 */
+  --naturals-gold: 251 176 64;       /* #FBB040 */
+  --naturals-cream: 253 248 240;     /* #FDF8F0 */
+  --naturals-charcoal: 33 37 41;     /* #212529 */
+  --naturals-white: 255 255 255;     /* #FFFFFF */
+}
+
 /* Explicit fallback layers to satisfy editor settings */
 @layer base {
   html, body {

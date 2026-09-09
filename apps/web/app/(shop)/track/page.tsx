@@ -76,7 +76,7 @@ function ReorderButton({ orderId, contact }: { orderId: string; contact: string 
     <button
       onClick={handleReorder}
       disabled={loading || done}
-      className="inline-flex items-center gap-2 bg-[#006A38] text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#00522B] transition-colors disabled:opacity-60"
+      className="inline-flex items-center gap-2 bg-naturals-green text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
     >
       {done ? '✓ Added to cart! Redirecting…' : loading ? 'Adding to cart…' : <><ArrowCounterClockwise size={15} weight="bold" /> Reorder</>}
     </button>
@@ -127,7 +127,7 @@ function TrackOrderContent() {
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
       {/* Hero strip */}
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">Track Your Order</h1>
         <p className="text-[#FFF8E1] text-sm mt-1">Enter your Order ID and the email or phone used at checkout.</p>
       </div>
@@ -145,7 +145,7 @@ function TrackOrderContent() {
                 onChange={e => setOrderId(e.target.value)}
                 placeholder="e.g. #CMQXAHRX"
                 required
-                className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006A38] font-mono"
+                className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-naturals-green font-mono"
               />
               <p className="text-xs text-[#9E9E9E] mt-1">Found in your order confirmation email or WhatsApp receipt.</p>
             </div>
@@ -157,7 +157,7 @@ function TrackOrderContent() {
                 onChange={e => setContact(e.target.value)}
                 placeholder="email@example.com or 9876543210"
                 required
-                className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
 
@@ -170,7 +170,7 @@ function TrackOrderContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#006A38] text-white font-bold py-3 rounded-xl hover:bg-[#00522B] transition-colors disabled:opacity-60 text-sm"
+              className="w-full bg-naturals-green text-white font-bold py-3 rounded-xl hover:bg-naturals-green-dark transition-colors disabled:opacity-60 text-sm"
             >
               {loading ? 'Looking up…' : 'Track Order'}
             </button>
@@ -186,7 +186,7 @@ function TrackOrderContent() {
               <div className="flex items-start justify-between flex-wrap gap-3">
                 <div>
                   <p className="text-xs font-bold text-[#9E9E9E] uppercase tracking-wider">Order</p>
-                  <p className="text-2xl font-black text-[#006A38] font-mono mt-0.5">#{order.shortId}</p>
+                  <p className="text-2xl font-black text-naturals-green font-mono mt-0.5">#{order.shortId}</p>
                   <p className="text-sm text-[#616161] mt-1">
                     Placed on {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}
                   </p>
@@ -209,7 +209,7 @@ function TrackOrderContent() {
                   href={`/invoice/${order.id}?contact=${encodeURIComponent(contact)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-[#006A38] text-[#006A38] text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-[#006A38] hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 border border-naturals-green text-naturals-green text-sm font-bold px-4 py-2.5 rounded-xl hover:bg-naturals-green hover:text-white transition-colors"
                 >
                   <Receipt size={16} weight="regular" /> Download Invoice
                 </a>
@@ -238,7 +238,7 @@ function TrackOrderContent() {
                 <div className="relative">
                   <div className="absolute top-5 left-5 right-5 h-0.5 bg-[#E0E0E0] -z-0" />
                   <div
-                    className="absolute top-5 left-5 h-0.5 bg-[#006A38] transition-all duration-500 -z-0"
+                    className="absolute top-5 left-5 h-0.5 bg-naturals-green transition-all duration-500 -z-0"
                     style={{ width: currentStep === 0 ? '0%' : currentStep === 1 ? '50%' : '100%' }}
                   />
                   <div className="relative flex justify-between">
@@ -249,11 +249,11 @@ function TrackOrderContent() {
                       return (
                         <div key={step} className="flex flex-col items-center text-center w-1/3 px-2">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                            done ? 'bg-[#006A38] border-[#006A38] shadow-md' : 'bg-white border-[#E0E0E0]'
+                            done ? 'bg-naturals-green border-naturals-green shadow-md' : 'bg-white border-[#E0E0E0]'
                           }`}>
                             {done ? <info.icon size={18} weight="regular" className="text-white" /> : <span className="text-[#9E9E9E] text-sm font-bold">{idx + 1}</span>}
                           </div>
-                          <p className={`text-xs font-bold mt-2 ${active ? 'text-[#006A38]' : done ? 'text-[#424242]' : 'text-[#9E9E9E]'}`}>
+                          <p className={`text-xs font-bold mt-2 ${active ? 'text-naturals-green' : done ? 'text-[#424242]' : 'text-[#9E9E9E]'}`}>
                             {info.label}
                           </p>
                           {active && (
@@ -297,7 +297,7 @@ function TrackOrderContent() {
                   {order.shipment.estimatedDelivery && (
                     <div>
                       <p className="text-[10px] uppercase font-bold text-[#9E9E9E] tracking-wider">Est. Delivery</p>
-                      <p className="font-semibold mt-0.5 text-[#006A38]">{new Date(order.shipment.estimatedDelivery).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                      <p className="font-semibold mt-0.5 text-naturals-green">{new Date(order.shipment.estimatedDelivery).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                     </div>
                   )}
                 </div>
@@ -306,7 +306,7 @@ function TrackOrderContent() {
                     href={order.shipment.trackingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 bg-[#006A38] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#00522B] transition-colors"
+                    className="inline-flex items-center gap-2 mt-4 bg-naturals-green text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-naturals-green-dark transition-colors"
                   >
                     <MagnifyingGlass size={14} weight="bold" /> Track on Courier Website
                   </a>
@@ -337,8 +337,8 @@ function TrackOrderContent() {
                 {order.shippingFee > 0 && (
                   <div className="flex justify-between text-[#616161]"><span>Shipping</span><span>₹{order.shippingFee.toFixed(2)}</span></div>
                 )}
-                <div className="flex justify-between font-black text-[#212121] text-base pt-1 border-t border-[#006A38]">
-                  <span>Total</span><span className="text-[#006A38]">₹{order.total.toFixed(2)}</span>
+                <div className="flex justify-between font-black text-[#212121] text-base pt-1 border-t border-naturals-green">
+                  <span>Total</span><span className="text-naturals-green">₹{order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -355,7 +355,7 @@ function TrackOrderContent() {
             {/* Help */}
             <div className="bg-[#FFF8E1] border border-[#FFE082] rounded-2xl p-5 text-center text-sm text-[#424242]">
               <p className="font-bold text-[#212121] mb-1">Need help with your order?</p>
-              <p>Call us at <a href={`tel:${BRAND.phone}`} className="text-[#006A38] font-bold">{BRAND.phone}</a> or email <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-bold">{BRAND.email}</a></p>
+              <p>Call us at <a href={`tel:${BRAND.phone}`} className="text-naturals-green font-bold">{BRAND.phone}</a> or email <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-bold">{BRAND.email}</a></p>
             </div>
 
           </div>

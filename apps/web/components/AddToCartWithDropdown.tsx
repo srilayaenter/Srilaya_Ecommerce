@@ -59,7 +59,7 @@ export default function AddToCartWithDropdown({
               setQuantity(1);
               onVariantChange?.(e.target.value);
             }}
-            className="w-full appearance-none border-2 border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-[#006A38] focus:border-[#006A38] outline-none text-base bg-white text-[#212121] cursor-pointer"
+            className="w-full appearance-none border-2 border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-naturals-green focus:border-naturals-green outline-none text-base bg-white text-[#212121] cursor-pointer"
           >
             {variants.map((v) => (
               <option key={v.id} value={v.id}>
@@ -68,7 +68,7 @@ export default function AddToCartWithDropdown({
             ))}
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006A38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--naturals-green))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="m6 9 6 6 6-6"/>
             </svg>
           </div>
@@ -76,7 +76,7 @@ export default function AddToCartWithDropdown({
       </div>
 
       {/* Price */}
-      <div className="text-3xl font-black text-[#006A38] mb-4">
+      <div className="text-3xl font-black text-naturals-green mb-4">
         ₹{selected.price.toFixed(2)}
       </div>
 

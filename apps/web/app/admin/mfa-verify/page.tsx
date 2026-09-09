@@ -34,7 +34,7 @@ export default function MfaVerifyPage() {
     <div className="flex flex-col items-center justify-center min-h-[80vh] font-sans pb-20 mt-12">
       <div className="text-center mb-8">
         <h1 className="text-[32px] font-black text-[#212121] tracking-tight">
-          SriLaYa <span className="text-[#006A38]">Foods</span>
+          SriLaYa <span className="text-naturals-green">Foods</span>
         </h1>
         <p className="text-[#8D6E63] font-bold tracking-wide mt-1 uppercase text-[12px]">
           Two-Factor Verification
@@ -43,7 +43,7 @@ export default function MfaVerifyPage() {
 
       <div className="bg-white rounded-[12px] border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] w-full max-w-sm p-8">
         <div className="text-center mb-6">
-          <LockKey size={40} weight="regular" className="text-[#006A38] mx-auto" />
+          <LockKey size={40} weight="regular" className="text-naturals-green mx-auto" />
           <p className="text-sm text-[#616161] mt-3">
             Open your authenticator app and enter the 6-digit code for <strong>SriLaYa Admin</strong>.
           </p>
@@ -60,7 +60,7 @@ export default function MfaVerifyPage() {
             placeholder="000000"
             required
             autoFocus
-            className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 text-center text-2xl font-mono tracking-[0.5em] focus:outline-none focus:border-[#006A38] focus:ring-1 focus:ring-[#006A38]"
+            className="w-full border border-[#E0E0E0] rounded-[8px] px-4 py-3 text-center text-2xl font-mono tracking-[0.5em] focus:outline-none focus:border-naturals-green focus:ring-1 focus:ring-naturals-green"
           />
 
           {error && (
@@ -72,7 +72,7 @@ export default function MfaVerifyPage() {
           <button
             type="submit"
             disabled={loading || code.length !== 6}
-            className="w-full bg-[#006A38] text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-[#00522B] transition-all disabled:opacity-70"
+            className="w-full bg-naturals-green text-white py-3 rounded-[8px] font-bold text-[15px] hover:bg-naturals-green-dark transition-all disabled:opacity-70"
           >
             {loading ? "Verifying…" : "Verify"}
           </button>

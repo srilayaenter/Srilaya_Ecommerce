@@ -56,7 +56,7 @@ export default function MfaSetupPage() {
             Two-factor authentication is now active. You'll be asked for a code each time you log in.
           </p>
           <button onClick={() => router.push("/admin")}
-            className="bg-[#006A38] text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#00522B] transition-colors">
+            className="bg-naturals-green text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors">
             Back to Dashboard
           </button>
         </div>
@@ -102,13 +102,13 @@ export default function MfaSetupPage() {
               placeholder="000000"
               required
               autoFocus
-              className="w-full border border-[#E0E0E0] rounded-lg px-4 py-3 text-center text-xl font-mono tracking-[0.5em] focus:outline-none focus:border-[#006A38]"
+              className="w-full border border-[#E0E0E0] rounded-lg px-4 py-3 text-center text-xl font-mono tracking-[0.5em] focus:outline-none focus:border-naturals-green"
             />
             {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
             <button
               type="submit"
               disabled={loading || code.length !== 6}
-              className="w-full bg-[#006A38] text-white font-bold py-3 rounded-lg text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
+              className="w-full bg-naturals-green text-white font-bold py-3 rounded-lg text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
             >
               {loading ? "Verifying…" : "Enable MFA"}
             </button>

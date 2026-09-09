@@ -66,7 +66,7 @@ export default async function CartPage() {
           <div className="bg-white rounded-2xl border border-[#E0E0E0] shadow-sm p-12 text-center max-w-lg mx-auto">
             <ShoppingCart className="w-12 h-12 text-[#9E9E9E] mx-auto mb-4" weight="regular" />
             <p className="text-[#757575] font-medium text-lg mb-6">Your cart is empty</p>
-            <Link href="/product" className="block w-full bg-[#006A38] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm text-center">
+            <Link href="/product" className="block w-full bg-naturals-green text-white px-6 py-3 rounded-xl font-bold hover:bg-naturals-green-dark transition-all shadow-sm text-center">
               Continue Shopping
             </Link>
           </div>
@@ -93,14 +93,14 @@ export default async function CartPage() {
 
                     <div className="flex-1">
                       <Link href={`/product/${item.variant.product.slug}`}>
-                        <h3 className="font-bold text-lg text-[#212121] hover:text-[#006A38] transition-colors line-clamp-1">
+                        <h3 className="font-bold text-lg text-[#212121] hover:text-naturals-green transition-colors line-clamp-1">
                           {item.variant.product.title}
                         </h3>
                       </Link>
                       <p className="text-xs text-[#757575] mt-1 font-medium bg-[#F5F5F5] px-2 py-0.5 rounded-md inline-block">
                         Size: {item.variant.size}
                       </p>
-                      <p className="text-[#006A38] font-extrabold mt-3 text-base">
+                      <p className="text-naturals-green font-extrabold mt-3 text-base">
                         ₹{price.toFixed(2)}
                       </p>
                     </div>
@@ -169,7 +169,7 @@ export default async function CartPage() {
               <div className="border-t border-[#E0E0E0] pt-4 mb-6">
                 <div className="flex justify-between text-xl font-extrabold">
                   <span className="text-[#212121]">Subtotal + GST</span>
-                  <span className="text-[#006A38]">₹{total.toFixed(2)}</span>
+                  <span className="text-naturals-green">₹{total.toFixed(2)}</span>
                 </div>
                 <p className="text-[11px] text-[#9E9E9E] mt-1 text-right">
                   + shipping &amp; coupon discount applied at checkout
@@ -177,7 +177,7 @@ export default async function CartPage() {
               </div>
 
               <div className="space-y-3">
-                <Link href="/checkout" className="block w-full bg-[#006A38] text-white py-3 rounded-xl font-bold hover:bg-[#00522B] transition-all shadow-sm text-center text-sm">
+                <Link href="/checkout" className="block w-full bg-naturals-green text-white py-3 rounded-xl font-bold hover:bg-naturals-green-dark transition-all shadow-sm text-center text-sm">
                   Proceed to Checkout
                 </Link>
                 <Link href="/product" className="block w-full bg-[#F5F5F5] border border-[#E0E0E0] text-[#424242] py-3 rounded-xl font-bold hover:bg-[#EEEEEE] transition-all text-center text-sm">

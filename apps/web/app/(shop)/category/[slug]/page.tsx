@@ -269,8 +269,8 @@ export default async function CategoryPage({ params }: PageProps) {
               href={`/category/${sib.slug}`}
               className={`text-sm font-semibold px-3 py-1.5 rounded-full transition ${
                 sib.slug === category.slug
-                  ? "bg-[#006A38] text-white"
-                  : "text-[#006A38] bg-[#006A38]/10 hover:bg-[#006A38]/20"
+                  ? "bg-naturals-green text-white"
+                  : "text-naturals-green bg-naturals-green/10 hover:bg-naturals-green/20"
               }`}
             >
               {sib.name}
@@ -316,7 +316,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <p className="text-xs text-gray-400 mb-2">
                   {product.variants.length} size{product.variants.length !== 1 ? "s" : ""} available
                 </p>
-                <p className="text-[#006A38] font-black">{priceDisplay}</p>
+                <p className="text-naturals-green font-black">{priceDisplay}</p>
               </Link>
             );
           })}

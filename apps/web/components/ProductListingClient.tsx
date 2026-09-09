@@ -60,8 +60,8 @@ export default function ProductListingClient({ products, categories }: Props) {
               className={`
                 flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium border transition-colors
                 ${activeCategory === cat
-                  ? "bg-[#006A38] text-white border-[#006A38]"
-                  : "bg-white text-[#006A38] border-[#006A38] hover:bg-[#e8f5ee]"}
+                  ? "bg-naturals-green text-white border-naturals-green"
+                  : "bg-white text-naturals-green border-naturals-green hover:bg-[#e8f5ee]"}
               `}
             >
               {cat}
@@ -76,7 +76,7 @@ export default function ProductListingClient({ products, categories }: Props) {
             id="sort"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#212121] bg-white focus:outline-none focus:ring-2 focus:ring-[#006A38] focus:border-transparent"
+            className="appearance-none border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-[#212121] bg-white focus:outline-none focus:ring-2 focus:ring-naturals-green focus:border-transparent"
           >
             {SORT_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -97,7 +97,7 @@ export default function ProductListingClient({ products, categories }: Props) {
           <p className="text-lg mb-2">No products in this category yet.</p>
           <button
             onClick={() => setActiveCategory("All")}
-            className="text-[#006A38] underline text-sm"
+            className="text-naturals-green underline text-sm"
           >
             View all products
           </button>
@@ -130,7 +130,7 @@ export default function ProductListingClient({ products, categories }: Props) {
                   <WishlistButton productId={product.id} />
                 </div>
 
-                <div className="text-xs text-[#006A38] font-semibold mb-1">
+                <div className="text-xs text-naturals-green font-semibold mb-1">
                   {product.category.name}
                 </div>
                 <h2 className="font-bold text-[#212121] mb-1">{product.title}</h2>
@@ -140,7 +140,7 @@ export default function ProductListingClient({ products, categories }: Props) {
                 <p className="text-xs text-gray-400 mb-2">
                   {product.variants.length} size{product.variants.length !== 1 ? "s" : ""} available
                 </p>
-                <p className="text-[#006A38] font-black">{priceDisplay}</p>
+                <p className="text-naturals-green font-black">{priceDisplay}</p>
               </Link>
             );
           })}

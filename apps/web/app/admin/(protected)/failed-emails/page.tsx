@@ -69,7 +69,7 @@ export default async function FailedEmailsPage() {
                   <input type="hidden" name="id" value={email.id} />
                   <button
                     type="submit"
-                    className="bg-[#006A38] text-white px-4 py-2 rounded-lg hover:bg-[#00522B] text-sm"
+                    className="bg-naturals-green text-white px-4 py-2 rounded-lg hover:bg-naturals-green-dark text-sm"
                   >
                     Retry
                   </button>

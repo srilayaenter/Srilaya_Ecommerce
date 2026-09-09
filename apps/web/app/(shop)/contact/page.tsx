@@ -71,18 +71,18 @@ export default function ContactUsPage() {
                 href="https://www.google.com/maps/search/?api=1&query=Seegehalli+White+Field+Hoskote+Main+Road+Bengaluru+Karnataka+560067"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-2xl overflow-hidden border border-[#E0E0E0] shadow-sm bg-[#F0F4F0] hover:border-[#006A38] transition-colors group"
+                className="block rounded-2xl overflow-hidden border border-[#E0E0E0] shadow-sm bg-[#F0F4F0] hover:border-naturals-green transition-colors group"
                 style={{ height: 180 }}
               >
                 <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                  <MapPin size={32} weight="regular" className="text-[#006A38] group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-[#006A38] group-hover:underline">View on Google Maps</span>
+                  <MapPin size={32} weight="regular" className="text-naturals-green group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-naturals-green group-hover:underline">View on Google Maps</span>
                   <span className="text-[11px] text-[#9E9E9E] text-center px-4">Seegehalli, Bengaluru, Karnataka 560067</span>
                 </div>
               </a>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-emerald-50 text-naturals-green rounded-xl flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
@@ -97,7 +97,7 @@ export default function ContactUsPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-emerald-50 text-naturals-green rounded-xl flex items-center justify-center flex-shrink-0">
                   <Phone className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
@@ -111,7 +111,7 @@ export default function ContactUsPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-50 text-[#006A38] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-emerald-50 text-naturals-green rounded-xl flex items-center justify-center flex-shrink-0">
                   <Envelope className="w-5 h-5" weight="regular" />
                 </div>
                 <div>
@@ -157,7 +157,7 @@ export default function ContactUsPage() {
                         setFormData({ ...formData, name: e.target.value })
                       }
                       placeholder="Your name"
-                      className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                      className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                     />
                   </div>
 
@@ -174,7 +174,7 @@ export default function ContactUsPage() {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       placeholder="username@domain.com"
-                      className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                      className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                     />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export default function ContactUsPage() {
                       setFormData({ ...formData, phone: e.target.value })
                     }
                     placeholder="10-digit number"
-                    className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242]"
+                    className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242]"
                   />
                 </div>
 
@@ -208,7 +208,7 @@ export default function ContactUsPage() {
                       setFormData({ ...formData, message: e.target.value })
                     }
                     placeholder="Type your question here in detail..."
-                    className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#006A38] bg-white text-[#424242] resize-none"
+                    className="w-full text-xs font-medium border border-[#E0E0E0] rounded-xl px-4 py-2.5 focus:outline-none focus:border-naturals-green bg-white text-[#424242] resize-none"
                   ></textarea>
                 </div>
 
@@ -221,7 +221,7 @@ export default function ContactUsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full text-center font-bold text-xs bg-[#006A38] text-white hover:bg-[#00522B] disabled:opacity-60 py-3 rounded-xl transition-all duration-200 shadow-sm"
+                  className="w-full text-center font-bold text-xs bg-naturals-green text-white hover:bg-naturals-green-dark disabled:opacity-60 py-3 rounded-xl transition-all duration-200 shadow-sm"
                 >
                   {submitting ? "Sending..." : "Submit Inquiry Form"}
                 </button>

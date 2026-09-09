@@ -29,7 +29,7 @@ export default async function InventoryMatrixPage({ searchParams }: PageProps) {
         </div>
         <Link
           href="/admin/products/new"
-          className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors"
+          className="bg-naturals-green text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-naturals-green-dark transition-colors"
         >
           + Add New Product
         </Link>
@@ -57,7 +57,7 @@ export default async function InventoryMatrixPage({ searchParams }: PageProps) {
           <Link key={tab.href} href={tab.href}
             className={`px-4 py-1.5 text-sm font-semibold rounded-lg border transition-colors ${
               (tab.href === "/admin/products?status=draft") === showDraft
-                ? "bg-[#006A38] text-white border-[#006A38]"
+                ? "bg-naturals-green text-white border-naturals-green"
                 : "bg-white border-[#E0E0E0] text-[#9E9E9E] hover:text-[#212121]"
             }`}>
             {tab.label}
@@ -94,7 +94,7 @@ export default async function InventoryMatrixPage({ searchParams }: PageProps) {
                     return (
                       <div key={v.id} className={`flex items-center gap-4 text-xs py-1 ${inactive ? 'opacity-40' : ''}`}>
                         <span className="font-mono text-[#8D6E63] w-12">{v.size}</span>
-                        <span className="font-bold text-[#006A38] w-16">₹{toNum(v.price).toFixed(2)}</span>
+                        <span className="font-bold text-naturals-green w-16">₹{toNum(v.price).toFixed(2)}</span>
                         {inactive ? (
                           <span className="px-2 py-0.5 rounded border bg-gray-100 text-gray-400 border-gray-200 line-through">inactive</span>
                         ) : (
@@ -112,7 +112,7 @@ export default async function InventoryMatrixPage({ searchParams }: PageProps) {
                 <td className="px-6 py-4 text-right">
                   <Link 
                     href={`/admin/products/${product.id}`}
-                    className="text-[#006A38] font-bold hover:underline text-sm"
+                    className="text-naturals-green font-bold hover:underline text-sm"
                   >
                     Edit
                   </Link>
