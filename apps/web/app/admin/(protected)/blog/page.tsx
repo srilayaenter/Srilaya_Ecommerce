@@ -81,24 +81,24 @@ export default function AdminBlogPage() {
       <form onSubmit={handleCreate} className="bg-white rounded-2xl border border-[#E0E0E0] p-6 space-y-4">
         <h2 className="font-black text-[#212121]">New Post</h2>
         <div className="grid grid-cols-2 gap-4">
-          <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} required placeholder="Post title *" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]" />
-          <input value={form.excerpt} onChange={e => setForm(f => ({...f, excerpt: e.target.value}))} placeholder="Short excerpt (shown in listing)" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]" />
-          <input value={form.image} onChange={e => setForm(f => ({...f, image: e.target.value}))} placeholder="Cover image URL" className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38]" />
+          <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} required placeholder="Post title *" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green" />
+          <input value={form.excerpt} onChange={e => setForm(f => ({...f, excerpt: e.target.value}))} placeholder="Short excerpt (shown in listing)" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green" />
+          <input value={form.image} onChange={e => setForm(f => ({...f, image: e.target.value}))} placeholder="Cover image URL" className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green" />
           <div className="flex gap-3">
-            <select value={form.category} onChange={e => setForm(f => ({...f, category: e.target.value}))} className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] bg-white">
+            <select value={form.category} onChange={e => setForm(f => ({...f, category: e.target.value}))} className="flex-1 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green bg-white">
               {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
             </select>
-            <input type="number" min={1} max={60} value={form.readMins} onChange={e => setForm(f => ({...f, readMins: e.target.value}))} placeholder="Mins" className="w-20 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#006A38] text-center" />
+            <input type="number" min={1} max={60} value={form.readMins} onChange={e => setForm(f => ({...f, readMins: e.target.value}))} placeholder="Mins" className="w-20 border border-[#E0E0E0] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-naturals-green text-center" />
           </div>
-          <textarea value={form.content} onChange={e => setForm(f => ({...f, content: e.target.value}))} required rows={6} placeholder="Full content (supports plain text or Markdown) *" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#006A38] resize-y font-mono" />
+          <textarea value={form.content} onChange={e => setForm(f => ({...f, content: e.target.value}))} required rows={6} placeholder="Full content (supports plain text or Markdown) *" className="col-span-2 border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-naturals-green resize-y font-mono" />
         </div>
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm font-medium text-[#424242] cursor-pointer">
-            <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({...f, published: e.target.checked}))} className="w-4 h-4 accent-[#006A38]" />
+            <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({...f, published: e.target.checked}))} className="w-4 h-4 accent-naturals-green" />
             Publish immediately
           </label>
           {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button type="submit" disabled={saving} className="bg-[#006A38] text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-[#005A30] transition-colors disabled:opacity-50">
+          <button type="submit" disabled={saving} className="bg-naturals-green text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-50">
             {saving ? "Saving…" : "Create Post"}
           </button>
         </div>
@@ -119,9 +119,9 @@ export default function AdminBlogPage() {
               <div key={post.id} className="px-6 py-4">
                 {editing === post.id ? (
                   <div className="space-y-3">
-                    <textarea value={editContent} onChange={e => setEditContent(e.target.value)} rows={8} className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-[#006A38] resize-y" />
+                    <textarea value={editContent} onChange={e => setEditContent(e.target.value)} rows={8} className="w-full border border-[#E0E0E0] rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-naturals-green resize-y" />
                     <div className="flex gap-2">
-                      <button onClick={() => saveEdit(post.id)} disabled={saving} className="bg-[#006A38] text-white font-bold px-4 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? "Saving…" : "Save"}</button>
+                      <button onClick={() => saveEdit(post.id)} disabled={saving} className="bg-naturals-green text-white font-bold px-4 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? "Saving…" : "Save"}</button>
                       <button onClick={() => setEditing(null)} className="border border-[#E0E0E0] text-[#757575] font-bold px-4 py-2 rounded-lg text-sm">Cancel</button>
                     </div>
                   </div>
@@ -143,7 +143,7 @@ export default function AdminBlogPage() {
                       <button onClick={() => togglePublish(post)} className="text-xs font-bold border border-[#E0E0E0] px-3 py-1.5 rounded-lg hover:bg-[#F5F5F5] text-[#424242]">
                         {post.published ? "Unpublish" : "Publish"}
                       </button>
-                      <a href={`/blog/${post.slug}`} target="_blank" rel="noopener" className="text-xs font-bold border border-[#E0E0E0] px-3 py-1.5 rounded-lg hover:bg-[#F5F5F5] text-[#006A38]">View</a>
+                      <a href={`/blog/${post.slug}`} target="_blank" rel="noopener" className="text-xs font-bold border border-[#E0E0E0] px-3 py-1.5 rounded-lg hover:bg-[#F5F5F5] text-naturals-green">View</a>
                       <button onClick={() => { setEditing(post.id); setEditContent(""); }} className="text-xs font-bold border border-[#E0E0E0] px-3 py-1.5 rounded-lg hover:bg-[#F5F5F5] text-[#424242]">Edit</button>
                       <button onClick={() => deletePost(post.id)} className="text-xs font-bold border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50 text-red-600">Delete</button>
                     </div>

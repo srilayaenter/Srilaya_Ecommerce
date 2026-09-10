@@ -113,7 +113,7 @@ export default async function PackagingPage() {
                                 {isLow && <span className="ml-2 text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">LOW</span>}
                                 {item.notes && <p className="text-[11px] text-[#9E9E9E] mt-0.5">{item.notes}</p>}
                               </td>
-                              <td className={`px-4 py-3 text-right font-mono font-bold text-base ${isLow ? "text-red-600" : "text-[#006A38]"}`}>
+                              <td className={`px-4 py-3 text-right font-mono font-bold text-base ${isLow ? "text-red-600" : "text-naturals-green"}`}>
                                 {item.stockQty}
                                 <span className="text-xs font-normal text-[#9E9E9E] ml-1">{item.unit}</span>
                               </td>
@@ -132,9 +132,9 @@ export default async function PackagingPage() {
                                   <input type="hidden" name="packagingItemId" value={item.id} />
                                   <div className="flex items-center gap-1 justify-center">
                                     <input type="number" name="qty" min="1" placeholder="qty"
-                                      className="w-16 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
+                                      className="w-16 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-naturals-green" />
                                     <button type="submit"
-                                      className="bg-[#006A38] text-white text-xs px-2 py-1 rounded hover:bg-[#00522B] font-bold">
+                                      className="bg-naturals-green text-white text-xs px-2 py-1 rounded hover:bg-naturals-green-dark font-bold">
                                       +
                                     </button>
                                   </div>
@@ -147,7 +147,7 @@ export default async function PackagingPage() {
                                   <input type="hidden" name="type" value="used" />
                                   <div className="flex items-center gap-1 justify-center">
                                     <input type="number" name="qty" min="1" placeholder="qty"
-                                      className="w-16 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#006A38]" />
+                                      className="w-16 border border-[#E0E0E0] rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-naturals-green" />
                                     <button type="submit"
                                       className="bg-[#424242] text-white text-xs px-2 py-1 rounded hover:bg-[#212121] font-bold">
                                       −
@@ -175,12 +175,12 @@ export default async function PackagingPage() {
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Name *</label>
                 <input name="name" required placeholder="e.g. 1kg Foxtail Pouch, Medium Box"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Category *</label>
                 <select name="category" required
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
                   <option value="">— Select —</option>
                   {Object.entries(CATEGORY_LABELS).map(([v, l]) => (
                     <option key={v} value={v}>{l}</option>
@@ -190,7 +190,7 @@ export default async function PackagingPage() {
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Unit</label>
                 <select name="unit"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
                   <option value="pcs">pcs (pieces)</option>
                   <option value="rolls">rolls</option>
                   <option value="sheets">sheets</option>
@@ -202,19 +202,19 @@ export default async function PackagingPage() {
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Reorder Alert Threshold</label>
                 <input name="reorderThreshold" type="number" min="0" defaultValue="50"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
               </div>
               {showCost && (
                 <div>
                   <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Cost per Unit (₹)</label>
                   <input name="costPerUnit" type="number" step="0.01" min="0" placeholder="0.00"
-                    className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                    className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
                 </div>
               )}
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Supplier</label>
                 <select name="supplierId"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]">
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green">
                   <option value="">— None —</option>
                   {suppliers.map(s => (
                     <option key={s.id} value={s.id}>{s.name}</option>
@@ -224,10 +224,10 @@ export default async function PackagingPage() {
               <div>
                 <label className="block text-xs font-bold text-[#9E9E9E] uppercase mb-1">Notes</label>
                 <input name="notes" placeholder="e.g. Ziplock, kraft paper, 3-layer"
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]" />
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green" />
               </div>
               <button type="submit"
-                className="w-full bg-[#006A38] text-white font-bold py-2.5 rounded-lg hover:bg-[#00522B] text-sm">
+                className="w-full bg-naturals-green text-white font-bold py-2.5 rounded-lg hover:bg-naturals-green-dark text-sm">
                 Add Item
               </button>
             </form>
@@ -236,7 +236,7 @@ export default async function PackagingPage() {
           {/* Supplier reminder */}
           <div className="bg-[#FFF8E1] border border-[#FFD54F] rounded-xl p-4 text-xs text-[#795548]">
             <p className="font-bold mb-1 inline-flex items-center gap-1"><Lightbulb size={13} weight="regular" /> Packaging suppliers</p>
-            <p>Add packaging suppliers under <a href="/admin/suppliers" className="text-[#006A38] underline font-semibold">Admin → Suppliers</a> first, then link them here when adding items.</p>
+            <p>Add packaging suppliers under <a href="/admin/suppliers" className="text-naturals-green underline font-semibold">Admin → Suppliers</a> first, then link them here when adding items.</p>
           </div>
         </div>
       </div>

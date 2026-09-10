@@ -103,14 +103,14 @@ export default function NewOfflineOrderPage() {
     return (
       <div className="space-y-6 font-sans pb-12">
         <div className="flex items-center gap-4">
-          <button type="button" onClick={() => router.back()} className="text-sm text-[#006A38] font-bold hover:underline">← Back</button>
+          <button type="button" onClick={() => router.back()} className="text-sm text-naturals-green font-bold hover:underline">← Back</button>
           <h1 className="text-2xl font-bold text-[#212121]">New In-Store Order</h1>
         </div>
         <button
           type="button"
           onClick={loadProducts}
           disabled={loading}
-          className="bg-[#006A38] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#00522B] transition-colors disabled:opacity-60"
+          className="bg-naturals-green text-white px-6 py-3 rounded-lg font-bold hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
         >
           {loading ? 'Loading…' : 'Load Product Catalog'}
         </button>
@@ -121,7 +121,7 @@ export default function NewOfflineOrderPage() {
   return (
     <div className="space-y-6 font-sans pb-12 max-w-3xl">
       <div className="flex items-center gap-4">
-        <button type="button" onClick={() => router.back()} className="text-sm text-[#006A38] font-bold hover:underline">← Back to Orders</button>
+        <button type="button" onClick={() => router.back()} className="text-sm text-naturals-green font-bold hover:underline">← Back to Orders</button>
         <h1 className="text-2xl font-bold text-[#212121]">New In-Store Order</h1>
         <span className="text-xs bg-[#FF9800]/10 text-[#E65100] font-bold px-2 py-1 rounded-full">In-Store / Offline</span>
       </div>
@@ -139,7 +139,7 @@ export default function NewOfflineOrderPage() {
             <select
               value={selectedProduct}
               onChange={e => { setSelectedProduct(e.target.value); setSelectedVariant(''); }}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green"
             >
               <option value="">Select product…</option>
               {products.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
@@ -151,7 +151,7 @@ export default function NewOfflineOrderPage() {
               value={selectedVariant}
               onChange={e => setSelectedVariant(e.target.value)}
               disabled={!currentProduct}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38] disabled:opacity-50"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green disabled:opacity-50"
             >
               <option value="">Select size…</option>
               {currentProduct?.variants.map(v => (
@@ -170,14 +170,14 @@ export default function NewOfflineOrderPage() {
               value={qty}
               onChange={e => setQty(Math.max(1, parseInt(e.target.value) || 1))}
               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } }}
-              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+              className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
             />
           </div>
           <button
             type="button"
             onClick={addItem}
             disabled={!selectedVariant}
-            className="bg-[#006A38] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#00522B] transition-colors disabled:opacity-40"
+            className="bg-naturals-green text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-naturals-green-dark transition-colors disabled:opacity-40"
           >
             + Add
           </button>
@@ -220,7 +220,7 @@ export default function NewOfflineOrderPage() {
               <tfoot className="bg-[#F5F5F5]">
                 <tr>
                   <td colSpan={4} className="px-4 py-2 text-right text-xs font-bold text-[#9E9E9E] uppercase">Subtotal (excl. GST)</td>
-                  <td className="px-4 py-2 text-right font-bold text-[#006A38]">₹{subtotal.toFixed(2)}</td>
+                  <td className="px-4 py-2 text-right font-bold text-naturals-green">₹{subtotal.toFixed(2)}</td>
                   <td />
                 </tr>
               </tfoot>
@@ -241,7 +241,7 @@ export default function NewOfflineOrderPage() {
                 value={customerName}
                 onChange={e => setCustomerName(e.target.value)}
                 placeholder="Walk-in customer"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div>
@@ -251,7 +251,7 @@ export default function NewOfflineOrderPage() {
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 placeholder="Optional"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div>
@@ -261,7 +261,7 @@ export default function NewOfflineOrderPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="Optional"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div>
@@ -269,7 +269,7 @@ export default function NewOfflineOrderPage() {
               <select
                 value={paymentMethod}
                 onChange={e => setPaymentMethod(e.target.value)}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-naturals-green"
               >
                 <option value="cash">Cash</option>
                 <option value="upi">UPI</option>
@@ -284,7 +284,7 @@ export default function NewOfflineOrderPage() {
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 placeholder="e.g. bulk order, reference number…"
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function NewOfflineOrderPage() {
               type="button"
               onClick={handleCreate}
               disabled={submitting}
-              className="bg-[#006A38] text-white font-bold px-8 py-3 rounded-lg hover:bg-[#00522B] transition-colors disabled:opacity-60"
+              className="bg-naturals-green text-white font-bold px-8 py-3 rounded-lg hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
             >
               {submitting ? 'Creating…' : 'Create Order'}
             </button>

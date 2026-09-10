@@ -41,7 +41,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
         <h1 className="text-[28px] font-bold text-[#212121] tracking-tight font-poppins">
           Edit Supplier
         </h1>
-        <Link href="/admin/suppliers" className="text-[#006A38] font-semibold text-sm hover:underline">
+        <Link href="/admin/suppliers" className="text-naturals-green font-semibold text-sm hover:underline">
           ← Back to Suppliers
         </Link>
       </div>
@@ -56,7 +56,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                 name="name"
                 defaultValue={supplier.name}
                 required
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div>
@@ -65,7 +65,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                 type="text"
                 name="contactPerson"
                 defaultValue={supplier.contactPerson || ""}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -75,7 +75,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                   type="tel"
                   name="phone"
                   defaultValue={supplier.phone || ""}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
                 />
               </div>
               <div>
@@ -84,7 +84,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                   type="email"
                   name="email"
                   defaultValue={supplier.email || ""}
-                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38]"
+                  className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green"
                 />
               </div>
             </div>
@@ -94,7 +94,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                 name="address"
                 rows={2}
                 defaultValue={supplier.address || ""}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] resize-none"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green resize-none"
               />
             </div>
             <div>
@@ -103,7 +103,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                 name="notes"
                 rows={2}
                 defaultValue={supplier.notes || ""}
-                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#006A38] resize-none"
+                className="w-full border border-[#E0E0E0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-naturals-green resize-none"
               />
             </div>
             <label className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
             </label>
             <button
               type="submit"
-              className="w-full bg-[#006A38] hover:bg-[#00522B] text-white py-2.5 rounded-lg font-bold text-sm transition-colors"
+              className="w-full bg-naturals-green hover:bg-naturals-green-dark text-white py-2.5 rounded-lg font-bold text-sm transition-colors"
             >
               Save Changes
             </button>
@@ -131,7 +131,7 @@ export default async function EditSupplierPage({ params }: PageProps) {
                 <li key={p.id}>
                   <Link
                     href={`/admin/products/${p.id}`}
-                    className="text-sm text-[#006A38] hover:underline font-medium"
+                    className="text-sm text-naturals-green hover:underline font-medium"
                   >
                     {p.title}
                   </Link>

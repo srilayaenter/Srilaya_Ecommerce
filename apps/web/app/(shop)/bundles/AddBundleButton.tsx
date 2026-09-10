@@ -24,7 +24,7 @@ export default function AddBundleButton({ slug }: { slug: string }) {
     <button
       onClick={handleAdd}
       disabled={loading || done}
-      className="bg-[#006A38] text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-[#00522B] transition-colors disabled:opacity-60"
+      className="bg-naturals-green text-white font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
     >
       {done ? "✓ Added!" : loading ? "Adding…" : "Add to Cart"}
     </button>

@@ -94,7 +94,7 @@ export default function PaymentDetailsPage() {
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0]">
                 <span className="text-[#757575] font-medium">IFSC Code</span>
-                <span className="font-mono font-bold text-[#006A38] text-right">{BANK.ifsc}</span>
+                <span className="font-mono font-bold text-naturals-green text-right">{BANK.ifsc}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-[#E0E0E0] sm:col-span-2">

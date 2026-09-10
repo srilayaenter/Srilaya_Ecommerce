@@ -13,7 +13,7 @@ export default function ShopError({
       <p className="text-gray-500 mb-6">We had trouble loading this page. Please try again.</p>
       <button
         onClick={reset}
-        className="px-5 py-2 bg-[#006A38] text-white rounded-lg text-sm font-medium hover:bg-[#005a30]"
+        className="px-5 py-2 bg-naturals-green text-white rounded-lg text-sm font-medium hover:bg-naturals-green-dark"
       >
         Try again
       </button>

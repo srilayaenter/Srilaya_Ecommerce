@@ -83,7 +83,7 @@ export default function GstReportPage() {
         {report && (
           <button
             onClick={downloadCsv}
-            className="flex items-center gap-2 bg-[#006A38] text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-[#005A30] transition-colors"
+            className="flex items-center gap-2 bg-naturals-green text-white font-bold text-sm px-4 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors"
           >
             ⬇ Download CSV
           </button>
@@ -97,7 +97,7 @@ export default function GstReportPage() {
           <select
             value={month}
             onChange={e => setMonth(Number(e.target.value))}
-            className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm font-semibold text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#006A38]/30 bg-white"
+            className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm font-semibold text-[#212121] focus:outline-none focus:ring-2 focus:ring-naturals-green/30 bg-white"
           >
             {MONTHS.map((m, i) => (
               <option key={m} value={i + 1}>{m}</option>
@@ -109,7 +109,7 @@ export default function GstReportPage() {
           <select
             value={year}
             onChange={e => setYear(Number(e.target.value))}
-            className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm font-semibold text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#006A38]/30 bg-white"
+            className="border border-[#E0E0E0] rounded-xl px-4 py-2.5 text-sm font-semibold text-[#212121] focus:outline-none focus:ring-2 focus:ring-naturals-green/30 bg-white"
           >
             {yearOptions.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
@@ -117,7 +117,7 @@ export default function GstReportPage() {
         <button
           onClick={fetchReport}
           disabled={loading}
-          className="bg-[#006A38] text-white font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-[#005A30] transition-colors disabled:opacity-60"
+          className="bg-naturals-green text-white font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-naturals-green-dark transition-colors disabled:opacity-60"
         >
           {loading ? "Loading…" : "Generate Report"}
         </button>
@@ -134,7 +134,7 @@ export default function GstReportPage() {
           {/* Summary cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: "Total Orders",     value: report.orderCount.toString(),           color: "#006A38" },
+              { label: "Total Orders",     value: report.orderCount.toString(),           color: "rgb(var(--naturals-green))" },
               { label: "Taxable Sales",    value: `₹${report.grandTaxable.toFixed(2)}`,  color: "#1565C0" },
               { label: "Total GST",        value: `₹${report.grandTax.toFixed(2)}`,      color: "#6A1B9A" },
               { label: "Gross Revenue",    value: `₹${report.grandTotal.toFixed(2)}`,    color: "#E65100" },
@@ -175,7 +175,7 @@ export default function GstReportPage() {
                   {report.slabs.map(slab => (
                     <tr key={slab.rate} className="hover:bg-[#FAFAFA] transition-colors">
                       <td className="px-6 py-4 font-bold text-[#212121]">
-                        <span className="bg-[#E8F5E9] text-[#006A38] px-2.5 py-1 rounded-full text-xs font-black">
+                        <span className="bg-[#E8F5E9] text-naturals-green px-2.5 py-1 rounded-full text-xs font-black">
                           {slab.rate}%
                         </span>
                       </td>
@@ -222,7 +222,7 @@ export default function GstReportPage() {
               ))}
               <div className="flex justify-between py-3">
                 <span className="font-black text-[#212121]">Gross Collection</span>
-                <span className="font-black text-[#006A38] text-lg">₹{report.grandTotal.toFixed(2)}</span>
+                <span className="font-black text-naturals-green text-lg">₹{report.grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

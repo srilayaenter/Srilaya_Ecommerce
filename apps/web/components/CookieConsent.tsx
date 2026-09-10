@@ -42,7 +42,7 @@ export default function CookieConsent() {
         </Link>
         <button
           onClick={accept}
-          className="bg-[#006A38] hover:bg-[#00522B] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
+          className="bg-naturals-green hover:bg-naturals-green-dark text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
         >
           I understand
         </button>

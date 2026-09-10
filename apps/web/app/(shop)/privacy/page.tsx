@@ -11,7 +11,7 @@ const LAST_UPDATED = "18 July 2026";
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white">Privacy Policy</h1>
         <p className="text-green-200 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
       </div>
@@ -25,7 +25,7 @@ export default function PrivacyPolicyPage() {
               <strong>srilaya.com</strong> and sells organic millets, millet-based flours, rava, flakes,
               and traditional laddus across India. Our registered address is{" "}
               <strong>{BRAND.address}</strong>. For any privacy-related queries, write to us at{" "}
-              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">{BRAND.email}</a>.
+              <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-medium hover:underline">{BRAND.email}</a>.
             </p>
           </Section>
 
@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
               <li><strong>Correction</strong> — ask us to correct inaccurate data.</li>
               <li><strong>Deletion</strong> — request deletion of your account and personal data, subject to legal retention requirements.</li>
-              <li><strong>Grievance redressal</strong> — under the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023, you may raise a complaint with our Grievance Officer at <a href={`mailto:${BRAND.email}`} className="text-[#006A38] hover:underline">{BRAND.email}</a>. We will respond within 30 days.</li>
+              <li><strong>Grievance redressal</strong> — under the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023, you may raise a complaint with our Grievance Officer at <a href={`mailto:${BRAND.email}`} className="text-naturals-green hover:underline">{BRAND.email}</a>. We will respond within 30 days.</li>
             </ul>
           </Section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="mb-3">
               To exercise any of these rights, write to us at{" "}
-              <a href={`mailto:${BRAND.email}`} className="text-[#006A38] font-medium hover:underline">
+              <a href={`mailto:${BRAND.email}`} className="text-naturals-green font-medium hover:underline">
                 {BRAND.email}
               </a>{" "}
               with the subject line <strong>"DPDP Data Rights Request"</strong>. Please include

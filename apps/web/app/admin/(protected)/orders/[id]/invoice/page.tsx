@@ -78,7 +78,7 @@ export default async function OrderInvoicePage({ params }: PageProps) {
 {/* Toolbar — hidden on print */}
       <div className="print:hidden flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Link href="/admin/orders" className="text-sm text-[#006A38] font-bold hover:underline">← Orders</Link>
+          <Link href="/admin/orders" className="text-sm text-naturals-green font-bold hover:underline">← Orders</Link>
           <h1 className="text-xl font-bold text-[#212121]">Invoice / Receipt</h1>
           {isInStore && (
             <span className="text-xs bg-[#FF9800]/10 text-[#E65100] font-bold px-2 py-1 rounded-full">In-Store</span>
@@ -91,7 +91,7 @@ export default async function OrderInvoicePage({ params }: PageProps) {
         <div id="invoice-doc" className="bg-white rounded-xl border border-[#E0E0E0] shadow-sm overflow-hidden print:shadow-none print:border-none print:rounded-none">
 
           {/* Header */}
-          <div className="bg-[#006A38] px-8 py-6 flex justify-between items-start">
+          <div className="bg-naturals-green px-8 py-6 flex justify-between items-start">
             <div>
               <h2 className="text-white font-black text-xl">{BRAND.name}</h2>
               <p className="text-[#FFF8E1] text-xs mt-1">GSTIN: {BRAND.gstin}</p>
@@ -99,7 +99,7 @@ export default async function OrderInvoicePage({ params }: PageProps) {
               <p className="text-[#FFF8E1] text-xs">{BRAND.phone} · {BRAND.email}</p>
             </div>
             <div className="text-right">
-              <div className="bg-[#FFF8E1] text-[#006A38] font-black text-xs px-3 py-1.5 rounded-full tracking-widest uppercase">
+              <div className="bg-[#FFF8E1] text-naturals-green font-black text-xs px-3 py-1.5 rounded-full tracking-widest uppercase">
                 {isInStore ? 'In-Store Receipt' : 'Invoice'}
               </div>
               <p className="text-[#FFF8E1] text-xs mt-2">#{order.id.slice(0, 8).toUpperCase()}</p>
@@ -172,9 +172,9 @@ export default async function OrderInvoicePage({ params }: PageProps) {
                     <td className="py-2 text-[#616161]">GST</td>
                     <td className="py-2 text-right">₹{taxTotal.toFixed(2)}</td>
                   </tr>
-                  <tr className="border-t-2 border-[#006A38]">
+                  <tr className="border-t-2 border-naturals-green">
                     <td className="py-2.5 font-black text-[#212121] text-base">Total Paid</td>
-                    <td className="py-2.5 text-right font-black text-[#006A38] text-base">₹{total.toFixed(2)}</td>
+                    <td className="py-2.5 text-right font-black text-naturals-green text-base">₹{total.toFixed(2)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -190,7 +190,7 @@ export default async function OrderInvoicePage({ params }: PageProps) {
 
           {/* Footer */}
           <div className="px-8 py-4 bg-[#F5F5F5] border-t border-[#E0E0E0] text-center text-xs text-[#9E9E9E]">
-            <p>Thank you for shopping with <strong className="text-[#006A38]">{BRAND.name}</strong>!</p>
+            <p>Thank you for shopping with <strong className="text-naturals-green">{BRAND.name}</strong>!</p>
             <p className="mt-1">This is a computer-generated receipt and does not require a signature.</p>
           </div>
         </div>

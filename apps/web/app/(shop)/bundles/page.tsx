@@ -21,7 +21,7 @@ export default async function BundlesPage() {
 
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      <div className="bg-[#006A38] py-10 px-4 text-center">
+      <div className="bg-naturals-green py-10 px-4 text-center">
         <h1 className="text-2xl font-black text-white font-poppins">Bundle Packs</h1>
         <p className="text-[#FFF8E1] text-sm mt-1">Curated combos at special prices — great value, zero compromise.</p>
       </div>
@@ -46,7 +46,7 @@ export default async function BundlesPage() {
               return (
                 <div key={bundle.id} className="bg-white rounded-2xl border border-[#E8E0D5] shadow-sm overflow-hidden">
                   {savings > 0 && (
-                    <div className="bg-[#006A38] text-white text-[11px] font-bold text-center py-1.5 tracking-wider">
+                    <div className="bg-naturals-green text-white text-[11px] font-bold text-center py-1.5 tracking-wider">
                       SAVE ₹{savings.toFixed(0)} vs buying separately
                     </div>
                   )}
@@ -60,7 +60,7 @@ export default async function BundlesPage() {
                     <ul className="mt-4 space-y-2">
                       {bundle.items.map((item, i) => (
                         <li key={i} className="flex items-center gap-3 text-sm">
-                          <span className="w-6 h-6 bg-[#006A38]/10 rounded-full flex items-center justify-center text-[#006A38] font-bold text-xs flex-shrink-0">
+                          <span className="w-6 h-6 bg-naturals-green/10 rounded-full flex items-center justify-center text-naturals-green font-bold text-xs flex-shrink-0">
                             {item.quantity}×
                           </span>
                           <span className="text-[#424242]">
@@ -77,7 +77,7 @@ export default async function BundlesPage() {
                         {savings > 0 && (
                           <p className="text-xs text-[#9E9E9E] line-through">₹{originalTotal.toFixed(2)}</p>
                         )}
-                        <p className="text-2xl font-black text-[#006A38]">₹{bundlePrice.toFixed(2)}</p>
+                        <p className="text-2xl font-black text-naturals-green">₹{bundlePrice.toFixed(2)}</p>
                         <p className="text-xs text-[#9E9E9E] mt-0.5">incl. GST</p>
                       </div>
                       <AddBundleButton slug={bundle.slug} />
